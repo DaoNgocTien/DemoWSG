@@ -1,18 +1,13 @@
 import React, { Component } from "react";
-import { actLoginApi } from "./modules/action";
+import { actLoginApi, googleOAuth2 } from "./modules/action";
 import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
-import { Input, message } from "antd";
+import { Input, message, Form, Button, Checkbox } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Redirect } from "react-router-dom";
+import { GoogleLogin } from "react-google-login";
 
 class AuthPage extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-    };
-  }
-
   openMessage = () => {
     const key = "updatable";
     message.error({ content: "Can't Access !", key, duration: 2 });
@@ -21,17 +16,9 @@ class AuthPage extends Component {
     }, 1000);
   };
 
-  handleOnChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  handleLogin = (e) => {
-    console.log(this.state);
-    e.preventDefault();
-    this.props.login(this.state, this.props.history);
+  onFinish = (e) => {
+    console.log(e);
+    this.props.login(e, this.props.history);
   };
 
   renderNoti = () => {
@@ -44,110 +31,81 @@ class AuthPage extends Component {
   render() {
     const { loading } = this.props;
     if (loading) return <Loader />;
-    if (localStorage.getItem("User") || localStorage.getItem("UserAdmin")) {
-      this.openMessage();
+    if (localStorage.getItem("user")) {
+      return <Redirect to="/" />;
     } else {
       return (
-        // <div className="bg-gradient-primary">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-xl-10 col-lg-12 col-md-9">
-              <div className="card o-hidden border-0 shadow-lg my-5">
-                <div className="card-body p-0">
-                  <div className="row">
-                    <div class="col-lg-6 center-item my-primary-color">
-                      <h1
-                        style={{
-                          fontFamily: "Montserrat",
-                          fontStyle: "italic",
-                          fontWeight: "900",
-                          fontSize: "36px",
-                        }}
-                        className="my-grandient-text"
-                      >
-                        CosmeSis
-                      </h1>
-                    </div>
+        <div className="main_form_body">
+          <div className="form__wrapper">
+            <div className="form__container">
+              <h2 style={{ textAlign: "center" }}>LOGIN</h2>
+              <Form
+                name="normal_login"
+                className="login-form"
+                initialValues={{ remember: true }}
+                onFinish={this.onFinish}
+              >
+                <Form.Item
+                  name="username"
+                  rules={[
+                    { required: true, message: "Please input your Username!" },
+                  ]}
+                >
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                    placeholder="Username"
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  rules={[
+                    { required: true, message: "Please input your Password!" },
+                  ]}
+                >
+                  <Input
+                    prefix={<LockOutlined className="site-form-item-icon" />}
+                    type="password"
+                    placeholder="Password"
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Form.Item name="remember" valuePropName="checked" noStyle>
+                    <Checkbox>Remember me</Checkbox>
+                  </Form.Item>
 
-                    <div className="col-lg-6">
-                      <div className="p-5">
-                        <div className="text-center">
-                          <h1 className="h4 text-gray-900 mb-4">
-                            Welcome CosmeSis!
-                          </h1>
-                        </div>
-                        <form className="user" onSubmit={this.handleLogin}>
-                          <div className="form-group">
-                            <Input
-                              type="text"
-                              className="form-control form-control-user"
-                              id="exampleInputEmail"
-                              aria-describedby="emailHelp"
-                              placeholder="Enter Email Address..."
-                              name="username"
-                              onChange={this.handleOnChange}
-                            />
-                          </div>
-                          <div className="form-group">
-                            <Input
-                              type="password"
-                              className="form-control form-control-user"
-                              id="exampleInputPassword"
-                              placeholder="Password"
-                              name="password"
-                              onChange={this.handleOnChange}
-                            />
-                          </div>
-                          <div className="form-group">
-                            <div className="custom-control custom-checkbox small">
-                              <Input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="customCheck"
-                                name="checkbox"
-                              />
-                              <label
-                                className="custom-control-label"
-                                for="customCheck"
-                              >
-                                Remember Me
-                              </label>
-                            </div>
-                          </div>
-                          <button
-                            type="submit"
-                            className="btn btn-primary btn-user btn-block"
-                            style={{
-                              backgroundColor: "rgba(123, 120, 242, 1)",
-                            }}
-                          >
-                            Login
-                          </button>
-                          {/* <hr />
-                            <a
-                              href="#"
-                              className="btn btn-facebook btn-user btn-block"
-                            >
-                              <i className="fab fa-facebook-f fa-fw"></i> Login
-                              with Facebook
-                            </a> */}
-                        </form>
-                        <hr />
-                        <div className="text-center">
-                          <a className="small" href="forgot-password.html">
-                            Forgot Password?
-                          </a>
-                        </div>
-                        <div className="text-center"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  <a
+                    className="login-form-forgot"
+                    href=""
+                    style={{ float: "right" }}
+                  >
+                    Forgot password
+                  </a>
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                  >
+                    Log in
+                  </Button>
+                </Form.Item>
+                <GoogleLogin
+                  clientId="641513059325-n3suicaa1j3fsph5fqaft0okgh57gv2l.apps.googleusercontent.com"
+                  buttonText="Sign in with Google"
+                  onSuccess={this.props.googleOAuth2}
+                  onFailure={this.props.googleOAuth2}
+                  cookiePolicy={"single_host_origin"}
+                  className="google-button"
+                />
+                <br />
+                <a href="" style={{ float: "right" }}>
+                  register now!
+                </a>
+              </Form>
             </div>
           </div>
         </div>
-        // </div>
       );
     }
   }
@@ -164,6 +122,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     login: (user, history) => {
       dispatch(actLoginApi(user, history));
+    },
+    googleOAuth2: (googleResponse) => {
+      dispatch(googleOAuth2(googleResponse));
     },
   };
 };

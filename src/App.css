@@ -1,3 +1,71 @@
+/*navigation */
 .nav-menu {
   width: 30%;
+}
+
+#components-layout-demo-top-side-2 .logo {
+  float: left;
+  width: 120px;
+  height: 31px;
+  margin: 16px 24px 16px 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.ant-row-rtl #components-layout-demo-top-side-2 .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+.site-layout-background {
+  background: #fff;
+}
+
+/* General */
+input {
+  outline: none;
+  border: none;
+}
+
+/* login form  */
+.main_form_body {
+  width: 100%;
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  /* background: rgba(22, 13, 148, 0.322); */
+}
+
+.form__container {
+  border: 1px solid black;
+  padding: 70px 70px 100px 70px;
+  width: 450px;
+  /* border-radius: 5%; */
+  /* background: rgba(22, 13, 148, 0.322); */
+}
+
+.login-form-button {
+  width: 100%;
+  height: 100px;
+}
+
+.google-button {
+  width: 100%;
+  height: 50px;
+}
+
+/* All table */
+.ant-table-body {
+  min-height: 350px;
+}
+
+/* All Links */
+.LinkDecorations {
+  text-decoration: none;
 }

@@ -2,6 +2,7 @@ import {
   AUTH_PAGE_REQUEST,
   AUTH_PAGE_SUCCESS,
   AUTH_PAGE_FAILED,
+  GOOGLE_OAUTH2
 } from "./constant";
 
 let initialState = {
@@ -29,7 +30,10 @@ const authReducer = (state = initialState, action) => {
       state.data = null;
       // state.err = action.payload;
       return { ...state };
-
+    case GOOGLE_OAUTH2:
+      state.loading = false;
+      state.data = action.googleResponse;
+      return { ...state };
     default:
       return { ...state };
   }
