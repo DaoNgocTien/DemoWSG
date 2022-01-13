@@ -9,15 +9,14 @@ export const getAllDataForProduct = () => {
   return async (dispatch) => {
     dispatch(getDataForProductRequest());
     try {
-      const [categories, brands] = await Promise.all([
+      const [categories] = await Promise.all([
         await Axios({
-          url: `/categories`,
+          url: `/categories/All`,
           method: "GET",
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      console.log(brands);
       return dispatch(
         getDataForProductSuccess({
           categories: categories.data.data,

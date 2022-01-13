@@ -44,7 +44,7 @@ class AddProduct extends Component {
     }).then((response) => {
       if (response.status === 200) {
         // console.log(response);
-        return this.props.history.push("/products/catalog")
+        return this.props.history.push("/products/catalog");
       }
     });
     this.setState({
@@ -93,12 +93,10 @@ class AddProduct extends Component {
   };
 
   onFinish = (values) => {
-    values.image = JSON.stringify(this.state.fileList);
+    values.image = this.state.fileList;
     values.quantity = parseInt(values.quantity);
-    values.quantityForWholesale = parseInt(values.quantityForWholesale);
     values.retailPrice = parseFloat(values.retailPrice);
-    values.wholesalePrice = parseFloat(values.wholesalePrice);
-
+    console.log(values);
     Axios({
       url: `/products/${this.props.match.params.id}`,
       method: "PUT",
@@ -154,9 +152,6 @@ class AddProduct extends Component {
                 initialValue={data.product.categoryid}
               >
                 <Select>
-                  <Select.Option key={null} value={null}>
-                    none
-                  </Select.Option>
                   {data.categories.map((item) => (
                     <Select.Option key={item.id} value={item.id}>
                       {item.categoryname}
@@ -198,16 +193,7 @@ class AddProduct extends Component {
               >
                 <InputNumber min={0} defaultValue={data.product.retailprice} />
               </Form.Item>
-              <Form.Item
-                label="Wholesale Price"
-                name="wholesalePrice"
-                initialValue={data.product.wholesaleprice}
-              >
-                <InputNumber
-                  min={0}
-                  defaultValue={data.product.wholesaleprice}
-                />
-              </Form.Item>
+
               <Form.Item
                 label="Quantity"
                 name="quantity"
@@ -215,13 +201,7 @@ class AddProduct extends Component {
               >
                 <InputNumber min={0} defaultValue={data.product.quantity} />
               </Form.Item>
-              <Form.Item
-                label="Quantity For Wholesale"
-                name="quantityForWholesale"
-                initialValue={data.product.quantityforwholesale}
-              >
-                <InputNumber defaultValue={data.product.quantityforwholesale} />
-              </Form.Item>
+
               <Form.Item
                 label="Description"
                 name="description"

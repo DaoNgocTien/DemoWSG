@@ -5,7 +5,7 @@ export const getCategory = () => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/categories/`,
+      url: `/categories/All`,
       method: "GET",
       withCredentials: true,
     })

@@ -87,11 +87,7 @@ class categoryPage extends Component {
   deleteConfirm = () => {
     Axios({
       url: `/categories/${this.state.editRecord.id}`,
-      method: "PUT",
-      data: {
-        categoryName: this.state.editRecord?.categoryname,
-        isDeleted: true,
-      },
+      method: "DELETE",
       withCredentials: true,
     }).then((response) => {
       if (response.status === 200) {
@@ -175,7 +171,7 @@ class categoryPage extends Component {
               </Button>,
             ]}
           >
-            <Form.Item label="Category Name" name="categoryname">
+            <Form.Item label="Category Name" name="categoryName">
               <Input placeholder="Category Name" />
             </Form.Item>
           </Modal>

@@ -11,7 +11,7 @@ export const getAllDataForProduct = (id) => {
     try {
       const [categories, product] = await Promise.all([
         await Axios({
-          url: `/categories`,
+          url: `/categories/All`,
           method: "GET",
           withCredentials: true,
           exposedHeaders: ["set-cookie"],

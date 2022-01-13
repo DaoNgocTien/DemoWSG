@@ -40,14 +40,13 @@ export const actLoginApi = (user, history) => {
 export const googleOAuth2 = (googleResponse) => {
   return async (dispatch) => {
     dispatch(actLoginRequest());
-    console.log(googleResponse);
     if (typeof googleResponse === "undefined") {
       googleResponse = [];
     }
-
-    if (googleResponse) {
+    console.log(googleResponse)
+    if (googleResponse && !googleResponse.error) {
       Axios({
-        url: `/users/loginWithGoogle`,
+        url: `/users/login/google`,
         method: "POST",
         headers: {
           Authorization: "JWT_TOKEN",

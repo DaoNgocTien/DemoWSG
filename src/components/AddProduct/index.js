@@ -56,7 +56,7 @@ class AddProduct extends Component {
         // Component will show file.url as link
         file.url = file.response[0].url;
         file.name = file.response[0].name;
-        file.thumbUrl = null
+        file.thumbUrl = null;
       }
       return file;
     });
@@ -66,7 +66,7 @@ class AddProduct extends Component {
   };
 
   onFinish = (values) => {
-    values.image = this.state.fileList
+    values.image = this.state.fileList;
     console.log(values);
     Axios({
       url: `/products`,
@@ -76,7 +76,7 @@ class AddProduct extends Component {
       exposedHeaders: ["set-cookie"],
     })
       .then((result) => {
-        // return window.location.replace("/branchProduct");
+        return window.location.replace("/products/catalog");
       })
       .catch((err) => console.error(err));
   };
@@ -110,10 +110,10 @@ class AddProduct extends Component {
               <Form.Item label="Name" name="name">
                 <Input />
               </Form.Item>
-              <Form.Item label="Category" name="categoryid">
+              <Form.Item label="Category" name="categoryId">
                 <Select>
                   {data.categories.map((item) => (
-                    <Select.Option key={item.Id} value={item.Id}>
+                    <Select.Option key={item.id} value={item.id}>
                       {item.categoryname}
                     </Select.Option>
                   ))}
@@ -146,20 +146,15 @@ class AddProduct extends Component {
                   </Modal>
                 </>
               </Form.Item>
-              <Form.Item label="Retail Price" name="retailPrice">
-                <InputNumber min={0} />
-              </Form.Item>
-              <Form.Item label="Wholesale Price" name="wholesalePrice">
-                <InputNumber min={0} />
-              </Form.Item>
-              <Form.Item label="Quantity" name="quantity">
-                <InputNumber min={0} />
-              </Form.Item>
               <Form.Item
-                label="Quantity For Wholesale"
-                name="quantityForWholesale"
+                label="Retail Price"
+                name="retailPrice"
+                initialValue={0}
               >
-                <InputNumber />
+                <InputNumber min={0} default={0} />
+              </Form.Item>
+              <Form.Item label="Quantity" name="quantity" initialValue={0}>
+                <InputNumber min={0} default={0} />
               </Form.Item>
               <Form.Item label="Description" name="description">
                 <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
