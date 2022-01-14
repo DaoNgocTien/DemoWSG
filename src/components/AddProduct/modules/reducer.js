@@ -10,7 +10,7 @@ let initialState = {
   err: null,
 };
 
-const branchProductReducer = (state = initialState, action) => {
+const Reducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_FOR_PRODUCT_FAIL:
       state.loading = true;
@@ -34,4 +34,4 @@ const branchProductReducer = (state = initialState, action) => {
   }
 };
 
-export default branchProductReducer;
+export default Reducer;
