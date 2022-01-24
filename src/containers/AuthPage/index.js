@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { actLoginApi, googleOAuth2 } from "./modules/action";
 import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
-import { Input, message, Form, Button, Checkbox } from "antd";
+import { Input, message, Form, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Redirect } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";

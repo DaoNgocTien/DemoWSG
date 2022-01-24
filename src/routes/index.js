@@ -6,6 +6,8 @@ import Category from "../components/Category";
 import AddProduct from "../components/AddProduct";
 import EditProduct from "../components/EditProduct";
 
+import Campaign from "../components/Campaign";
+
 const routesAdmin = [
   {
     exact: true,
@@ -31,6 +33,11 @@ const routesAdmin = [
     exact: true,
     path: "/products/:id",
     component: EditProduct,
+  },
+  {
+    exact: true,
+    path: "/products/campaigns",
+    component: Campaign,
   },
 ];
 

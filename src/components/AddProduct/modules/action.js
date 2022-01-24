@@ -10,7 +10,7 @@ export const getAllDataForProduct = () => {
     dispatch(getDataForProductRequest());
     try {
       const [categories] = await Promise.all([
-        await Axios({
+        Axios({
           url: `/categories/All`,
           method: "GET",
           withCredentials: true,

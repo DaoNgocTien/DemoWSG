@@ -24,16 +24,16 @@ function AdminRender(props) {
           >
             <Menu
               mode="inline"
-              defaultSelectedKeys={["product"]}
-              // defaultOpenKeys={["sub1"]}
+              // defaultSelectedKeys={["catalog"]}
+              defaultOpenKeys={["products"]}
               style={{ height: "100%", borderRight: 0 }}
             >
-              <SubMenu key="product" title="Products">
-                <Menu.Item key="1"><Link className="LinkDecorations" to="/products/categories">Categories</Link></Menu.Item>
-                <Menu.Item key="2"><Link className="LinkDecorations" to="/products/catalog">Catalog</Link></Menu.Item>
+              <SubMenu key="products" title="Products">
+                <Menu.Item key="categories"><Link className="LinkDecorations" to="/products/categories">Categories</Link></Menu.Item>
+                <Menu.Item key="catalog"><Link className="LinkDecorations" to="/products/catalog">Catalog</Link></Menu.Item>
+                <Menu.Item key="campaigns"><Link className="LinkDecorations" to="/products/campaigns">Campaign</Link></Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" title="subnav 2">
-                <Menu.Item key="5">option5</Menu.Item>
                 <Menu.Item key="6">option6</Menu.Item>
                 <Menu.Item key="7">option7</Menu.Item>
                 <Menu.Item key="8">option8</Menu.Item>

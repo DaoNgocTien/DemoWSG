@@ -5,6 +5,8 @@ import {
   GOOGLE_OAUTH2,
 } from "./constant";
 import Axios from "axios";
+// import APIMethods from "../../../redux/url/APIMethods";
+// import APISettings from "../../../redux/url/APISettings";
 
 export const actLoginApi = (user, history) => {
   return async (dispatch) => {
@@ -23,11 +25,11 @@ export const actLoginApi = (user, history) => {
       .then((result) => {
         dispatch(actLoginSuccess(result.data));
         if (result.data.status === "success") {
-          if (result.data.data.user.rolename === "Supplier") {
+          if (result.data.data.user.rolename === "Customer" || result.data.data.user.rolename === "Deliverer") {
+            return history.push("/login");
+          } else {
             localStorage.setItem("user", JSON.stringify(result.data.data.user));
             return history.push("/");
-          } else {
-            return history.push("/login");
           }
         }
       })
@@ -62,16 +64,17 @@ export const googleOAuth2 = (googleResponse) => {
         withCredentials: true,
         exposedHeaders: ["set-cookie"],
       })
-        .then((result) => {
-          dispatch(actLoginSuccess(result.data));
-          if (result.data.status === "success") {
-            // if (result.data.data.user.rolename === "Supplier") {
-            localStorage.setItem("user", JSON.stringify(result.data.data.user));
-            return window.location.replace("/");
-          } else {
-            return window.location.replace("/login");
+        .then((response) => {
+          dispatch(actLoginSuccess(response.data));
+          alert(response);
+          if (response.data.status === "success") {
+            if (response.data.data.user.rolename === "Supplier") {
+              localStorage.setItem("user", JSON.stringify(response.data.data.user));
+              return window.location.replace("/");
+            } else {
+              return window.location.replace("/login");
+            }
           }
-          // }
         })
         .catch((err) => {
           return dispatch(actLoginFailed(err));
