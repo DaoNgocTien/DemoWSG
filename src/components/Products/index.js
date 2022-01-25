@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { getAllProduct } from "./modules/action";
 import { connect } from "react-redux";
-import { Input, message, Button, Table, Tag, Space } from "antd";
+import { Button, Table, Space } from "antd";
 import moment from "moment";
 
 import Loader from "../Loader";
@@ -107,7 +107,7 @@ class Products extends Component {
     if (loading) return <Loader />;
     return (
       <div className="container-fluid">
-        <h1 className="h3 mb-2 text-gray-800" style={{textAlign: "center" }}>Products</h1>
+        <h1 className="h3 mb-2 text-gray-800" style={{ textAlign: "center" }}>Products</h1>
         <Button
           type="button"
           style={{
