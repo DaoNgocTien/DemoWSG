@@ -8,7 +8,7 @@ import APIMethods from "../../../redux/url/APIMethods";
 
 const getCampaign = () => {
   return async (dispatch) => {
-    dispatch(getProductRequest());
+    dispatch(getRequest());
     Axios({
       url: `/campaigns/All`,
       method: "GET",
@@ -27,13 +27,13 @@ const getCampaign = () => {
   };
 };
 
-const getProductRequest = () => {
+const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
   };
 };
 
-const getProductSuccess = (data) => {
+const getSuccess = (data) => {
   console.log(data)
   return {
     type: GET_DATA_SUCCESS,

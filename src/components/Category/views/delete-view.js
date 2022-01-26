@@ -110,9 +110,7 @@ class DeleteModal extends Component {
                         width={window.innerWidth * 0.7}
                         heigh={window.innerHeight * 0.5}
                         style={{
-                            position: "absolute",
-                            top: window.innerHeight / 2,
-                            left: window.innerWidth / 2
+                            top: 10,
                         }}
                         title={`Records to be deleted: ${selectedRowKeys.length} items`}
                         visible={openModal}

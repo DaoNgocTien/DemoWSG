@@ -45,7 +45,7 @@ class CategoryUI extends Component {
     openDeleteModal: false,
     openEditModal: false,
     displayData: [],
-    searchDataa: "",
+    searchData: "",
   };
 
   componentDidMount() {
@@ -141,14 +141,14 @@ class CategoryUI extends Component {
 
   onChangeHandler = (e) => {
     let { data } = this.props;
-    let searchString = data.filter(item => {
+    let searchList = data.filter(item => {
       return item.categoryname.includes(e.target.value)
         || item.createdat.includes(e.target.value)
         || item.updatedat.includes(e.target.value);
     });
     this.setState({
-      displayData: searchString,
-      searchData: searchString
+      displayData: searchList,
+      searchData: e.target.value,
     })
   }
 
