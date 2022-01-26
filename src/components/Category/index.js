@@ -23,6 +23,7 @@ class categoryPage extends Component {
       <>
         <CategoryUI
           data={this.props.data}
+          loading={this.props.loading}
           createCategory={this.props.createCategory}
           updateCategory={this.props.updateCategory}
           deleteCategory={this.props.deleteCategory}
@@ -44,18 +45,14 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getCategory: async () => await dispatch(action.getCategory()),
     createCategory: async (record) => {
-      alert("createCategory final");
-      console.log(record);
       await dispatch(action.createCategory(record));
       await dispatch(action.getCategory());
     },
     updateCategory: async (record) => {
-      alert("updateCategory final");
       await dispatch(action.updateCategory(record));
       await dispatch(action.getCategory());
     },
     deleteCategory: async (id) => {
-      alert("deleteCategory final" + id);
       await dispatch(action.deleteCategory(id));
       await dispatch(action.getCategory());
     },

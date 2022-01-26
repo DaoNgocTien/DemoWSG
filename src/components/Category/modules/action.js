@@ -27,8 +27,6 @@ const getCategory = () => {
         }
       })
       .catch((err) => {
-        alert(err);
-        alert(typeof (err));
         return dispatch(getFailed());
       });
   };
@@ -46,12 +44,9 @@ const createCategory = record => {
       if (response.status === 200) {
         // console.log(response);
         // return window.location.reload();
-        alert(response.data.data);
       }
     })
       .catch((err) => {
-        alert(err);
-        alert(typeof (err));
         return dispatch(getFailed());
       })
       .finally(() => {
@@ -73,11 +68,9 @@ const updateCategory = (record) => {
       if (response.status === 200) {
         // console.log(response);
         // return window.location.reload();
-        alert(response.data.data);
       }
     }).catch((err) => {
       console.log(err);
-      alert(typeof (err));
       return dispatch(getFailed());
     });
   };
@@ -98,7 +91,6 @@ const deleteCategory = id => {
       }
     }).catch((err) => {
       console.log(err);
-      alert(typeof (err));
       return dispatch(getFailed());
     });
   };

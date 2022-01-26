@@ -66,7 +66,6 @@ export const googleOAuth2 = (googleResponse) => {
       })
         .then((response) => {
           dispatch(actLoginSuccess(response.data));
-          alert(response);
           if (response.data.status === "success") {
             if (response.data.data.user.rolename === "Supplier") {
               localStorage.setItem("user", JSON.stringify(response.data.data.user));
