@@ -1,3 +1,3 @@
-export const GET_DATA_SUCCESS = "productReducer/GET_PRODUCT_SUCCESSS";
-export const GET_DATA_REQUEST = "productReducer/GET_PRODUCT_REQUEST";
-export const GET_DATA_FAIL = "productReducer/GET_PRODUCT_FAIL";
+export const GET_DATA_SUCCESS = "campaign/GET_SUCCESS";
+export const GET_DATA_FAIL = "campaign/GET_FAIL";
+export const GET_DATA_REQUEST = "campaign/GET_REQUEST";

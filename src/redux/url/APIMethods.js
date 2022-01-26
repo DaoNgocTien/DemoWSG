@@ -30,7 +30,6 @@ const post = async (url, data) => {
         exposedHeaders: ["set-cookie"],
     })
         .then((response) => {
-            alert("post " + response.status + JSON.stringify(response.data.data));
 
             if (response.status === 200) {
                 return {

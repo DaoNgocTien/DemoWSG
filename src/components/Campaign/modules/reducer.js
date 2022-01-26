@@ -1,20 +1,16 @@
-import {
-  GET_DATA_FAIL,
-  GET_DATA_REQUEST,
-  GET_DATA_SUCCESS,
-} from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 
 let initialState = {
   loading: true,
-  data: null,
+  data: [],
   err: null,
 };
 
-const brandProductReducer = (state = initialState, action) => {
+const categoryReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_DATA_FAIL:
+    case GET_DATA_REQUEST:
       state.loading = true;
-      state.data = null;
+      state.data = [];
       state.err = null;
       return { ...state };
 
@@ -24,14 +20,14 @@ const brandProductReducer = (state = initialState, action) => {
       state.err = null;
       return { ...state };
 
-    case GET_DATA_REQUEST:
-      state.loading = true;
-      state.data = null;
+    case GET_DATA_FAIL:
+      state.loading = false;
+      state.data = [];
+      // state.err = action.payload;
       return { ...state };
-
     default:
       return { ...state };
   }
 };
 
-export default brandProductReducer;
+export default categoryReducer;

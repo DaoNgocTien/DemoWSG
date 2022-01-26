@@ -30,8 +30,6 @@ const getAllCategory = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
-        console.log(typeof (err));
         return dispatch(getFailed());
       });
   };
@@ -49,12 +47,9 @@ const createCategory = record => {
       if (response.status === 200) {
         console.log(response);
         // return window.location.reload();
-        console.log(response.data.data);
       }
     })
       .catch((err) => {
-        console.log(err);
-        console.log(typeof (err));
         return dispatch(getFailed());
       })
       .finally(() => {
@@ -74,11 +69,11 @@ const updateCategory = (record) => {
     }).then((response) => {
       console.log(response);
       if (response.status === 200) {
-        console.log(response.data.data);
+        // console.log(response);
+        // return window.location.reload();
       }
     }).catch((err) => {
       console.log(err);
-      console.log(typeof (err));
       return dispatch(getFailed());
     });
   };
@@ -99,7 +94,6 @@ const deleteCategory = id => {
       }
     }).catch((err) => {
       console.log(err);
-      console.log(typeof (err));
       return dispatch(getFailed());
     });
   };

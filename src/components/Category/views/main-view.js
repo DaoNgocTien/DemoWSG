@@ -1,11 +1,5 @@
 import React, { Component, memo } from "react";
-import {
-  Table,
-  Button,
-  Input,
-  Row,
-  Col,
-} from "antd";
+import { Table, Button, Input, Row, Col } from "antd";
 import PropTypes from "prop-types";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
@@ -32,12 +26,11 @@ const propsDefault = {
     supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
     isdeleted: false,
     createdat: "2022-01-23T12:03:11.309Z",
-    updatedat: "2022-01-23T12:03:11.309Z"
+    updatedat: "2022-01-23T12:03:11.309Z",
   },
   createCategory: () => { },
   updateCategory: () => { },
   deleteCategory: () => { },
-
 };
 
 class CategoryUI extends Component {
@@ -45,7 +38,6 @@ class CategoryUI extends Component {
   static defaultProps = propsDefault;
   state = {
     selectedRowKeys: [], // Check here to configure the default column
-    loading: false,
     editButton: false,
     deleteButton: false,
     addNewButton: true,
@@ -60,30 +52,30 @@ class CategoryUI extends Component {
     console.log("CategoryUI");
     console.log(this.props);
     console.log(this.state);
-
   }
 
-  start = openModal => {
+  start = (openModal) => {
     switch (openModal) {
       case "openCreateModal":
-        this.setState({ loading: true, openCreateModal: true });
+        this.setState({ openCreateModal: true });
         break;
 
       case "openDeleteModal":
-        this.setState({ loading: true, openDeleteModal: true });
+        this.setState({ openDeleteModal: true });
 
         break;
 
       case "openEditModal":
-        this.setState({ loading: true, openEditModal: true });
+        this.setState({ openEditModal: true });
 
         break;
-      default: break;
+      default:
+        break;
     }
   };
 
-  onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+  onSelectChange = (selectedRowKeys) => {
+    console.log("selectedRowKeys changed: ", selectedRowKeys);
     this.setState({
       selectedRowKeys,
       editButton: selectedRowKeys.length == 1,
@@ -95,7 +87,6 @@ class CategoryUI extends Component {
   closeModal = () => {
     this.setState({
       selectedRowKeys: [],
-      loading: false,
       editButton: false,
       deleteButton: false,
       addNewButton: true,
@@ -105,7 +96,7 @@ class CategoryUI extends Component {
       openDeleteModal: false,
       openEditModal: false,
     });
-  }
+  };
 
   columns = [
     {
@@ -116,7 +107,7 @@ class CategoryUI extends Component {
         return index + 1;
       },
       width: 100,
-      fixed: 'left',
+      fixed: "left",
     },
 
     {
@@ -128,23 +119,23 @@ class CategoryUI extends Component {
     },
 
     {
-      title: "Created Date",
+      title: "Created At",
       dataIndex: "createdat",
       key: "createdat",
       sorter: (a, b) => a.createdat.length - b.createdat.length,
       render: (text, record) => {
-        return ((new Date(record.createdat)).toString()).slice(0, 24);
-      }
+        return new Date(record.createdat).toString().slice(0, 24);
+      },
     },
 
     {
-      title: "Updated Date",
+      title: "Updated At",
       dataIndex: "updatedat",
       key: "updatedat",
       sorter: (a, b) => a.updatedat.length - b.updatedat.length,
       render: (text, record) => {
-        return ((new Date(record.updatedat)).toString()).slice(0, 24);
-      }
+        return new Date(record.updatedat).toString().slice(0, 24);
+      },
     },
   ];
 
@@ -163,7 +154,6 @@ class CategoryUI extends Component {
 
   render() {
     const {
-      loading,
       selectedRowKeys,
       deleteButton,
       editButton,
@@ -175,11 +165,7 @@ class CategoryUI extends Component {
       searchData,
     } = this.state;
 
-    const {
-      createCategory,
-      updateCategory,
-      deleteCategory,
-    } = this.props;
+    const { createCategory, updateCategory, deleteCategory } = this.props;
 
     const rowSelection = {
       selectedRowKeys,
@@ -188,7 +174,6 @@ class CategoryUI extends Component {
     // const hasSelected = selectedRowKeys.length > 0;
 
     return (
-
       <div>
         <CreateModal
           openModal={openCreateModal}
@@ -206,35 +191,56 @@ class CategoryUI extends Component {
           openModal={openEditModal}
           closeModal={this.closeModal}
           updateCategory={updateCategory}
-          record={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })[0]}
+          record={
+            this.props.data.filter((item) => {
+              return selectedRowKeys.includes(item.id);
+            })[0]
+          }
           selectedRowKeys={selectedRowKeys[0]}
         />
 
         <div style={{ marginBottom: 16 }}>
           <Row>
-            <Col flex={5}>
-              <Button type="primary" onClick={() => this.start("openCreateModal")} disabled={!addNewButton} loading={loading}>
+            <Col flex={3}>
+              <Button
+                type="primary"
+                onClick={() => this.start("openCreateModal")}
+                disabled={!addNewButton}
+              >
                 Add New
               </Button>
-              <Button type="primary" onClick={() => this.start("openEditModal")} disabled={!editButton} loading={loading} style={{ marginLeft: 3, width: 90 }}>
+              <Button
+                type="primary"
+                onClick={() => this.start("openEditModal")}
+                disabled={!editButton}
+                style={{ marginLeft: 3, width: 90 }}
+              >
                 Edit
               </Button>
-              <Button type="danger" onClick={() => this.start("openDeleteModal")} disabled={!deleteButton} loading={loading} style={{ marginLeft: 3, width: 90 }}>
+              <Button
+                type="danger"
+                onClick={() => this.start("openDeleteModal")}
+                disabled={!deleteButton}
+                style={{ marginLeft: 3, width: 90 }}
+              >
                 Delete
               </Button>
               <span style={{ marginLeft: 8 }}>
-                {selectedRowKeys.length > 0 ? `Selected ${selectedRowKeys.length} items` : ''}
+                {selectedRowKeys.length > 0
+                  ? `Selected ${selectedRowKeys.length} items`
+                  : ""}
               </span>
             </Col>
-            <Col flex={2}>
-
-            </Col>
-            <Col flex={3}>
-              <Input onChange={e => this.onChangeHandler(e)} placeholder="Search data" />
+            <Col flex={4}>
+              <Input
+                onChange={(e) => this.onChangeHandler(e)}
+                placeholder="Search data"
+              />
             </Col>
           </Row>
         </div>
         <Table
+          loading={this.props.loading}
           rowSelection={rowSelection}
           columns={this.columns}
           dataSource={displayData.length === 0 && searchData === '' ? this.props.data : displayData}
