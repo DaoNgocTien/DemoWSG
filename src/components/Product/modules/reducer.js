@@ -6,15 +6,15 @@ import {
 
 let initialState = {
   loading: true,
-  data: null,
+  data: [],
   err: null,
 };
 
-const brandProductReducer = (state = initialState, action) => {
+const productReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_FAIL:
       state.loading = true;
-      state.data = null;
+      state.data = [];
       state.err = null;
       return { ...state };
 
@@ -26,7 +26,7 @@ const brandProductReducer = (state = initialState, action) => {
 
     case GET_DATA_REQUEST:
       state.loading = true;
-      state.data = null;
+      state.data = [];
       return { ...state };
 
     default:
@@ -34,4 +34,4 @@ const brandProductReducer = (state = initialState, action) => {
   }
 };
 
-export default brandProductReducer;
+export default productReducer;

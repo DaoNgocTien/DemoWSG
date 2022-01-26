@@ -1,4 +1,5 @@
 import React, { Component, memo } from "react";
+import moment from "moment";
 import {
   Table,
   Button,
@@ -40,7 +41,7 @@ const propsDefault = {
 
 };
 
-class CategoryUI extends Component {
+class ProductUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
@@ -53,11 +54,10 @@ class CategoryUI extends Component {
     openDeleteModal: false,
     openEditModal: false,
     displayData: [],
-    searchDataa: "",
   };
 
   componentDidMount() {
-    console.log("CategoryUI");
+    console.log("ProductUI");
     console.log(this.props);
     console.log(this.state);
 
@@ -92,72 +92,113 @@ class CategoryUI extends Component {
     });
   };
 
-  closeModal = () => {
-    this.setState({
-      selectedRowKeys: [],
-      loading: false,
-      editButton: false,
-      deleteButton: false,
-      addNewButton: true,
-    });
-    this.setState({
-      openCreateModal: false,
-      openDeleteModal: false,
-      openEditModal: false,
-    });
-  }
+  // closeModal = () => {
+  //   this.setState({
+  //     selectedRowKeys: [],
+  //     loading: false,
+  //     editButton: false,
+  //     deleteButton: false,
+  //     addNewButton: true,
+  //   });
+  //   this.setState({
+  //     openCreateModal: false,
+  //     openDeleteModal: false,
+  //     openEditModal: false,
+  //   });
+  // }
 
   columns = [
     {
       title: "No.",
       dataIndex: "No.",
       key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      width: 100,
-      fixed: 'left',
+      width: 60,
+      render: (text, object, index) => index + 1,
     },
-
+    {
+      title: "Image",
+      dataIndex: "image",
+      width: 100,
+      key: "image",
+      render: (url) => {
+        if (url.length > 0) {
+          url = JSON.parse(url);
+          return (
+            <img
+              src={url[0].url}
+              alt="avatar"
+              style={{ width: "90px", height: "70px", margin: "auto" }}
+            />
+          );
+        }
+      },
+    },
     {
       title: "Name",
-      dataIndex: "categoryname",
-      key: "categoryname",
-      sorter: (a, b) => a.categoryname.length - b.categoryname.length,
-      fix: "left",
+      dataIndex: "name",
+      width: 200,
+      key: "name",
     },
-
+    {
+      title: "Category",
+      dataIndex: "categoryname",
+      width: 200,
+      key: "categoryname",
+    },
+    {
+      title: "Retail Price",
+      dataIndex: "retailprice",
+      width: 200,
+      key: "retailprice",
+    },
+    {
+      title: "Wholesale Price",
+      dataIndex: "wholesaleprice",
+      width: 200,
+      key: "wholesaleprice",
+    },
+    {
+      title: "Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+      width: 100,
+    },
     {
       title: "Created Date",
       dataIndex: "createdat",
       key: "createdat",
-      sorter: (a, b) => a.createdat.length - b.createdat.length,
-      render: (text, record) => {
-        return ((new Date(record.createdat)).toString()).slice(0, 24);
-      }
+      width: 150,
+      render: (data) => moment(data).format("YYYY-MM-DD HH:mm:ss"),
     },
-
-    {
-      title: "Updated Date",
-      dataIndex: "updatedat",
-      key: "updatedat",
-      sorter: (a, b) => a.updatedat.length - b.updatedat.length,
-      render: (text, record) => {
-        return ((new Date(record.updatedat)).toString()).slice(0, 24);
-      }
-    },
+    // {
+    //   title: "Action",
+    //   dataIndex: "action",
+    //   key: "action",
+    //   width: 100,
+    //   render: (text, records) => (
+    //     <Space>
+    //       <Button
+    //         onClick={() => this.onViewClick(records)}
+    //         shape="round"
+    //         style={{ background: "#e3c7ff", color: "#6f0dd0", border: "none" }}
+    //       >
+    //         view
+    //       </Button>
+    //     </Space>
+    //   ),
+    //   fixed: "right",
+    // },
   ];
 
   onChangeHandler = (e) => {
     let { data } = this.props;
-    let searchString = data.filter(item => {
+    let searchData = data.filter(item => {
       return item.categoryname.includes(e.target.value)
         || item.createdat.includes(e.target.value)
         || item.updatedat.includes(e.target.value);
     });
     this.setState({
-      displayData: searchString,
-      searchData: searchString
+      displayData: searchData
     })
   }
 
@@ -172,7 +213,6 @@ class CategoryUI extends Component {
       openDeleteModal,
       openEditModal,
       displayData,
-      searchData,
     } = this.state;
 
     const {
@@ -193,21 +233,22 @@ class CategoryUI extends Component {
         <CreateModal
           openModal={openCreateModal}
           closeModal={this.closeModal}
-          createCategory={createCategory}
+          categoryList={this.props.categoryList}
+          // createCategory={createCategory}
         />
         <DeleteModal
           openModal={openDeleteModal}
           closeModal={this.closeModal}
-          deleteCategory={deleteCategory}
-          selectedRowKeys={selectedRowKeys}
-          data={this.props.data}
+          // deleteCategory={deleteCategory}
+          // selectedRowKeys={selectedRowKeys}
+          // data={this.props.data}
         />
         <EditModal
           openModal={openEditModal}
           closeModal={this.closeModal}
-          updateCategory={updateCategory}
-          record={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })[0]}
-          selectedRowKeys={selectedRowKeys[0]}
+          // updateCategory={updateCategory}
+          // record={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })[0]}
+          // selectedRowKeys={selectedRowKeys[0]}
         />
 
         <div style={{ marginBottom: 16 }}>
@@ -234,12 +275,7 @@ class CategoryUI extends Component {
             </Col>
           </Row>
         </div>
-        <Table
-          rowSelection={rowSelection}
-          columns={this.columns}
-          dataSource={displayData.length === 0 && searchData === '' ? this.props.data : displayData}
-          scroll={{ y: 350 }}
-        />
+        <Table rowSelection={rowSelection} columns={this.columns} dataSource={displayData.length == 0 ? this.props.data : displayData} scroll={{ y: 350 }} />
       </div>
     );
   }
@@ -250,4 +286,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(CategoryUI, arePropsEqual);
+export default memo(ProductUI, arePropsEqual);

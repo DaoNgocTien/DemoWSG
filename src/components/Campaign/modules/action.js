@@ -1,39 +1,44 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
+import {
+  GET_DATA_FAIL,
+  GET_DATA_REQUEST,
+  GET_DATA_SUCCESS,
+} from "./constant";
 import Axios from "axios";
 
-export const getCategory = () => {
+export const getAllProduct = () => {
   return async (dispatch) => {
-    dispatch(getRequest());
+    dispatch(getProductRequest());
     Axios({
-      url: `/categories/All`,
+      url: `/products/All`,
       method: "GET",
       withCredentials: true,
+      exposedHeaders: ["set-cookie"],
     })
       .then((result) => {
-        if (result.status === 200) {
-          return dispatch(getSuccess(result.data.data));
-        }
+        console.log(result);
+        return dispatch(getProductSuccess(result.data.data));
       })
       .catch((err) => {
-        return dispatch(getFailed());
+        return dispatch(getProducFail(err));
       });
   };
 };
 
-const getRequest = () => {
+const getProductRequest = () => {
   return {
     type: GET_DATA_REQUEST,
   };
 };
 
-const getSuccess = (data) => {
+const getProductSuccess = (data) => {
+  console.log(data)
   return {
     type: GET_DATA_SUCCESS,
     payload: data,
   };
 };
 
-const getFailed = (err) => {
+const getProducFail = (err) => {
   return {
     type: GET_DATA_FAIL,
     payload: err,

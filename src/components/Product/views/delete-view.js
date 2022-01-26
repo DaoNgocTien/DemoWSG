@@ -108,12 +108,6 @@ class DeleteModal extends Component {
                 <Form id="deleteForm" onFinish={this.handleDelete}>
                     <Modal
                         width={window.innerWidth * 0.7}
-                        heigh={window.innerHeight * 0.5}
-                        style={{
-                            position: "absolute",
-                            top: window.innerHeight / 2,
-                            left: window.innerWidth / 2
-                        }}
                         title={`Records to be deleted: ${selectedRowKeys.length} items`}
                         visible={openModal}
                         // onOk={this.handleOk}

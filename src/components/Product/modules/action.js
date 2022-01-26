@@ -1,43 +1,35 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
-import APIMethods from "../../../redux/url/APIMethods";
+import action from "../../Category/modules/action";
 
-const getAllCategory = () => {
+const getAllProduct = () => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/categories/All`,
+      url: `/products/All`,
       method: "GET",
       withCredentials: true,
+      exposedHeaders: ["set-cookie"],
     })
-      .then((result) => {
-        if (result.status === 200) {
-          console.log(result.data.data);
-
-          const data = (result.data.data).map(category => {
-            console.log(category);
-            return {
-              key: category.id,
-              ...category
-            }
-          });
-          // if (Array.isArray(data)) {
-          //   data.map((item) => {
-          //     console.log(item);
-          //   })
-          // }
-          return dispatch(getSuccess(data));
-        }
-      })
+    .then((result) => {
+      if (result.status === 200) {
+        const data = (result.data.data).map(product => {
+          return {
+            key: product.id,
+            ...product
+          }
+        });
+        dispatch(action.getAllCategory());
+        return dispatch(getSuccess(data));
+      }
+    })
       .catch((err) => {
-        console.log(err);
-        console.log(typeof (err));
-        return dispatch(getFailed());
+        return dispatch(getFailed(err));
       });
   };
 };
 
-const createCategory = record => {
+const createProduct = record => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -47,14 +39,12 @@ const createCategory = record => {
       withCredentials: true,
     }).then((response) => {
       if (response.status === 200) {
-        console.log(response);
-        // return window.location.reload();
         console.log(response.data.data);
       }
     })
       .catch((err) => {
-        console.log(err);
-        console.log(typeof (err));
+        // console.log(err);
+        // console.log(typeof (err));
         return dispatch(getFailed());
       })
       .finally(() => {
@@ -62,18 +52,20 @@ const createCategory = record => {
   };
 }
 
-const updateCategory = (record) => {
+const updateProduct = (record) => {
   console.log(record);
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
       url: `/categories/${record.id}`,
       method: "PUT",
-      data: { categoryName: record.categoryName },
+      data: { name: record.name },
       withCredentials: true,
     }).then((response) => {
       console.log(response);
       if (response.status === 200) {
+        // console.log(response);
+        // return window.location.reload();
         console.log(response.data.data);
       }
     }).catch((err) => {
@@ -84,7 +76,7 @@ const updateCategory = (record) => {
   };
 }
 
-const deleteCategory = id => {
+const deleteProduct = id => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -126,8 +118,8 @@ const getFailed = (err) => {
 };
 
 export default {
-  getAllCategory: getAllCategory,
-  createCategory: createCategory,
-  updateCategory: updateCategory,
-  deleteCategory: deleteCategory
+  getAllProduct: getAllProduct,
+  createProduct: createProduct,
+  updateProduct: updateProduct,
+  deleteProduct: deleteProduct
 }
