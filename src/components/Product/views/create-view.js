@@ -14,25 +14,34 @@ import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
-  createCategory: PropTypes.func,
-  defaultCategory: PropTypes.object,
-  openModal: PropTypes.bool
+  createProduct: PropTypes.func,
+  defaultProduct: PropTypes.object,
+  openModal: PropTypes.bool,
+  categoryList: PropTypes.array,
 };
 
 //  default props
 const propsDefault = {
   closeModal: () => { },
-  createCategory: () => { },
-  defaultCategory: {
-    key: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    id: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    categoryname: "Ipad",
+  createProduct: () => { },
+  defaultProduct: {
+    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
+    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
+    name: "test222 again Product",
     supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    isdeleted: false,
-    createdat: "2022-01-23T12:03:11.309Z",
-    updatedat: "2022-01-23T12:03:11.309Z"
+    retailprice: "5.00",
+    quantity: 11,
+    description: "testttttt",
+    image: "",
+    categoryid: null,
+    status: "active",
+    typeofproduct: "",
+    createdat: "2022-01-07T14:08:02.994Z",
+    updatedat: "2022-01-13T16:34:09.908Z",
+    categoryname: null,
   },
   openModal: false,
+  categoryList: [],
 };
 
 class CreatModal extends Component {
@@ -44,21 +53,27 @@ class CreatModal extends Component {
     previewTitle: "",
     fileList: [],
   };
+  formRef = React.createRef();
+
 
   componentDidMount() {
     console.log(this.props);
   }
 
   handleCreateAndClose = (data) => {
-    this.props.createCategory(data);
+    data.image = this.state.fileList;
+    this.props.createProduct(data);
+    this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
   handleCreate = (data) => {
-    this.props.createCategory(data);
+    this.props.createProduct(data);
+    this.formRef.current.resetFields();
   };
 
   handleCancel = () => {
+    this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -71,7 +86,7 @@ class CreatModal extends Component {
     });
   }
 
-  handleCancel = () => this.setState({ previewVisible: false });
+  handleCancelUploadImage = () => this.setState({ previewVisible: false });
 
   handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -133,82 +148,84 @@ class CreatModal extends Component {
     );
 
     return (
-      <div className="container-fluid">
-        <h1 className="h3 mb-2 text-gray-800" style={{ textAlign: "center" }}>
-          Add Product
-        </h1>
-
-        <div className="card-body">
-          <div className="table-responsive">
-            <Form
-              labelCol={{ span: 4 }}
-              wrapperCol={{ span: 14 }}
-              layout="horizontal"
-              onFinish={(values) => {
-                this.onFinish(values);
-              }}
-            >
-              <Form.Item label="Name" name="name">
-                <Input />
-              </Form.Item>
-              <Form.Item label="Category" name="categoryId">
-                <Select>
-                  {categoryList.map((item) => (
-                    <Select.Option key={item.key} value={item.id}>
-                      {item.categoryname}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-
-              <Form.Item label="image" name="image">
-                <>
-                  <Upload
-                    name="file"
-                    action="/files/upload"
-                    listType="picture-card"
-                    fileList={this.state.fileList}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                  >
-                    {this.state.fileList.length >= 8 ? null : uploadButton}
-                  </Upload>
-                  <Modal
-                    visible={this.state.previewVisible}
-                    title={this.state.previewTitle}
-                    footer={null}
-                    onCancel={this.handleCancel}
-                  >
-                    <img
-                      alt="example"
-                      style={{ width: "100%" }}
-                      src={this.state.previewImage}
-                    />
-                  </Modal>
-                </>
-              </Form.Item>
-              <Form.Item
-                label="Retail Price"
-                name="retailPrice"
-                initialValue={0}
+      <>
+        <Form id="createProductForm" ref={this.formRef} onFinish={this.handleCreateAndClose}>
+          <Modal
+            width={window.innerWidth * 0.7}
+            heigh={window.innerHeight * 0.5}
+            style={{
+              top: 10,
+            }}
+            title="Add New"
+            visible={openModal}
+            onCancel={this.handleCancel}
+            footer={[
+              <Button onClick={this.handleCancel}>Cancel</Button>,
+              <Button
+                type="primary"
+                form="createProductForm"
+                key="submit"
+                htmlType="submit"
               >
-                <InputNumber min={0} default={0} />
-              </Form.Item>
-              <Form.Item label="Quantity" name="quantity" initialValue={0}>
-                <InputNumber min={0} default={0} />
-              </Form.Item>
-              <Form.Item label="Description" name="description">
-                <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
-              </Form.Item>
-              <Form.Item style={{ float: "right" }}>
-                <Button type="text" className="button_submit" htmlType="submit">
-                  <span className="btn btn-info">Submit</span>
-                </Button>
-              </Form.Item>
-            </Form>
-          </div>
-        </div>
-      </div>
+                Submit
+              </Button>,
+            ]}
+          >
+            <Form.Item label="Name" name="name">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Category" name="categoryId">
+              <Select>
+                {categoryList.map((item) => (
+                  <Select.Option key={item.key} value={item.id}>
+                    {item.categoryname}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item label="image" name="image">
+              <>
+                <Upload
+                  name="file"
+                  action="/files/upload"
+                  listType="picture-card"
+                  fileList={this.state.fileList}
+                  onPreview={this.handlePreview}
+                  onChange={this.handleChange}
+                >
+                  {this.state.fileList.length >= 8 ? null : uploadButton}
+                </Upload>
+                <Modal
+                  visible={this.state.previewVisible}
+                  title={this.state.previewTitle}
+                  footer={null}
+                  onCancel={this.handleCancelUploadImage}
+                >
+                  <img
+                    alt="example"
+                    style={{ width: "100%" }}
+                    src={this.state.previewImage}
+                  />
+                </Modal>
+              </>
+            </Form.Item>
+            <Form.Item
+              label="Retail Price"
+              name="retailPrice"
+              initialValue={0}
+            >
+              <InputNumber min={0} default={0} />
+            </Form.Item>
+            <Form.Item label="Quantity" name="quantity" initialValue={0}>
+              <InputNumber min={0} default={0} />
+            </Form.Item>
+            <Form.Item label="Description" name="description">
+              <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} />
+            </Form.Item>
+          </Modal>
+        </Form>
+      </>
     );
   }
 }

@@ -12,10 +12,7 @@ const getAllCategory = () => {
     })
       .then((result) => {
         if (result.status === 200) {
-          console.log(result.data.data);
-
           const data = (result.data.data).map(category => {
-            console.log(category);
             return {
               key: category.id,
               ...category

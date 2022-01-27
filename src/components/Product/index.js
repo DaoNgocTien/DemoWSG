@@ -23,6 +23,7 @@ class ProductPage extends Component {
       <>
         <ProductUI
           data={this.props.data}
+          loading={this.props.loading}
           createProduct={this.props.createProduct}
           updateProduct={this.props.updateProduct}
           deleteProduct={this.props.deleteProduct}

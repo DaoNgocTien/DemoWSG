@@ -1,4 +1,5 @@
 import React, { Component, memo } from "react";
+import moment from "moment";
 import { Table, Button, Input, Row, Col } from "antd";
 import PropTypes from "prop-types";
 import CreateModal from "./create-view";
@@ -85,12 +86,12 @@ class CategoryUI extends Component {
   };
 
   closeModal = () => {
-    this.setState({
-      selectedRowKeys: [],
-      editButton: false,
-      deleteButton: false,
-      addNewButton: true,
-    });
+    // this.setState({
+    //   // selectedRowKeys: [],
+    //   // editButton: false,
+    //   // deleteButton: false,
+    //   // addNewButton: true,
+    // });
     this.setState({
       openCreateModal: false,
       openDeleteModal: false,
@@ -123,9 +124,10 @@ class CategoryUI extends Component {
       dataIndex: "createdat",
       key: "createdat",
       sorter: (a, b) => a.createdat.length - b.createdat.length,
-      render: (text, record) => {
-        return new Date(record.createdat).toString().slice(0, 24);
-      },
+      render: (data) => moment(data).format("DD-MM-YYYY"),
+      // render: (text, record) => {
+      //   return new Date(record.createdat).toString().slice(0, 24);
+      // },
     },
 
     {
@@ -133,9 +135,7 @@ class CategoryUI extends Component {
       dataIndex: "updatedat",
       key: "updatedat",
       sorter: (a, b) => a.updatedat.length - b.updatedat.length,
-      render: (text, record) => {
-        return new Date(record.updatedat).toString().slice(0, 24);
-      },
+      render: (data) => moment(data).format("DD-MM-YYYY"),
     },
   ];
 

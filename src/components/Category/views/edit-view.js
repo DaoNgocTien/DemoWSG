@@ -34,9 +34,7 @@ const propsDefault = {
 class EditModal extends Component {
     static propTypes = propsProTypes;
     static defaultProps = propsDefault;
-    state = {
-        record: this.props.record,
-    };
+    formRef = React.createRef();
 
     componentDidMount() {
         console.log(this.props);
@@ -44,6 +42,7 @@ class EditModal extends Component {
 
     handleEditAndClose = (data) => {
         this.props.updateCategory(data);
+        this.formRef.current.resetFields();
         this.props.closeModal();
     };
 
@@ -52,14 +51,16 @@ class EditModal extends Component {
     };
 
     handleCancel = () => {
+        this.formRef.current.resetFields();
         this.props.closeModal();
     };
 
     render() {
-        const { openModal } = this.props;
+        const { openModal, record, selectedRowKeys } = this.props;
+
         return (
             <>
-                <Form id="editForm" onFinish={this.handleEditAndClose}>
+                <Form id="editCategoryForm" ref={this.formRef} onFinish={this.handleEditAndClose}>
                     <Modal
                         title="Edit a record"
                         visible={openModal}
@@ -69,7 +70,7 @@ class EditModal extends Component {
                             <Button onClick={this.handleCancel}>Cancel</Button>,
                             <Button
                                 type="primary"
-                                form="editForm"
+                                form="editCategoryForm"
                                 key="submit"
                                 htmlType="submit"
                             >
@@ -80,23 +81,24 @@ class EditModal extends Component {
                         <Form.Item
                             label="Category ID"
                             name="id"
-                            initialValue={this.props.selectedRowKeys}
-                            // hidden="true"
+                            initialValue={record.id}
+                            hidden="true"
                         >
                             <Input
                                 placeholder="Category ID"
-                                defaultValue={this.props.selectedRowKeys}
+                                defaultValue={record.id}
                                 disabled={true}
+                                hidden={true}
                             />
                         </Form.Item>
                         <Form.Item
                             label="Category Name"
                             name="categoryName"
-                            initialValue={this.props.record.categoryname}
+                            initialValue={record.categoryname}
                         >
                             <Input
-                                placeholder="Category Name"                            
-                                defaultValue={this.props.record.categoryname}
+                                placeholder="Category Name"
+                                defaultValue={record.categoryname}
                             />
                         </Form.Item>
                     </Modal>

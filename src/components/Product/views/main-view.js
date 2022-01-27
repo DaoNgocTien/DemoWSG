@@ -16,24 +16,31 @@ import EditModal from "./edit-view";
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
-  defaultCategory: PropTypes.object,
-  createCategory: PropTypes.func,
-  updateCategory: PropTypes.func,
-  deleteCategory: PropTypes.func,
+  defaultProduct: PropTypes.object,
+  createProduct: PropTypes.func,
+  updateProduct: PropTypes.func,
+  deleteProduct: PropTypes.func,
 };
 
 //  default props
 const propsDefault = {
   index: 1,
   data: [],
-  defaultCategory: {
-    key: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    id: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    categoryname: "Ipad",
+  defaultProduct: {
+    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
+    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
+    name: "test222 again Product",
     supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    isdeleted: false,
-    createdat: "2022-01-23T12:03:11.309Z",
-    updatedat: "2022-01-23T12:03:11.309Z"
+    retailprice: "5.00",
+    quantity: 11,
+    description: "testttttt",
+    image: "",
+    categoryid: null,
+    status: "active",
+    typeofproduct: "",
+    createdat: "2022-01-07T14:08:02.994Z",
+    updatedat: "2022-01-13T16:34:09.908Z",
+    categoryname: null
   },
   createCategory: () => { },
   updateCategory: () => { },
@@ -45,8 +52,9 @@ class ProductUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
-    selectedRowKeys: [], // Check here to configure the default column
     loading: false,
+    selectedRowKeys: [], // Check here to configure the default column
+    loadingActionButton: false,
     editButton: false,
     deleteButton: false,
     addNewButton: true,
@@ -54,6 +62,7 @@ class ProductUI extends Component {
     openDeleteModal: false,
     openEditModal: false,
     displayData: [],
+    searchData: "",
   };
 
   componentDidMount() {
@@ -66,16 +75,16 @@ class ProductUI extends Component {
   start = openModal => {
     switch (openModal) {
       case "openCreateModal":
-        this.setState({ loading: true, openCreateModal: true });
+        this.setState({ loadingActionButton: true, openCreateModal: true });
         break;
 
       case "openDeleteModal":
-        this.setState({ loading: true, openDeleteModal: true });
+        this.setState({ loadingActionButton: true, openDeleteModal: true });
 
         break;
 
       case "openEditModal":
-        this.setState({ loading: true, openEditModal: true });
+        this.setState({ loadingActionButton: true, openEditModal: true });
 
         break;
       default: break;
@@ -92,20 +101,13 @@ class ProductUI extends Component {
     });
   };
 
-  // closeModal = () => {
-  //   this.setState({
-  //     selectedRowKeys: [],
-  //     loading: false,
-  //     editButton: false,
-  //     deleteButton: false,
-  //     addNewButton: true,
-  //   });
-  //   this.setState({
-  //     openCreateModal: false,
-  //     openDeleteModal: false,
-  //     openEditModal: false,
-  //   });
-  // }
+  closeModal = () => {
+    this.setState({
+      openCreateModal: false,
+      openDeleteModal: false,
+      openEditModal: false,
+    });
+  }
 
   columns = [
     {
@@ -125,8 +127,8 @@ class ProductUI extends Component {
           url = JSON.parse(url);
           return (
             <img
-              src={url[0].url}
-              alt="avatar"
+              src={url[0]?.url}
+              alt="image"
               style={{ width: "90px", height: "70px", margin: "auto" }}
             />
           );
@@ -168,43 +170,35 @@ class ProductUI extends Component {
       dataIndex: "createdat",
       key: "createdat",
       width: 150,
-      render: (data) => moment(data).format("YYYY-MM-DD HH:mm:ss"),
+      render: (data) => moment(data).format("DD-MM-YYYY"),
     },
-    // {
-    //   title: "Action",
-    //   dataIndex: "action",
-    //   key: "action",
-    //   width: 100,
-    //   render: (text, records) => (
-    //     <Space>
-    //       <Button
-    //         onClick={() => this.onViewClick(records)}
-    //         shape="round"
-    //         style={{ background: "#e3c7ff", color: "#6f0dd0", border: "none" }}
-    //       >
-    //         view
-    //       </Button>
-    //     </Space>
-    //   ),
-    //   fixed: "right",
-    // },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+      width: 250,
+    },
   ];
 
   onChangeHandler = (e) => {
     let { data } = this.props;
-    let searchData = data.filter(item => {
-      return item.categoryname.includes(e.target.value)
-        || item.createdat.includes(e.target.value)
-        || item.updatedat.includes(e.target.value);
+    let searchList = data.filter(item => {
+      return item.name.includes(e.target.value)
+        || item.categoryname.includes(e.target.value)
+        || item.retailprice.includes(e.target.value)
+        || item.wholesaleprice.includes(e.target.value)
+        || item.quantity.includes(e.target.value)
+        || item.description.includes(e.target.value);
     });
     this.setState({
-      displayData: searchData
+      displayData: searchList,
+      searchData: e.target.value,
     })
   }
 
   render() {
     const {
-      loading,
+      loadingActionButton,
       selectedRowKeys,
       deleteButton,
       editButton,
@@ -213,12 +207,14 @@ class ProductUI extends Component {
       openDeleteModal,
       openEditModal,
       displayData,
+      searchData,
     } = this.state;
 
     const {
-      createCategory,
-      updateCategory,
-      deleteCategory,
+      categoryList,
+      createProduct,
+      updateProduct,
+      deleteProduct,
     } = this.props;
 
     const rowSelection = {
@@ -233,34 +229,34 @@ class ProductUI extends Component {
         <CreateModal
           openModal={openCreateModal}
           closeModal={this.closeModal}
-          categoryList={this.props.categoryList}
-          // createCategory={createCategory}
+          categoryList={categoryList}
+          createProduct={createProduct}
         />
         <DeleteModal
           openModal={openDeleteModal}
           closeModal={this.closeModal}
-          // deleteCategory={deleteCategory}
-          // selectedRowKeys={selectedRowKeys}
-          // data={this.props.data}
+        // deleteCategory={deleteCategory}
+        // selectedRowKeys={selectedRowKeys}
+        // data={this.props.data}
         />
         <EditModal
           openModal={openEditModal}
           closeModal={this.closeModal}
-          // updateCategory={updateCategory}
-          // record={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })[0]}
-          // selectedRowKeys={selectedRowKeys[0]}
+        // updateCategory={updateCategory}
+        // record={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })[0]}
+        // selectedRowKeys={selectedRowKeys[0]}
         />
 
         <div style={{ marginBottom: 16 }}>
           <Row>
             <Col flex={5}>
-              <Button type="primary" onClick={() => this.start("openCreateModal")} disabled={!addNewButton} loading={loading}>
+              <Button type="primary" onClick={() => this.start("openCreateModal")} disabled={!addNewButton} loading={loadingActionButton}>
                 Add New
               </Button>
-              <Button type="primary" onClick={() => this.start("openEditModal")} disabled={!editButton} loading={loading} style={{ marginLeft: 3, width: 90 }}>
+              <Button type="primary" onClick={() => this.start("openEditModal")} disabled={!editButton} loading={loadingActionButton} style={{ marginLeft: 3, width: 90 }}>
                 Edit
               </Button>
-              <Button type="danger" onClick={() => this.start("openDeleteModal")} disabled={!deleteButton} loading={loading} style={{ marginLeft: 3, width: 90 }}>
+              <Button type="danger" onClick={() => this.start("openDeleteModal")} disabled={!deleteButton} loading={loadingActionButton} style={{ marginLeft: 3, width: 90 }}>
                 Delete
               </Button>
               <span style={{ marginLeft: 8 }}>
@@ -275,7 +271,13 @@ class ProductUI extends Component {
             </Col>
           </Row>
         </div>
-        <Table rowSelection={rowSelection} columns={this.columns} dataSource={displayData.length == 0 ? this.props.data : displayData} scroll={{ y: 350 }} />
+        <Table
+          loading={this.props.loading}
+          rowSelection={rowSelection}
+          columns={this.columns}
+          dataSource={displayData.length === 0 && searchData === "" ? this.props.data : displayData}
+          scroll={{ y: 350 }}
+        />
       </div>
     );
   }

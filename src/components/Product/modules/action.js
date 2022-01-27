@@ -13,6 +13,7 @@ const getAllProduct = () => {
     })
     .then((result) => {
       if (result.status === 200) {
+        console.log(result.data.data);
         const data = (result.data.data).map(product => {
           return {
             key: product.id,
@@ -33,7 +34,7 @@ const createProduct = record => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/categories/`,
+      url: `/products/`,
       method: "POST",
       data: record,
       withCredentials: true,
