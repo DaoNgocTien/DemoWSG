@@ -6,6 +6,8 @@ import {
   Input,
   Row,
   Col,
+  Space,
+  PageHeader,
 } from "antd";
 import PropTypes from "prop-types";
 import CreateModal from "./create-view";
@@ -44,7 +46,7 @@ const propsDefault = {
   },
   createCategory: () => { },
   updateCategory: () => { },
-  deleteCategory: () => { },
+  deleteProduct: () => { },
 
 };
 
@@ -182,17 +184,20 @@ class ProductUI extends Component {
 
   onChangeHandler = (e) => {
     let { data } = this.props;
+    console.log(data);
+    let searchString = e.target.value;
     let searchList = data.filter(item => {
-      return item.name.includes(e.target.value)
-        || item.categoryname.includes(e.target.value)
-        || item.retailprice.includes(e.target.value)
-        || item.wholesaleprice.includes(e.target.value)
-        || item.quantity.includes(e.target.value)
-        || item.description.includes(e.target.value);
+      console.log(item);
+      return item.categoryname.includes(searchString)
+        || item.createdat.includes(searchString)
+        || item.description.includes(searchString)
+        || item.name.includes(searchString)
+        || item.quantity.includes(searchString)
+        || item.retailprice.includes(searchString);
     });
     this.setState({
       displayData: searchList,
-      searchData: e.target.value,
+      searchData: searchString ?? "",
     })
   }
 
@@ -223,62 +228,91 @@ class ProductUI extends Component {
     };
     // const hasSelected = selectedRowKeys.length > 0;
 
+
+    const arrayLocation = (window.location.pathname).split("/");
     return (
+      <PageHeader
+        className="site-page-header-responsive"
+        onBack={() => window.history.back()}
+        title={(arrayLocation[2]).toUpperCase()}
+        subTitle={`This is a ${arrayLocation[2]} page`}
+        footer={
 
-      <div>
-        <CreateModal
-          openModal={openCreateModal}
-          closeModal={this.closeModal}
-          categoryList={categoryList}
-          createProduct={createProduct}
-        />
-        <DeleteModal
-          openModal={openDeleteModal}
-          closeModal={this.closeModal}
-        // deleteCategory={deleteCategory}
-        // selectedRowKeys={selectedRowKeys}
-        // data={this.props.data}
-        />
-        <EditModal
-          openModal={openEditModal}
-          closeModal={this.closeModal}
-        // updateCategory={updateCategory}
-        // record={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })[0]}
-        // selectedRowKeys={selectedRowKeys[0]}
-        />
+          <div>
+            <CreateModal
+              openModal={openCreateModal}
+              closeModal={this.closeModal}
+              categoryList={categoryList}
+              createProduct={createProduct}
+            />
+            <DeleteModal
+              openModal={openDeleteModal}
+              closeModal={this.closeModal}
+              deleteProduct={deleteProduct}
+              selectedRowKeys={selectedRowKeys}
+              data={this.props.data}
+            />
+            <EditModal
+              openModal={openEditModal}
+              closeModal={this.closeModal}
+              categoryList={categoryList}
+              updateProduct={updateProduct}
+              record={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })[0]}
+              selectedRowKeys={selectedRowKeys[0]}
+            />
 
-        <div style={{ marginBottom: 16 }}>
-          <Row>
-            <Col flex={5}>
-              <Button type="primary" onClick={() => this.start("openCreateModal")} disabled={!addNewButton} loading={loadingActionButton}>
-                Add New
-              </Button>
-              <Button type="primary" onClick={() => this.start("openEditModal")} disabled={!editButton} loading={loadingActionButton} style={{ marginLeft: 3, width: 90 }}>
-                Edit
-              </Button>
-              <Button type="danger" onClick={() => this.start("openDeleteModal")} disabled={!deleteButton} loading={loadingActionButton} style={{ marginLeft: 3, width: 90 }}>
-                Delete
-              </Button>
-              <span style={{ marginLeft: 8 }}>
-                {selectedRowKeys.length > 0 ? `Selected ${selectedRowKeys.length} items` : ''}
-              </span>
-            </Col>
-            <Col flex={2}>
+            <div style={{ marginBottom: 16 }}>
+              <Row>
+                <Col flex={5}>
+                  <Space size={3}>
+                    <Button
+                      type="primary"
+                      onClick={() => this.start("openCreateModal")}
+                      disabled={!addNewButton}
+                    >
+                      Add New
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={() => this.start("openEditModal")}
+                      disabled={!editButton}
+                      style={{ width: 90 }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      type="danger"
+                      onClick={() => this.start("openDeleteModal")}
+                      disabled={!deleteButton}
+                      style={{ width: 90 }}
+                    >
+                      Delete
+                    </Button>
+                    <span style={{ marginLeft: 8 }}>
+                      {selectedRowKeys.length > 0 ? `Selected ${selectedRowKeys.length} items` : ''}
+                    </span>
+                  </Space>
+                </Col>
+                <Col flex={2}>
 
-            </Col>
-            <Col flex={3}>
-              <Input onChange={e => this.onChangeHandler(e)} placeholder="Search data" />
-            </Col>
-          </Row>
-        </div>
-        <Table
-          loading={this.props.loading}
-          rowSelection={rowSelection}
-          columns={this.columns}
-          dataSource={displayData.length === 0 && searchData === "" ? this.props.data : displayData}
-          scroll={{ y: 350 }}
-        />
-      </div>
+                </Col>
+                <Col flex={3}>
+                  <Input onChange={e => this.onChangeHandler(e)} placeholder="Search data" />
+                </Col>
+              </Row>
+            </div>
+            <Table
+              loading={this.props.loading}
+              rowSelection={rowSelection}
+              columns={this.columns}
+              dataSource={displayData.length === 0 && searchData === "" ? this.props.data : displayData}
+              scroll={{ y: 350 }}
+            />
+          </div>
+        }
+      >
+      </PageHeader>
+
     );
   }
 }

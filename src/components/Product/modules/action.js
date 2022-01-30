@@ -11,19 +11,19 @@ const getAllProduct = () => {
       withCredentials: true,
       exposedHeaders: ["set-cookie"],
     })
-    .then((result) => {
-      if (result.status === 200) {
-        console.log(result.data.data);
-        const data = (result.data.data).map(product => {
-          return {
-            key: product.id,
-            ...product
-          }
-        });
-        dispatch(action.getAllCategory());
-        return dispatch(getSuccess(data));
-      }
-    })
+      .then((result) => {
+        if (result.status === 200) {
+          console.log(result.data.data);
+          const data = (result.data.data).map(product => {
+            return {
+              key: product.id,
+              ...product
+            }
+          });
+          dispatch(action.getAllCategory());
+          return dispatch(getSuccess(data));
+        }
+      })
       .catch((err) => {
         return dispatch(getFailed(err));
       });
@@ -58,9 +58,14 @@ const updateProduct = (record) => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/categories/${record.id}`,
+      url: `/products/${record.id}`,
       method: "PUT",
-      data: { name: record.name },
+      data: {
+        name: record.name,
+        retailPrice: record?.retailPrice,
+        quantity: record?.quantity,
+        description: record?.description
+      },
       withCredentials: true,
     }).then((response) => {
       console.log(response);
@@ -81,7 +86,7 @@ const deleteProduct = id => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/categories/${id}`,
+      url: `/products/${id}`,
       method: "DELETE",
       withCredentials: true,
     }).then((response) => {

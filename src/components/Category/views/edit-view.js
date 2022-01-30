@@ -19,25 +19,32 @@ const propsProTypes = {
 const propsDefault = {
     closeModal: () => { },
     updateCategory: () => { },
-    record: {
-        key: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-        id: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-        categoryname: "Ipad",
-        supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-        isdeleted: false,
-        createdat: "2022-01-23T12:03:11.309Z",
-        updatedat: "2022-01-23T12:03:11.309Z"
-    },
+    // record: {
+    //     key: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
+    //     id: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
+    //     categoryname: "Ipad",
+    //     supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
+    //     isdeleted: false,
+    //     createdat: "2022-01-23T12:03:11.309Z",
+    //     updatedat: "2022-01-23T12:03:11.309Z"
+    // },
     openModal: false,
 };
 
 class EditModal extends Component {
     static propTypes = propsProTypes;
     static defaultProps = propsDefault;
+    state = { record: this.props.record };
     formRef = React.createRef();
 
     componentDidMount() {
+        console.log("EditModal Didmount");
+
         console.log(this.props);
+        this.formRef.current.setFieldsValue({
+            id: this.props.record?.id,
+            categoryname: this.props.record?.categoryname,
+        });
     }
 
     handleEditAndClose = (data) => {
@@ -56,15 +63,29 @@ class EditModal extends Component {
     };
 
     render() {
-        const { openModal, record, selectedRowKeys } = this.props;
+        const { openModal, record, data, selectedRowKeys } = this.props;
+        // this.handelOpenModal(data, selectedRowKeys);
+        // const record = data.filter((item) => {
+        //     return selectedRowKeys?.includes(item.id);
+        // })[0];
+        // let record = data.filter((item) => {
+        //     return selectedRowKeys.includes(item.id);
+        //   })[0];
+        console.log("Record EditModal");
 
+        console.log(record);
+        console.log(this.state.record);
         return (
             <>
-                <Form id="editCategoryForm" ref={this.formRef} onFinish={this.handleEditAndClose}>
+                <Form
+                    key={record?.key}
+                    id="editCategoryForm"
+                    ref={this.formRef}
+                    onFinish={this.handleEditAndClose}
+                >
                     <Modal
                         title="Edit a record"
                         visible={openModal}
-                        // onOk={this.handleOk}
                         onCancel={this.handleCancel}
                         footer={[
                             <Button onClick={this.handleCancel}>Cancel</Button>,
@@ -81,24 +102,25 @@ class EditModal extends Component {
                         <Form.Item
                             label="Category ID"
                             name="id"
-                            initialValue={record.id}
+                            initialValue={record?.id}
                             hidden="true"
                         >
                             <Input
                                 placeholder="Category ID"
-                                defaultValue={record.id}
                                 disabled={true}
                                 hidden={true}
+                                value={record?.id}
                             />
                         </Form.Item>
                         <Form.Item
                             label="Category Name"
                             name="categoryName"
-                            initialValue={record.categoryname}
+                            initialValue={record?.categoryname}
                         >
                             <Input
                                 placeholder="Category Name"
-                                defaultValue={record.categoryname}
+
+                                value={record?.categoryname}
                             />
                         </Form.Item>
                     </Modal>

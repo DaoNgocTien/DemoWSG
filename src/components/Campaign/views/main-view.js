@@ -1,5 +1,5 @@
 import React, { Component, memo } from "react";
-import { Table, Button, Input, Row, Col } from "antd";
+import { Table, Button, Input, Row, Col, PageHeader } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
 //  prototype
@@ -97,6 +97,7 @@ class CampaignUI extends Component {
     });
   };
 
+
   render() {
     const { selectedRowKeys, displayData, searchKey } = this.state;
 
@@ -105,38 +106,48 @@ class CampaignUI extends Component {
       onChange: this.onSelectChange,
     };
     // const hasSelected = selectedRowKeys.length > 0;
-
+    const arrayLocation = (window.location.pathname).split("/");
     return (
-      <div>
-        <div style={{ marginBottom: 16 }}>
-          <Row>
-            <Col flex={3}>
-              <span style={{ marginLeft: 8 }}>
-                {selectedRowKeys.length > 0
-                  ? `Selected ${selectedRowKeys.length} items`
-                  : ""}
-              </span>
-            </Col>
-            <Col flex={4}>
-              <Input
-                onChange={(e) => this.onChangeHandler(e)}
-                placeholder="Search data"
-              />
-            </Col>
-          </Row>
-        </div>
-        <Table
-          loading={this.props.loading}
-          rowSelection={rowSelection}
-          columns={this.columns}
-          dataSource={
-            displayData.length === 0 && searchKey === ""
-              ? this.props.data
-              : displayData
-          }
-          scroll={{ y: 350 }}
-        />
-      </div>
+      <PageHeader
+        className="site-page-header-responsive"
+        onBack={() => window.history.back()}
+        title={(arrayLocation[2]).toUpperCase()}
+        subTitle={`This is a ${arrayLocation[2]} page`}
+        footer={
+          <div>
+            <div style={{ marginBottom: 16 }}>
+              <Row>
+                <Col flex={3}>
+                  <span style={{ marginLeft: 8 }}>
+                    {selectedRowKeys.length > 0
+                      ? `Selected ${selectedRowKeys.length} items`
+                      : ""}
+                  </span>
+                </Col>
+                <Col flex={4}>
+                  <Input
+                    onChange={(e) => this.onChangeHandler(e)}
+                    placeholder="Search data"
+                  />
+                </Col>
+              </Row>
+            </div>
+            <Table
+              loading={this.props.loading}
+              rowSelection={rowSelection}
+              columns={this.columns}
+              dataSource={
+                displayData.length === 0 && searchKey === ""
+                  ? this.props.data
+                  : displayData
+              }
+              scroll={{ y: 350 }}
+            />
+          </div>
+        }
+      >
+      </PageHeader>
+
     );
   }
 }

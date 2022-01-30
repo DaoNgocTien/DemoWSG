@@ -47,7 +47,7 @@ const mapDispatchToProps = (dispatch) => {
     createCategory: async (record) => {
       await dispatch(action.createCategory(record));
       await dispatch(action.getAllCategory());
-    },
+    }, 
     updateCategory: async (record) => {
       await dispatch(action.updateCategory(record));
       await dispatch(action.getAllCategory());

@@ -1,44 +1,68 @@
-import React from "react";
+import React, { Component } from "react";
 import { Route, Redirect, Link } from "react-router-dom";
-import { Layout, Menu } from "antd";
-
+import { Layout, Menu, Breadcrumb } from "antd";
+import {
+  VideoCameraOutlined,
+  UploadOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import NavbarAdmin from "../../components/NavbarAdmin";
 
 const { SubMenu } = Menu;
-const { Sider } = Layout;
+const { Header, Sider, Content } = Layout;
 
-function AdminRender(props) {
-  const { Content } = Layout;
-  if (!localStorage.getItem("user")) {
-    return <Redirect to="/login" />;
-  } else {
+class AdminRender extends Component {
+  state = {
+    collapsed: false,
+  };
+
+  toggleCollapsed = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
+
+  // componentDidMount = () => {
+  //   if (!localStorage.getItem("user")) {
+  //     return <Redirect to="/login" />;
+  //   }
+  // }
+
+
+
+  render() {
+    const { collapsed } = this.state;
     return (
       <Layout>
-        <NavbarAdmin />
+        <Header style={{ background: "#fff", margin: "5px 0px 5px 0px", padding: "0px 5px 0px 5px"}}>
+          <NavbarAdmin toggleCollapsed={this.toggleCollapsed} collapsed={collapsed} />
+        </Header>
         <Layout>
           <Sider
             width={200}
             className="site-layout-background"
-            collapsedWidth={0}
+            collapsedWidth={50}
             breakpoint="md"
+            collapsed={collapsed}
           >
             <Menu
               mode="inline"
               // defaultSelectedKeys={["catalog"]}
               defaultOpenKeys={["products"]}
               style={{ height: "100%", borderRight: 0 }}
+
             >
-              <SubMenu key="products" title="Products">
-                <Menu.Item key="categories"><Link className="LinkDecorations" to="/products/categories">Categories</Link></Menu.Item>
+              <SubMenu key="products" title="Products" icon={<VideoCameraOutlined />}>
+                <Menu.Item key="category"><Link className="LinkDecorations" to="/products/category">Category</Link></Menu.Item>
                 <Menu.Item key="catalog"><Link className="LinkDecorations" to="/products/catalog">Catalog</Link></Menu.Item>
                 <Menu.Item key="campaigns"><Link className="LinkDecorations" to="/products/campaigns">Campaign</Link></Menu.Item>
               </SubMenu>
-              <SubMenu key="sub2" title="subnav 2">
+              <SubMenu key="sub2" title="subnav 2" icon={<UploadOutlined />}>
                 <Menu.Item key="6">option6</Menu.Item>
                 <Menu.Item key="7">option7</Menu.Item>
                 <Menu.Item key="8">option8</Menu.Item>
               </SubMenu>
-              <SubMenu key="sub3" title="subnav 3">
+              <SubMenu key="sub3" title="subnav 3" icon={<UserOutlined />}>
                 <Menu.Item key="9">option9</Menu.Item>
                 <Menu.Item key="10">option10</Menu.Item>
                 <Menu.Item key="11">option11</Menu.Item>
@@ -46,8 +70,7 @@ function AdminRender(props) {
               </SubMenu>
             </Menu>
           </Sider>
-          <Layout style={{ padding: "24px 24px 0 24px" }}>
-            {/* <div style={{ margin: "16px 0" }}></div> */}
+          <Layout style={{ padding: "0px 5px 0px 5px" }}>
             <Content
               className="site-layout-background scrollable-container"
               style={{
@@ -56,11 +79,11 @@ function AdminRender(props) {
                 minHeight: 280,
               }}
             >
-              {props.children}
+              {this.props.children}
             </Content>
           </Layout>
         </Layout>
-      </Layout>
+      </Layout >
       // <div>
       //   <Layout style={{ background: "white" }}>
       //     <NavbarAdmin />
@@ -136,6 +159,8 @@ function AdminRender(props) {
       // </div>
     );
   }
+
+
 }
 // }
 
