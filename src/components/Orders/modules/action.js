@@ -2,19 +2,13 @@ import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 import APIMethods from "../../../redux/url/APIMethods";
 
-const getCampaign = () => {
+const getOrder = () => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      const [campaigns, products] = await Promise.all([
+      const [orders] = await Promise.all([
         Axios({
-          url: `/campaigns/All`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
-        Axios({
-          url: `/products/All`,
+          url: `/order/supplier`,
           method: "GET",
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
@@ -23,13 +17,12 @@ const getCampaign = () => {
 
       return dispatch(
         getSuccess({
-          campaigns: campaigns.data.data.map((campaign) => {
+          orders: orders.data.data.map((orders) => {
             return {
-              key: campaign.id,
-              ...campaign,
+              key: orders.id,
+              ...orders,
             };
           }),
-          products: products.data.data,
         })
       );
     } catch (error) {
@@ -38,28 +31,28 @@ const getCampaign = () => {
   };
 };
 
-const createCampaign = (record) => {
+const updateStatusOrder = (data) => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/campaigns/`,
-      method: "POST",
-      data: record,
+      url: `/order/supliers`,
+      method: "PUT",
+      data: data,
       withCredentials: true,
     })
       .then((response) => {
+        console.log(response);
         if (response.status === 200) {
           // console.log(response);
           // return window.location.reload();
         }
       })
       .catch((err) => {
+        console.log(err);
         return dispatch(getFailed());
-      })
-      .finally(() => {});
+      });
   };
 };
-
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -81,6 +74,6 @@ const getFailed = (err) => {
 };
 
 export default {
-  getCampaign,
-  createCampaign,
+  getOrder,
+  updateStatusOrder
 };

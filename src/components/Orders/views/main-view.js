@@ -2,7 +2,6 @@ import React, { Component, memo } from "react";
 import { Table, Button, Input, Row, Col } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
-import CreateModal from "./create-view";
 import EditModal from "./edit-view";
 
 //  prototype
@@ -23,7 +22,7 @@ const propsDefault = {
   defaultCampaign: {},
 };
 
-class CampaignUI extends Component {
+class OrderUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
@@ -37,11 +36,7 @@ class CampaignUI extends Component {
     editButton: true,
   };
 
-  componentDidMount() {
-    console.log("CampaignUI");
-    console.log(this.props);
-    console.log(this.state);
-  }
+  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -49,15 +44,9 @@ class CampaignUI extends Component {
         this.setState({ openCreateModal: true });
         break;
 
-      // case "openDeleteModal":
-      //   this.setState({ openDeleteModal: true });
-
-      //   break;
-
       case "openEditModal":
         this.setState({ openEditModal: true });
 
-      //   break;
       default:
         break;
     }
@@ -99,33 +88,44 @@ class CampaignUI extends Component {
       fixed: "left",
     },
     {
-      title: "Product Name",
-      dataIndex: "productname",
-      key: "productname",
-      sorter: (a, b) => a.productname.length - b.productname.length,
+      title: "First Name",
+      dataIndex: "customerfirstname",
+      key: "customerfirstname",
+      sorter: (a, b) => a.customerfirstname.length - b.customerfirstname.length,
       fix: "left",
     },
     {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "Last Name",
+      dataIndex: "customerlastname",
+      key: "customerlastname",
+      sorter: (a, b) => a.customerlastname.length - b.customerlastname.length,
+      fix: "left",
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
+      title: "Total Price",
+      dataIndex: "totalprice",
+      key: "totalprice",
     },
     {
-      title: "Start Date",
-      dataIndex: "fromdate",
-      key: "fromdate",
-      render: (data) => moment(data).format("MM/DD/YYYY"),
+      title: "Discount Price",
+      dataIndex: "discountprice",
+      key: "discountprice",
     },
     {
-      title: "End Date",
-      dataIndex: "todate",
-      key: "todate",
-      render: (data) => moment(data).format("MM/DD/YYYY"),
+      title: "Final Price",
+      dataIndex: "finalprice",
+      key: "finalprice",
+      render: (text, object) => {
+        return object.totalprice - object.discountprice;
+      },
+    },
+    {
+      title: "Created At",
+      dataIndex: "createdat",
+      key: "createdat",
+      render: (data) => {
+        return moment(data).format("MM/DD/YYYY");
+      },
     },
     {
       title: "Status",
@@ -138,9 +138,14 @@ class CampaignUI extends Component {
     let { data } = this.props;
     let searchData = data.filter((item) => {
       return (
-        item.productname.toUpperCase().includes(e.target.value.toUpperCase()) ||
-        item.fromdate.includes(e.target.value) ||
-        item.todate.includes(e.target.value)
+        item.customerfirstname
+          .toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
+        item.customerlastname
+          .toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
+        item.totalprice.includes(e.target.value) ||
+        item.createdat.includes(e.target.value)
       );
     });
     this.setState({
@@ -154,8 +159,6 @@ class CampaignUI extends Component {
       selectedRowKeys,
       displayData,
       searchKey,
-      openCreateModal,
-      addNewButton,
       openEditModal,
       editButton,
     } = this.state;
@@ -168,21 +171,15 @@ class CampaignUI extends Component {
 
     return (
       <div>
-        <CreateModal
-          openModal={openCreateModal}
-          closeModal={this.closeModal}
-          products={this.props.products}
-          createCampaign={this.props.createCampaign}
-        />
         <EditModal
           openModal={openEditModal}
           closeModal={this.closeModal}
+          updateStatusOrder={this.props.updateStatusOrder}
           record={
             this.props.data.filter((item) => {
               return selectedRowKeys.includes(item.id);
             })[0]
           }
-          products={this.props.products}
           selectedRowKeys={selectedRowKeys[0]}
         />
 
@@ -191,22 +188,15 @@ class CampaignUI extends Component {
             <Col flex={3}>
               <Button
                 type="primary"
-                onClick={() => this.start("openCreateModal")}
-                disabled={!addNewButton || this.props.loading ? true : false}
-              >
-                Add New
-              </Button>
-              <Button
-                type="primary"
                 onClick={() => this.start("openEditModal")}
                 disabled={
                   !editButton || this.state.selectedRowKeys.length === 0
                     ? true
                     : false
                 }
-                style={{ marginLeft: 3, width: 90 }}
+                style={{ marginLeft: 3 }}
               >
-                Edit
+                View Details
               </Button>
             </Col>
             <Col flex={3}>
@@ -245,4 +235,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(CampaignUI, arePropsEqual);
+export default memo(OrderUI, arePropsEqual);
