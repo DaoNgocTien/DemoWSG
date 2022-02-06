@@ -10,12 +10,18 @@ class Campaign extends Component {
   }
 
   componentDidMount() {
-    console.log("test campaigns");
     this.props.getCampaign();
   }
 
   render() {
-    return <CampaignUI data={this.props.data} loading={this.props.loading} />;
+    return (
+      <CampaignUI
+        data={this.props.data.campaigns}
+        products={this.props.data.products}
+        loading={this.props.loading}
+        createCampaign={this.props.createCampaign}
+      />
+    );
   }
 }
 
@@ -30,6 +36,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getCampaign: async () => await dispatch(action.getCampaign()),
+    createCampaign: async (data) => {
+      await dispatch(action.createCampaign(data));
+      await dispatch(action.getCampaign());
+    },
   };
 };
 
