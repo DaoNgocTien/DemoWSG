@@ -17,15 +17,44 @@ const getCampaign = () => {
     })
       .then((result) => {
         if (result.status === 200) {
-          console.log(result.data.data);
-          return dispatch(getSuccess(result.data.data));
+          const data = (result.data.data).map(category => {
+            return {
+              key: category.id,
+              ...category
+            }
+          });
+          return dispatch(getSuccess(data));
         }
       })
       .catch((err) => {
-        return dispatch(getProducFail(err));
+        return dispatch(getFailed(err));
       });
   };
 };
+
+const createCampaign = record => {
+  return async (dispatch) => {
+    dispatch(getRequest());
+    Axios({
+      url: `/campaigns/`,
+      method: "POST",
+      data: record,
+      withCredentials: true,
+    }).then((response) => {
+      if (response.status === 200) {
+        console.log(response.data.data);
+      }
+    })
+      .catch((err) => {
+        // console.log(err);
+        // console.log(typeof (err));
+        return dispatch(getFailed());
+      })
+      .finally(() => {
+      });
+  };
+}
+
 
 const getRequest = () => {
   return {
@@ -41,7 +70,7 @@ const getSuccess = (data) => {
   };
 };
 
-const getProducFail = (err) => {
+const getFailed = (err) => {
   return {
     type: GET_DATA_FAIL,
     payload: err,
@@ -50,4 +79,5 @@ const getProducFail = (err) => {
 
 export default {
   getCampaign,
+  createCampaign,
 };

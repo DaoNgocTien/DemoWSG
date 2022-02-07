@@ -219,19 +219,19 @@ class CategoryUI extends Component {
 
             <div style={{ marginBottom: 16 }}>
               <Row>
-                <Col flex={5}>
+                <Col flex="auto">
                   <Space size={3}>
                     <Button
                       type="primary"
                       onClick={() => this.start("openCreateModal")}
-                      disabled={!addNewButton}
+                      hidden={!addNewButton}
                     >
                       Add New
                     </Button>
                     <Button
                       type="primary"
                       onClick={() => this.start("openEditModal")}
-                      disabled={!editButton}
+                      hidden={!editButton}
                       style={{ width: 90 }}
                     >
                       Edit
@@ -239,7 +239,7 @@ class CategoryUI extends Component {
                     <Button
                       type="danger"
                       onClick={() => this.start("openDeleteModal")}
-                      disabled={!deleteButton}
+                      hidden={!deleteButton}
                       style={{ width: 90 }}
                     >
                       Delete
@@ -251,7 +251,7 @@ class CategoryUI extends Component {
                     </span>
                   </Space>
                 </Col>
-                <Col flex={4}>
+                <Col flex="300px">
                   <Input
                     onChange={(e) => this.onChangeHandler(e)}
                     placeholder="Search data"

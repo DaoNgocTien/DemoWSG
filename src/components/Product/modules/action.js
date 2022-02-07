@@ -13,6 +13,7 @@ const getAllProduct = () => {
     })
       .then((result) => {
         if (result.status === 200) {
+          console.log("getAllProduct: ");
           console.log(result.data.data);
           const data = (result.data.data).map(product => {
             return {
