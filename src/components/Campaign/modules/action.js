@@ -8,12 +8,48 @@ import APIMethods from "../../../redux/url/APIMethods";
 
 const getCampaign = () => {
   return async (dispatch) => {
+    try {
+      dispatch(getRequest());
+      const [campaigns, products] = await Promise.all([
+        Axios({
+          url: `/campaigns/All`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+        Axios({
+          url: `/products/All`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+      ]);
+
+      return dispatch(
+        getSuccess({
+          campaigns: campaigns.data.data.map((campaign) => {
+            return {
+              key: campaign.id,
+              ...campaign,
+            };
+          }),
+          products: products.data.data,
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed());
+    }
+  };
+};
+
+const createCampaign = (record) => {
+  return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/campaigns/All`,
-      method: "GET",
+      url: `/campaigns/`,
+      method: "POST",
+      data: record,
       withCredentials: true,
-      exposedHeaders: ["set-cookie"],
     })
       .then((result) => {
         if (result.status === 200) {
@@ -32,28 +68,28 @@ const getCampaign = () => {
   };
 };
 
-const createCampaign = record => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/campaigns/`,
-      method: "POST",
-      data: record,
-      withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        console.log(response.data.data);
-      }
-    })
-      .catch((err) => {
-        // console.log(err);
-        // console.log(typeof (err));
-        return dispatch(getFailed());
-      })
-      .finally(() => {
-      });
-  };
-}
+// const createCampaign = record => {
+//   return async (dispatch) => {
+//     dispatch(getRequest());
+//     Axios({
+//       url: `/campaigns/`,
+//       method: "POST",
+//       data: record,
+//       withCredentials: true,
+//     }).then((response) => {
+//       if (response.status === 200) {
+//         console.log(response.data.data);
+//       }
+//     })
+//       .catch((err) => {
+//         // console.log(err);
+//         // console.log(typeof (err));
+//         return dispatch(getFailed());
+//       })
+//       .finally(() => {
+//       });
+//   };
+// }
 
 
 const getRequest = () => {

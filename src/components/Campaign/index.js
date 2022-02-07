@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import action from "./modules/action";
-import {default as productAction} from "../Product/modules/action";
+// import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
 import CampaignUI from "./views/main-view";
 
@@ -10,16 +10,15 @@ class Campaign extends Component {
     this.state = {};
   }
   componentDidMount() {
-    console.log("test campaigns");
     this.props.getCampaign();
   }
 
   render() {
     return <CampaignUI
-      data={this.props.data}
+      data={this.props.data.campaigns}
       loading={this.props.loading}
-      orderList={this.props.orderList}
-      productList={this.props.productList}
+      // orderList={this.props.orderList}
+      productList={this.props.data.products}
       createCampaign={this.props.createCampaign}
     />;
   }
@@ -40,8 +39,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getCampaign: async () => {
       await dispatch(action.getCampaign());
-      await dispatch(productAction.getAllProduct());
-      await dispatch(action.getCampaign());
+      // await dispatch(productAction.getAllProduct());
+      // await dispatch(action.getCampaign());
     },
 
     getOrdersInCampaign: async (campaignID) => {

@@ -23,6 +23,7 @@ const propsProTypes = {
 const propsDefault = {
   index: 1,
   data: [],
+  products: [],
   defaultCampaign: {},
 };
 
@@ -150,13 +151,13 @@ class CampaignUI extends Component {
       title: "Start Date",
       dataIndex: "fromdate",
       key: "fromdate",
-      render: (data) => moment(data).format("DD/MM/YYYY"),
+      render: (data) => moment(data).format("MM/DD/YYYY"),
     },
     {
       title: "End Date",
       dataIndex: "todate",
       key: "todate",
-      render: (data) => moment(data).format("DD/MM/YYYY"),
+      render: (data) => moment(data).format("MM/DD/YYYY"),
     },
     {
       title: "Status",

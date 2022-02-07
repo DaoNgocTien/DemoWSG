@@ -224,4 +224,3 @@ const arePropsEqual = (prevProps, nextProps) => {
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(CreatModal, arePropsEqual);
-
