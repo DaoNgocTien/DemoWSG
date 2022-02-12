@@ -15,7 +15,7 @@ const routesAdmin = [
   },
   {
     exact: true,
-    path: "/products/category",
+    path: "/products/categories",
     component: Category,
   },
   {

@@ -14,13 +14,16 @@ class Campaign extends Component {
   }
 
   render() {
-    return <CampaignUI
-      data={this.props.data.campaigns}
-      loading={this.props.loading}
-      // orderList={this.props.orderList}
-      productList={this.props.data.products}
-      createCampaign={this.props.createCampaign}
-    />;
+    return (
+      <CampaignUI
+        data={this.props.data.campaigns}
+        loading={this.props.loading}
+        getCampaign={this.props.getCampaign}
+        ordersInCampaign={this.props.data.order}
+        productList={this.props.data.products}
+        createCampaign={this.props.createCampaign}
+      />
+    );
   }
 }
 
@@ -29,25 +32,21 @@ const mapStateToProps = (state) => {
     loading: state.campaignReducer.loading,
     data: state.campaignReducer.data,
     error: state.campaignReducer.err,
-    productList: state.productReducer.data,
-    orderList: [],
-
+    // productList: state.productReducer.data,
+    // orderList: [],
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCampaign: async () => {
-      await dispatch(action.getCampaign());
-      // await dispatch(productAction.getAllProduct());
-      // await dispatch(action.getCampaign());
+    getCampaign: async (campaignId) => {
+      console.log("get campaign");
+      await dispatch(action.getCampaign(campaignId));
     },
 
     getOrdersInCampaign: async (campaignID) => {
       console.log("getOrdersInCampaign final");
       console.log(campaignID);
-      // await dispatch(action.createProduct(record));
-      // await dispatch(action.getAllProduct());
     },
 
     createCampaign: async (record) => {

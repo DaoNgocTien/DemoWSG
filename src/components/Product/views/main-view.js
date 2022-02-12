@@ -118,6 +118,7 @@ class ProductUI extends Component {
       key: "No.",
       width: 60,
       render: (text, object, index) => index + 1,
+      fixed: 'left',
     },
     {
       title: "Image",
@@ -136,12 +137,14 @@ class ProductUI extends Component {
           );
         }
       },
+      fixed: 'left',
     },
     {
       title: "Name",
       dataIndex: "name",
       width: 200,
       key: "name",
+      fixed: 'left',
     },
     {
       title: "Category",
@@ -154,12 +157,6 @@ class ProductUI extends Component {
       dataIndex: "retailprice",
       width: 200,
       key: "retailprice",
-    },
-    {
-      title: "Wholesale Price",
-      dataIndex: "wholesaleprice",
-      width: 200,
-      key: "wholesaleprice",
     },
     {
       title: "Quantity",

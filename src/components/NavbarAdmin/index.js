@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 // import { Link } from "react-router-dom";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 import { Menu, Button, Divider, Row, Col, Typography } from "antd";
 import {
-  SettingOutlined, AppstoreOutlined,
+  SettingOutlined,
+  AppstoreOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   PieChartOutlined,
@@ -20,28 +22,34 @@ export default class NavbarAdmin extends Component {
       withCredentials: true,
     }).then((result) => {
       localStorage.clear();
-      return window.location.reload()
+      return window.location.reload();
     });
   };
 
-  getIcon = collapsed => {
-    return collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
-  }
+  getIcon = (collapsed) => {
+    return collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />;
+  };
 
   render() {
     const { toggleCollapsed, collapsed } = this.props;
     return (
       <Row>
         {/* <Space size={1}> */}
-        <Col flex="195px" >
-          <Button type="primary" onClick={toggleCollapsed} icon={this.getIcon(collapsed)} />
+        <Col flex="195px">
+          <Button
+            type="primary"
+            onClick={toggleCollapsed}
+            icon={this.getIcon(collapsed)}
+          />
         </Col>
 
         <Col flex="1px">
           <Divider type="vertical" />
         </Col>
-        <Col flex="500px" >
-        WHOLESALE GROUP
+        <Col flex="500px">
+          <Link className="LinkDecorations" style={{ color: "black" }} to="/">
+            WHOLESALE GROUP
+          </Link>
         </Col>
 
         <Col flex="auto" style={{ height: "50px" }}>
@@ -75,7 +83,6 @@ export default class NavbarAdmin extends Component {
       </Row>
       // <div style={{ width: 256 }}>
 
-
       //   </div>
 
       //   <Menu.Item key="1" className="nav-menu">
@@ -92,4 +99,3 @@ export default class NavbarAdmin extends Component {
     );
   }
 }
-

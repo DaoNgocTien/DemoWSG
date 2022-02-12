@@ -8,6 +8,7 @@ import {
   DatePicker,
   InputNumber,
   Descriptions,
+  Upload,
 } from "antd";
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -53,20 +54,19 @@ class UpdateModal extends Component {
     previewImage: "",
     previewTitle: "",
     fileList: [],
-    productSelected: {},
-    price: 0,
+    // productSelected: null,
+    // price: 1,
   };
   formRef = React.createRef();
 
-  componentDidMount() {
-    console.log(this.props);
-  }
+  componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
-    data.image = this.state.fileList;
-    this.props.updateProduct(data);
-    this.formRef.current.resetFields();
-    this.props.closeModal();
+    console.log(data)
+    // data.image = this.state.fileList;
+    // this.props.updateProduct(data);
+    // this.formRef.current.resetFields();
+    // this.props.closeModal();
   };
 
   handleUpdate = (data) => {
@@ -118,12 +118,10 @@ class UpdateModal extends Component {
     });
 
     this.setState({ fileList });
-    console.log(this.state.fileList);
   };
 
   onFinish = (values) => {
     values.image = this.state.fileList;
-    console.log(values);
     Axios({
       url: `/products`,
       method: "POST",
@@ -137,19 +135,41 @@ class UpdateModal extends Component {
       .catch((err) => console.error(err));
   };
 
+  onSelectProduct = (value) => {
+    this.setState({
+      productSelected: this.props.productList?.find(
+        (element) => element.id === value
+      ),
+    });
+  };
+
+  onChangePrice = (value) => {
+    this.setState({
+      price: value,
+    });
+  };
+
   render() {
     const { RangePicker } = DatePicker;
     const { openModal } = this.props;
 
-    const { productList } = this.props;
-    const { productSelected, price } = this.state;
+    const { productList, record } = this.props;
+    const {
+      productSelected = this.props.productList?.find(
+        (element) => element.id === this.props.record?.productid
+      ) || {},
+      price = (this.props.record?.price / productSelected?.retailprice) * 100,
+    } = this.state;
 
+    if (this.props.loading || !this.props.record) {
+      return <></>;
+    }
     return (
       <>
         <Form
           id="updateCampaignForm"
           ref={this.formRef}
-          onFinish={this.handleCreateAndClose}
+          onFinish={this.handleUpdateAndClose}
         >
           <Modal
             width={window.innerWidth * 0.7}
@@ -157,7 +177,7 @@ class UpdateModal extends Component {
             style={{
               top: 10,
             }}
-            title="Add New"
+            title="Update"
             visible={openModal}
             onCancel={this.handleCancel}
             footer={[
@@ -172,9 +192,15 @@ class UpdateModal extends Component {
               </Button>,
             ]}
           >
-            <Descriptions bordered column={2}>
+            <Descriptions layout="vertical" column={2}>
               <Descriptions.Item label="Campaign duration">
-                <Form.Item name="date">
+                <Form.Item
+                  name="date"
+                  initialValue={[
+                    moment(this.props.record?.fromdate),
+                    moment(this.props.record?.todate),
+                  ]}
+                >
                   <RangePicker
                     ranges={{
                       Today: [moment(), moment()],
@@ -187,20 +213,24 @@ class UpdateModal extends Component {
                         moment().endOf("month"),
                       ],
                     }}
+                    defaultValue={[
+                      moment(this.props.record?.fromdate),
+                      moment(this.props.record?.todate),
+                    ]}
+                    format="MM/DD/YYYY"
                     onChange={this.onChange}
+                    style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Product">
-                <Form.Item
-                  name="productId"
-                  initialValue={this.productList[0]?.id}
-                >
-                  <Select onChange={this.onSelectProduct}>
-                    {productList.map((item) => {
-                      console.log("Product in create campaign: ");
-                      console.log(item);
+                <Form.Item name="productId" initialValue={record.productid}>
+                  <Select
+                    onChange={this.onSelectProduct}
+                    style={{ width: "60vh" }}
+                  >
+                    {productList?.map((item) => {
                       return (
                         <Select.Option key={item.key} value={item.id}>
                           {item.name}
@@ -213,16 +243,33 @@ class UpdateModal extends Component {
 
               <Descriptions.Item label="Quantity">
                 <Form.Item name="quantity">
-                  <InputNumber addonAfter=" products" defaultValue={1} />
+                  <InputNumber
+                    addonAfter=" products"
+                    defaultValue={1}
+                    style={{ width: "60vh" }}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Wholesale percent">
-                <Form.Item name="wholesalePercent">
+                <Form.Item
+                  name="wholesalePercent"
+                  initialValue={
+                    (this.props.record?.price / productSelected?.retailprice) *
+                    100
+                  }
+                >
                   <InputNumber
-                    addonAfter=" %"
-                    defaultValue={1}
+                    addonAfter="%"
+                    defaultValue={
+                      (this.props.record?.price /
+                        productSelected?.retailprice) *
+                      100
+                    }
                     onChange={this.onChangePrice}
+                    min={0}
+                    max={100}
+                    style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
@@ -230,42 +277,45 @@ class UpdateModal extends Component {
 
             <Descriptions bordered title="Product in campaign" column={2}>
               <Descriptions.Item label="Name">
-                {productSelected.name ?? ""}
+                {productSelected?.name ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Category">
-                {productSelected.categoryname ?? ""}
+                {productSelected?.categoryname ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Quantity in stock">
-                {productSelected.quantity ?? ""}
+                {productSelected?.quantity ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Quantity in campaign">
-                {productSelected.name ?? ""}
+                {productSelected?.name ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Retail price">
-                {productSelected.price ?? ""}
+                {productSelected?.retailprice ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Wholesale price">
-                {price ?? ""}
+                {(price * productSelected?.retailprice) / 100 ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Description">
-                Data disk type: MongoDB
-                <br />
-                Database version: 3.4
-                <br />
-                Package: dds.mongo.mid
-                <br />
-                Storage space: 10 GB
-                <br />
-                Replication factor: 3
-                <br />
-                Region: East China 1<br />
+                <Input.TextArea
+                  value={productSelected?.description}
+                  rows={5}
+                  bordered={false}
+                />
               </Descriptions.Item>
               <Descriptions.Item label="Image">
-                <img
-                  alt="example"
-                  style={{ width: "100%" }}
-                  src={productSelected.previewImage}
-                />
+                <Upload
+                  name="file"
+                  action="/files/upload"
+                  listType="picture-card"
+                  fileList={
+                    productSelected.image
+                      ? JSON.parse(productSelected?.image)
+                      : []
+                  }
+                  // onPreview={this.handlePreview}
+                  // onChange={this.handleChange}
+                >
+                  {/* {this.state.fileList.length >= 8 ? null : uploadButton} */}
+                </Upload>
               </Descriptions.Item>
             </Descriptions>
           </Modal>

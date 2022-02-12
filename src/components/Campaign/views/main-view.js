@@ -1,5 +1,14 @@
 import React, { Component, memo } from "react";
-import { Table, Button, Input, Row, Col, PageHeader, Space, Drawer } from "antd";
+import {
+  Table,
+  Button,
+  Input,
+  Row,
+  Col,
+  PageHeader,
+  Space,
+  Drawer,
+} from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
 
@@ -7,7 +16,6 @@ import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 import OrdersInCampaign from "./orders-in-campaign-view";
-
 
 //  prototype
 const propsProTypes = {
@@ -47,11 +55,7 @@ class CampaignUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() {
-    console.log("CampaignUI");
-    console.log(this.props);
-    console.log(this.state);
-  }
+  componentDidMount() {}
 
   showDrawer = () => {
     this.setState({
@@ -65,11 +69,13 @@ class CampaignUI extends Component {
     });
   };
 
-  start = openModal => {
+  start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;
     //  Get campaign record
-    let recordToEdit = data.filter(item => { return selectedRowKeys.includes(item.id) })[0];
+    let recordToEdit = data.filter((item) => {
+      return selectedRowKeys.includes(item.id);
+    })[0];
 
     switch (openModal) {
       case "openCreateModal":
@@ -92,7 +98,10 @@ class CampaignUI extends Component {
       case "openOrdersInCampaign":
         //  Get orders in campaign
         let orderList = this.props.orderList;
-        let orderListInCampaign = orderList.filter(item => { return selectedRowKeys.includes(item.campaignid) });
+        let orderListInCampaign = orderList?.filter((item) => {
+          return selectedRowKeys.includes(item.campaignid);
+        });
+        this.props.getCampaign(selectedRowKeys);
 
         //  Set campaign record and orders in campaign into state
         this.setState({
@@ -102,7 +111,8 @@ class CampaignUI extends Component {
         });
 
         break;
-      default: break;
+      default:
+        break;
     }
   };
 
@@ -112,7 +122,7 @@ class CampaignUI extends Component {
       openDeleteModal: false,
       openEditModal: false,
     });
-  }
+  };
 
   columns = [
     {
@@ -188,6 +198,7 @@ class CampaignUI extends Component {
     let record = this.props.data.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
+
     console.log(record);
     // this.setState({
     //   record: this.props.data.filter((item) => {
@@ -233,12 +244,12 @@ class CampaignUI extends Component {
       onChange: this.onSelectChange,
     };
     // const hasSelected = selectedRowKeys.length > 0;
-    const arrayLocation = (window.location.pathname).split("/");
+    const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title={(arrayLocation[2]).toUpperCase()}
+        title={arrayLocation[2].toUpperCase()}
         subTitle={`This is a ${arrayLocation[2]} page`}
         footer={
           <div>
@@ -256,8 +267,10 @@ class CampaignUI extends Component {
               data={this.props.data}
             />
             <EditModal
+              loading={this.props.loading}
               openModal={openEditModal}
               closeModal={this.closeModal}
+              productList={productList}
               updateCampaign={updateCampaign}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
@@ -293,7 +306,7 @@ class CampaignUI extends Component {
                       type="primary"
                       onClick={() => this.start("openOrdersInCampaign")}
                       hidden={!editButton}
-                    // style={{ width: 90 }}
+                      // style={{ width: 90 }}
                     >
                       Orders in campaigns
                     </Button>
@@ -328,7 +341,8 @@ class CampaignUI extends Component {
                 record={this.state.record}
                 orderList={this.state.orderList}
                 loading={this.props.loading}
-
+                ordersInCampaign={this.props.ordersInCampaign}
+                productList={productList}
               />
             </Drawer>
             <Table
@@ -344,9 +358,7 @@ class CampaignUI extends Component {
             />
           </div>
         }
-      >
-      </PageHeader>
-
+      ></PageHeader>
     );
   }
 }

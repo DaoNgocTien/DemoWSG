@@ -1,30 +1,52 @@
-import {
-  GET_DATA_FAIL,
-  GET_DATA_REQUEST,
-  GET_DATA_SUCCESS,
-} from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 import APIMethods from "../../../redux/url/APIMethods";
 
-const getCampaign = () => {
+const getCampaign = (campaignId) => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      const [campaigns, products] = await Promise.all([
-        Axios({
-          url: `/campaigns/All`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
-        Axios({
-          url: `/products/All`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
-      ]);
-
+      let campaigns,
+        products,
+        order = {};
+      if (!campaignId) {
+        [campaigns, products] = await Promise.all([
+          Axios({
+            url: `/campaigns/All`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+          Axios({
+            url: `/products/All`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+        ]);
+      } else {
+        [campaigns, products, order] = await Promise.all([
+          Axios({
+            url: `/campaigns/All`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+          Axios({
+            url: `/products/All`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+          Axios({
+            url: `/order/supplier/campaign/${campaignId}`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+        ]);
+      }
+      console.log(order);
       return dispatch(
         getSuccess({
           campaigns: campaigns.data.data.map((campaign) => {
@@ -34,9 +56,19 @@ const getCampaign = () => {
             };
           }),
           products: products.data.data,
+          order:
+            order !== {}
+              ? order.data?.data.map((item) => {
+                  return {
+                    key: item.id,
+                    ...item,
+                  };
+                })
+              : {},
         })
       );
     } catch (error) {
+      console.log(error);
       return dispatch(getFailed());
     }
   };
@@ -53,11 +85,11 @@ const createCampaign = (record) => {
     })
       .then((result) => {
         if (result.status === 200) {
-          const data = (result.data.data).map(category => {
+          const data = result.data.data.map((category) => {
             return {
               key: category.id,
-              ...category
-            }
+              ...category,
+            };
           });
           return dispatch(getSuccess(data));
         }
@@ -91,7 +123,6 @@ const createCampaign = (record) => {
 //   };
 // }
 
-
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -99,7 +130,7 @@ const getRequest = () => {
 };
 
 const getSuccess = (data) => {
-  console.log(data)
+  console.log(data);
   return {
     type: GET_DATA_SUCCESS,
     payload: data,

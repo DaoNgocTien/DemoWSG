@@ -30,8 +30,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  createCampaign: () => { },
+  closeModal: () => {},
+  createCampaign: () => {},
   openModal: false,
   productList: [],
 };
@@ -44,15 +44,11 @@ class CreatModal extends Component {
     previewImage: "",
     previewTitle: "",
     fileList: [],
-    productSelected: {},
     price: 0,
   };
   formRef = React.createRef();
 
-
-  componentDidMount() {
-    console.log(this.props);
-  }
+  componentDidMount() {}
 
   handleCreateAndClose = (data) => {
     console.log("Campaign create");
@@ -61,7 +57,7 @@ class CreatModal extends Component {
       productId: data.productId,
       fromDate: data.date[0],
       toDate: data.date[1],
-      quantity: 100,
+      quantity: data.quantity,
       price: 1000,
     };
     this.props.createCampaign(newCampaign);
@@ -82,20 +78,25 @@ class CreatModal extends Component {
   };
 
   onChange = (dates, dateStrings) => {
-    console.log('From: ', dates[0], ', to: ', dates[1]);
-    console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-  }
+    console.log("From: ", dates[0], ", to: ", dates[1]);
+    console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+  };
 
-  onSelectProduct = value => {
+  onSelectProduct = (value) => {
     console.log(value);
-  }
+    this.setState({
+      productSelected: this.props.productList?.find(
+        (element) => element.id === value
+      ),
+    });
+  };
 
-  onChangePrice = value => {
+  onChangePrice = (value) => {
     if (isNaN(value)) {
       return;
     }
     this.setState({
-      price: value * 10000 / 100,
+      price: value,
     });
   };
 
@@ -103,10 +104,16 @@ class CreatModal extends Component {
     const { openModal } = this.props;
 
     const { productList } = this.props;
-    const { productSelected, price } = this.state;
+    const { productSelected = this.props.productList[0], price = 0 } =
+      this.state;
+    console.log(productSelected);
     return (
       <>
-        <Form id="createCampaignForm" ref={this.formRef} onFinish={this.handleCreateAndClose}>
+        <Form
+          id="createCampaignForm"
+          ref={this.formRef}
+          onFinish={this.handleCreateAndClose}
+        >
           <Modal
             width={window.innerWidth * 0.7}
             heigh={window.innerHeight * 0.5}
@@ -128,87 +135,102 @@ class CreatModal extends Component {
               </Button>,
             ]}
           >
-
-            <Descriptions
-              bordered
-              column={2}
-            >
+            <Descriptions bordered column={2}>
               <Descriptions.Item label="Campaign duration">
-                <Form.Item name="date">
+                <Form.Item name="date" initialValue={[moment(), moment().add(1, "days")]}>
                   <RangePicker
                     ranges={{
                       Today: [moment(), moment()],
-                      'This Week': [moment().startOf('week'), moment().endOf('week')],
-                      'This Month': [moment().startOf('month'), moment().endOf('month')],
+                      "This Week": [
+                        moment().startOf("week"),
+                        moment().endOf("week"),
+                      ],
+                      "This Month": [
+                        moment().startOf("month"),
+                        moment().endOf("month"),
+                      ],
                     }}
+                    defaultValue={[moment(), moment().add(1, "days")]}
+                    format="MM/DD/YYYY"
                     onChange={this.onChange}
                   />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Product">
-                <Form.Item
-                  name="productId"
-                  initialValues={{ value: productList[0] ? productList[0].name : "" }}
-                >
-                  <Select
-                    onChange={this.onSelectProduct}
-                  >
+                <Form.Item name="productId" initialValue={productList[0]?.id}>
+                  <Select onChange={this.onSelectProduct}>
                     {productList.map((item) => {
-                      console.log("Product in create campaign: ");
-                      console.log(item);
-                      return <Select.Option key={item.key} value={item.id}>
-                        {item.name}
-                      </Select.Option>
+                      return (
+                        <Select.Option key={item.key} value={item.id}>
+                          {item.name}
+                        </Select.Option>
+                      );
                     })}
                   </Select>
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
-                <Form.Item name="quantity">
+                <Form.Item name="quantity" initialValue={1}>
                   <InputNumber addonAfter=" products" defaultValue={1} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Wholesale percent">
-                <Form.Item name="wholesalePercent">
-                  <InputNumber addonAfter=" %" defaultValue={1} onChange={this.onChangePrice} />
+                <Form.Item name="wholesalePercent" initialValue={0}>
+                  <InputNumber
+                    addonAfter=" %"
+                    defaultValue={0}
+                    onChange={this.onChangePrice}
+                    min={0}
+                    max={100}
+                  />
                 </Form.Item>
               </Descriptions.Item>
-
             </Descriptions>
 
-            <Descriptions
-              bordered
-              title="Product in campaign"
-              column={2}
-            >
-              <Descriptions.Item label="Name">{productSelected.name ?? ""}</Descriptions.Item>
-              <Descriptions.Item label="Category">{productSelected.categoryname ?? ""}</Descriptions.Item>
-              <Descriptions.Item label="Quantity in stock">{productSelected.quantity ?? ""}</Descriptions.Item>
-              <Descriptions.Item label="Quantity in campaign">{productSelected.name ?? ""}</Descriptions.Item>
-              <Descriptions.Item label="Retail price">{productSelected.price ?? ""}</Descriptions.Item>
-              <Descriptions.Item label="Wholesale price">{price ?? ""}</Descriptions.Item>
+            <Descriptions bordered title="Product in campaign" column={2}>
+              <Descriptions.Item label="Name">
+                {productSelected?.name ?? ""}
+              </Descriptions.Item>
+              <Descriptions.Item label="Category">
+                {productSelected?.categoryname ?? ""}
+              </Descriptions.Item>
+              <Descriptions.Item label="Quantity in stock">
+                {productSelected?.quantity ?? ""}
+              </Descriptions.Item>
+              <Descriptions.Item label="Quantity in campaign">
+                {productSelected?.name ?? ""}
+              </Descriptions.Item>
+              <Descriptions.Item label="Retail price">
+                {productSelected?.retailprice ?? ""}
+              </Descriptions.Item>
+              <Descriptions.Item label="Wholesale price">
+                {(price * productSelected?.retailprice) / 100 ?? ""}
+              </Descriptions.Item>
               <Descriptions.Item label="Description">
-                Data disk type: MongoDB
-                <br />
-                Database version: 3.4
-                <br />
-                Package: dds.mongo.mid
-                <br />
-                Storage space: 10 GB
-                <br />
-                Replication factor: 3
-                <br />
-                Region: East China 1<br />
+                <Input.TextArea
+                  value={productSelected?.description}
+                  rows={5}
+                  bordered={false}
+                />
               </Descriptions.Item>
               <Descriptions.Item label="Image">
-                <img
-                  alt="example"
-                  style={{ width: "100%" }}
-                  src={productSelected.previewImage}
-                />
+                <Upload
+                  name="file"
+                  action="/files/upload"
+                  listType="picture-card"
+                  fileList={
+                    productSelected?.image
+                      ? JSON.parse(productSelected?.image)
+                      : []
+                  }
+                  // onPreview={this.handlePreview}
+                  // onChange={this.handleChange}
+                >
+                  {/* {this.state.fileList.length >= 8 ? null : uploadButton} */}
+                </Upload>
               </Descriptions.Item>
             </Descriptions>
           </Modal>

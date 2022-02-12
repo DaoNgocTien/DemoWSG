@@ -59,10 +59,10 @@ class DeleteModal extends Component {
           render: (text, object, index) => index + 1,
         },
         {
-          title: "Image",
-          dataIndex: "image",
+          title: "Product Image",
+          dataIndex: "productimage",
           width: 100,
-          key: "image",
+          key: "productimage",
           render: (url) => {
             if (url.length > 0) {
               url = JSON.parse(url);
@@ -77,16 +77,10 @@ class DeleteModal extends Component {
           },
         },
         {
-          title: "Name",
-          dataIndex: "name",
+          title: "Product Name",
+          dataIndex: "productname",
           width: 200,
-          key: "name",
-        },
-        {
-          title: "Category",
-          dataIndex: "categoryname",
-          width: 200,
-          key: "categoryname",
+          key: "productname",
         },
         {
           title: "Retail Price",
