@@ -173,74 +173,22 @@ class OrdersInCampaign extends React.Component {
         <Form>
           <Descriptions bordered title="Campaign information" column={2}>
             <Descriptions.Item label="Campaign duration">
-              <Form.Item
-                name="date"
-                initialValue={[
-                  moment(record?.fromdate),
-                  moment(record?.todate),
-                ]}
-              >
-                <RangePicker
-                  disabled={true}
-                  ranges={{
-                    Today: [moment(), moment()],
-                    "This Week": [
-                      moment().startOf("week"),
-                      moment().endOf("week"),
-                    ],
-                    "This Month": [
-                      moment().startOf("month"),
-                      moment().endOf("month"),
-                    ],
-                  }}
-                  format="MM/DD/YYYY"
-                  defaultValue={[
-                    moment(record?.fromdate),
-                    moment(record?.todate),
-                  ]}
-                />
-              </Form.Item>
+              {moment(record?.fromdate).format("MM/DD/YYYY") + ` - ` + moment(record?.todate).format("MM/DD/YYYY")}
             </Descriptions.Item>
 
             <Descriptions.Item label="Product">
-              <Form.Item name="productId" initialValue={record?.productid}>
-                <Select disabled={true}>
-                  {productList?.map((item) => {
-                    return (
-                      <Select.Option key={item.key} value={item.id}>
-                        {item.name}
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
+
+              {record?.productname}
             </Descriptions.Item>
 
             <Descriptions.Item label="Quantity">
-              <Form.Item name="quantity" initialValue={record?.quantity}>
-                <InputNumber
-                  disabled={true}
-                  addonAfter=" products"
-                  defaultValue={record?.quantity}
-                />
-              </Form.Item>
+              {record?.quantity}
             </Descriptions.Item>
 
             <Descriptions.Item label="Wholesale percent">
-              <Form.Item
-                name="wholesalePercent"
-                initialValue={
-                  (record?.price / record?.productretailprice) * 100
-                }
-              >
-                <InputNumber
-                  disabled={true}
-                  addonAfter=" %"
-                  defaultValue={
-                    (record?.price / record?.productretailprice) * 100
-                  }
-                />
-              </Form.Item>
+              {
+                (record?.price / record?.productretailprice) * 100 + ' %'
+              }
             </Descriptions.Item>
           </Descriptions>
         </Form>
