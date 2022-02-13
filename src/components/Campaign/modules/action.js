@@ -2,25 +2,51 @@ import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 import APIMethods from "../../../redux/url/APIMethods";
 
-const getCampaign = () => {
+const getCampaign = (campaignId) => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      const [campaigns, products] = await Promise.all([
-        Axios({
-          url: `/campaigns/All`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
-        Axios({
-          url: `/products/All`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
-      ]);
-
+      let campaigns,
+        products,
+        order = {};
+      if (!campaignId) {
+        [campaigns, products] = await Promise.all([
+          Axios({
+            url: `/campaigns/All`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+          Axios({
+            url: `/products/All`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+        ]);
+      } else {
+        [campaigns, products, order] = await Promise.all([
+          Axios({
+            url: `/campaigns/All`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+          Axios({
+            url: `/products/All`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+          Axios({
+            url: `/order/supplier/campaign/${campaignId}`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
+        ]);
+      }
+      console.log(order);
       return dispatch(
         getSuccess({
           campaigns: campaigns.data.data.map((campaign) => {
@@ -30,9 +56,19 @@ const getCampaign = () => {
             };
           }),
           products: products.data.data,
+          order:
+            order !== {}
+              ? order.data?.data.map((item) => {
+                  return {
+                    key: item.id,
+                    ...item,
+                  };
+                })
+              : {},
         })
       );
     } catch (error) {
+      console.log(error);
       return dispatch(getFailed());
     }
   };
@@ -47,18 +83,45 @@ const createCampaign = (record) => {
       data: record,
       withCredentials: true,
     })
-      .then((response) => {
-        if (response.status === 200) {
-          // console.log(response);
-          // return window.location.reload();
+      .then((result) => {
+        if (result.status === 200) {
+          const data = result.data.data.map((category) => {
+            return {
+              key: category.id,
+              ...category,
+            };
+          });
+          return dispatch(getSuccess(data));
         }
       })
       .catch((err) => {
-        return dispatch(getFailed());
-      })
-      .finally(() => {});
+        return dispatch(getFailed(err));
+      });
   };
 };
+
+// const createCampaign = record => {
+//   return async (dispatch) => {
+//     dispatch(getRequest());
+//     Axios({
+//       url: `/campaigns/`,
+//       method: "POST",
+//       data: record,
+//       withCredentials: true,
+//     }).then((response) => {
+//       if (response.status === 200) {
+//         console.log(response.data.data);
+//       }
+//     })
+//       .catch((err) => {
+//         // console.log(err);
+//         // console.log(typeof (err));
+//         return dispatch(getFailed());
+//       })
+//       .finally(() => {
+//       });
+//   };
+// }
 
 const getRequest = () => {
   return {
@@ -67,6 +130,7 @@ const getRequest = () => {
 };
 
 const getSuccess = (data) => {
+  console.log(data);
   return {
     type: GET_DATA_SUCCESS,
     payload: data,

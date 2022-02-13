@@ -1,7 +1,7 @@
 import DashBoard from "../containers/AdminLayout/DashBoard";
 import AuthPage from "../containers/AuthPage";
 
-import Products from "../components/Products";
+import Product from "../components/Product";
 import Category from "../components/Category";
 import AddProduct from "../components/AddProduct";
 import EditProduct from "../components/EditProduct";
@@ -21,7 +21,7 @@ const routesAdmin = [
   {
     exact: true,
     path: "/products/catalog",
-    component: Products,
+    component: Product,
   },
   {
     exact: true,

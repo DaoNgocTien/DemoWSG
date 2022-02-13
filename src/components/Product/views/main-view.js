@@ -1,6 +1,14 @@
 import React, { Component, memo } from "react";
 import moment from "moment";
-import { Table, Button, Input, Row, Col, Space, PageHeader, Statistic, Descriptions } from "antd";
+import {
+  Table,
+  Button,
+  Input,
+  Row,
+  Col,
+  Space,
+  PageHeader,
+} from "antd";
 import PropTypes from "prop-types";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
@@ -10,35 +18,45 @@ import EditModal from "./edit-view";
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
-  defaultCategory: PropTypes.object,
-  createCategory: PropTypes.func,
-  updateCategory: PropTypes.func,
-  deleteCategory: PropTypes.func,
+  defaultProduct: PropTypes.object,
+  createProduct: PropTypes.func,
+  updateProduct: PropTypes.func,
+  deleteProduct: PropTypes.func,
 };
 
 //  default props
 const propsDefault = {
   index: 1,
   data: [],
-  defaultCategory: {
-    key: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    id: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    categoryname: "Ipad",
+  defaultProduct: {
+    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
+    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
+    name: "test222 again Product",
     supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    isdeleted: false,
-    createdat: "2022-01-23T12:03:11.309Z",
-    updatedat: "2022-01-23T12:03:11.309Z",
+    retailprice: "5.00",
+    quantity: 11,
+    description: "testttttt",
+    image: "",
+    categoryid: null,
+    status: "active",
+    typeofproduct: "",
+    createdat: "2022-01-07T14:08:02.994Z",
+    updatedat: "2022-01-13T16:34:09.908Z",
+    categoryname: null
   },
   createCategory: () => { },
   updateCategory: () => { },
-  deleteCategory: () => { },
+  deleteProduct: () => { },
+
 };
 
-class CategoryUI extends Component {
+class ProductUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
+    loading: false,
     selectedRowKeys: [], // Check here to configure the default column
+    loadingActionButton: false,
     editButton: false,
     deleteButton: false,
     addNewButton: true,
@@ -46,52 +64,39 @@ class CategoryUI extends Component {
     openDeleteModal: false,
     openEditModal: false,
     displayData: [],
-    searchData: "",
-    record: {},
+    searchKey: "",
   };
 
   componentDidMount() {
-    console.log("CategoryUI");
+    console.log("ProductUI");
     console.log(this.props);
     console.log(this.state);
+
   }
 
-  start = (openModal) => {
+  start = openModal => {
     switch (openModal) {
       case "openCreateModal":
-        this.setState({ openCreateModal: true });
+        this.setState({ loadingActionButton: true, openCreateModal: true });
         break;
 
       case "openDeleteModal":
-        this.setState({ openDeleteModal: true });
+        this.setState({ loadingActionButton: true, openDeleteModal: true });
 
         break;
 
       case "openEditModal":
-        this.setState({ openEditModal: true });
+        this.setState({ loadingActionButton: true, openEditModal: true });
 
         break;
-      default:
-        break;
+      default: break;
     }
   };
 
-  onSelectChange = (selectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    console.log(this.props.data);
-    let record = this.props.data.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-    console.log(record);
-    // this.setState({
-    //   record: this.props.data.filter((item) => {
-    //     return selectedRowKeys.includes(item.id);
-    //   })[0]
-    // });
-    // console.log(this.state.record);
+  onSelectChange = selectedRowKeys => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({
       selectedRowKeys,
-      record: record,
       editButton: selectedRowKeys.length == 1,
       deleteButton: selectedRowKeys.length >= 1,
       addNewButton: selectedRowKeys.length === 0,
@@ -99,74 +104,103 @@ class CategoryUI extends Component {
   };
 
   closeModal = () => {
-    // this.setState({
-    //   // selectedRowKeys: [],
-    //   // editButton: false,
-    //   // deleteButton: false,
-    //   // addNewButton: true,
-    // });
     this.setState({
       openCreateModal: false,
       openDeleteModal: false,
       openEditModal: false,
     });
-  };
+  }
 
   columns = [
     {
       title: "No.",
       dataIndex: "No.",
       key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      width: 100,
-      fixed: "left",
+      width: 60,
+      render: (text, object, index) => index + 1,
+      fixed: 'left',
     },
-
+    {
+      title: "Image",
+      dataIndex: "image",
+      width: 100,
+      key: "image",
+      render: (url) => {
+        if (url.length > 0) {
+          url = JSON.parse(url);
+          return (
+            <img
+              src={url[0]?.url}
+              alt="image"
+              style={{ width: "90px", height: "70px", margin: "auto" }}
+            />
+          );
+        }
+      },
+      fixed: 'left',
+    },
     {
       title: "Name",
-      dataIndex: "categoryname",
-      key: "categoryname",
-      sorter: (a, b) => a.categoryname.length - b.categoryname.length,
-      fix: "left",
+      dataIndex: "name",
+      width: 200,
+      key: "name",
+      fixed: 'left',
     },
-
     {
-      title: "Created At",
+      title: "Category",
+      dataIndex: "categoryname",
+      width: 200,
+      key: "categoryname",
+    },
+    {
+      title: "Retail Price",
+      dataIndex: "retailprice",
+      width: 200,
+      key: "retailprice",
+    },
+    {
+      title: "Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+      width: 100,
+    },
+    {
+      title: "Created Date",
       dataIndex: "createdat",
       key: "createdat",
-      sorter: (a, b) => a.createdat.length - b.createdat.length,
+      width: 150,
       render: (data) => moment(data).format("DD-MM-YYYY"),
-      // render: (text, record) => {
-      //   return new Date(record.createdat).toString().slice(0, 24);
-      // },
     },
-
     {
-      title: "Updated At",
-      dataIndex: "updatedat",
-      key: "updatedat",
-      sorter: (a, b) => a.updatedat.length - b.updatedat.length,
-      render: (data) => moment(data).format("DD-MM-YYYY"),
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+      width: 250,
     },
   ];
 
   onChangeHandler = (e) => {
     let { data } = this.props;
+    console.log(data);
+    let searchString = e.target.value;
     let searchList = data.filter(item => {
-      return item.categoryname.includes(e.target.value)
-        || item.createdat.includes(e.target.value)
-        || item.updatedat.includes(e.target.value);
+      console.log(item);
+      return item.categoryname.includes(searchString)
+        || item.createdat.includes(searchString)
+        || item.description.includes(searchString)
+        || item.name.includes(searchString)
+        || item.quantity.includes(searchString)
+        || item.retailprice.includes(searchString);
     });
     this.setState({
       displayData: searchList,
-      searchData: e.target.value,
+      searchKey: searchString ?? "",
     })
   }
 
   render() {
     const {
+      loadingActionButton,
       selectedRowKeys,
       deleteButton,
       editButton,
@@ -175,11 +209,15 @@ class CategoryUI extends Component {
       openDeleteModal,
       openEditModal,
       displayData,
-      searchData,
-      record,
+      searchKey,
     } = this.state;
 
-    const { createCategory, updateCategory, deleteCategory } = this.props;
+    const {
+      categoryList,
+      createProduct,
+      updateProduct,
+      deleteProduct,
+    } = this.props;
 
     const rowSelection = {
       selectedRowKeys,
@@ -187,34 +225,37 @@ class CategoryUI extends Component {
     };
     // const hasSelected = selectedRowKeys.length > 0;
 
-    const arr = (window.location.pathname).split("/");
+
+    const arrayLocation = (window.location.pathname).split("/");
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title={(arr[2]).toUpperCase()}
-        subTitle={`This is a ${arr[2]} page`}
+        title={(arrayLocation[2]).toUpperCase()}
+        subTitle={`This is a ${arrayLocation[2]} page`}
         footer={
+
           <div>
             <CreateModal
               openModal={openCreateModal}
               closeModal={this.closeModal}
-              createCategory={createCategory}
+              categoryList={categoryList}
+              createProduct={createProduct}
             />
             <DeleteModal
               openModal={openDeleteModal}
               closeModal={this.closeModal}
-              deleteCategory={deleteCategory}
+              deleteProduct={deleteProduct}
               selectedRowKeys={selectedRowKeys}
               data={this.props.data}
             />
             <EditModal
               openModal={openEditModal}
               closeModal={this.closeModal}
-              updateCategory={updateCategory}
-              record={record}
-              data={this.props.data}
-              selectedRowKeys={selectedRowKeys}
+              categoryList={categoryList}
+              updateProduct={updateProduct}
+              record={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })[0]}
+              selectedRowKeys={selectedRowKeys[0]}
             />
 
             <div style={{ marginBottom: 16 }}>
@@ -245,17 +286,12 @@ class CategoryUI extends Component {
                       Delete
                     </Button>
                     <span style={{ marginLeft: 8 }}>
-                      {selectedRowKeys.length > 0
-                        ? `Selected ${selectedRowKeys.length} items`
-                        : ""}
+                      {selectedRowKeys.length > 0 ? `Selected ${selectedRowKeys.length} items` : ''}
                     </span>
                   </Space>
                 </Col>
                 <Col flex="300px">
-                  <Input
-                    onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search data"
-                  />
+                  <Input onChange={e => this.onChangeHandler(e)} placeholder="Search data" />
                 </Col>
               </Row>
             </div>
@@ -263,13 +299,14 @@ class CategoryUI extends Component {
               loading={this.props.loading}
               rowSelection={rowSelection}
               columns={this.columns}
-              dataSource={displayData.length === 0 && searchData === '' ? this.props.data : displayData}
+              dataSource={displayData.length === 0 && searchKey === "" ? this.props.data : displayData}
               scroll={{ y: 350 }}
             />
           </div>
         }
       >
       </PageHeader>
+
     );
   }
 }
@@ -279,4 +316,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(CategoryUI, arePropsEqual);
+export default memo(ProductUI, arePropsEqual);

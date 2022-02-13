@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import action from "./modules/action";
+// import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
 import CampaignUI from "./views/main-view";
 
@@ -8,7 +9,6 @@ class Campaign extends Component {
     super(props);
     this.state = {};
   }
-
   componentDidMount() {
     this.props.getCampaign();
   }
@@ -17,8 +17,10 @@ class Campaign extends Component {
     return (
       <CampaignUI
         data={this.props.data.campaigns}
-        products={this.props.data.products}
         loading={this.props.loading}
+        getCampaign={this.props.getCampaign}
+        ordersInCampaign={this.props.data.order}
+        productList={this.props.data.products}
         createCampaign={this.props.createCampaign}
       />
     );
@@ -30,14 +32,27 @@ const mapStateToProps = (state) => {
     loading: state.campaignReducer.loading,
     data: state.campaignReducer.data,
     error: state.campaignReducer.err,
+    // productList: state.productReducer.data,
+    // orderList: [],
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCampaign: async () => await dispatch(action.getCampaign()),
-    createCampaign: async (data) => {
-      await dispatch(action.createCampaign(data));
+    getCampaign: async (campaignId) => {
+      console.log("get campaign");
+      await dispatch(action.getCampaign(campaignId));
+    },
+
+    getOrdersInCampaign: async (campaignID) => {
+      console.log("getOrdersInCampaign final");
+      console.log(campaignID);
+    },
+
+    createCampaign: async (record) => {
+      console.log("createProduct final");
+      console.log(record);
+      await dispatch(action.createCampaign(record));
       await dispatch(action.getCampaign());
     },
   };

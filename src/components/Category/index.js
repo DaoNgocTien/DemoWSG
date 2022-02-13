@@ -3,7 +3,7 @@ import action from "./modules/action";
 import { connect } from "react-redux";
 import CategoryUI from "./views/main-view";
 
-class categoryPage extends Component {
+class CategoryPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,7 +15,7 @@ class categoryPage extends Component {
   }
 
   componentDidMount() {
-    this.props.getCategory();
+    this.props.getAllCategory();
   }
 
   render() {
@@ -43,21 +43,21 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCategory: async () => await dispatch(action.getCategory()),
+    getAllCategory: async () => await dispatch(action.getAllCategory()),
     createCategory: async (record) => {
       await dispatch(action.createCategory(record));
-      await dispatch(action.getCategory());
-    },
+      await dispatch(action.getAllCategory());
+    }, 
     updateCategory: async (record) => {
       await dispatch(action.updateCategory(record));
-      await dispatch(action.getCategory());
+      await dispatch(action.getAllCategory());
     },
     deleteCategory: async (id) => {
       await dispatch(action.deleteCategory(id));
-      await dispatch(action.getCategory());
+      await dispatch(action.getAllCategory());
     },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(categoryPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryPage);
 

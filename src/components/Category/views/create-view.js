@@ -34,6 +34,7 @@ const propsDefault = {
 class CreatModal extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
+  formRef = React.createRef();
   // state = {
   //   openModal: false,
   // };
@@ -43,15 +44,19 @@ class CreatModal extends Component {
   }
 
   handleCreateAndClose = (data) => {
+    this.formRef.current.resetFields();
     this.props.createCategory(data);
     this.props.closeModal();
   };
 
   handleCreate = (data) => {
+    this.formRef.current.resetFields();
     this.props.createCategory(data);
+    this.props.closeModal();
   };
 
   handleCancel = () => {
+    this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -60,7 +65,7 @@ class CreatModal extends Component {
     const { openModal } = this.props;
     return (
       <>
-        <Form id="createForm" onFinish={this.handleCreateAndClose}>
+        <Form id="createCategoryForm" ref={this.formRef} onFinish={this.handleCreateAndClose}>
           <Modal
             title="Add New"
             visible={openModal}
@@ -69,11 +74,11 @@ class CreatModal extends Component {
               <Button onClick={this.handleCancel}>Cancel</Button>,
               <Button
                 type="primary"
-                form="createForm"
+                form="createCategoryForm"
                 key="submit"
                 htmlType="submit"
               >
-                Submit and Close
+                Submit
               </Button>,
             ]}
           >
@@ -93,5 +98,3 @@ const arePropsEqual = (prevProps, nextProps) => {
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(CreatModal, arePropsEqual);
-
-

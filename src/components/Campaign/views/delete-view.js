@@ -1,4 +1,5 @@
 import React, { Component, memo } from "react";
+import moment from "moment";
 import {
     Modal,
     Button,
@@ -14,8 +15,7 @@ const propsProTypes = {
     data: PropTypes.array,
     selectedRowKeys: PropTypes.array,
     closeModal: PropTypes.func,
-    deleteCategory: PropTypes.func,
-    defaultCategory: PropTypes.object,
+    deleteProduct: PropTypes.func,
     openModal: PropTypes.bool,
 };
 
@@ -24,16 +24,7 @@ const propsDefault = {
     data: [],
     selectedRowKeys: [],
     closeModal: () => { },
-    deleteCategory: () => { },
-    defaultCategory: {
-        key: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-        id: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-        categoryname: "Ipad",
-        supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-        isdeleted: false,
-        createdat: "2022-01-23T12:03:11.309Z",
-        updatedat: "2022-01-23T12:03:11.309Z"
-    },
+    deleteProduct: () => { },
     openModal: false,
 };
 
@@ -42,14 +33,14 @@ class DeleteModal extends Component {
     static defaultProps = propsDefault;
 
     componentDidMount() {
-        console.log("DeleteModal");
+        console.log("DeleteProductModal");
         console.log(this.props);
     }
 
     handleDelete = () => {
         (this.props.selectedRowKeys).map(item => {
             console.log(item);
-            this.props.deleteCategory(item);
+            this.props.deleteProduct(item);
         })
         this.props.closeModal();
     };
@@ -61,57 +52,81 @@ class DeleteModal extends Component {
 
     columns = [
         {
-            title: "No.",
-            dataIndex: "No.",
-            key: "No.",
-            render: (text, object, index) => {
-                return index + 1;
-            },
-            width: 100,
-            fixed: 'left',
+          title: "No.",
+          dataIndex: "No.",
+          key: "No.",
+          width: 60,
+          render: (text, object, index) => index + 1,
         },
-
         {
-            title: "Name",
-            dataIndex: "categoryname",
-            key: "categoryname",
-            sorter: (a, b) => a.categoryname.length - b.categoryname.length,
-            fix: "left"
-        },
-
-        {
-            title: "Created Date",
-            dataIndex: "createdat",
-            key: "createdat",
-            sorter: (a, b) => a.createdat.length - b.createdat.length,
-            render: (text, record) => {
-                return ((new Date(record.createdat)).toString()).slice(0, 24);
+          title: "Product Image",
+          dataIndex: "productimage",
+          width: 100,
+          key: "productimage",
+          render: (url) => {
+            if (url.length > 0) {
+              url = JSON.parse(url);
+              return (
+                <img
+                  src={url[0]?.url}
+                  alt="image"
+                  style={{ width: "90px", height: "70px", margin: "auto" }}
+                />
+              );
             }
+          },
         },
-
         {
-            title: "Updated Date",
-            dataIndex: "updatedat",
-            key: "updatedat",
-            sorter: (a, b) => a.updatedat.length - b.updatedat.length,
-            render: (text, record) => {
-                return ((new Date(record.updatedat)).toString()).slice(0, 24);
-            }
+          title: "Product Name",
+          dataIndex: "productname",
+          width: 200,
+          key: "productname",
         },
-    ];
+        {
+          title: "Retail Price",
+          dataIndex: "retailprice",
+          width: 200,
+          key: "retailprice",
+        },
+        {
+          title: "Wholesale Price",
+          dataIndex: "wholesaleprice",
+          width: 200,
+          key: "wholesaleprice",
+        },
+        {
+          title: "Quantity",
+          dataIndex: "quantity",
+          key: "quantity",
+          width: 100,
+        },
+        {
+          title: "Created Date",
+          dataIndex: "createdat",
+          key: "createdat",
+          width: 150,
+          render: (data) => moment(data).format("DD-MM-YYYY"),
+        },
+        {
+          title: "Description",
+          dataIndex: "description",
+          key: "description",
+          width: 250,
+        },
+      ];
 
     render() {
         const { openModal, selectedRowKeys } = this.props;
         return (
             <>
 
-                <Form id="deleteForm" onFinish={this.handleDelete}>
+                <Form id="deleteProductForm" onFinish={this.handleDelete}>
                     <Modal
-                        width={window.innerWidth * 0.7}
-                        heigh={window.innerHeight * 0.5}
-                        style={{
-                            top: 10,
-                        }}
+                         width={window.innerWidth * 0.7}
+                         heigh={window.innerHeight * 0.5}
+                         style={{
+                             top: 10,
+                         }}
                         title={`Records to be deleted: ${selectedRowKeys.length} items`}
                         visible={openModal}
                         // onOk={this.handleOk}
@@ -120,7 +135,7 @@ class DeleteModal extends Component {
                             <Button onClick={this.handleCancel}>Cancel</Button>,
                             <Button
                                 type="primary"
-                                form="deleteForm"
+                                form="deleteProductForm"
                                 key="submit"
                                 htmlType="submit"
                             >
