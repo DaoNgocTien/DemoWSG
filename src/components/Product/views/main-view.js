@@ -1,14 +1,6 @@
 import React, { Component, memo } from "react";
 import moment from "moment";
-import {
-  Table,
-  Button,
-  Input,
-  Row,
-  Col,
-  Space,
-  PageHeader,
-} from "antd";
+import { Table, Button, Input, Row, Col, Space, PageHeader } from "antd";
 import PropTypes from "prop-types";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
@@ -42,12 +34,11 @@ const propsDefault = {
     typeofproduct: "",
     createdat: "2022-01-07T14:08:02.994Z",
     updatedat: "2022-01-13T16:34:09.908Z",
-    categoryname: null
+    categoryname: null,
   },
-  createCategory: () => { },
-  updateCategory: () => { },
-  deleteProduct: () => { },
-
+  createCategory: () => {},
+  updateCategory: () => {},
+  deleteProduct: () => {},
 };
 
 class ProductUI extends Component {
@@ -71,10 +62,9 @@ class ProductUI extends Component {
     console.log("ProductUI");
     console.log(this.props);
     console.log(this.state);
-
   }
 
-  start = openModal => {
+  start = (openModal) => {
     switch (openModal) {
       case "openCreateModal":
         this.setState({ loadingActionButton: true, openCreateModal: true });
@@ -89,12 +79,13 @@ class ProductUI extends Component {
         this.setState({ loadingActionButton: true, openEditModal: true });
 
         break;
-      default: break;
+      default:
+        break;
     }
   };
 
-  onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+  onSelectChange = (selectedRowKeys) => {
+    console.log("selectedRowKeys changed: ", selectedRowKeys);
     this.setState({
       selectedRowKeys,
       editButton: selectedRowKeys.length == 1,
@@ -109,7 +100,7 @@ class ProductUI extends Component {
       openDeleteModal: false,
       openEditModal: false,
     });
-  }
+  };
 
   columns = [
     {
@@ -118,7 +109,7 @@ class ProductUI extends Component {
       key: "No.",
       width: 60,
       render: (text, object, index) => index + 1,
-      fixed: 'left',
+      fixed: "left",
     },
     {
       title: "Image",
@@ -137,14 +128,14 @@ class ProductUI extends Component {
           );
         }
       },
-      fixed: 'left',
+      fixed: "left",
     },
     {
       title: "Name",
       dataIndex: "name",
       width: 200,
       key: "name",
-      fixed: 'left',
+      fixed: "left",
     },
     {
       title: "Category",
@@ -175,7 +166,14 @@ class ProductUI extends Component {
       title: "Description",
       dataIndex: "description",
       key: "description",
-      width: 250,
+      width: 500,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      width: 100,
+      fixed: "right",
     },
   ];
 
@@ -183,20 +181,22 @@ class ProductUI extends Component {
     let { data } = this.props;
     console.log(data);
     let searchString = e.target.value;
-    let searchList = data.filter(item => {
+    let searchList = data.filter((item) => {
       console.log(item);
-      return item.categoryname.includes(searchString)
-        || item.createdat.includes(searchString)
-        || item.description.includes(searchString)
-        || item.name.includes(searchString)
-        || item.quantity.includes(searchString)
-        || item.retailprice.includes(searchString);
+      return (
+        item.categoryname.includes(searchString) ||
+        item.createdat.includes(searchString) ||
+        item.description.includes(searchString) ||
+        item.name.includes(searchString) ||
+        item.quantity.includes(searchString) ||
+        item.retailprice.includes(searchString)
+      );
     });
     this.setState({
       displayData: searchList,
       searchKey: searchString ?? "",
-    })
-  }
+    });
+  };
 
   render() {
     const {
@@ -212,12 +212,8 @@ class ProductUI extends Component {
       searchKey,
     } = this.state;
 
-    const {
-      categoryList,
-      createProduct,
-      updateProduct,
-      deleteProduct,
-    } = this.props;
+    const { categoryList, createProduct, updateProduct, deleteProduct } =
+      this.props;
 
     const rowSelection = {
       selectedRowKeys,
@@ -225,16 +221,14 @@ class ProductUI extends Component {
     };
     // const hasSelected = selectedRowKeys.length > 0;
 
-
-    const arrayLocation = (window.location.pathname).split("/");
+    const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title={(arrayLocation[2]).toUpperCase()}
+        title={arrayLocation[2].toUpperCase()}
         subTitle={`This is a ${arrayLocation[2]} page`}
         footer={
-
           <div>
             <CreateModal
               openModal={openCreateModal}
@@ -254,7 +248,11 @@ class ProductUI extends Component {
               closeModal={this.closeModal}
               categoryList={categoryList}
               updateProduct={updateProduct}
-              record={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })[0]}
+              record={
+                this.props.data.filter((item) => {
+                  return selectedRowKeys.includes(item.id);
+                })[0]
+              }
               selectedRowKeys={selectedRowKeys[0]}
             />
 
@@ -286,12 +284,17 @@ class ProductUI extends Component {
                       Delete
                     </Button>
                     <span style={{ marginLeft: 8 }}>
-                      {selectedRowKeys.length > 0 ? `Selected ${selectedRowKeys.length} items` : ''}
+                      {selectedRowKeys.length > 0
+                        ? `Selected ${selectedRowKeys.length} items`
+                        : ""}
                     </span>
                   </Space>
                 </Col>
                 <Col flex="300px">
-                  <Input onChange={e => this.onChangeHandler(e)} placeholder="Search data" />
+                  <Input
+                    onChange={(e) => this.onChangeHandler(e)}
+                    placeholder="Search data"
+                  />
                 </Col>
               </Row>
             </div>
@@ -299,14 +302,16 @@ class ProductUI extends Component {
               loading={this.props.loading}
               rowSelection={rowSelection}
               columns={this.columns}
-              dataSource={displayData.length === 0 && searchKey === "" ? this.props.data : displayData}
+              dataSource={
+                displayData.length === 0 && searchKey === ""
+                  ? this.props.data
+                  : displayData
+              }
               scroll={{ y: 350 }}
             />
           </div>
         }
-      >
-      </PageHeader>
-
+      ></PageHeader>
     );
   }
 }

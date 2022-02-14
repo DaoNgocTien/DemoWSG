@@ -21,6 +21,7 @@ class Campaign extends Component {
         getCampaign={this.props.getCampaign}
         ordersInCampaign={this.props.data.order}
         productList={this.props.data.products}
+        updateCampaign={this.props.updateCampaign}
         createCampaign={this.props.createCampaign}
       />
     );
@@ -55,6 +56,11 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.createCampaign(record));
       await dispatch(action.getCampaign());
     },
+
+    updateCampaign: async (record) => {
+      await dispatch(action.updateCampaign(record));
+      await dispatch(action.getCampaign());
+    }
   };
 };
 

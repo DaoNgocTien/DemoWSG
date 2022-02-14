@@ -100,28 +100,37 @@ const createCampaign = (record) => {
   };
 };
 
-// const createCampaign = record => {
-//   return async (dispatch) => {
-//     dispatch(getRequest());
-//     Axios({
-//       url: `/campaigns/`,
-//       method: "POST",
-//       data: record,
-//       withCredentials: true,
-//     }).then((response) => {
-//       if (response.status === 200) {
-//         console.log(response.data.data);
-//       }
-//     })
-//       .catch((err) => {
-//         // console.log(err);
-//         // console.log(typeof (err));
-//         return dispatch(getFailed());
-//       })
-//       .finally(() => {
-//       });
-//   };
-// }
+const updateCampaign = (record) => {
+  return async (dispatch) => {
+    dispatch(getRequest());
+    Axios({
+      url: `/campaigns/${record.id}`,
+      method: "PUT",
+      data: {
+        productId: record.productId,
+        fromDate: record.fromDate,
+        toDate: record.toDate,
+        quantity: record.quantity,
+        price: record.price,
+      },
+      withCredentials: true,
+    })
+      .then((result) => {
+        if (result.status === 200) {
+          const data = result.data.data.map((category) => {
+            return {
+              key: category.id,
+              ...category,
+            };
+          });
+          return dispatch(getSuccess(data));
+        }
+      })
+      .catch((err) => {
+        return dispatch(getFailed(err));
+      });
+  };
+};
 
 const getRequest = () => {
   return {
@@ -147,4 +156,5 @@ const getFailed = (err) => {
 export default {
   getCampaign,
   createCampaign,
+  updateCampaign,
 };

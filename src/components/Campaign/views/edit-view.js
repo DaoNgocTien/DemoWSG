@@ -55,18 +55,39 @@ class UpdateModal extends Component {
     previewTitle: "",
     fileList: [],
     // productSelected: null,
-    // price: 1,
+    price: 0,
+    // (this.props.record?.price /
+    //   this.props.productList?.find(
+    //     (element) => element.id === this.props.record?.productid
+    //   )?.retailprice) *
+    //   100 || 0,
   };
   formRef = React.createRef();
 
   componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
-    console.log(data)
+    console.log(data);
+
+    const productSelected = !this.state.productSelected
+      ? this.props.productList?.find(
+          (element) => element.id === this.props.record?.productid
+        )
+      : this.state.productSelected;
+    let newCampaign = {
+      id: this.props.record?.id,
+      productId: data.productId,
+      fromDate: data.date[0].format("MM/DD/YYYY"),
+      toDate: data.date[1].format("MM/DD/YYYY"),
+      quantity: data.quantity,
+      price: (data.wholesalePercent * productSelected.retailprice) / 100,
+    };
+
+    console.log(newCampaign);
     // data.image = this.state.fileList;
-    // this.props.updateProduct(data);
+    this.props.updateCampaign(newCampaign);
     // this.formRef.current.resetFields();
-    // this.props.closeModal();
+    this.props.closeModal();
   };
 
   handleUpdate = (data) => {
@@ -120,21 +141,6 @@ class UpdateModal extends Component {
     this.setState({ fileList });
   };
 
-  onFinish = (values) => {
-    values.image = this.state.fileList;
-    Axios({
-      url: `/products`,
-      method: "POST",
-      data: values,
-      withCredentials: true,
-      exposedHeaders: ["set-cookie"],
-    })
-      .then((result) => {
-        return window.location.replace("/products/catalog");
-      })
-      .catch((err) => console.error(err));
-  };
-
   onSelectProduct = (value) => {
     this.setState({
       productSelected: this.props.productList?.find(
@@ -158,8 +164,17 @@ class UpdateModal extends Component {
       productSelected = this.props.productList?.find(
         (element) => element.id === this.props.record?.productid
       ) || {},
-      price = (this.props.record?.price / productSelected?.retailprice) * 100,
     } = this.state;
+
+    console.log(this.state.price);
+    console.log(
+      (this.props.record?.price / productSelected?.retailprice) * 100
+    );
+
+    this.state.price =
+      this.state.price === 0 || !this.state.price
+        ? (this.props.record?.price / productSelected?.retailprice) * 100
+        : this.state.price;
 
     if (this.props.loading || !this.props.record) {
       return <></>;
@@ -242,10 +257,10 @@ class UpdateModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
-                <Form.Item name="quantity">
+                <Form.Item name="quantity" initialValue={record.quantity}>
                   <InputNumber
                     addonAfter=" products"
-                    defaultValue={1}
+                    defaultValue={record?.quantity}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>
@@ -292,7 +307,8 @@ class UpdateModal extends Component {
                 {productSelected?.retailprice ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Wholesale price">
-                {(price * productSelected?.retailprice) / 100 ?? ""}
+                {console.log(this.state.price)}
+                {(this.state.price * productSelected?.retailprice) / 100 ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Description">
                 <Input.TextArea
