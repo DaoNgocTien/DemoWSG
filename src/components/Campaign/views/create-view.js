@@ -50,17 +50,12 @@ class CreatModal extends Component {
   }
 
   handleCreateAndClose = (data) => {
-<<<<<<< HEAD
     console.log("Campaign create");
     console.log(data);
     const productSelected =
       this.state.productSelected === {}
         ? this.props.productList[0]
         : this.state.productSelected;
-=======
-    // console.log("Campaign create");
-    // console.log(data);
->>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
     let newCampaign = {
       productId: data.productId,
       fromDate: data.date[0],

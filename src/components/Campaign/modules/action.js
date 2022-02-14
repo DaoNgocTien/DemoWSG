@@ -99,7 +99,6 @@ const createCampaign = (record) => {
   };
 };
 
-<<<<<<< HEAD
 const updateCampaign = (record) => {
   return async (dispatch) => {
     dispatch(getRequest());
@@ -131,30 +130,6 @@ const updateCampaign = (record) => {
       });
   };
 };
-=======
-// const createCampaign = record => {
-//   return async (dispatch) => {
-//     dispatch(getRequest());
-//     Axios({
-//       url: `/campaigns/`,
-//       method: "POST",
-//       data: record,
-//       withCredentials: true,
-//     }).then((response) => {
-//       if (response.status === 200) {
-//         // console.log(response.data.data);
-//       }
-//     })
-//       .catch((err) => {
-//         // // console.log(err);
-//         // // console.log(typeof (err));
-//         return dispatch(getFailed());
-//       })
-//       .finally(() => {
-//       });
-//   };
-// }
->>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
 
 const getRequest = () => {
   return {

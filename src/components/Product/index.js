@@ -54,15 +54,9 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.getAllProduct());
     },
     updateProduct: async (record) => {
-<<<<<<< HEAD
-      console.log("updateProduct final");
-      dispatch(action.updateProduct(record));
-      dispatch(action.getAllProduct());
-=======
       // console.log("updateProduct final");
       await dispatch(action.updateProduct(record));
       await dispatch(action.getAllProduct());
->>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
     },
     deleteProduct: async (id) => {
       // console.log("deleteProduct final" + id);

@@ -59,16 +59,10 @@ class ProductUI extends Component {
   };
 
   componentDidMount() {
-<<<<<<< HEAD
-    console.log("ProductUI");
-    console.log(this.props);
-    console.log(this.state);
-=======
     // console.log("ProductUI");
     // console.log(this.props);
     // console.log(this.state);
 
->>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
   }
 
   start = (openModal) => {
@@ -91,13 +85,8 @@ class ProductUI extends Component {
     }
   };
 
-<<<<<<< HEAD
-  onSelectChange = (selectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-=======
   onSelectChange = selectedRowKeys => {
     // console.log('selectedRowKeys changed: ', selectedRowKeys);
->>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
     this.setState({
       selectedRowKeys,
       editButton: selectedRowKeys.length === 1,
@@ -193,18 +182,6 @@ class ProductUI extends Component {
     let { data } = this.props;
     // console.log(data);
     let searchString = e.target.value;
-<<<<<<< HEAD
-    let searchList = data.filter((item) => {
-      console.log(item);
-      return (
-        item.categoryname.includes(searchString) ||
-        item.createdat.includes(searchString) ||
-        item.description.includes(searchString) ||
-        item.name.includes(searchString) ||
-        item.quantity.includes(searchString) ||
-        item.retailprice.includes(searchString)
-      );
-=======
     let searchList = data.filter(item => {
       // console.log(item);
       return item.categoryname.includes(searchString)
@@ -213,7 +190,6 @@ class ProductUI extends Component {
         || item.name.includes(searchString)
         || item.quantity.includes(searchString)
         || item.retailprice.includes(searchString);
->>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
     });
     this.setState({
       displayData: searchList,
