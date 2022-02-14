@@ -67,6 +67,7 @@ class UpdateModal extends Component {
   componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
+<<<<<<< HEAD
     console.log(data);
 
     const productSelected = !this.state.productSelected
@@ -84,6 +85,9 @@ class UpdateModal extends Component {
     };
 
     console.log(newCampaign);
+=======
+    // console.log(data)
+>>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
     // data.image = this.state.fileList;
     this.props.updateCampaign(newCampaign);
     // this.formRef.current.resetFields();

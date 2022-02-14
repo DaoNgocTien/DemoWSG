@@ -1,6 +1,7 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 
+
 const getCampaign = (campaignId) => {
   return async (dispatch) => {
     try {
@@ -58,11 +59,11 @@ const getCampaign = (campaignId) => {
           order:
             order !== {}
               ? order.data?.data.map((item) => {
-                return {
-                  key: item.id,
-                  ...item,
-                };
-              })
+                  return {
+                    key: item.id,
+                    ...item,
+                  };
+                })
               : {},
         })
       );
@@ -99,39 +100,6 @@ const createCampaign = (record) => {
   };
 };
 
-<<<<<<< HEAD
-const updateCampaign = (record) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/campaigns/${record.id}`,
-      method: "PUT",
-      data: {
-        productId: record.productId,
-        fromDate: record.fromDate,
-        toDate: record.toDate,
-        quantity: record.quantity,
-        price: record.price,
-      },
-      withCredentials: true,
-    })
-      .then((result) => {
-        if (result.status === 200) {
-          const data = result.data.data.map((category) => {
-            return {
-              key: category.id,
-              ...category,
-            };
-          });
-          return dispatch(getSuccess(data));
-        }
-      })
-      .catch((err) => {
-        return dispatch(getFailed(err));
-      });
-  };
-};
-=======
 // const createCampaign = record => {
 //   return async (dispatch) => {
 //     dispatch(getRequest());
@@ -154,7 +122,6 @@ const updateCampaign = (record) => {
 //       });
 //   };
 // }
->>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
 
 const getRequest = () => {
   return {
@@ -177,10 +144,9 @@ const getFailed = (err) => {
   };
 };
 
-const action = {
+const action =  {
   getCampaign,
   createCampaign,
-  updateCampaign,
 };
 
 export default action;

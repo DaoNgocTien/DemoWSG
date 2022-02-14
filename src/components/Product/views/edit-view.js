@@ -2,8 +2,6 @@ import React, { Component, memo } from "react";
 import { Modal, Button, Form, Input } from "antd";
 import PropTypes from "prop-types";
 import { Select, Upload, InputNumber } from "antd";
-import moment from "moment";
-import Axios from "axios";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
 //  prototype

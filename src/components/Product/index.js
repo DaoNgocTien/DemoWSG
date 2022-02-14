@@ -48,18 +48,24 @@ const mapDispatchToProps = (dispatch) => {
     // getCategory: async () => await dispatch(getCategory()),
     getAllProduct: async () => await dispatch(action.getAllProduct()),
     createProduct: async (record) => {
-      console.log("createProduct final");
-      console.log(record);
+      // console.log("createProduct final");
+      // console.log(record);
       await dispatch(action.createProduct(record));
       await dispatch(action.getAllProduct());
     },
     updateProduct: async (record) => {
+<<<<<<< HEAD
       console.log("updateProduct final");
       dispatch(action.updateProduct(record));
       dispatch(action.getAllProduct());
+=======
+      // console.log("updateProduct final");
+      await dispatch(action.updateProduct(record));
+      await dispatch(action.getAllProduct());
+>>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
     },
     deleteProduct: async (id) => {
-      console.log("deleteProduct final" + id);
+      // console.log("deleteProduct final" + id);
       await dispatch(action.deleteProduct(id));
       await dispatch(action.getAllProduct());
     },

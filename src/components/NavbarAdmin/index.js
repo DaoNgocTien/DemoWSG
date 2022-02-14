@@ -2,18 +2,12 @@ import React, { Component } from "react";
 // import { Link } from "react-router-dom";
 import Axios from "axios";
 import { Link } from "react-router-dom";
-import { Menu, Button, Divider, Row, Col, Typography } from "antd";
+import { Menu, Button, Divider, Row, Col, } from "antd";
 import {
   SettingOutlined,
-  AppstoreOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  PieChartOutlined,
-  DesktopOutlined,
-  ContainerOutlined,
-  MailOutlined,
 } from "@ant-design/icons";
-const { Title } = Typography;
 export default class NavbarAdmin extends Component {
   handleLogOut = (e) => {
     Axios({
@@ -70,6 +64,7 @@ export default class NavbarAdmin extends Component {
                 right: 50,
                 fontSize: "20px",
               }}
+              key="Log out"
               title={<SettingOutlined style={{ fontSize: "25px" }} />}
             >
               <Menu.Item key="4">nav 4</Menu.Item>

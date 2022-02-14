@@ -21,10 +21,10 @@ import OrdersInCampaign from "./orders-in-campaign-view";
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
-  defaultCampaign: PropTypes.object,
-  createCampaign: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  deleteCampaign: PropTypes.func,
+  defaultDiscountCode: PropTypes.object,
+  createDiscountCode: PropTypes.func,
+  updateDiscountCode: PropTypes.func,
+  deleteDiscountCode: PropTypes.func,
 };
 
 //  default props
@@ -32,10 +32,10 @@ const propsDefault = {
   index: 1,
   data: [],
   products: [],
-  defaultCampaign: {},
+  defaultDiscountCode: {},
 };
 
-class CampaignUI extends Component {
+class DiscountCodeUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
@@ -72,7 +72,7 @@ class CampaignUI extends Component {
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;
-    //  Get campaign record
+    //  Get DiscountCode record
     let recordToEdit = data.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
@@ -101,7 +101,7 @@ class CampaignUI extends Component {
         let orderListInCampaign = orderList?.filter((item) => {
           return selectedRowKeys.includes(item.campaignid);
         });
-        this.props.getCampaign(selectedRowKeys);
+        this.props.getDiscountCode(selectedRowKeys);
 
         //  Set campaign record and orders in campaign into state
         this.setState({
@@ -199,13 +199,6 @@ class CampaignUI extends Component {
       return selectedRowKeys.includes(item.id);
     })[0];
 
-    // console.log(record);
-    // this.setState({
-    //   record: this.props.data.filter((item) => {
-    //     return selectedRowKeys.includes(item.id);
-    //   })[0]
-    // });
-    // // console.log(this.state.record);
     this.setState({
       selectedRowKeys,
       record: record,
@@ -230,9 +223,9 @@ class CampaignUI extends Component {
 
     const {
       productList,
-      createCampaign,
-      updateCampaign,
-      deleteCampaign,
+      createDiscountCode,
+      updateDiscountCode,
+      deleteDiscountCode,
     } = this.props;
 
     const rowSelection = {
@@ -252,13 +245,13 @@ class CampaignUI extends Component {
             <CreateModal
               openModal={openCreateModal}
               closeModal={this.closeModal}
-              createCampaign={createCampaign}
+              createDiscountCode={createDiscountCode}
               productList={productList}
             />
             <DeleteModal
               openModal={openDeleteModal}
               closeModal={this.closeModal}
-              deleteCampaign={deleteCampaign}
+              deleteDiscountCode={deleteDiscountCode}
               selectedRowKeys={selectedRowKeys}
               data={this.props.data}
             />
@@ -267,7 +260,7 @@ class CampaignUI extends Component {
               openModal={openEditModal}
               closeModal={this.closeModal}
               productList={productList}
-              updateCampaign={updateCampaign}
+              updateDiscountCode={updateDiscountCode}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
             />
@@ -321,10 +314,6 @@ class CampaignUI extends Component {
                 </Col>
               </Row>
             </div>
-            {/* <OrdersInCampaign
-              onCloseDrawer={onCloseDrawer}
-              openDrawer={openDrawer}
-            /> */}
             <Drawer
               width={window.innerWidth * 0.7}
               placement="right"
@@ -364,4 +353,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(CampaignUI, arePropsEqual);
+export default memo(DiscountCodeUI, arePropsEqual);

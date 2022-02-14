@@ -5,7 +5,7 @@ import {
   GOOGLE_OAUTH2,
 } from "./constant";
 import Axios from "axios";
-// import APIMethods from "../../../redux/url/APIMethods";
+// 
 // import APISettings from "../../../redux/url/APISettings";
 
 export const actLoginApi = (user, history) => {
@@ -45,7 +45,7 @@ export const googleOAuth2 = (googleResponse) => {
     if (typeof googleResponse === "undefined") {
       googleResponse = [];
     }
-    console.log(googleResponse)
+    // console.log(googleResponse)
     if (googleResponse && !googleResponse.error) {
       Axios({
         url: `/users/login/google`,

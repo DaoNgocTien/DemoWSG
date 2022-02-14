@@ -3,9 +3,7 @@ import {
     Modal,
     Button,
     Form,
-    Input,
     Table,
-    Popconfirm,
 } from "antd";
 import PropTypes from "prop-types";
 
@@ -42,14 +40,14 @@ class DeleteModal extends Component {
     static defaultProps = propsDefault;
 
     componentDidMount() {
-        console.log("DeleteModal");
-        console.log(this.props);
+        // console.log("DeleteModal");
+        // console.log(this.props);
     }
 
     handleDelete = () => {
         (this.props.selectedRowKeys).map(item => {
-            console.log(item);
-            this.props.deleteCategory(item);
+            // console.log(item);
+            return this.props.deleteCategory(item);
         })
         this.props.closeModal();
     };

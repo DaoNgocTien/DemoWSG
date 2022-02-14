@@ -17,7 +17,7 @@ const { RangePicker } = DatePicker;
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
-  createCampaign: PropTypes.func,
+  createDiscountCode: PropTypes.func,
   openModal: PropTypes.bool,
   productList: PropTypes.array,
 };
@@ -25,7 +25,7 @@ const propsProTypes = {
 //  default props
 const propsDefault = {
   closeModal: () => {},
-  createCampaign: () => {},
+  createDiscountCode: () => {},
   openModal: false,
   productList: [],
 };
@@ -39,42 +39,26 @@ class CreatModal extends Component {
     previewTitle: "",
     fileList: [],
     price: 0,
-    productSelected: {},
   };
   formRef = React.createRef();
 
-  componentDidMount() {
-    this.setState({
-      productSelected: this.props.productList[0],
-    });
-  }
+  componentDidMount() {}
 
   handleCreateAndClose = (data) => {
-<<<<<<< HEAD
-    console.log("Campaign create");
-    console.log(data);
-    const productSelected =
-      this.state.productSelected === {}
-        ? this.props.productList[0]
-        : this.state.productSelected;
-=======
-    // console.log("Campaign create");
+    // console.log("DiscountCode create");
     // console.log(data);
->>>>>>> af474bb12947130f80a687669fe4f2d61a910f92
-    let newCampaign = {
+    let newDiscountCode = {
       productId: data.productId,
       fromDate: data.date[0],
       toDate: data.date[1],
       quantity: data.quantity,
-      price:
-        (data.wholesalePercent * productSelected.retailprice) / 100,
+      price: 1000,
     };
-    // console.log(newCampaign);
-    this.props.createCampaign(newCampaign);
+    this.props.createDiscountCode(newDiscountCode);
     // data.image = this.state.fileList;
     // this.props.createProduct(data);
     // this.formRef.current.resetFields();
-    this.props.closeModal();
+    // this.props.closeModal();
   };
 
   handleCreate = (data) => {
@@ -120,7 +104,7 @@ class CreatModal extends Component {
     return (
       <>
         <Form
-          id="createCampaignForm"
+          id="createDiscountCodeForm"
           ref={this.formRef}
           onFinish={this.handleCreateAndClose}
         >
@@ -137,7 +121,7 @@ class CreatModal extends Component {
               <Button onClick={this.handleCancel}>Cancel</Button>,
               <Button
                 type="primary"
-                form="createCampaignForm"
+                form="createDiscountCodeForm"
                 key="submit"
                 htmlType="submit"
               >
@@ -146,11 +130,8 @@ class CreatModal extends Component {
             ]}
           >
             <Descriptions bordered column={2}>
-              <Descriptions.Item label="Campaign duration">
-                <Form.Item
-                  name="date"
-                  initialValue={[moment(), moment().add(1, "days")]}
-                >
+              <Descriptions.Item label="DiscountCode duration">
+                <Form.Item name="date" initialValue={[moment(), moment().add(1, "days")]}>
                   <RangePicker
                     ranges={{
                       Today: [moment(), moment()],
