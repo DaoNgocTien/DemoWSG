@@ -65,7 +65,9 @@ const updateProduct = (record) => {
         name: record.name,
         retailPrice: record?.retailPrice,
         quantity: record?.quantity,
-        description: record?.description
+        description: record?.description,
+        categoryId: record?.categoryId,
+        image: record?.image,
       },
       withCredentials: true,
     }).then((response) => {

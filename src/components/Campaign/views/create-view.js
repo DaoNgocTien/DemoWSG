@@ -39,26 +39,37 @@ class CreatModal extends Component {
     previewTitle: "",
     fileList: [],
     price: 0,
+    productSelected: {},
   };
   formRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.setState({
+      productSelected: this.props.productList[0],
+    });
+  }
 
   handleCreateAndClose = (data) => {
-    // console.log("Campaign create");
-    // console.log(data);
+    console.log("Campaign create");
+    console.log(data);
+    const productSelected =
+      this.state.productSelected === {}
+        ? this.props.productList[0]
+        : this.state.productSelected;
     let newCampaign = {
       productId: data.productId,
       fromDate: data.date[0],
       toDate: data.date[1],
       quantity: data.quantity,
-      price: 1000,
+      price:
+        (data.wholesalePercent * productSelected.retailprice) / 100,
     };
+    // console.log(newCampaign);
     this.props.createCampaign(newCampaign);
     // data.image = this.state.fileList;
     // this.props.createProduct(data);
     // this.formRef.current.resetFields();
-    // this.props.closeModal();
+    this.props.closeModal();
   };
 
   handleCreate = (data) => {
@@ -131,7 +142,10 @@ class CreatModal extends Component {
           >
             <Descriptions bordered column={2}>
               <Descriptions.Item label="Campaign duration">
-                <Form.Item name="date" initialValue={[moment(), moment().add(1, "days")]}>
+                <Form.Item
+                  name="date"
+                  initialValue={[moment(), moment().add(1, "days")]}
+                >
                   <RangePicker
                     ranges={{
                       Today: [moment(), moment()],
