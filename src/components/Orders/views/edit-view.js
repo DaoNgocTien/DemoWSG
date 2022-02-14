@@ -1,5 +1,5 @@
 import React, { Component, memo } from "react";
-import { Modal, Button, Form, Input, Table, Select } from "antd";
+import { Modal, Button, Form, Table, Select } from "antd";
 import PropTypes from "prop-types";
 
 //  prototype
@@ -30,7 +30,7 @@ class EditModal extends Component {
   formRef = React.createRef();
 
   componentDidMount() {
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   handleEditAndClose = (data) => {
@@ -68,7 +68,7 @@ class EditModal extends Component {
         return data === "" ? (
           ""
         ) : (
-          <img width="100" height="100" src={JSON.parse(data)[0].url} />
+          <img width="100" alt="show illustrative representation" height="100" src={JSON.parse(data)[0].url} />
         );
       },
     },

@@ -68,9 +68,9 @@ class ProductUI extends Component {
   };
 
   componentDidMount() {
-    console.log("ProductUI");
-    console.log(this.props);
-    console.log(this.state);
+    // console.log("ProductUI");
+    // console.log(this.props);
+    // console.log(this.state);
 
   }
 
@@ -94,10 +94,10 @@ class ProductUI extends Component {
   };
 
   onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    // console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({
       selectedRowKeys,
-      editButton: selectedRowKeys.length == 1,
+      editButton: selectedRowKeys.length === 1,
       deleteButton: selectedRowKeys.length >= 1,
       addNewButton: selectedRowKeys.length === 0,
     });
@@ -131,7 +131,7 @@ class ProductUI extends Component {
           return (
             <img
               src={url[0]?.url}
-              alt="image"
+              alt="show illustrative representation"
               style={{ width: "90px", height: "70px", margin: "auto" }}
             />
           );
@@ -181,10 +181,10 @@ class ProductUI extends Component {
 
   onChangeHandler = (e) => {
     let { data } = this.props;
-    console.log(data);
+    // console.log(data);
     let searchString = e.target.value;
     let searchList = data.filter(item => {
-      console.log(item);
+      // console.log(item);
       return item.categoryname.includes(searchString)
         || item.createdat.includes(searchString)
         || item.description.includes(searchString)
@@ -200,7 +200,6 @@ class ProductUI extends Component {
 
   render() {
     const {
-      loadingActionButton,
       selectedRowKeys,
       deleteButton,
       editButton,

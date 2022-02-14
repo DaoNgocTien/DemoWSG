@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+import React, { memo } from "react";
 import moment from "moment";
 import {
   Table,
@@ -75,7 +75,7 @@ class OrdersInCampaign extends React.Component {
         ) : (
           <img
             width="100"
-            alt = "show illustrative representation"
+            alt="show illustrative representation"
             height="100"
             src={JSON.parse(object.details[0].image)[0].url}
           />

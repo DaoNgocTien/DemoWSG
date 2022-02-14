@@ -2,26 +2,30 @@ import React, { Component } from "react";
 import action from "./modules/action";
 // import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
-import CampaignUI from "./views/main-view";
+import DiscountCodeUI from "./views/main-view";
 
-class Campaign extends Component {
+class DiscountCode extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
   componentDidMount() {
-    this.props.getCampaign();
+    this.props.getDiscountCode();
   }
 
   render() {
     return (
-      <CampaignUI
+      <DiscountCodeUI
         data={this.props.data.campaigns}
         loading={this.props.loading}
-        getCampaign={this.props.getCampaign}
+        getDiscountCode={this.props.getDiscountCode}
         ordersInCampaign={this.props.data.order}
         productList={this.props.data.products}
-        createCampaign={this.props.createCampaign}
+        createDiscountCode={this.props.createDiscountCode ? this.props.createDiscountCodethis : () => { }}
+
+        updateDiscountCode={this.props.updateDiscountCode ? this.props.updateDiscountCodethis : () => { }}
+
+        deleteDiscountCode={this.props.deleteDiscountCode ? this.props.deleteDiscountCode : () => { }}
       />
     );
   }
@@ -39,8 +43,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCampaign: async (campaignId) => {
-      // console.log("get campaign");
+    getDiscountCode: async (campaignId) => {
+      // console.log("get DiscountCode");
       await dispatch(action.getCampaign(campaignId));
     },
 
@@ -49,7 +53,7 @@ const mapDispatchToProps = (dispatch) => {
       // console.log(campaignID);
     },
 
-    createCampaign: async (record) => {
+    createDiscountCode: async (record) => {
       // console.log("createProduct final");
       // console.log(record);
       await dispatch(action.createCampaign(record));
@@ -58,4 +62,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Campaign);
+export default connect(mapStateToProps, mapDispatchToProps)(DiscountCode);

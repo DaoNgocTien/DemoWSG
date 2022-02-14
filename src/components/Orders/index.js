@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getOrder: async () => await dispatch(action.getOrder()),
     updateStatusOrder: async (data) => {
-      console.log(data)
+      // console.log(data)
       await dispatch(action.updateStatusOrder(data));
       await dispatch(action.getOrder())
     },

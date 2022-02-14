@@ -3,8 +3,7 @@ import AuthPage from "../containers/AuthPage";
 
 import Product from "../components/Product";
 import Category from "../components/Category";
-import AddProduct from "../components/AddProduct";
-import EditProduct from "../components/EditProduct";
+import DiscountCode from "../components/DiscountCode";
 import Campaign from "../components/Campaign";
 import Order from "../components/Orders";
 const routesAdmin = [
@@ -23,27 +22,24 @@ const routesAdmin = [
     path: "/products/catalog",
     component: Product,
   },
-  {
-    exact: true,
-    path: "/products/add",
-    component: AddProduct,
-  },
-  {
-    exact: true,
-    path: "/products/campaigns",
-    component: Campaign,
-  },
-  {
-    exact: true,
-    path: "/products/:id",
-    component: EditProduct,
-  },
 
   {
     exact: true,
     path: "/orders/catalog",
     component: Order,
   },
+
+  {
+    exact: true,
+    path: "/discount/campaigns",
+    component: Campaign,
+  },
+  {
+    exact: true,
+    path: "/discount/discount-codes",
+    component: DiscountCode,
+  },
+    
 ];
 
 const routesAuth = [

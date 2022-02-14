@@ -7,8 +7,6 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import { Select, Upload, InputNumber } from "antd";
-import moment from "moment";
-import Axios from "axios";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
 //  prototype
@@ -57,7 +55,7 @@ class CreatModal extends Component {
 
 
   componentDidMount() {
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   handleCreateAndClose = (data) => {
@@ -116,30 +114,12 @@ class CreatModal extends Component {
     });
 
     this.setState({ fileList });
-    console.log(this.state.fileList);
-  };
-
-  onFinish = (values) => {
-    values.image = this.state.fileList;
-    console.log(values);
-    Axios({
-      url: `/products`,
-      method: "POST",
-      data: values,
-      withCredentials: true,
-      exposedHeaders: ["set-cookie"],
-    })
-      .then((result) => {
-        return window.location.replace("/products/catalog");
-      })
-      .catch((err) => console.error(err));
+    // console.log(this.state.fileList);
   };
 
   render() {
-    const { openModal } = this.props;
-
-    const { data, categoryList } = this.props;
-    const { load, imageUrl } = this.state;
+    const { openModal, categoryList } = this.props;
+    const { load, } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}

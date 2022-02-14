@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { Route, Redirect, Link } from "react-router-dom";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Route, Link } from "react-router-dom";
+import { Layout, Menu, } from "antd";
 import {
   ReconciliationOutlined,
   DropboxOutlined,
@@ -72,6 +72,7 @@ class AdminRender extends Component {
                   </Link>
                 </Menu.Item>
               </SubMenu>
+
               {/* <SubMenu key="orders" title="Orders"> */}
               <Menu.Item key="Order" icon={<ReconciliationOutlined />}>
                 <Link className="LinkDecorations" to="/orders/catalog">
@@ -81,11 +82,15 @@ class AdminRender extends Component {
 
               <SubMenu key="Discount" title="Discounts" icon={<PercentageOutlined />}>
                 <Menu.Item key="campaigns">
-                  <Link className="LinkDecorations" to="/products/campaigns">
+                  <Link className="LinkDecorations" to="/discount/campaigns">
                     Campaign
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="9">Discount Code</Menu.Item>
+                <Menu.Item key="discount-codes">
+                  <Link className="LinkDecorations" to="/discount/discount-codes">
+                    Discount Code
+                  </Link>
+                </Menu.Item>
               </SubMenu>
             </Menu>
           </Sider>
