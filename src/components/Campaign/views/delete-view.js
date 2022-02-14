@@ -4,9 +4,7 @@ import {
     Modal,
     Button,
     Form,
-    Input,
     Table,
-    Popconfirm,
 } from "antd";
 import PropTypes from "prop-types";
 
@@ -15,7 +13,7 @@ const propsProTypes = {
     data: PropTypes.array,
     selectedRowKeys: PropTypes.array,
     closeModal: PropTypes.func,
-    deleteProduct: PropTypes.func,
+    deleteCampaign: PropTypes.func,
     openModal: PropTypes.bool,
 };
 
@@ -24,7 +22,7 @@ const propsDefault = {
     data: [],
     selectedRowKeys: [],
     closeModal: () => { },
-    deleteProduct: () => { },
+    deleteCampaign: () => { },
     openModal: false,
 };
 
@@ -33,14 +31,14 @@ class DeleteModal extends Component {
     static defaultProps = propsDefault;
 
     componentDidMount() {
-        console.log("DeleteProductModal");
-        console.log(this.props);
+        // console.log("DeleteCampaignModal");
+        // console.log(this.props);
     }
 
     handleDelete = () => {
         (this.props.selectedRowKeys).map(item => {
-            console.log(item);
-            this.props.deleteProduct(item);
+            // console.log(item);
+            return this.props.deleteCampaign(item);
         })
         this.props.closeModal();
     };
@@ -69,7 +67,7 @@ class DeleteModal extends Component {
               return (
                 <img
                   src={url[0]?.url}
-                  alt="image"
+                  alt="show illustrative representation"
                   style={{ width: "90px", height: "70px", margin: "auto" }}
                 />
               );

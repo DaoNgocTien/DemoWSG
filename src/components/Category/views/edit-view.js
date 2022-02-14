@@ -38,9 +38,9 @@ class EditModal extends Component {
     formRef = React.createRef();
 
     componentDidMount() {
-        console.log("EditModal Didmount");
+        // console.log("EditModal Didmount");
 
-        console.log(this.props);
+        // console.log(this.props);
         this.formRef.current.setFieldsValue({
             id: this.props.record?.id,
             categoryname: this.props.record?.categoryname,
@@ -63,7 +63,7 @@ class EditModal extends Component {
     };
 
     render() {
-        const { openModal, record, data, selectedRowKeys } = this.props;
+        const { openModal, record, } = this.props;
         // this.handelOpenModal(data, selectedRowKeys);
         // const record = data.filter((item) => {
         //     return selectedRowKeys?.includes(item.id);
@@ -71,10 +71,10 @@ class EditModal extends Component {
         // let record = data.filter((item) => {
         //     return selectedRowKeys.includes(item.id);
         //   })[0];
-        console.log("Record EditModal");
+        // console.log("Record EditModal");
 
-        console.log(record);
-        console.log(this.state.record);
+        // console.log(record);
+        // console.log(this.state.record);
         return (
             <>
                 <Form

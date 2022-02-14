@@ -5,18 +5,12 @@ import {
   Form,
   Input,
   DatePicker,
-  Space,
-  Row,
-  Col,
   InputNumber,
-  Slider,
   Descriptions,
 } from "antd";
 import PropTypes from "prop-types";
 import { Select, Upload } from "antd";
 import moment from "moment";
-import Axios from "axios";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 
@@ -51,8 +45,8 @@ class CreatModal extends Component {
   componentDidMount() {}
 
   handleCreateAndClose = (data) => {
-    console.log("Campaign create");
-    console.log(data);
+    // console.log("Campaign create");
+    // console.log(data);
     let newCampaign = {
       productId: data.productId,
       fromDate: data.date[0],
@@ -78,12 +72,12 @@ class CreatModal extends Component {
   };
 
   onChange = (dates, dateStrings) => {
-    console.log("From: ", dates[0], ", to: ", dates[1]);
-    console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
+    // console.log("From: ", dates[0], ", to: ", dates[1]);
+    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
   };
 
   onSelectProduct = (value) => {
-    console.log(value);
+    // console.log(value);
     this.setState({
       productSelected: this.props.productList?.find(
         (element) => element.id === value
@@ -106,7 +100,7 @@ class CreatModal extends Component {
     const { productList } = this.props;
     const { productSelected = this.props.productList[0], price = 0 } =
       this.state;
-    console.log(productSelected);
+    // console.log(productSelected);
     return (
       <>
         <Form

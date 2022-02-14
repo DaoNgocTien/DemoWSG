@@ -46,6 +46,7 @@ class OrderUI extends Component {
 
       case "openEditModal":
         this.setState({ openEditModal: true });
+        break;
 
       default:
         break;
@@ -67,10 +68,10 @@ class OrderUI extends Component {
   };
 
   onSelectChange = (selectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
+    // console.log("selectedRowKeys changed: ", selectedRowKeys);
     this.setState({
       selectedRowKeys,
-      editButton: selectedRowKeys.length == 1,
+      editButton: selectedRowKeys.length === 1,
       deleteButton: selectedRowKeys.length >= 1,
       addNewButton: selectedRowKeys.length === 0,
     });

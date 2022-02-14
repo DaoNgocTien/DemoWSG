@@ -1,6 +1,7 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 
+
 const getCampaign = (campaignId) => {
   return async (dispatch) => {
     try {
@@ -58,11 +59,11 @@ const getCampaign = (campaignId) => {
           order:
             order !== {}
               ? order.data?.data.map((item) => {
-                return {
-                  key: item.id,
-                  ...item,
-                };
-              })
+                  return {
+                    key: item.id,
+                    ...item,
+                  };
+                })
               : {},
         })
       );
@@ -143,7 +144,7 @@ const getFailed = (err) => {
   };
 };
 
-const action = {
+const action =  {
   getCampaign,
   createCampaign,
 };

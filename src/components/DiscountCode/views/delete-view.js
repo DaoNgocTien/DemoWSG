@@ -13,7 +13,7 @@ const propsProTypes = {
   data: PropTypes.array,
   selectedRowKeys: PropTypes.array,
   closeModal: PropTypes.func,
-  deleteProduct: PropTypes.func,
+  deleteDiscountCode: PropTypes.func,
   openModal: PropTypes.bool,
 };
 
@@ -22,7 +22,7 @@ const propsDefault = {
   data: [],
   selectedRowKeys: [],
   closeModal: () => { },
-  deleteProduct: () => { },
+  deleteDiscountCode: () => { },
   openModal: false,
 };
 
@@ -31,14 +31,14 @@ class DeleteModal extends Component {
   static defaultProps = propsDefault;
 
   componentDidMount() {
-    // console.log("DeleteProductModal");
+    // console.log("DeleteDiscountCodeModal");
     // console.log(this.props);
   }
 
   handleDelete = () => {
     (this.props.selectedRowKeys).map(item => {
       // console.log(item);
-      return this.props.deleteProduct(item);
+      return this.props.deleteDiscountCode(item);
     })
     this.props.closeModal();
   };
@@ -57,10 +57,10 @@ class DeleteModal extends Component {
       render: (text, object, index) => index + 1,
     },
     {
-      title: "Image",
-      dataIndex: "image",
+      title: "Product Image",
+      dataIndex: "productimage",
       width: 100,
-      key: "image",
+      key: "productimage",
       render: (url) => {
         if (url.length > 0) {
           url = JSON.parse(url);
@@ -75,16 +75,10 @@ class DeleteModal extends Component {
       },
     },
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Product Name",
+      dataIndex: "productname",
       width: 200,
-      key: "name",
-    },
-    {
-      title: "Category",
-      dataIndex: "categoryname",
-      width: 200,
-      key: "categoryname",
+      key: "productname",
     },
     {
       title: "Retail Price",
@@ -124,7 +118,7 @@ class DeleteModal extends Component {
     return (
       <>
 
-        <Form id="deleteProductForm" onFinish={this.handleDelete}>
+        <Form id="deleteDiscountCodeForm" onFinish={this.handleDelete}>
           <Modal
             width={window.innerWidth * 0.7}
             heigh={window.innerHeight * 0.5}
@@ -139,7 +133,7 @@ class DeleteModal extends Component {
               <Button onClick={this.handleCancel}>Cancel</Button>,
               <Button
                 type="primary"
-                form="deleteProductForm"
+                form="deleteDiscountCodeForm"
                 key="submit"
                 htmlType="submit"
               >

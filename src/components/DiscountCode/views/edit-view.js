@@ -17,7 +17,7 @@ import Axios from "axios";
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
-  updateCampaign: PropTypes.func,
+  updateDiscountCode: PropTypes.func,
   record: PropTypes.object,
   openModal: PropTypes.bool,
 };
@@ -167,7 +167,7 @@ class UpdateModal extends Component {
     return (
       <>
         <Form
-          id="updateCampaignForm"
+          id="updateDiscountCodeForm"
           ref={this.formRef}
           onFinish={this.handleUpdateAndClose}
         >
@@ -184,7 +184,7 @@ class UpdateModal extends Component {
               <Button onClick={this.handleCancel}>Cancel</Button>,
               <Button
                 type="primary"
-                form="updateCampaignForm"
+                form="updateDiscountCodeForm"
                 key="submit"
                 htmlType="submit"
               >

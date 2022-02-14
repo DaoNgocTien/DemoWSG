@@ -1,6 +1,6 @@
 import React, { Component, memo } from "react";
 import moment from "moment";
-import { Table, Button, Input, Row, Col, Space, PageHeader, Statistic, Descriptions } from "antd";
+import { Table, Button, Input, Row, Col, Space, PageHeader, } from "antd";
 import PropTypes from "prop-types";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
@@ -51,9 +51,9 @@ class CategoryUI extends Component {
   };
 
   componentDidMount() {
-    console.log("CategoryUI");
-    console.log(this.props);
-    console.log(this.state);
+    // console.log("CategoryUI");
+    // console.log(this.props);
+    // console.log(this.state);
   }
 
   start = (openModal) => {
@@ -77,22 +77,22 @@ class CategoryUI extends Component {
   };
 
   onSelectChange = (selectedRowKeys) => {
-    console.log("selectedRowKeys changed: ", selectedRowKeys);
-    console.log(this.props.data);
+    // console.log("selectedRowKeys changed: ", selectedRowKeys);
+    // console.log(this.props.data);
     let record = this.props.data.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
-    console.log(record);
+    // console.log(record);
     // this.setState({
     //   record: this.props.data.filter((item) => {
     //     return selectedRowKeys.includes(item.id);
     //   })[0]
     // });
-    // console.log(this.state.record);
+    // // console.log(this.state.record);
     this.setState({
       selectedRowKeys,
       record: record,
-      editButton: selectedRowKeys.length == 1,
+      editButton: selectedRowKeys.length === 1,
       deleteButton: selectedRowKeys.length >= 1,
       addNewButton: selectedRowKeys.length === 0,
     });

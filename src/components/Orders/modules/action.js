@@ -1,6 +1,6 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
-import APIMethods from "../../../redux/url/APIMethods";
+
 
 const getOrder = () => {
   return async (dispatch) => {
@@ -41,14 +41,14 @@ const updateStatusOrder = (data) => {
       withCredentials: true,
     })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 200) {
-          // console.log(response);
+          // // console.log(response);
           // return window.location.reload();
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         return dispatch(getFailed());
       });
   };
@@ -73,7 +73,9 @@ const getFailed = (err) => {
   };
 };
 
-export default {
+const action = {
   getOrder,
   updateStatusOrder
 };
+
+export default action;

@@ -1,6 +1,6 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
-import action from "../../Category/modules/action";
+import { default as categoryAction } from "../../Category/modules/action";
 
 const getAllProduct = () => {
   return async (dispatch) => {
@@ -13,15 +13,15 @@ const getAllProduct = () => {
     })
       .then((result) => {
         if (result.status === 200) {
-          console.log("getAllProduct: ");
-          console.log(result.data.data);
+          // console.log("getAllProduct: ");
+          // console.log(result.data.data);
           const data = (result.data.data).map(product => {
             return {
               key: product.id,
               ...product
             }
           });
-          dispatch(action.getAllCategory());
+          dispatch(categoryAction.getAllCategory());
           return dispatch(getSuccess(data));
         }
       })
@@ -41,12 +41,12 @@ const createProduct = record => {
       withCredentials: true,
     }).then((response) => {
       if (response.status === 200) {
-        console.log(response.data.data);
+        // console.log(response.data.data);
       }
     })
       .catch((err) => {
-        // console.log(err);
-        // console.log(typeof (err));
+        // // console.log(err);
+        // // console.log(typeof (err));
         return dispatch(getFailed());
       })
       .finally(() => {
@@ -55,7 +55,7 @@ const createProduct = record => {
 }
 
 const updateProduct = (record) => {
-  console.log(record);
+  // console.log(record);
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -69,15 +69,15 @@ const updateProduct = (record) => {
       },
       withCredentials: true,
     }).then((response) => {
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
-        // console.log(response);
+        // // console.log(response);
         // return window.location.reload();
-        console.log(response.data.data);
+        // console.log(response.data.data);
       }
     }).catch((err) => {
-      console.log(err);
-      console.log(typeof (err));
+      // console.log(err);
+      // console.log(typeof (err));
       return dispatch(getFailed());
     });
   };
@@ -91,14 +91,14 @@ const deleteProduct = id => {
       method: "DELETE",
       withCredentials: true,
     }).then((response) => {
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
-        console.log(response);
+        // console.log(response);
         // return window.location.reload();
       }
     }).catch((err) => {
-      console.log(err);
-      console.log(typeof (err));
+      // console.log(err);
+      // console.log(typeof (err));
       return dispatch(getFailed());
     });
   };
@@ -124,9 +124,11 @@ const getFailed = (err) => {
   };
 };
 
-export default {
+const action = {
   getAllProduct: getAllProduct,
   createProduct: createProduct,
   updateProduct: updateProduct,
   deleteProduct: deleteProduct
 }
+
+export default action;

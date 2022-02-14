@@ -17,7 +17,7 @@ class AuthPage extends Component {
   };
 
   onFinish = (e) => {
-    console.log(e);
+    // console.log(e);
     this.props.login(e, this.props.history);
   };
 
@@ -72,7 +72,7 @@ class AuthPage extends Component {
 
                   <a
                     className="login-form-forgot"
-                    href=""
+                    href="/#"
                     style={{ float: "right" }}
                   >
                     Forgot password
@@ -96,7 +96,7 @@ class AuthPage extends Component {
                   className="google-button"
                 />
                 <br />
-                <a href="" style={{ float: "right" }}>
+                <a href="/#" style={{ float: "right" }}>
                   register now!
                 </a>
               </Form>

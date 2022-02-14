@@ -1,6 +1,6 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
-import APIMethods from "../../../redux/url/APIMethods";
+
 
 const getAllCategory = () => {
   return async (dispatch) => {
@@ -20,7 +20,7 @@ const getAllCategory = () => {
           });
           // if (Array.isArray(data)) {
           //   data.map((item) => {
-          //     console.log(item);
+          //     // console.log(item);
           //   })
           // }
           return dispatch(getSuccess(data));
@@ -42,7 +42,7 @@ const createCategory = record => {
       withCredentials: true,
     }).then((response) => {
       if (response.status === 200) {
-        console.log(response);
+        // console.log(response);
         // return window.location.reload();
       }
     })
@@ -55,7 +55,7 @@ const createCategory = record => {
 }
 
 const updateCategory = (record) => {
-  console.log(record);
+  // console.log(record);
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -64,13 +64,13 @@ const updateCategory = (record) => {
       data: { categoryName: record.categoryName },
       withCredentials: true,
     }).then((response) => {
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
-        // console.log(response);
+        // // console.log(response);
         // return window.location.reload();
       }
     }).catch((err) => {
-      console.log(err);
+      // console.log(err);
       return dispatch(getFailed());
     });
   };
@@ -84,13 +84,13 @@ const deleteCategory = id => {
       method: "DELETE",
       withCredentials: true,
     }).then((response) => {
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
-        console.log(response);
+        // console.log(response);
         // return window.location.reload();
       }
     }).catch((err) => {
-      console.log(err);
+      // console.log(err);
       return dispatch(getFailed());
     });
   };
@@ -116,9 +116,11 @@ const getFailed = (err) => {
   };
 };
 
-export default {
+const action = {
   getAllCategory: getAllCategory,
   createCategory: createCategory,
   updateCategory: updateCategory,
   deleteCategory: deleteCategory
 }
+
+export default action;
