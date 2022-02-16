@@ -1,7 +1,6 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 
-
 const getOrder = () => {
   return async (dispatch) => {
     try {
@@ -34,23 +33,45 @@ const getOrder = () => {
 const updateStatusOrder = (data) => {
   return async (dispatch) => {
     dispatch(getRequest());
-    Axios({
-      url: `/order/supliers`,
-      method: "PUT",
-      data: data,
-      withCredentials: true,
-    })
-      .then((response) => {
-        // console.log(response);
-        if (response.status === 200) {
-          // // console.log(response);
-          // return window.location.reload();
-        }
-      })
-      .catch((err) => {
-        // console.log(err);
-        return dispatch(getFailed());
-      });
+    switch (data.status) {
+      case "created": {
+        Axios({
+          url: `/order/supplier`,
+          method: "PUT",
+          data: { orderCode: data.ordercode },
+          withCredentials: true,
+        })
+          .then((response) => {
+            if (response.status === 200) {
+            }
+          })
+          .catch((err) => {
+            return dispatch(getFailed());
+          });
+
+        break;
+      }
+      case "processing": {
+        Axios({
+          url: `/order/supplier/delivering`,
+          method: "PUT",
+          data: { orderCode: data.ordercode },
+          withCredentials: true,
+        })
+          .then((response) => {
+            if (response.status === 200) {
+            }
+          })
+          .catch((err) => {
+            return dispatch(getFailed());
+          });
+
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   };
 };
 const getRequest = () => {
@@ -75,7 +96,7 @@ const getFailed = (err) => {
 
 const action = {
   getOrder,
-  updateStatusOrder
+  updateStatusOrder,
 };
 
 export default action;

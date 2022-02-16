@@ -2,15 +2,15 @@ import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 
 let initialState = {
   loading: true,
-  data: [],
+  data: {},
   err: null,
 };
 
-const categoryReducer = (state = initialState, action) => {
+const Reducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
       state.loading = true;
-      state.data = [];
+      state.data = {};
       state.err = null;
       return { ...state };
 
@@ -22,7 +22,7 @@ const categoryReducer = (state = initialState, action) => {
 
     case GET_DATA_FAIL:
       state.loading = false;
-      state.data = [];
+      state.data = {};
       // state.err = action.payload;
       return { ...state };
     default:
@@ -30,4 +30,4 @@ const categoryReducer = (state = initialState, action) => {
   }
 };
 
-export default categoryReducer;
+export default Reducer;

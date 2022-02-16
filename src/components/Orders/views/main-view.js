@@ -52,7 +52,9 @@ class OrderUI extends Component {
         break;
     }
   };
-
+  changeStatus = (data) => {
+    this.props.updateStatusOrder(data)
+  };
   closeModal = () => {
     this.setState({
       selectedRowKeys: [],
@@ -132,6 +134,20 @@ class OrderUI extends Component {
       title: "Status",
       dataIndex: "status",
       key: "status",
+    },
+    {
+      title: "Action",
+      render: (object) => {
+        return (
+          <Button
+            onClick={() => this.changeStatus(object)}
+            type="primary"
+          >
+            Change Status
+          </Button>
+        );
+      },
+      fixed: "right",
     },
   ];
 

@@ -25,7 +25,7 @@ const propsProTypes = {
 //  default props
 const propsDefault = {
   closeModal: () => {},
-  updateProduct: () => {},
+  updateDiscountCode: () => {},
   defaultProduct: {
     key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
     id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
@@ -62,11 +62,24 @@ class UpdateModal extends Component {
   componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
-    // console.log(data)
+    console.log(data);
+    let newDiscountCode = {
+      productId: data.productId,
+      startDate: data.date[0],
+      endDate: data.date[1],
+      quantity: data.quantity,
+      discountPrice: data.discountPrice,
+      minimunPriceCondition: data.minimunPrice,
+      status: data.status,
+      code: data.code,
+    };
+
+    console.log(newDiscountCode);
+    this.props.updateDiscountCode(newDiscountCode, this.props.record?.id);
     // data.image = this.state.fileList;
     // this.props.updateProduct(data);
     // this.formRef.current.resetFields();
-    // this.props.closeModal();
+    this.props.closeModal();
   };
 
   handleUpdate = (data) => {
@@ -154,14 +167,13 @@ class UpdateModal extends Component {
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    const {
-      productSelected = this.props.productList?.find(
-        (element) => element.id === this.props.record?.productid
-      ) || {},
-      price = (this.props.record?.price / productSelected?.retailprice) * 100,
-    } = this.state;
+    // const {
+    //   productSelected = this.props.productList?.find(
+    //     (element) => element.id === this.props.record?.productid
+    //   ) || {},
+    // } = this.state;
 
-    if (this.props.loading || !this.props.record) {
+    if (this.props.loading || !this.props.record || !productList) {
       return <></>;
     }
     return (
@@ -192,13 +204,13 @@ class UpdateModal extends Component {
               </Button>,
             ]}
           >
-            <Descriptions layout="vertical" column={2}>
-              <Descriptions.Item label="Campaign duration">
+            <Descriptions bordered column={2}>
+              <Descriptions.Item label="Discount Code duration">
                 <Form.Item
                   name="date"
                   initialValue={[
-                    moment(this.props.record?.fromdate),
-                    moment(this.props.record?.todate),
+                    moment(this.props.record?.startdate),
+                    moment(this.props.record?.enddate),
                   ]}
                 >
                   <RangePicker
@@ -214,23 +226,47 @@ class UpdateModal extends Component {
                       ],
                     }}
                     defaultValue={[
-                      moment(this.props.record?.fromdate),
-                      moment(this.props.record?.todate),
+                      moment(this.props.record?.startdate),
+                      moment(this.props.record?.enddate),
                     ]}
                     format="MM/DD/YYYY"
                     onChange={this.onChange}
-                    style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
 
+              <Descriptions.Item label="Code">
+                <Form.Item name="code" initialValue={this.props.record?.code}>
+                  <Input defaultValue={this.props.record?.code} />
+                </Form.Item>
+              </Descriptions.Item>
+              <Descriptions.Item label="Discount price">
+                <Form.Item
+                  name="discountPrice"
+                  initialValue={this.props.record?.discountprice}
+                >
+                  <InputNumber
+                    defaultValue={this.props.record?.discountprice}
+                  />
+                </Form.Item>
+              </Descriptions.Item>
+              <Descriptions.Item label="Minimun price">
+                <Form.Item
+                  name="minimunPrice"
+                  initialValue={this.props.record?.minimunpricecondition}
+                >
+                  <InputNumber
+                    defaultValue={this.props.record?.minimunpricecondition}
+                  />
+                </Form.Item>
+              </Descriptions.Item>
               <Descriptions.Item label="Product">
-                <Form.Item name="productId" initialValue={record.productid}>
-                  <Select
-                    onChange={this.onSelectProduct}
-                    style={{ width: "60vh" }}
-                  >
-                    {productList?.map((item) => {
+                <Form.Item
+                  name="productId"
+                  initialValue={this.props.record?.productid}
+                >
+                  <Select onChange={this.onSelectProduct}>
+                    {productList.map((item) => {
                       return (
                         <Select.Option key={item.key} value={item.id}>
                           {item.name}
@@ -241,81 +277,29 @@ class UpdateModal extends Component {
                 </Form.Item>
               </Descriptions.Item>
 
-              <Descriptions.Item label="Quantity">
-                <Form.Item name="quantity">
-                  <InputNumber
-                    addonAfter=" products"
-                    defaultValue={1}
-                    style={{ width: "60vh" }}
-                  />
-                </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Wholesale percent">
+              <Descriptions.Item label="Status">
                 <Form.Item
-                  name="wholesalePercent"
-                  initialValue={
-                    (this.props.record?.price / productSelected?.retailprice) *
-                    100
-                  }
+                  name="status"
+                  initialValue={this.props.record?.status}
                 >
-                  <InputNumber
-                    addonAfter="%"
-                    defaultValue={
-                      (this.props.record?.price /
-                        productSelected?.retailprice) *
-                      100
-                    }
-                    onChange={this.onChangePrice}
-                    min={0}
-                    max={100}
-                    style={{ width: "60vh" }}
-                  />
+                  <Select>
+                    <Select.Option key="public" value="public">
+                      Public
+                    </Select.Option>
+                    <Select.Option key="private" value="private">
+                      Private
+                    </Select.Option>
+                  </Select>
                 </Form.Item>
               </Descriptions.Item>
-            </Descriptions>
 
-            <Descriptions bordered title="Product in campaign" column={2}>
-              <Descriptions.Item label="Name">
-                {productSelected?.name ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Category">
-                {productSelected?.categoryname ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Quantity in stock">
-                {productSelected?.quantity ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Quantity in campaign">
-                {productSelected?.name ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Retail price">
-                {productSelected?.retailprice ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Wholesale price">
-                {(price * productSelected?.retailprice) / 100 ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Description">
-                <Input.TextArea
-                  value={productSelected?.description}
-                  rows={5}
-                  bordered={false}
-                />
-              </Descriptions.Item>
-              <Descriptions.Item label="Image">
-                <Upload
-                  name="file"
-                  action="/files/upload"
-                  listType="picture-card"
-                  fileList={
-                    productSelected.image
-                      ? JSON.parse(productSelected?.image)
-                      : []
-                  }
-                  // onPreview={this.handlePreview}
-                  // onChange={this.handleChange}
+              <Descriptions.Item label="Quantity">
+                <Form.Item
+                  name="quantity"
+                  initialValue={this.props.record?.quantity}
                 >
-                  {/* {this.state.fileList.length >= 8 ? null : uploadButton} */}
-                </Upload>
+                  <InputNumber defaultValue={this.props.record?.quantity} />
+                </Form.Item>
               </Descriptions.Item>
             </Descriptions>
           </Modal>

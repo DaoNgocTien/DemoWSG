@@ -45,20 +45,25 @@ class CreatModal extends Component {
   componentDidMount() {}
 
   handleCreateAndClose = (data) => {
-    // console.log("DiscountCode create");
-    // console.log(data);
+    console.log("DiscountCode create");
+    console.log(data);
     let newDiscountCode = {
       productId: data.productId,
-      fromDate: data.date[0],
-      toDate: data.date[1],
+      startDate: data.date[0],
+      endDate: data.date[1],
       quantity: data.quantity,
-      price: 1000,
+      discountPrice: data.discountPrice,
+      minimunPriceCondition: data.minimunPrice,
+      status: data.status,
+      code: data.code
     };
+
+    console.log(newDiscountCode);
     this.props.createDiscountCode(newDiscountCode);
     // data.image = this.state.fileList;
     // this.props.createProduct(data);
     // this.formRef.current.resetFields();
-    // this.props.closeModal();
+    this.props.closeModal();
   };
 
   handleCreate = (data) => {
@@ -130,8 +135,11 @@ class CreatModal extends Component {
             ]}
           >
             <Descriptions bordered column={2}>
-              <Descriptions.Item label="DiscountCode duration">
-                <Form.Item name="date" initialValue={[moment(), moment().add(1, "days")]}>
+              <Descriptions.Item label="Discount Code duration">
+                <Form.Item
+                  name="date"
+                  initialValue={[moment(), moment().add(1, "days")]}
+                >
                   <RangePicker
                     ranges={{
                       Today: [moment(), moment()],
@@ -151,6 +159,21 @@ class CreatModal extends Component {
                 </Form.Item>
               </Descriptions.Item>
 
+              <Descriptions.Item label="Code">
+                <Form.Item name="code">
+                  <Input/>
+                </Form.Item>
+              </Descriptions.Item>
+              <Descriptions.Item label="Discount price">
+                <Form.Item name="discountPrice" initialValue={1}>
+                  <InputNumber defaultValue={1} />
+                </Form.Item>
+              </Descriptions.Item>
+              <Descriptions.Item label="Minimun price">
+                <Form.Item name="minimunPrice" initialValue={1}>
+                  <InputNumber defaultValue={1} />
+                </Form.Item>
+              </Descriptions.Item>
               <Descriptions.Item label="Product">
                 <Form.Item name="productId" initialValue={productList[0]?.id}>
                   <Select onChange={this.onSelectProduct}>
@@ -165,66 +188,23 @@ class CreatModal extends Component {
                 </Form.Item>
               </Descriptions.Item>
 
+              <Descriptions.Item label="Status">
+                <Form.Item name="status" initialValue={"public"}>
+                  <Select>
+                    <Select.Option key="public" value="public">
+                      Public
+                    </Select.Option>
+                    <Select.Option key="private" value="private">
+                      Private
+                    </Select.Option>
+                  </Select>
+                </Form.Item>
+              </Descriptions.Item>
+
               <Descriptions.Item label="Quantity">
                 <Form.Item name="quantity" initialValue={1}>
-                  <InputNumber addonAfter=" products" defaultValue={1} />
+                  <InputNumber defaultValue={1} />
                 </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Wholesale percent">
-                <Form.Item name="wholesalePercent" initialValue={0}>
-                  <InputNumber
-                    addonAfter=" %"
-                    defaultValue={0}
-                    onChange={this.onChangePrice}
-                    min={0}
-                    max={100}
-                  />
-                </Form.Item>
-              </Descriptions.Item>
-            </Descriptions>
-
-            <Descriptions bordered title="Product in campaign" column={2}>
-              <Descriptions.Item label="Name">
-                {productSelected?.name ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Category">
-                {productSelected?.categoryname ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Quantity in stock">
-                {productSelected?.quantity ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Quantity in campaign">
-                {productSelected?.name ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Retail price">
-                {productSelected?.retailprice ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Wholesale price">
-                {(price * productSelected?.retailprice) / 100 ?? ""}
-              </Descriptions.Item>
-              <Descriptions.Item label="Description">
-                <Input.TextArea
-                  value={productSelected?.description}
-                  rows={5}
-                  bordered={false}
-                />
-              </Descriptions.Item>
-              <Descriptions.Item label="Image">
-                <Upload
-                  name="file"
-                  action="/files/upload"
-                  listType="picture-card"
-                  fileList={
-                    productSelected?.image
-                      ? JSON.parse(productSelected?.image)
-                      : []
-                  }
-                  // onPreview={this.handlePreview}
-                  // onChange={this.handleChange}
-                >
-                  {/* {this.state.fileList.length >= 8 ? null : uploadButton} */}
-                </Upload>
               </Descriptions.Item>
             </Descriptions>
           </Modal>

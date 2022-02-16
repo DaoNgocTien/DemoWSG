@@ -1,85 +1,77 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 
-
-const getCampaign = (campaignId) => {
+const getDiscountCode = () => {
   return async (dispatch) => {
+    dispatch(getRequest());
     try {
-      dispatch(getRequest());
-      let campaigns,
-        products,
-        order = {};
-      if (!campaignId) {
-        [campaigns, products] = await Promise.all([
-          Axios({
-            url: `/campaigns/All`,
-            method: "GET",
-            withCredentials: true,
-            exposedHeaders: ["set-cookie"],
-          }),
-          Axios({
-            url: `/products/All`,
-            method: "GET",
-            withCredentials: true,
-            exposedHeaders: ["set-cookie"],
-          }),
-        ]);
-      } else {
-        [campaigns, products, order] = await Promise.all([
-          Axios({
-            url: `/campaigns/All`,
-            method: "GET",
-            withCredentials: true,
-            exposedHeaders: ["set-cookie"],
-          }),
-          Axios({
-            url: `/products/All`,
-            method: "GET",
-            withCredentials: true,
-            exposedHeaders: ["set-cookie"],
-          }),
-          Axios({
-            url: `/order/supplier/campaign/${campaignId}`,
-            method: "GET",
-            withCredentials: true,
-            exposedHeaders: ["set-cookie"],
-          }),
-        ]);
-      }
-      // console.log(order);
+      const [discountCodes, products] = await Promise.all([
+        Axios({
+          url: `/discountcode/supplier`,
+          method: "GET",
+          withCredentials: true,
+        }),
+        Axios({
+          url: `/products/All`,
+          method: "GET",
+          withCredentials: true,
+        }),
+      ]);
+
       return dispatch(
         getSuccess({
-          campaigns: campaigns.data.data.map((campaign) => {
+          discountCodes: discountCodes.data.data.map((item) => {
             return {
-              key: campaign.id,
-              ...campaign,
+              key: item.id,
+              ...item,
             };
           }),
-          products: products.data.data,
-          order:
-            order !== {}
-              ? order.data?.data.map((item) => {
-                  return {
-                    key: item.id,
-                    ...item,
-                  };
-                })
-              : {},
+          products: products.data.data.map((item) => {
+            return {
+              key: item.id,
+              ...item,
+            };
+          }),
         })
       );
     } catch (error) {
-      // console.log(error);
-      return dispatch(getFailed());
+      return dispatch(getFailed(error));
     }
   };
 };
 
-const createCampaign = (record) => {
+const createDiscountCode = (record) => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/campaigns/`,
+      url: `/discountcode/`,
       method: "POST",
+      data: record,
+      withCredentials: true,
+    })
+      .then((result) => {
+        if (result.status === 200) {
+          const data = result.data.data.map((category) => {
+            return {
+              key: category.id,
+              ...category,
+            };
+          });
+          return dispatch(getSuccess(data));
+        }
+      })
+      .catch((err) => {
+        return dispatch(getFailed(err));
+      });
+  };
+};
+
+const updateDiscountCode = (record, id) => {
+  return async (dispatch) => {
+    dispatch(getRequest());
+    Axios({
+      url: `/discountcode/${id}`,
+      method: "PUT",
       data: record,
       withCredentials: true,
     })
@@ -144,9 +136,10 @@ const getFailed = (err) => {
   };
 };
 
-const action =  {
-  getCampaign,
-  createCampaign,
+const action = {
+  getDiscountCode,
+  createDiscountCode,
+  updateDiscountCode
 };
 
 export default action;
