@@ -15,7 +15,7 @@ import PropTypes from "prop-types";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
-import OrdersInCampaign from "./orders-in-campaign-view";
+import OrdersInDiscountCode from "./orders-in-campaign-view";
 
 //  prototype
 const propsProTypes = {
@@ -95,19 +95,19 @@ class DiscountCodeUI extends Component {
         });
 
         break;
-      case "openOrdersInCampaign":
-        //  Get orders in campaign
+      case "openOrdersInDiscountCode":
+        //  Get orders in DiscountCode
         let orderList = this.props.orderList;
-        let orderListInCampaign = orderList?.filter((item) => {
-          return selectedRowKeys.includes(item.campaignid);
+        let orderListInDiscountCode = orderList?.filter((item) => {
+          return selectedRowKeys.includes(item.DiscountCodeid);
         });
         this.props.getDiscountCode(selectedRowKeys);
 
-        //  Set campaign record and orders in campaign into state
+        //  Set DiscountCode record and orders in DiscountCode into state
         this.setState({
           openDrawer: true,
           record: recordToEdit,
-          orderList: orderListInCampaign,
+          orderList: orderListInDiscountCode,
         });
 
         break;
@@ -136,10 +136,10 @@ class DiscountCodeUI extends Component {
       fixed: "left",
     },
     {
-      title: "Product Name",
-      dataIndex: "productname",
-      key: "productname",
-      sorter: (a, b) => a.productname.length - b.productname.length,
+      title: "Code",
+      dataIndex: "code",
+      key: "code",
+      // sorter: (a, b) => a.productname.length - b.productname.length,
       fix: "left",
     },
     {
@@ -148,25 +148,25 @@ class DiscountCodeUI extends Component {
       key: "quantity",
     },
     {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
+      title: "Discount Price",
+      dataIndex: "discountprice",
+      key: "discountprice",
     },
     {
-      title: "Order",
-      dataIndex: "price",
-      key: "order",
+      title: "Minimun Price",
+      dataIndex: "minimunpricecondition",
+      key: "minimunpricecondition",
     },
     {
       title: "Start Date",
-      dataIndex: "fromdate",
-      key: "fromdate",
+      dataIndex: "startdate",
+      key: "startdate",
       render: (data) => moment(data).format("MM/DD/YYYY"),
     },
     {
       title: "End Date",
-      dataIndex: "todate",
-      key: "todate",
+      dataIndex: "enddate",
+      key: "enddate",
       render: (data) => moment(data).format("MM/DD/YYYY"),
     },
     {
@@ -293,11 +293,11 @@ class DiscountCodeUI extends Component {
                     </Button>
                     <Button
                       type="primary"
-                      onClick={() => this.start("openOrdersInCampaign")}
+                      onClick={() => this.start("openOrdersInDiscountCode")}
                       hidden={!editButton}
                       // style={{ width: 90 }}
                     >
-                      Orders in campaigns
+                      Orders in DiscountCodes
                     </Button>
                     <span style={{ marginLeft: 8 }}>
                       {selectedRowKeys.length > 0
@@ -322,11 +322,11 @@ class DiscountCodeUI extends Component {
               onClose={this.onCloseDrawer}
               visible={this.state.openDrawer}
             >
-              <OrdersInCampaign
+              <OrdersInDiscountCode
                 record={this.state.record}
                 orderList={this.state.orderList}
                 loading={this.props.loading}
-                ordersInCampaign={this.props.ordersInCampaign}
+                ordersInDiscountCode={this.props.ordersInDiscountCode}
                 productList={productList}
               />
             </Drawer>

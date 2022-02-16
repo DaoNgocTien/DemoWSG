@@ -62,7 +62,6 @@ class ProductUI extends Component {
     // console.log("ProductUI");
     // console.log(this.props);
     // console.log(this.state);
-
   }
 
   start = (openModal) => {
@@ -85,7 +84,7 @@ class ProductUI extends Component {
     }
   };
 
-  onSelectChange = selectedRowKeys => {
+  onSelectChange = (selectedRowKeys) => {
     // console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({
       selectedRowKeys,
@@ -134,20 +133,20 @@ class ProductUI extends Component {
     {
       title: "Name",
       dataIndex: "name",
-      width: 200,
+      width: 100,
       key: "name",
       fixed: "left",
     },
     {
       title: "Category",
       dataIndex: "categoryname",
-      width: 200,
+      width: 100,
       key: "categoryname",
     },
     {
       title: "Retail Price",
       dataIndex: "retailprice",
-      width: 200,
+      width: 120,
       key: "retailprice",
     },
     {
@@ -167,14 +166,33 @@ class ProductUI extends Component {
       title: "Description",
       dataIndex: "description",
       key: "description",
-      width: 500,
+      width: 1000,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: 100,
+      width: 120,
       fixed: "right",
+      render: (data) => {
+        let status = "";
+        switch (data) {
+          case "incampaign": {
+            status = "In Campaign";
+            break;
+          }
+          case "active": {
+            status = "Active";
+            break;
+          }
+          default: {
+            status = "Deactivate";
+            break;
+          }
+        }
+
+        return status;
+      },
     },
   ];
 
@@ -182,14 +200,16 @@ class ProductUI extends Component {
     let { data } = this.props;
     // console.log(data);
     let searchString = e.target.value;
-    let searchList = data.filter(item => {
+    let searchList = data.filter((item) => {
       // console.log(item);
-      return item.categoryname.includes(searchString)
-        || item.createdat.includes(searchString)
-        || item.description.includes(searchString)
-        || item.name.includes(searchString)
-        || item.quantity.includes(searchString)
-        || item.retailprice.includes(searchString);
+      return (
+        item.categoryname.includes(searchString) ||
+        item.createdat.includes(searchString) ||
+        item.description.includes(searchString) ||
+        item.name.includes(searchString) ||
+        item.quantity.includes(searchString) ||
+        item.retailprice.includes(searchString)
+      );
     });
     this.setState({
       displayData: searchList,

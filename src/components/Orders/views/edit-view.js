@@ -1,5 +1,5 @@
 import React, { Component, memo } from "react";
-import { Modal, Button, Form, Table, Select } from "antd";
+import { Modal, Button, Form, Table, Select, Descriptions } from "antd";
 import PropTypes from "prop-types";
 
 //  prototype
@@ -34,12 +34,12 @@ class EditModal extends Component {
   }
 
   handleEditAndClose = (data) => {
-    if(data.status === "created" || data.status === "advanced") {
+    if (data.status === "created" || data.status === "advanced") {
       this.formRef.current.resetFields();
       return this.props.closeModal();
     }
-    data.orderCode = this.state.record?.orderCode
-    delete data.status
+    data.orderCode = this.state.record?.orderCode;
+    delete data.status;
     this.props.updateStatusOrder(data);
     this.formRef.current.resetFields();
     this.props.closeModal();
@@ -68,7 +68,12 @@ class EditModal extends Component {
         return data === "" ? (
           ""
         ) : (
-          <img width="100" alt="show illustrative representation" height="100" src={JSON.parse(data)[0].url} />
+          <img
+            width="100"
+            alt="show illustrative representation"
+            height="100"
+            src={JSON.parse(data)[0].url}
+          />
         );
       },
     },
@@ -102,7 +107,7 @@ class EditModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-    },
+    }
   ];
 
   render() {
@@ -138,35 +143,35 @@ class EditModal extends Component {
               </Button>,
             ]}
           >
+            <Descriptions
+              bordered
+              title="Order Infomation"
+              column={2}
+              style={{ marginBottom: "10px" }}
+            >
+              <Descriptions.Item label="Order Code">
+                {this.state.record?.ordercode}
+              </Descriptions.Item>
+              <Descriptions.Item label="Total Price">
+                {this.state.record?.totalprice}VND
+              </Descriptions.Item>
+              <Descriptions.Item label="Discount Price">
+                {this.state.record?.discountprice}VND
+              </Descriptions.Item>
+              <Descriptions.Item label="Final Price">
+                {" "}
+                {this.state.record?.totalprice -
+                  this.state.record?.discountprice}
+                VND
+              </Descriptions.Item>
+              <Descriptions.Item label="Status">
+                {this.state.record?.status}
+              </Descriptions.Item>
+            </Descriptions>
             <Table
               columns={this.columns}
               dataSource={this.state.record.details}
             />
-            <h5> Order Code: {this.state.record?.ordercode}</h5>
-            <h5> Total Price: {this.state.record?.totalprice}VND</h5>
-            <h5> Discount Price: {this.state.record?.discountprice}VND</h5>
-            <h5>
-              Final Price:{" "}
-              {this.state.record?.totalprice - this.state.record?.discountprice}
-              VND
-            </h5>
-            <Form.Item
-              label="Status"
-              name="status"
-              initialValue={this.state.record?.status}
-            >
-              <Select defaultValue={this.state.record?.status}>
-                <Select.Option key={"created"} value={"created"} disabled>
-                  created
-                </Select.Option>
-                <Select.Option key={"advanced"} value={"advanced"} disabled>
-                  advanced
-                </Select.Option>
-                <Select.Option key={"delivering"} value={"delivering"}>
-                  delivering
-                </Select.Option>
-              </Select>
-            </Form.Item>
           </Modal>
         </Form>
       </>

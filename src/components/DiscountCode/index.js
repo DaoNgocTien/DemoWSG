@@ -14,18 +14,21 @@ class DiscountCode extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <DiscountCodeUI
-        data={this.props.data.campaigns}
+        data={this.props.data.discountCodes}
         loading={this.props.loading}
         getDiscountCode={this.props.getDiscountCode}
         ordersInCampaign={this.props.data.order}
         productList={this.props.data.products}
-        createDiscountCode={this.props.createDiscountCode ? this.props.createDiscountCodethis : () => { }}
-
-        updateDiscountCode={this.props.updateDiscountCode ? this.props.updateDiscountCodethis : () => { }}
-
-        deleteDiscountCode={this.props.deleteDiscountCode ? this.props.deleteDiscountCode : () => { }}
+        createDiscountCode={this.props.createDiscountCode}
+        updateDiscountCode={this.props.updateDiscountCode}
+        deleteDiscountCode={
+          this.props.deleteDiscountCode
+            ? this.props.deleteDiscountCode
+            : () => {}
+        }
       />
     );
   }
@@ -33,9 +36,9 @@ class DiscountCode extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.campaignReducer.loading,
-    data: state.campaignReducer.data,
-    error: state.campaignReducer.err,
+    loading: state.discountCodeReducer.loading,
+    data: state.discountCodeReducer.data,
+    error: state.discountCodeReducer.err,
     // productList: state.productReducer.data,
     // orderList: [],
   };
@@ -43,21 +46,20 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getDiscountCode: async (campaignId) => {
-      // console.log("get DiscountCode");
-      await dispatch(action.getCampaign(campaignId));
-    },
-
-    getOrdersInCampaign: async (campaignID) => {
-      // console.log("getOrdersInCampaign final");
-      // console.log(campaignID);
+    getDiscountCode: async () => {
+      await dispatch(action.getDiscountCode());
     },
 
     createDiscountCode: async (record) => {
-      // console.log("createProduct final");
-      // console.log(record);
-      await dispatch(action.createCampaign(record));
-      await dispatch(action.getCampaign());
+      console.log(record);
+      await dispatch(action.createDiscountCode(record));
+      await dispatch(action.getDiscountCode());
+    },
+
+    updateDiscountCode: async (record, id) => {
+      console.log(record);
+      await dispatch(action.updateDiscountCode(record, id));
+      await dispatch(action.getDiscountCode());
     },
   };
 };
