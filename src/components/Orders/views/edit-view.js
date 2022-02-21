@@ -1,5 +1,5 @@
 import React, { Component, memo } from "react";
-import { Modal, Button, Form, Table, Select, Descriptions } from "antd";
+import { Modal, Button, Form, Table, Descriptions } from "antd";
 import PropTypes from "prop-types";
 
 //  prototype
@@ -111,7 +111,8 @@ class EditModal extends Component {
   ];
 
   render() {
-    this.state.record = this.props.record;
+    const newState = {...this.state}
+    newState.record = this.props.record;
     const { openModal } = this.props;
 
     return (

@@ -117,8 +117,8 @@ class UpdateModal extends Component {
   render() {
     const { openModal, record } = this.props;
 
-    const { data, categoryList } = this.props;
-    const { load, imageUrl } = this.state;
+    const { categoryList } = this.props;
+    const { load } = this.state;
     // this.state.fileList =
     //   this.props.record && this.state.fileList !== 0
     //     ? JSON.parse(this.props.record?.image)

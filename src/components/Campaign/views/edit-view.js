@@ -170,10 +170,15 @@ class UpdateModal extends Component {
       (this.props.record?.price / productSelected?.retailprice) * 100
     );
 
-    this.state.price =
+    // this.setState({...this.state, price})
+
+    const newState = {...this.state}
+
+    newState.price =
       this.state.price === 0 || !this.state.price
         ? (this.props.record?.price / productSelected?.retailprice) * 100
         : this.state.price;
+    this.setState(newState)
 
     if (this.props.loading || !this.props.record) {
       return <></>;

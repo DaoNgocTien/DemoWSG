@@ -9,7 +9,7 @@ import {
   Descriptions,
 } from "antd";
 import PropTypes from "prop-types";
-import { Select, Upload } from "antd";
+import { Select } from "antd";
 import moment from "moment";
 
 const { RangePicker } = DatePicker;
@@ -103,8 +103,7 @@ class CreatModal extends Component {
     const { openModal } = this.props;
 
     const { productList } = this.props;
-    const { productSelected = this.props.productList[0], price = 0 } =
-      this.state;
+   
     // console.log(productSelected);
     return (
       <>

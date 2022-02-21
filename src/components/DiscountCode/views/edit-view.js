@@ -8,7 +8,6 @@ import {
   DatePicker,
   InputNumber,
   Descriptions,
-  Upload,
 } from "antd";
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -166,7 +165,7 @@ class UpdateModal extends Component {
     const { RangePicker } = DatePicker;
     const { openModal } = this.props;
 
-    const { productList, record } = this.props;
+    const { productList } = this.props;
     // const {
     //   productSelected = this.props.productList?.find(
     //     (element) => element.id === this.props.record?.productid
