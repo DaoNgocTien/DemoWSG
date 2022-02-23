@@ -7,6 +7,8 @@ import {
   PercentageOutlined,
 } from "@ant-design/icons";
 import NavbarAdmin from "../../components/NavbarAdmin";
+import ChatMaterial from "../../components/Chat-Material";
+import Chat from "../../components/Chat";
 
 const { SubMenu } = Menu;
 const { Header, Sider, Content } = Layout;
@@ -14,6 +16,7 @@ const { Header, Sider, Content } = Layout;
 class AdminRender extends Component {
   state = {
     collapsed: false,
+    openDrawer: false,
   };
 
   toggleCollapsed = () => {
@@ -22,14 +25,21 @@ class AdminRender extends Component {
     });
   };
 
-  // componentDidMount = () => {
-  //   if (!localStorage.getItem("user")) {
-  //     return <Redirect to="/login" />;
-  //   }
-  // }
+  showDrawer = (mode) => {
+    //  true: notice
+    //  false: chatbox
+    this.setState({
+      openDrawer: mode,
+    });
+  };
+
+  getDrawerContent = () => {
+    return this.state.openDrawer ? <Chat /> : <ChatMaterial />;
+  }
 
   render() {
-    const { collapsed } = this.state;
+    const { collapsed, openDrawer } = this.state;
+    const drawerLength = openDrawer ? 0.4 : 0.7;
     return (
       <Layout>
         <Header
@@ -42,6 +52,7 @@ class AdminRender extends Component {
           <NavbarAdmin
             toggleCollapsed={this.toggleCollapsed}
             collapsed={collapsed}
+            showDrawer={this.showDrawer}
           />
         </Header>
         <Layout>
@@ -104,10 +115,20 @@ class AdminRender extends Component {
               }}
             >
               {this.props.children}
+              <Drawer
+                width={window.innerWidth * drawerLength}
+                placement="right"
+                size={"736px"}
+                closable={false}
+                onClose={this.showDrawer()}
+                visible={openDrawer}
+              >
+                {this.getDrawerContent()}
+              </Drawer>
             </Content>
           </Layout>
         </Layout>
-      </Layout>
+      </Layout >
     );
   }
 }
