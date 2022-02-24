@@ -321,10 +321,6 @@ class CampaignUI extends Component {
                 </Col>
               </Row>
             </div>
-            {/* <OrdersInCampaign
-              onCloseDrawer={onCloseDrawer}
-              openDrawer={openDrawer}
-            /> */}
             <Drawer
               width={window.innerWidth * 0.7}
               placement="right"

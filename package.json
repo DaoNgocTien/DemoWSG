@@ -5,7 +5,8 @@
   "homepage": "./",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
-    "@material-ui/core": "^4.11.4",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
     "@popperjs/core": "^2.9.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",

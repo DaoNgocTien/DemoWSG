@@ -12,7 +12,6 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import moment from "moment";
-import Axios from "axios";
 
 //  prototype
 const propsProTypes = {
@@ -196,12 +195,13 @@ class UpdateModal extends Component {
             visible={openModal}
             onCancel={this.handleCancel}
             footer={[
-              <Button onClick={this.handleCancel}>Cancel</Button>,
+              <Button onClick={this.handleCancel} key='btnCancel'>Cancel</Button>,
               <Button
                 type="primary"
                 form="updateCampaignForm"
                 key="submit"
                 htmlType="submit"
+                
               >
                 Submit
               </Button>,

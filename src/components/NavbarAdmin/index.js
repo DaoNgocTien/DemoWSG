@@ -7,6 +7,8 @@ import {
   SettingOutlined,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
+  PieChartOutlined,
+  DesktopOutlined,
 } from "@ant-design/icons";
 export default class NavbarAdmin extends Component {
   handleLogOut = (e) => {
@@ -25,7 +27,7 @@ export default class NavbarAdmin extends Component {
   };
 
   render() {
-    const { toggleCollapsed, collapsed } = this.props;
+    const { toggleCollapsed, collapsed, showDrawer } = this.props;
     return (
       <Row>
         {/* <Space size={1}> */}
@@ -72,6 +74,12 @@ export default class NavbarAdmin extends Component {
                 Logout
               </Menu.Item>
             </Menu.SubMenu>
+            <Menu.Item key="1" icon={<PieChartOutlined />} onClick={showDrawer(true)}>
+              Chat
+            </Menu.Item>
+            <Menu.Item key="2" icon={<DesktopOutlined />} onClick={showDrawer(false)}>
+              Notice
+            </Menu.Item>
           </Menu>
         </Col>
         {/* </Space> */}
