@@ -1,12 +1,15 @@
 import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
-import { Layout, Menu, } from "antd";
+import { Route, Link, Redirect } from "react-router-dom";
+import { Layout, Menu } from "antd";
 import {
   ReconciliationOutlined,
   DropboxOutlined,
   PercentageOutlined,
 } from "@ant-design/icons";
 import NavbarAdmin from "../../components/NavbarAdmin";
+
+import { ref, onValue, get, set } from "firebase/database";
+import { realtime } from "../../services/firebase";
 
 const { SubMenu } = Menu;
 const { Header, Sider, Content } = Layout;
@@ -22,11 +25,23 @@ class AdminRender extends Component {
     });
   };
 
-  // componentDidMount = () => {
-  //   if (!localStorage.getItem("user")) {
-  //     return <Redirect to="/login" />;
-  //   }
-  // }
+  componentDidMount = () => {
+    // console.log(localStorage.getItem("user"))
+    this.getNotif();
+    if (!localStorage.getItem("user")) {
+      // return <Redirect to="/login" />;
+      return window.location.replace("/login");
+    }
+  };
+
+  getNotif = async () => {
+    console.log(get(ref(realtime, "notif")));
+    set(ref(realtime, "hello"), { gg: "f" });
+    onValue(ref(realtime, "hello"), (snapshot) => {
+      console.log("hello");
+      console.log(snapshot.val());
+    });
+  };
 
   render() {
     const { collapsed } = this.state;
@@ -52,10 +67,7 @@ class AdminRender extends Component {
             breakpoint="md"
             collapsed={collapsed}
           >
-            <Menu
-              mode="inline"
-              style={{ height: "100%", borderRight: 0 }}
-            >
+            <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
               <SubMenu
                 key="products"
                 title="Products"
@@ -80,14 +92,21 @@ class AdminRender extends Component {
                 </Link>
               </Menu.Item>
 
-              <SubMenu key="Discount" title="Discounts" icon={<PercentageOutlined />}>
+              <SubMenu
+                key="Discount"
+                title="Discounts"
+                icon={<PercentageOutlined />}
+              >
                 <Menu.Item key="campaigns">
                   <Link className="LinkDecorations" to="/discount/campaigns">
                     Campaign
                   </Link>
                 </Menu.Item>
                 <Menu.Item key="discount-codes">
-                  <Link className="LinkDecorations" to="/discount/discount-codes">
+                  <Link
+                    className="LinkDecorations"
+                    to="/discount/discount-codes"
+                  >
                     Discount Code
                   </Link>
                 </Menu.Item>

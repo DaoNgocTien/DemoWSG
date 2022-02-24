@@ -153,9 +153,9 @@ class CampaignUI extends Component {
       key: "price",
     },
     {
-      title: "Order",
-      dataIndex: "price",
-      key: "order",
+      title: "Orders",
+      dataIndex: "numorder",
+      key: "numorder",
     },
     {
       title: "Start Date",
