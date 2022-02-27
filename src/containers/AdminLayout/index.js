@@ -33,7 +33,7 @@ function AdminRender(props) {
                 <Menu.Item key="2"><Link className="LinkDecorations" to="/products/catalog">Catalog</Link></Menu.Item>
               </SubMenu>
               <SubMenu key="sub2" title="subnav 2">
-                <Menu.Item key="5">option5</Menu.Item>
+                <Menu.Item key="5"><Link className="LinkDecorations" to="/campaigns">Catalog</Link></Menu.Item>
                 <Menu.Item key="6">option6</Menu.Item>
                 <Menu.Item key="7">option7</Menu.Item>
                 <Menu.Item key="8">option8</Menu.Item>
