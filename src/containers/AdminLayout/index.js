@@ -7,8 +7,6 @@ import {
   PercentageOutlined,
 } from "@ant-design/icons";
 import NavbarAdmin from "../../components/NavbarAdmin";
-import ChatMaterial from "../../components/Chat-Material";
-import Chat from "../../components/Chat";
 
 const { SubMenu } = Menu;
 const { Header, Sider, Content } = Layout;
