@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { actLoginApi, googleOAuth2 } from "./modules/action";
 import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
-import { Input, message, Form, Button, Checkbox } from "antd";
+import { Input, message, Form, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Redirect } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
@@ -17,7 +17,7 @@ class AuthPage extends Component {
   };
 
   onFinish = (e) => {
-    console.log(e);
+    // console.log(e);
     this.props.login(e, this.props.history);
   };
 
@@ -72,7 +72,7 @@ class AuthPage extends Component {
 
                   <a
                     className="login-form-forgot"
-                    href=""
+                    href="/#"
                     style={{ float: "right" }}
                   >
                     Forgot password
@@ -96,7 +96,7 @@ class AuthPage extends Component {
                   className="google-button"
                 />
                 <br />
-                <a href="" style={{ float: "right" }}>
+                <a href="/#" style={{ float: "right" }}>
                   register now!
                 </a>
               </Form>

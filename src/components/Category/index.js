@@ -1,23 +1,9 @@
 import React, { Component } from "react";
-import { getCategory } from "./modules/action";
+import action from "./modules/action";
 import { connect } from "react-redux";
-import Loader from "../../components/Loader";
-import {
-  Table,
-  Tag,
-  Space,
-  Modal,
-  Button,
-  Form,
-  Input,
-  Popconfirm,
-} from "antd";
-import { Redirect } from "react-router-dom";
-import Axios from "axios";
+import CategoryUI from "./views/main-view";
 
-import { EditOutlined } from "@ant-design/icons";
-
-class categoryPage extends Component {
+class CategoryPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,207 +15,18 @@ class categoryPage extends Component {
   }
 
   componentDidMount() {
-    this.props.getCategory();
+    this.props.getAllCategory();
   }
 
-  showCreateModal = () => {
-    this.setState({
-      CreateModel: true,
-    });
-  };
-  showEditModal = (record) => {
-    this.setState({
-      EditModel: true,
-      editRecord: record,
-    });
-  };
-  showDeleteModal = () => {
-    this.setState({
-      DeleteModel: true,
-    });
-  };
-
-  handleOk = (result) => {
-    Axios({
-      url: `/categories/`,
-      method: "POST",
-      data: result,
-      withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        // console.log(response);
-        return window.location.reload();
-      }
-    });
-    this.setState({
-      CreateModel: false,
-    });
-  };
-  handleEditOk = (result) => {
-    console.log(result);
-
-    Axios({
-      url: `/categories/${this.state.editRecord.id}`,
-      method: "PUT",
-      data: result,
-      withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        // console.log(response);
-        return window.location.reload();
-      }
-    });
-    this.setState({
-      EditModel: false,
-    });
-  };
-
-  deleteConfirm = () => {
-    Axios({
-      url: `/categories/${this.state.editRecord.id}`,
-      method: "DELETE",
-      withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        // console.log(response);
-        return window.location.reload();
-      }
-    });
-    this.setState({
-      DeleteModel: false,
-    });
-  };
-
-  handleCancel = () => {
-    this.setState({
-      CreateModel: false,
-      EditModel: false,
-    });
-  };
-
-  columns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      width: 100,
-    },
-    {
-      title: "Name",
-      dataIndex: "categoryname",
-      key: "categoryname",
-      sorter: (a, b) => a.categoryname.length - b.categoryname.length,
-    },
-
-    {
-      title: "Action",
-      key: "action",
-      render: (text, record) => (
-        <Space size="middle">
-          <Button type="primary" onClick={() => this.showEditModal(record)}>
-            <EditOutlined />
-          </Button>
-        </Space>
-      ),
-      width: 100,
-    },
-  ];
-
   render() {
-    const { loading, data } = this.props;
-    if (loading) return <Loader />;
     return (
       <>
-        <h2 style={{ textAlign: "center" }}>CATEGORIES</h2>
-        <Button
-          type="primary"
-          onClick={this.showCreateModal}
-          style={{
-            margin: "0 0 10px 0",
-          }}
-        >
-          Add New
-        </Button>
-        <Form id="createForm" onFinish={this.handleOk}>
-          <Modal
-            title="Add New"
-            visible={this.state.CreateModel}
-            // onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            footer={[
-              <Button onClick={this.handleCancel}>Cancel</Button>,
-              <Button
-                type="primary"
-                form="createForm"
-                key="submit"
-                htmlType="submit"
-              >
-                Submit
-              </Button>,
-            ]}
-          >
-            <Form.Item label="Category Name" name="categoryName">
-              <Input placeholder="Category Name" />
-            </Form.Item>
-          </Modal>
-        </Form>
-
-        <Form id="editForm" onFinish={this.handleEditOk}>
-          <Modal
-            title="Edit"
-            visible={this.state.EditModel}
-            onCancel={this.handleCancel}
-            footer={[
-              <Button onClick={this.handleCancel}>Cancel</Button>,
-              <Popconfirm
-                placement="topRight"
-                title="Are you sure to delete this Category?"
-                visible={this.DeleteModel}
-                onConfirm={this.deleteConfirm}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button type="danger" onClick={this.showDeleteModal}>
-                  Delete
-                </Button>
-              </Popconfirm>,
-              <Button
-                type="primary"
-                form="editForm"
-                key="submit"
-                htmlType="submit"
-              >
-                Save
-              </Button>,
-            ]}
-          >
-            <Form.Item
-              label="Category Name"
-              name="categoryName"
-              initialValue={this.state.editRecord?.categoryname}
-            >
-              <Input
-                placeholder="Category Name"
-                defaultValue={this.state.editRecord?.categoryname}
-                // value={this.state.editRecord?.categoryname}
-              />
-            </Form.Item>
-          </Modal>
-        </Form>
-
-        <Table
-          columns={this.columns}
-          dataSource={[...data]}
-          pagination={{
-            defaultPageSize: 5,
-            showSizeChanger: true,
-            pageSizeOptions: ["5", "10", "15"],
-          }}
-          scroll={{ y: "350px" }}
-          bordered
+        <CategoryUI
+          data={this.props.data}
+          loading={this.props.loading}
+          createCategory={this.props.createCategory}
+          updateCategory={this.props.updateCategory}
+          deleteCategory={this.props.deleteCategory}
         />
       </>
     );
@@ -246,8 +43,21 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCategory: () => dispatch(getCategory()),
+    getAllCategory: async () => await dispatch(action.getAllCategory()),
+    createCategory: async (record) => {
+      await dispatch(action.createCategory(record));
+      await dispatch(action.getAllCategory());
+    }, 
+    updateCategory: async (record) => {
+      await dispatch(action.updateCategory(record));
+      await dispatch(action.getAllCategory());
+    },
+    deleteCategory: async (id) => {
+      await dispatch(action.deleteCategory(id));
+      await dispatch(action.getAllCategory());
+    },
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(categoryPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryPage);
+

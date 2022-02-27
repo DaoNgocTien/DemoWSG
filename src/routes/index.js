@@ -1,14 +1,11 @@
 import DashBoard from "../containers/AdminLayout/DashBoard";
 import AuthPage from "../containers/AuthPage";
 
-import Products from "../components/Products"
+import Product from "../components/Product";
 import Category from "../components/Category";
-import AddProduct from "../components/AddProduct";
-import EditProduct from "../components/EditProduct";
-
-//  TienDevelop
+import DiscountCode from "../components/DiscountCode";
 import Campaign from "../components/Campaign";
-
+import Order from "../components/Orders";
 const routesAdmin = [
   {
     exact: true,
@@ -23,23 +20,26 @@ const routesAdmin = [
   {
     exact: true,
     path: "/products/catalog",
-    component: Products,
+    component: Product,
   },
+
   {
     exact: true,
-    path: "/products/add",
-    component: AddProduct,
+    path: "/orders/catalog",
+    component: Order,
   },
+
   {
     exact: true,
-    path: "/products/:id",
-    component: EditProduct,
-  },
-  {
-    exact: true,
-    path: "/campaigns",
+    path: "/discount/campaigns",
     component: Campaign,
   },
+  {
+    exact: true,
+    path: "/discount/discount-codes",
+    component: DiscountCode,
+  },
+    
 ];
 
 const routesAuth = [
@@ -47,6 +47,6 @@ const routesAuth = [
     exact: false,
     path: "/login",
     component: AuthPage,
-  }
+  },
 ];
 export { routesAdmin, routesAuth };
