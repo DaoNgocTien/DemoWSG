@@ -7,8 +7,6 @@ import {
   PercentageOutlined,
 } from "@ant-design/icons";
 import NavbarAdmin from "../../components/NavbarAdmin";
-import ChatMaterial from "../../components/Chat-Material";
-import Chat from "../../components/Chat";
 
 const { SubMenu } = Menu;
 const { Header, Sider, Content } = Layout;
@@ -67,21 +65,15 @@ class AdminRender extends Component {
               mode="inline"
               style={{ height: "100%", borderRight: 0 }}
             >
-              <SubMenu
-                key="products"
-                title="Products"
-                icon={<DropboxOutlined />}
-              >
-                <Menu.Item key="categories">
-                  <Link className="LinkDecorations" to="/products/categories">
-                    Categories
-                  </Link>
-                </Menu.Item>
-                <Menu.Item key="catalog">
-                  <Link className="LinkDecorations" to="/products/catalog">
-                    Catalog
-                  </Link>
-                </Menu.Item>
+              <SubMenu key="product" title="Products">
+                <Menu.Item key="1"><Link className="LinkDecorations" to="/products/categories">Categories</Link></Menu.Item>
+                <Menu.Item key="2"><Link className="LinkDecorations" to="/products/catalog">Catalog</Link></Menu.Item>
+              </SubMenu>
+              <SubMenu key="sub2" title="subnav 2">
+                <Menu.Item key="5"><Link className="LinkDecorations" to="/campaigns">Catalog</Link></Menu.Item>
+                <Menu.Item key="6">option6</Menu.Item>
+                <Menu.Item key="7">option7</Menu.Item>
+                <Menu.Item key="8">option8</Menu.Item>
               </SubMenu>
 
               {/* <SubMenu key="orders" title="Orders"> */}
