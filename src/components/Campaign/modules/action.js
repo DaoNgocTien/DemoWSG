@@ -9,7 +9,7 @@ const getCampaign = (campaignId) => {
         products,
         order = {};
       if (!campaignId) {
-        console.log('test');
+        console.log("test");
         [campaigns, products] = await Promise.all([
           Axios({
             url: `/campaigns/All`,
@@ -59,11 +59,11 @@ const getCampaign = (campaignId) => {
           order:
             order !== {}
               ? order.data?.data.map((item) => {
-                return {
-                  key: item.id,
-                  ...item,
-                };
-              })
+                  return {
+                    key: item.id,
+                    ...item,
+                  };
+                })
               : {},
         })
       );
@@ -112,6 +112,8 @@ const updateCampaign = (record) => {
         toDate: record.toDate,
         quantity: record.quantity,
         price: record.price,
+        maxQuantity: record.maxQuantity,
+        isShare: record.isShare,
       },
       withCredentials: true,
     })

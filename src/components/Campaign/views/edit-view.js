@@ -9,6 +9,7 @@ import {
   InputNumber,
   Descriptions,
   Upload,
+  Switch,
 } from "antd";
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -80,6 +81,8 @@ class UpdateModal extends Component {
       toDate: data.date[1].format("MM/DD/YYYY"),
       quantity: data.quantity,
       price: (data.wholesalePercent * productSelected.retailprice) / 100,
+      maxQuantity: data.maxQuantity,
+      isShare: data.isShare,
     };
 
     console.log(newCampaign);
@@ -163,6 +166,7 @@ class UpdateModal extends Component {
       productSelected = this.props.productList?.find(
         (element) => element.id === this.props.record?.productid
       ) || {},
+      shareChecked = record?.isshare,
     } = this.state;
 
     console.log(this.state.price);
@@ -195,13 +199,14 @@ class UpdateModal extends Component {
             visible={openModal}
             onCancel={this.handleCancel}
             footer={[
-              <Button onClick={this.handleCancel} key='btnCancel'>Cancel</Button>,
+              <Button onClick={this.handleCancel} key="btnCancel">
+                Cancel
+              </Button>,
               <Button
                 type="primary"
                 form="updateCampaignForm"
                 key="submit"
                 htmlType="submit"
-                
               >
                 Submit
               </Button>,
@@ -262,6 +267,29 @@ class UpdateModal extends Component {
                     addonAfter=" products"
                     defaultValue={record?.quantity}
                     style={{ width: "60vh" }}
+                  />
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Max Quantity">
+                <Form.Item
+                  name="maxQuantity"
+                  initialValue={record?.maxquantity}
+                >
+                  <InputNumber
+                    addonAfter=" products"
+                    defaultValue={record?.maxquantity}
+                    style={{ width: "60vh" }}
+                  />
+                </Form.Item>
+              </Descriptions.Item>
+              <Descriptions.Item label="Share">
+                <Form.Item name="isShare" initialValue={record?.isshare}>
+                  <Switch
+                    checked={shareChecked}
+                    onClick={() => {
+                      this.setState({ shareChecked: !shareChecked });
+                    }}
                   />
                 </Form.Item>
               </Descriptions.Item>

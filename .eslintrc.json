@@ -8,11 +8,11 @@
         "plugin:react/recommended"
     ],
     "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module",
         "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": "latest",
-        "sourceType": "module"
+            "jsx": false
+        }
     },
     "plugins": [
         "react"
@@ -20,6 +20,8 @@
     "rules": {
         "no-unused-vars": "off",
         "react/prop-types": "off",
-        "react/no-direct-mutation-state": "off"
+        "react/no-direct-mutation-state": "off",
+        "react/jsx-key": 1,
+        "react/jsx-no-duplicate-props": "off"
     }
 }

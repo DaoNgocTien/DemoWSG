@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+import React, { memo } from "react";
 import moment from "moment";
 import {
   Table,
@@ -75,11 +75,19 @@ class OrdersInCampaign extends React.Component {
         ) : (
           <img
             width="100"
-            alt = "show illustrative representation"
+            alt="show illustrative representation"
             height="100"
             src={JSON.parse(object.details[0].image)[0].url}
           />
         );
+      },
+    },
+    {
+      title: "Quantity",
+      width: 100,
+      render: (text, object, index) => {
+        // console.log(object);
+        return object.details[0].quantity;
       },
     },
     {
@@ -147,7 +155,7 @@ class OrdersInCampaign extends React.Component {
     const { selectedRowKeys, deleteButton, displayData, searchData } =
       this.state;
 
-    const { record, ordersInCampaign, loading, } = this.props;
+    const { record, ordersInCampaign, loading } = this.props;
     // console.log(ordersInCampaign);
     const rowSelection = {
       selectedRowKeys,
@@ -168,11 +176,12 @@ class OrdersInCampaign extends React.Component {
         <Form>
           <Descriptions bordered title="Campaign information" column={2}>
             <Descriptions.Item label="Campaign duration">
-              {moment(record?.fromdate).format("MM/DD/YYYY") + ` - ` + moment(record?.todate).format("MM/DD/YYYY")}
+              {moment(record?.fromdate).format("MM/DD/YYYY") +
+                ` - ` +
+                moment(record?.todate).format("MM/DD/YYYY")}
             </Descriptions.Item>
 
             <Descriptions.Item label="Product">
-
               {record?.productname}
             </Descriptions.Item>
 
@@ -181,9 +190,7 @@ class OrdersInCampaign extends React.Component {
             </Descriptions.Item>
 
             <Descriptions.Item label="Wholesale percent">
-              {
-                (record?.price / record?.productretailprice) * 100 + ' %'
-              }
+              {(record?.price / record?.productretailprice) * 100 + " %"}
             </Descriptions.Item>
           </Descriptions>
         </Form>

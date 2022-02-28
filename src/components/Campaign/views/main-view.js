@@ -95,7 +95,7 @@ class CampaignUI extends Component {
         });
 
         break;
-      case "openOrdersInCampaign":
+      case "openOrdersInCampaign": {
         //  Get orders in campaign
         let orderList = this.props.orderList;
         let orderListInCampaign = orderList?.filter((item) => {
@@ -111,6 +111,7 @@ class CampaignUI extends Component {
         });
 
         break;
+      }
       default:
         break;
     }
@@ -148,14 +149,19 @@ class CampaignUI extends Component {
       key: "quantity",
     },
     {
+      title: "Max Quantity",
+      dataIndex: "maxquantity",
+      key: "maxquantity",
+    },
+    {
       title: "Price",
       dataIndex: "price",
       key: "price",
     },
     {
-      title: "Order",
-      dataIndex: "price",
-      key: "order",
+      title: "Orders",
+      dataIndex: "numorder",
+      key: "numorder",
     },
     {
       title: "Start Date",
@@ -228,12 +234,8 @@ class CampaignUI extends Component {
       searchKey,
     } = this.state;
 
-    const {
-      productList,
-      createCampaign,
-      updateCampaign,
-      deleteCampaign,
-    } = this.props;
+    const { productList, createCampaign, updateCampaign, deleteCampaign } =
+      this.props;
 
     const rowSelection = {
       selectedRowKeys,

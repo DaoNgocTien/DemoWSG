@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, memo } from "react";
 // import { Link } from "react-router-dom";
 import Axios from "axios";
 import { Link } from "react-router-dom";
-import { Menu, Button, Divider, Row, Col, } from "antd";
+import { Menu, Button, Divider, Row, Col } from "antd";
 import {
   SettingOutlined,
   MenuUnfoldOutlined,
@@ -10,7 +10,7 @@ import {
   PieChartOutlined,
   DesktopOutlined,
 } from "@ant-design/icons";
-export default class NavbarAdmin extends Component {
+class NavbarAdmin extends Component {
   handleLogOut = (e) => {
     Axios({
       url: `/users/logout`,
@@ -96,3 +96,11 @@ export default class NavbarAdmin extends Component {
     );
   }
 }
+
+const arePropsEqual = (prevProps, nextProps) => {
+  console.log(prevProps !== nextProps);
+  return prevProps !== nextProps;
+};
+
+// Wrap component using `React.memo()` and pass `arePropsEqual`
+export default memo(NavbarAdmin, arePropsEqual);
