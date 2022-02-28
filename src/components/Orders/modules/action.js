@@ -42,8 +42,6 @@ const updateStatusOrder = (data) => {
           withCredentials: true,
         })
           .then((response) => {
-            if (response.status === 200) {
-            }
           })
           .catch((err) => {
             return dispatch(getFailed());
@@ -59,8 +57,6 @@ const updateStatusOrder = (data) => {
           withCredentials: true,
         })
           .then((response) => {
-            if (response.status === 200) {
-            }
           })
           .catch((err) => {
             return dispatch(getFailed());

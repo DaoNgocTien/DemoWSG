@@ -97,18 +97,20 @@ class DiscountCodeUI extends Component {
         break;
       case "openOrdersInDiscountCode":
         //  Get orders in DiscountCode
-        let orderList = this.props.orderList;
-        let orderListInDiscountCode = orderList?.filter((item) => {
-          return selectedRowKeys.includes(item.DiscountCodeid);
-        });
-        this.props.getDiscountCode(selectedRowKeys);
+        {
+          let orderList = this.props.orderList;
+          let orderListInDiscountCode = orderList?.filter((item) => {
+            return selectedRowKeys.includes(item.DiscountCodeid);
+          });
+          this.props.getDiscountCode(selectedRowKeys);
 
-        //  Set DiscountCode record and orders in DiscountCode into state
-        this.setState({
-          openDrawer: true,
-          record: recordToEdit,
-          orderList: orderListInDiscountCode,
-        });
+          //  Set DiscountCode record and orders in DiscountCode into state
+          this.setState({
+            openDrawer: true,
+            record: recordToEdit,
+            orderList: orderListInDiscountCode,
+          });
+        }
 
         break;
       default:

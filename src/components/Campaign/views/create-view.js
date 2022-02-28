@@ -7,6 +7,7 @@ import {
   DatePicker,
   InputNumber,
   Descriptions,
+  Switch,
 } from "antd";
 import PropTypes from "prop-types";
 import { Select, Upload } from "antd";
@@ -51,9 +52,9 @@ class CreatModal extends Component {
 
   handleCreateAndClose = (data) => {
     console.log("Campaign create");
-    console.log(data);
+    console.log(this.state.productSelected);
     const productSelected =
-      this.state.productSelected === {}
+      this.state.productSelected === {} || !this.state.productSelected
         ? this.props.productList[0]
         : this.state.productSelected;
     let newCampaign = {
@@ -61,8 +62,9 @@ class CreatModal extends Component {
       fromDate: data.date[0],
       toDate: data.date[1],
       quantity: data.quantity,
-      price:
-        (data.wholesalePercent * productSelected.retailprice) / 100,
+      price: (data.wholesalePercent * productSelected.retailprice) / 100,
+      isShare: data.isShare,
+      maxQuantity: data.maxQuantity,
     };
     // console.log(newCampaign);
     this.props.createCampaign(newCampaign);
@@ -182,6 +184,16 @@ class CreatModal extends Component {
               <Descriptions.Item label="Quantity">
                 <Form.Item name="quantity" initialValue={1}>
                   <InputNumber addonAfter=" products" defaultValue={1} />
+                </Form.Item>
+              </Descriptions.Item>
+              <Descriptions.Item label="Max Quantity">
+                <Form.Item name="maxQuantity" initialValue={1}>
+                  <InputNumber addonAfter=" products" defaultValue={1} />
+                </Form.Item>
+              </Descriptions.Item>
+              <Descriptions.Item label="Share">
+                <Form.Item name="isShare">
+                  <Switch />
                 </Form.Item>
               </Descriptions.Item>
 

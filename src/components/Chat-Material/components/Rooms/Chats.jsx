@@ -37,4 +37,4 @@ class Chats extends Component {
     );
   }
 }
-module.exports = Chats;
+export default Chats;

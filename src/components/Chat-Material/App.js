@@ -25,15 +25,15 @@ function LoginPage(props) {
       marginTop: theme.spacing(8),
       display: "flex",
       flexDirection: "column",
-      alignItems: "center"
+      alignItems: "center",
     },
     form: {
       width: "100%", // Fix IE 11 issue.
-      marginTop: theme.spacing(1)
+      marginTop: theme.spacing(1),
     },
     submit: {
-      margin: theme.spacing(3, 0, 2)
-    }
+      margin: theme.spacing(3, 0, 2),
+    },
   }));
   const classes = useStyles();
   return (
@@ -85,15 +85,15 @@ function LoginPage(props) {
 function App() {
   const [logged, setLogged] = React.useState(false);
   const [user, setUser] = React.useState(null);
- 
-  function handleLog(){
-     setLogged(prev => !prev)
-     setUser(()=>null)
+
+  function handleLog() {
+    setLogged((prev) => !prev);
+    setUser(() => null);
   }
   return (
     <div>
       {logged ? (
-        <Rooms activeUser={user} handleLog={handleLog}/>
+        <Rooms activeUser={user} handleLog={handleLog} />
       ) : (
         <LoginPage setLogged={setLogged} setUser={setUser} />
       )}
@@ -101,4 +101,4 @@ function App() {
   );
 }
 
-module.exports = App;
+export default App;

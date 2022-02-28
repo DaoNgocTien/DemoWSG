@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link, Redirect } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Drawer } from "antd";
 import {
   ReconciliationOutlined,
   DropboxOutlined,
@@ -48,14 +48,17 @@ class AdminRender extends Component {
   showDrawer = (mode) => {
     //  true: notice
     //  false: chatbox
+    // if (this.state.openDrawer !== mode) {
+    console.log("a");
     this.setState({
       openDrawer: mode,
     });
+    // }
   };
 
   getDrawerContent = () => {
     return this.state.openDrawer ? <Chat /> : <ChatMaterial />;
-  }
+  };
 
   render() {
     const { collapsed, openDrawer } = this.state;
@@ -144,7 +147,7 @@ class AdminRender extends Component {
                 placement="right"
                 size={"736px"}
                 closable={false}
-                onClose={this.showDrawer()}
+                onClose={this.showDrawer}
                 visible={openDrawer}
               >
                 {this.getDrawerContent()}
@@ -152,7 +155,7 @@ class AdminRender extends Component {
             </Content>
           </Layout>
         </Layout>
-      </Layout >
+      </Layout>
     );
   }
 }

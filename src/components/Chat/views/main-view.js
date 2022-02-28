@@ -1,8 +1,8 @@
 import React, { Component, memo } from "react";
-import { Table, Button, Input, Row, Col, Space, PageHeader, } from "antd";
+import { Table, Button, Input, Row, Col, Space, PageHeader } from "antd";
 import PropTypes from "prop-types";
-import { Comment, Avatar, Form, Button, List, Input } from 'antd';
-import moment from 'moment';
+import { Comment, Avatar, Form, List } from "antd";
+import moment from "moment";
 
 //  prototype
 const propsProTypes = {
@@ -19,9 +19,9 @@ const { TextArea } = Input;
 const CommentList = ({ comments }) => (
   <List
     dataSource={comments}
-    header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
+    header={`${comments.length} ${comments.length > 1 ? "replies" : "reply"}`}
     itemLayout="horizontal"
-    renderItem={props => <Comment {...props} />}
+    renderItem={(props) => <Comment {...props} />}
   />
 );
 
@@ -31,7 +31,12 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
       <TextArea rows={4} onChange={onChange} value={value} />
     </Form.Item>
     <Form.Item>
-      <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
+      <Button
+        htmlType="submit"
+        loading={submitting}
+        onClick={onSubmit}
+        type="primary"
+      >
         Add Comment
       </Button>
     </Form.Item>
@@ -44,7 +49,7 @@ class ChatUI extends Component {
   state = {
     comments: [],
     submitting: false,
-    value: '',
+    value: "",
   };
 
   handleSubmit = () => {
@@ -59,12 +64,12 @@ class ChatUI extends Component {
     setTimeout(() => {
       this.setState({
         submitting: false,
-        value: '',
+        value: "",
         comments: [
           ...this.state.comments,
           {
-            author: 'Han Solo',
-            avatar: 'https://joeschmoe.io/api/v1/random',
+            author: "Han Solo",
+            avatar: "https://joeschmoe.io/api/v1/random",
             content: <p>{this.state.value}</p>,
             datetime: moment().fromNow(),
           },
@@ -73,7 +78,7 @@ class ChatUI extends Component {
     }, 1000);
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     this.setState({
       value: e.target.value,
     });
@@ -86,7 +91,9 @@ class ChatUI extends Component {
       <>
         {comments.length > 0 && <CommentList comments={comments} />}
         <Comment
-          avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />}
+          avatar={
+            <Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo" />
+          }
           content={
             <Editor
               onChange={this.handleChange}
