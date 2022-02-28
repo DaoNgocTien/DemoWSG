@@ -1,5 +1,5 @@
 import React, { Component, memo } from "react";
-import { Modal, Button, Form, Input } from "antd";
+import { Modal, Button, Form, Input, Descriptions } from "antd";
 import PropTypes from "prop-types";
 import { Select, Upload, InputNumber } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
@@ -15,8 +15,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => {},
-  updateProduct: () => {},
+  closeModal: () => { },
+  updateProduct: () => { },
   defaultProduct: {
     key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
     id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
@@ -159,6 +159,7 @@ class UpdateModal extends Component {
               </Button>,
             ]}
           >
+
             <Form.Item
               label="Product ID"
               name="id"
@@ -172,77 +173,98 @@ class UpdateModal extends Component {
                 hidden={true}
               />
             </Form.Item>
-            <Form.Item label="Name" name="name" initialValue={record?.name}>
-              <Input defaultValue={record?.name} />
-            </Form.Item>
-            <Form.Item
-              label="Category"
-              name="categoryId"
-              initialValue={record?.categoryid}
-            >
-              <Select defaultValue={record?.categoryid}>
-                {categoryList.map((item) => (
-                  <Select.Option key={item.key} value={item.id}>
-                    {item.categoryname}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
 
-            <Form.Item label="image" name="image">
-              <>
-                <Upload
-                  name="file"
-                  action="/files/upload"
-                  listType="picture-card"
-                  fileList={
-                    this.state.fileList.length === 0 && this.props.record
-                      ? JSON.parse(this.props.record?.image)
-                      : this.state.fileList
-                  }
-                  onPreview={this.handlePreview}
-                  onChange={this.handleChange}
+            <Descriptions layout="vertical" column={2}>
+              <Descriptions.Item label="Name">
+                <Form.Item name="name" initialValue={record?.name}>
+                  <Input defaultValue={record?.name} style={{ width: "60vh" }} />
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Category">
+                <Form.Item
+                  name="categoryId"
+                  initialValue={record?.categoryid}
                 >
-                  {this.state.fileList.length >= 8 ? null : uploadButton}
-                </Upload>
-                <Modal
-                  visible={this.state.previewVisible}
-                  title={this.state.previewTitle}
-                  footer={null}
-                  onCancel={this.handleCancelUploadImage}
+                  <Select defaultValue={record?.categoryid} style={{ width: "60vh" }} >
+                    {categoryList.map((item) => (
+                      <Select.Option key={item.key} value={item.id}>
+                        {item.categoryname}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Quantity">
+                <Form.Item
+                  name="quantity"
+                  initialValue={record?.quantity}
                 >
-                  <img
-                    alt="example"
-                    style={{ width: "100%" }}
-                    src={this.state.previewImage}
+                  <InputNumber min={0} defaultValue={record?.quantity} style={{ width: "60vh" }} />
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Retail Price">
+                <Form.Item
+                  name="retailPrice"
+                  initialValue={record?.retailprice}
+                >
+                  <InputNumber min={0} defaultValue={record?.retailprice} style={{ width: "60vh" }} />
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Description">
+                <Form.Item
+                  name="description"
+                  initialValue={record?.description}
+                >
+                  <Input.TextArea
+                    autoSize={{ minRows: 3, maxRows: 5 }}
+                    defaultValue={record?.description}
+                    style={{ width: "60vh" }} 
                   />
-                </Modal>
-              </>
-            </Form.Item>
-            <Form.Item
-              label="Retail Price"
-              name="retailPrice"
-              initialValue={record?.retailprice}
-            >
-              <InputNumber min={0} defaultValue={record?.retailprice} />
-            </Form.Item>
-            <Form.Item
-              label="Quantity"
-              name="quantity"
-              initialValue={record?.quantity}
-            >
-              <InputNumber min={0} defaultValue={record?.quantity} />
-            </Form.Item>
-            <Form.Item
-              label="Description"
-              name="description"
-              initialValue={record?.description}
-            >
-              <Input.TextArea
-                autoSize={{ minRows: 3, maxRows: 5 }}
-                defaultValue={record?.description}
-              />
-            </Form.Item>
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Image">
+                <Form.Item name="image">
+                  <>
+                    <Upload
+                      name="file"
+                      action="/files/upload"
+                      listType="picture-card"
+                      fileList={
+                        this.state.fileList.length === 0 && this.props.record
+                          ? JSON.parse(this.props.record?.image)
+                          : this.state.fileList
+                      }
+                      onPreview={this.handlePreview}
+                      onChange={this.handleChange}
+                      style={{ width: "60vh" }} 
+                    >
+                      {this.state.fileList.length >= 8 ? null : uploadButton}
+                    </Upload>
+                    <Modal
+                      visible={this.state.previewVisible}
+                      title={this.state.previewTitle}
+                      footer={null}
+                      onCancel={this.handleCancelUploadImage}
+                    >
+                      <img
+                        alt="example"
+                        style={{ width: "100%" }}
+                        src={this.state.previewImage}
+                      />
+                    </Modal>
+                  </>
+                </Form.Item>
+              </Descriptions.Item>
+
+
+
+
+            </Descriptions>
           </Modal>
         </Form>
       </>
