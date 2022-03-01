@@ -1,3 +1,3 @@
-export const GET_DATA_SUCCESS = "campaign/GET_SUCCESS";
-export const GET_DATA_FAIL = "campaign/GET_FAIL";
-export const GET_DATA_REQUEST = "campaign/GET_REQUEST";
+export const GET_DATA_SUCCESS = "notification/GET_SUCCESS";
+export const GET_DATA_FAIL = "notification/GET_FAIL";
+export const GET_DATA_REQUEST = "notification/GET_REQUEST";

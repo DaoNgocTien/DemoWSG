@@ -6,7 +6,7 @@ let initialState = {
   err: null,
 };
 
-const categoryReducer = (state = initialState, action) => {
+const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
       state.loading = true;
@@ -30,4 +30,4 @@ const categoryReducer = (state = initialState, action) => {
   }
 };
 
-export default categoryReducer;
+export default notificationReducer;
