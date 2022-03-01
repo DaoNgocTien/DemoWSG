@@ -2,13 +2,15 @@ import React, { Component, memo } from "react";
 // import { Link } from "react-router-dom";
 import Axios from "axios";
 import { Link } from "react-router-dom";
-import { Menu, Button, Divider, Row, Col } from "antd";
+import { Menu, Button, Divider, Row, Col, Space } from "antd";
 import {
-  SettingOutlined,
+  SettingTwoTone,
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  PieChartOutlined,
-  DesktopOutlined,
+  UserOutlined,
+  BellTwoTone,
+  LogoutOutlined,
+  MessageTwoTone,
 } from "@ant-design/icons";
 class NavbarAdmin extends Component {
   handleLogOut = (e) => {
@@ -27,7 +29,8 @@ class NavbarAdmin extends Component {
   };
 
   render() {
-    const { toggleCollapsed, collapsed, showDrawer } = this.props;
+    console.log(this.props);
+    const { toggleCollapsed, collapsed, showChatDrawer, showNotificationDrawer } = this.props;
     return (
       <Row>
         {/* <Space size={1}> */}
@@ -48,7 +51,10 @@ class NavbarAdmin extends Component {
           </Link>
         </Col>
 
-        <Col flex="auto" style={{ height: "50px" }}>
+        <Col flex="auto" style={{ height: "50px" }}  ></Col>
+
+        <Col flex="260px">
+
           <Menu
             theme="light"
             mode="horizontal"
@@ -57,8 +63,18 @@ class NavbarAdmin extends Component {
               justifyContent: "left",
               lineHeight: "64px",
               fontSize: "20px",
-            }}
-          >
+            }}>
+            <Menu.Item
+              key="Chat"
+              icon={<MessageTwoTone style={{ fontSize: "25px" }} onClick={showChatDrawer} />}
+            >
+            </Menu.Item>
+
+            <Menu.Item
+              key="Notice"
+              icon={<BellTwoTone style={{ fontSize: "25px" }} onClick={showNotificationDrawer} />} >
+            </Menu.Item>
+
             <Menu.SubMenu
               style={{
                 position: "absolute",
@@ -67,17 +83,18 @@ class NavbarAdmin extends Component {
                 fontSize: "20px",
               }}
               key="Log out"
-              title={<SettingOutlined style={{ fontSize: "25px" }} />}
+              title={<SettingTwoTone style={{ fontSize: "25px" }} />}
             >
-              <Menu.Item key="4">nav 4</Menu.Item>
-              <Menu.Item key="5" onClick={(e) => this.handleLogOut(e)}>
+              <Menu.Item key="4" icon={<UserOutlined style={{ fontSize: "25px" }} />}>User Profile</Menu.Item>
+              <Menu.Item key="5" onClick={(e) => this.handleLogOut(e)} icon={<LogoutOutlined style={{ fontSize: "25px" }} />}>
                 Logout
               </Menu.Item>
             </Menu.SubMenu>
+            {/* </Space> */}
           </Menu>
         </Col>
         {/* </Space> */}
-      </Row>
+      </Row >
       // <div style={{ width: 256 }}>
 
       //   </div>
