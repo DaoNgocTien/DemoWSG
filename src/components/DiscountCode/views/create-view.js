@@ -54,7 +54,7 @@ class CreatModal extends Component {
       quantity: data.quantity,
       discountPrice: data.discountPrice,
       minimunPriceCondition: data.minimunPrice,
-      status: data.status,
+      // status: "private",
       code: data.code
     };
 
@@ -134,13 +134,14 @@ class CreatModal extends Component {
               </Button>,
             ]}
           >
-            <Descriptions bordered column={2}>
+            <Descriptions layout="vertical" column={2}>
               <Descriptions.Item label="Discount Code duration">
                 <Form.Item
                   name="date"
                   initialValue={[moment(), moment().add(1, "days")]}
                 >
                   <RangePicker
+                  style={{ width: "60vh" }} 
                     ranges={{
                       Today: [moment(), moment()],
                       "This Week": [
@@ -161,22 +162,25 @@ class CreatModal extends Component {
 
               <Descriptions.Item label="Code">
                 <Form.Item name="code">
-                  <Input/>
+                  <Input style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
+
               <Descriptions.Item label="Discount price">
                 <Form.Item name="discountPrice" initialValue={1}>
-                  <InputNumber defaultValue={1} />
+                  <InputNumber defaultValue={1} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
+
               <Descriptions.Item label="Minimun price">
                 <Form.Item name="minimunPrice" initialValue={1}>
-                  <InputNumber defaultValue={1} />
+                  <InputNumber defaultValue={1} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
+
               <Descriptions.Item label="Product">
                 <Form.Item name="productId" initialValue={productList[0]?.id}>
-                  <Select onChange={this.onSelectProduct}>
+                  <Select onChange={this.onSelectProduct} style={{ width: "60vh" }} >
                     {productList.map((item) => {
                       return (
                         <Select.Option key={item.key} value={item.id}>
@@ -187,10 +191,10 @@ class CreatModal extends Component {
                   </Select>
                 </Form.Item>
               </Descriptions.Item>
-
+{/* 
               <Descriptions.Item label="Status">
                 <Form.Item name="status" initialValue={"public"}>
-                  <Select>
+                  <Select style={{ width: "60vh" }} >
                     <Select.Option key="public" value="public">
                       Public
                     </Select.Option>
@@ -199,11 +203,11 @@ class CreatModal extends Component {
                     </Select.Option>
                   </Select>
                 </Form.Item>
-              </Descriptions.Item>
+              </Descriptions.Item> */}
 
               <Descriptions.Item label="Quantity">
                 <Form.Item name="quantity" initialValue={1}>
-                  <InputNumber defaultValue={1} />
+                  <InputNumber defaultValue={1} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
             </Descriptions>

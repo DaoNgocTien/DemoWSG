@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { Route, Link, Redirect } from "react-router-dom";
-import { Layout, Menu, Drawer } from "antd";
+import { Layout, Menu, Drawer, Button } from "antd";
 import {
-  ReconciliationOutlined,
-  DropboxOutlined,
+  ReconciliationTwoTone,
+  RedEnvelopeTwoTone,
   PercentageOutlined,
+  HomeTwoTone,
+  DollarCircleTwoTone,
 } from "@ant-design/icons";
 import NavbarAdmin from "../../components/NavbarAdmin";
+import Notification from "../../components/Notification";
 
 import { ref, onValue, get, set } from "firebase/database";
 import { realtime } from "../../services/firebase";
@@ -17,7 +20,8 @@ const { Header, Sider, Content } = Layout;
 class AdminRender extends Component {
   state = {
     collapsed: false,
-    openDrawer: false,
+    visible: false,
+    drawerLength: 0,
   };
 
   toggleCollapsed = () => {
@@ -43,24 +47,35 @@ class AdminRender extends Component {
       console.log(snapshot.val());
     });
   };
-  showDrawer = (mode) => {
-    //  true: notice
-    //  false: chatbox
-    // if (this.state.openDrawer !== mode) {
-    console.log("a");
+
+  showChatDrawer = () => {
+    console.log("showChatDrawer");
     this.setState({
-      openDrawer: mode,
+      visible: true,
+      drawerLength: 0.45,
     });
-    // }
+  };
+
+  showNotificationDrawer = () => {
+    console.log("showNotificationDrawer");
+    this.setState({
+      visible: true,
+      drawerLength: 0.3,
+    });
+  };
+
+  onClose = () => {
+    this.setState({
+      visible: false,
+    });
   };
 
   getDrawerContent = () => {
-    return this.state.openDrawer ? <Chat /> : <ChatMaterial />;
+    return this.state.drawerLength == 0.3 ? <Notification /> : <Notification />;
   };
 
   render() {
-    const { collapsed, openDrawer } = this.state;
-    const drawerLength = openDrawer ? 0.4 : 0.7;
+    const { collapsed, visible, drawerLength } = this.state;
     return (
       <Layout>
         <Header
@@ -73,7 +88,8 @@ class AdminRender extends Component {
           <NavbarAdmin
             toggleCollapsed={this.toggleCollapsed}
             collapsed={collapsed}
-            showDrawer={this.showDrawer}
+            showChatDrawer={this.showChatDrawer}
+            showNotificationDrawer={this.showNotificationDrawer}
           />
         </Header>
         <Layout>
@@ -88,19 +104,19 @@ class AdminRender extends Component {
               mode="inline"
               style={{ height: "100%", borderRight: 0 }}
             >
-              <SubMenu key="product" title="Products">
+              <Menu.Item key="Dashboard" icon={<HomeTwoTone />}>
+                <Link className="LinkDecorations" to="/dashboard">
+                  Dashboard
+                </Link>
+              </Menu.Item>
+
+              <SubMenu key="product" title="Products" icon={<DollarCircleTwoTone />}>
                 <Menu.Item key="1"><Link className="LinkDecorations" to="/products/categories">Categories</Link></Menu.Item>
                 <Menu.Item key="2"><Link className="LinkDecorations" to="/products/catalog">Catalog</Link></Menu.Item>
               </SubMenu>
-              <SubMenu key="sub2" title="subnav 2">
-                <Menu.Item key="5"><Link className="LinkDecorations" to="/campaigns">Catalog</Link></Menu.Item>
-                <Menu.Item key="6">option6</Menu.Item>
-                <Menu.Item key="7">option7</Menu.Item>
-                <Menu.Item key="8">option8</Menu.Item>
-              </SubMenu>
 
               {/* <SubMenu key="orders" title="Orders"> */}
-              <Menu.Item key="Order" icon={<ReconciliationOutlined />}>
+              <Menu.Item key="Order" icon={<ReconciliationTwoTone />}>
                 <Link className="LinkDecorations" to="/orders/catalog">
                   Orders
                 </Link>
@@ -109,7 +125,7 @@ class AdminRender extends Component {
               <SubMenu
                 key="Discount"
                 title="Discounts"
-                icon={<PercentageOutlined />}
+                icon={<RedEnvelopeTwoTone />}
               >
                 <Menu.Item key="campaigns">
                   <Link className="LinkDecorations" to="/discount/campaigns">
@@ -142,8 +158,8 @@ class AdminRender extends Component {
                 placement="right"
                 size={"736px"}
                 closable={false}
-                onClose={this.showDrawer}
-                visible={openDrawer}
+                onClose={this.onClose}
+                visible={this.state.visible}
               >
                 {this.getDrawerContent()}
               </Drawer>

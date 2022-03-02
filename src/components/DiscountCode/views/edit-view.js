@@ -70,7 +70,7 @@ class UpdateModal extends Component {
       quantity: data.quantity,
       discountPrice: data.discountPrice,
       minimunPriceCondition: data.minimunPrice,
-      status: data.status,
+      // status: "private",
       code: data.code,
     };
 
@@ -214,6 +214,7 @@ class UpdateModal extends Component {
                   ]}
                 >
                   <RangePicker
+                  style={{ width: "60vh" }}
                     ranges={{
                       Today: [moment(), moment()],
                       "This Week": [
@@ -237,9 +238,10 @@ class UpdateModal extends Component {
 
               <Descriptions.Item label="Code">
                 <Form.Item name="code" initialValue={this.props.record?.code}>
-                  <Input defaultValue={this.props.record?.code} />
+                  <Input defaultValue={this.props.record?.code} style={{ width: "60vh" }}/>
                 </Form.Item>
               </Descriptions.Item>
+
               <Descriptions.Item label="Discount price">
                 <Form.Item
                   name="discountPrice"
@@ -247,9 +249,11 @@ class UpdateModal extends Component {
                 >
                   <InputNumber
                     defaultValue={this.props.record?.discountprice}
+                    style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
+
               <Descriptions.Item label="Minimun price">
                 <Form.Item
                   name="minimunPrice"
@@ -257,15 +261,17 @@ class UpdateModal extends Component {
                 >
                   <InputNumber
                     defaultValue={this.props.record?.minimunpricecondition}
+                    style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
+
               <Descriptions.Item label="Product">
                 <Form.Item
                   name="productId"
                   initialValue={this.props.record?.productid}
                 >
-                  <Select onChange={this.onSelectProduct}>
+                  <Select onChange={this.onSelectProduct} style={{ width: "60vh" }}>
                     {productList.map((item) => {
                       return (
                         <Select.Option key={item.key} value={item.id}>
@@ -276,7 +282,7 @@ class UpdateModal extends Component {
                   </Select>
                 </Form.Item>
               </Descriptions.Item>
-
+{/* 
               <Descriptions.Item label="Status">
                 <Form.Item
                   name="status"
@@ -291,14 +297,14 @@ class UpdateModal extends Component {
                     </Select.Option>
                   </Select>
                 </Form.Item>
-              </Descriptions.Item>
+              </Descriptions.Item> */}
 
               <Descriptions.Item label="Quantity">
                 <Form.Item
                   name="quantity"
                   initialValue={this.props.record?.quantity}
                 >
-                  <InputNumber defaultValue={this.props.record?.quantity} />
+                  <InputNumber defaultValue={this.props.record?.quantity} style={{ width: "60vh" }}/>
                 </Form.Item>
               </Descriptions.Item>
             </Descriptions>
