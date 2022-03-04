@@ -6,6 +6,8 @@ import Category from "../components/Category";
 import DiscountCode from "../components/DiscountCode";
 import Campaign from "../components/Campaign";
 import Order from "../components/Orders";
+import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
+import LoyalCustomer from "../components/LoyalCustomer";
 const routesAdmin = [
   {
     exact: true,
@@ -39,7 +41,16 @@ const routesAdmin = [
     path: "/discount/discount-codes",
     component: DiscountCode,
   },
-    
+  {
+    exact: true,
+    path: "/loyal-customer/conditon",
+    component: LoyalCustomerCondition,
+  }, 
+  {
+    exact: true,
+    path: "/loyal-customer/customer",
+    component: LoyalCustomer,
+  }, 
 ];
 
 const routesAuth = [

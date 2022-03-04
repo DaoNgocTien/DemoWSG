@@ -4,7 +4,7 @@ import { Layout, Menu, Drawer, Button } from "antd";
 import {
   ReconciliationTwoTone,
   RedEnvelopeTwoTone,
-  PercentageOutlined,
+  TeamOutlined,
   HomeTwoTone,
   DollarCircleTwoTone,
 } from "@ant-design/icons";
@@ -31,10 +31,8 @@ class AdminRender extends Component {
   };
 
   componentDidMount = () => {
-    // console.log(localStorage.getItem("user"))
     this.getNotif();
     if (!localStorage.getItem("user")) {
-      // return <Redirect to="/login" />;
       return window.location.replace("/login");
     }
   };
@@ -100,22 +98,30 @@ class AdminRender extends Component {
             breakpoint="md"
             collapsed={collapsed}
           >
-            <Menu
-              mode="inline"
-              style={{ height: "100%", borderRight: 0 }}
-            >
+            <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
               <Menu.Item key="Dashboard" icon={<HomeTwoTone />}>
                 <Link className="LinkDecorations" to="/dashboard">
                   Dashboard
                 </Link>
               </Menu.Item>
 
-              <SubMenu key="product" title="Products" icon={<DollarCircleTwoTone />}>
-                <Menu.Item key="1"><Link className="LinkDecorations" to="/products/categories">Categories</Link></Menu.Item>
-                <Menu.Item key="2"><Link className="LinkDecorations" to="/products/catalog">Catalog</Link></Menu.Item>
+              <SubMenu
+                key="product"
+                title="Products"
+                icon={<DollarCircleTwoTone />}
+              >
+                <Menu.Item key="1">
+                  <Link className="LinkDecorations" to="/products/categories">
+                    Categories
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="2">
+                  <Link className="LinkDecorations" to="/products/catalog">
+                    Catalog
+                  </Link>
+                </Menu.Item>
               </SubMenu>
 
-              {/* <SubMenu key="orders" title="Orders"> */}
               <Menu.Item key="Order" icon={<ReconciliationTwoTone />}>
                 <Link className="LinkDecorations" to="/orders/catalog">
                   Orders
@@ -130,6 +136,26 @@ class AdminRender extends Component {
                 <Menu.Item key="campaigns">
                   <Link className="LinkDecorations" to="/discount/campaigns">
                     Campaign
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="discount-codes">
+                  <Link
+                    className="LinkDecorations"
+                    to="/discount/discount-codes"
+                  >
+                    Discount Code
+                  </Link>
+                </Menu.Item>
+              </SubMenu>
+
+              <SubMenu
+                key="loyalCustomer"
+                title="Loyal Customer"
+                icon={<TeamOutlined />}
+              >
+                <Menu.Item key="condition">
+                  <Link className="LinkDecorations" to="/loyal-customer/conditon">
+                    Condition
                   </Link>
                 </Menu.Item>
                 <Menu.Item key="discount-codes">
