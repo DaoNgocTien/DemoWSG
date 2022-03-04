@@ -12,8 +12,8 @@ const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
   defaultDiscountCode: PropTypes.object,
-  createDiscountCode: PropTypes.func,
-  updateDiscountCode: PropTypes.func,
+  createLoyalCustomer: PropTypes.func,
+  updateLoyalCustomer: PropTypes.func,
   deleteDiscountCode: PropTypes.func,
 };
 
@@ -110,38 +110,41 @@ class DiscountCodeUI extends Component {
       fixed: "left",
     },
     {
-      title: "Code",
-      dataIndex: "code",
-      key: "code",
-      // sorter: (a, b) => a.productname.length - b.productname.length,
-      fix: "left",
+      title: "Customer Name",
+      width: 150,
+      render: (text, object, index) => {
+        // console.log(object);
+        return object.customerfirstname + " " + object.customerlastname;
+      },
+      fixed: "left",
     },
     {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "Avatar",
+      dataIndex: "customeravt",
+      key: "customeravt",
+      render: (data) => (
+        <img
+          src={data}
+          alt="show illustrative representation"
+          style={{ width: "90px", height: "70px", margin: "auto" }}
+        />
+      ),
     },
     {
-      title: "Discount Price",
-      dataIndex: "discountprice",
-      key: "discountprice",
+      title: "Num Of Order",
+      dataIndex: "numoforder",
+      key: "numoforder",
     },
     {
-      title: "Minimun Price",
-      dataIndex: "minimunpricecondition",
-      key: "minimunpricecondition",
+      title: "Num Of Product",
+      dataIndex: "numofproduct",
+      key: "numofproduct",
     },
     {
-      title: "Start Date",
-      dataIndex: "startdate",
-      key: "startdate",
-      render: (data) => moment(data).format("MM/DD/YYYY"),
-    },
-    {
-      title: "End Date",
-      dataIndex: "enddate",
-      key: "enddate",
-      render: (data) => moment(data).format("MM/DD/YYYY"),
+      title: "Discount Percent",
+      dataIndex: "discountpercent",
+      key: "discountpercent",
+      render: (data) => data + "%",
     },
     {
       title: "Status",
@@ -197,8 +200,8 @@ class DiscountCodeUI extends Component {
 
     const {
       productList,
-      createDiscountCode,
-      updateDiscountCode,
+      createLoyalCustomer,
+      updateLoyalCustomer,
       deleteDiscountCode,
     } = this.props;
 
@@ -212,14 +215,14 @@ class DiscountCodeUI extends Component {
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title={arrayLocation[2].toUpperCase()}
+        // title={arrayLocation[2].toUpperCase()}
         subTitle={`This is a ${arrayLocation[2]} page`}
         footer={
           <div>
             <CreateModal
               openModal={openCreateModal}
               closeModal={this.closeModal}
-              createDiscountCode={createDiscountCode}
+              createLoyalCustomer={createLoyalCustomer}
               productList={productList}
             />
             <DeleteModal
@@ -234,7 +237,7 @@ class DiscountCodeUI extends Component {
               openModal={openEditModal}
               closeModal={this.closeModal}
               productList={productList}
-              updateDiscountCode={updateDiscountCode}
+              updateLoyalCustomer={updateLoyalCustomer}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
             />

@@ -12,8 +12,8 @@ const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
   defaultDiscountCode: PropTypes.object,
-  createDiscountCode: PropTypes.func,
-  updateDiscountCode: PropTypes.func,
+  createLoyalCustomerCondition: PropTypes.func,
+  updateLoyalCustomerCondition: PropTypes.func,
   deleteDiscountCode: PropTypes.func,
 };
 
@@ -110,43 +110,26 @@ class DiscountCodeUI extends Component {
       fixed: "left",
     },
     {
-      title: "Code",
-      dataIndex: "code",
-      key: "code",
-      // sorter: (a, b) => a.productname.length - b.productname.length,
-      fix: "left",
+      title: "Min Order",
+      dataIndex: "minorder",
+      key: "minorder",
     },
     {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
+      title: "Min Product",
+      dataIndex: "minproduct",
+      key: "minproduct",
     },
     {
-      title: "Discount Price",
-      dataIndex: "discountprice",
-      key: "discountprice",
-    },
-    {
-      title: "Minimun Price",
-      dataIndex: "minimunpricecondition",
-      key: "minimunpricecondition",
+      title: "Discount Percent",
+      dataIndex: "discountpercent",
+      key: "discountpercent",
+      render: (data) => data + "%",
     },
     {
       title: "Start Date",
       dataIndex: "startdate",
       key: "startdate",
       render: (data) => moment(data).format("MM/DD/YYYY"),
-    },
-    {
-      title: "End Date",
-      dataIndex: "enddate",
-      key: "enddate",
-      render: (data) => moment(data).format("MM/DD/YYYY"),
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
     },
   ];
 
@@ -197,8 +180,8 @@ class DiscountCodeUI extends Component {
 
     const {
       productList,
-      createDiscountCode,
-      updateDiscountCode,
+      createLoyalCustomerCondition,
+      updateLoyalCustomerCondition,
       deleteDiscountCode,
     } = this.props;
 
@@ -212,14 +195,14 @@ class DiscountCodeUI extends Component {
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title={arrayLocation[2].toUpperCase()}
+        // title={arrayLocation[2].toUpperCase()}
         subTitle={`This is a ${arrayLocation[2]} page`}
         footer={
           <div>
             <CreateModal
               openModal={openCreateModal}
               closeModal={this.closeModal}
-              createDiscountCode={createDiscountCode}
+              createLoyalCustomerCondition={createLoyalCustomerCondition}
               productList={productList}
             />
             <DeleteModal
@@ -234,7 +217,7 @@ class DiscountCodeUI extends Component {
               openModal={openEditModal}
               closeModal={this.closeModal}
               productList={productList}
-              updateDiscountCode={updateDiscountCode}
+              updateLoyalCustomerCondition={updateLoyalCustomerCondition}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
             />
