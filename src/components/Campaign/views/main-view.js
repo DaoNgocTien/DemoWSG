@@ -164,6 +164,12 @@ class CampaignUI extends Component {
       key: "numorder",
     },
     {
+      title: "Advance Percent",
+      dataIndex: "advancefee",
+      key: "advancefee",
+      render: (data) => data + "%",
+    },
+    {
       title: "Start Date",
       dataIndex: "fromdate",
       key: "fromdate",

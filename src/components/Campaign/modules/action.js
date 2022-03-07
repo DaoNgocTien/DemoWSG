@@ -102,7 +102,7 @@ const createCampaign = (record) => {
 
 const updateCampaign = (record) => {
   return async (dispatch) => {
-    dispatch(getRequest());
+    // dispatch(getRequest());
     Axios({
       url: `/campaigns/${record.id}`,
       method: "PUT",
@@ -114,6 +114,7 @@ const updateCampaign = (record) => {
         price: record.price,
         maxQuantity: record.maxQuantity,
         isShare: record.isShare,
+        advanceFee: record.advanceFee,
       },
       withCredentials: true,
     })
@@ -125,11 +126,11 @@ const updateCampaign = (record) => {
               ...category,
             };
           });
-          return dispatch(getSuccess(data));
+          return true
         }
       })
       .catch((err) => {
-        return dispatch(getFailed(err));
+        // return dispatch(getFailed(err));
       });
   };
 };
