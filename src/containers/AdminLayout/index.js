@@ -4,7 +4,7 @@ import { Layout, Menu, Drawer, Button } from "antd";
 import {
   ReconciliationTwoTone,
   RedEnvelopeTwoTone,
-  TeamOutlined,
+  ContactsTwoTone,
   HomeTwoTone,
   DollarCircleTwoTone,
 } from "@ant-design/icons";
@@ -100,7 +100,7 @@ class AdminRender extends Component {
           >
             <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
               <Menu.Item key="Dashboard" icon={<HomeTwoTone />}>
-                <Link className="LinkDecorations" to="/dashboard">
+                <Link className="LinkDecorations" to="/">
                   Dashboard
                 </Link>
               </Menu.Item>
@@ -151,19 +151,22 @@ class AdminRender extends Component {
               <SubMenu
                 key="loyalCustomer"
                 title="Loyal Customer"
-                icon={<TeamOutlined />}
+                icon={<ContactsTwoTone />}
               >
                 <Menu.Item key="condition">
-                  <Link className="LinkDecorations" to="/loyal-customer/conditon">
+                  <Link
+                    className="LinkDecorations"
+                    to="/loyal-customer/conditon"
+                  >
                     Condition
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="discount-codes">
+                <Menu.Item key="Customers">
                   <Link
                     className="LinkDecorations"
-                    to="/discount/discount-codes"
+                    to="/loyal-customer/customer"
                   >
-                    Discount Code
+                    Customers
                   </Link>
                 </Menu.Item>
               </SubMenu>

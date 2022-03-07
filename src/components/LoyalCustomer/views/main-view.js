@@ -245,13 +245,13 @@ class DiscountCodeUI extends Component {
               <Row>
                 <Col flex="auto">
                   <Space size={4}>
-                    <Button
+                    {/* <Button
                       type="primary"
                       onClick={() => this.start("openCreateModal")}
                       hidden={!addNewButton}
                     >
                       Add New
-                    </Button>
+                    </Button> */}
                     <Button
                       type="primary"
                       onClick={() => this.start("openEditModal")}
@@ -260,14 +260,14 @@ class DiscountCodeUI extends Component {
                     >
                       Edit
                     </Button>
-                    <Button
+                    {/* <Button
                       type="danger"
                       onClick={() => this.start("openDeleteModal")}
                       hidden={!deleteButton}
                       style={{ width: 90 }}
                     >
                       Delete
-                    </Button>
+                    </Button> */}
                     <span style={{ marginLeft: 8 }}>
                       {selectedRowKeys.length > 0
                         ? `Selected ${selectedRowKeys.length} items`

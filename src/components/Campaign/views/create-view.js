@@ -65,6 +65,7 @@ class CreatModal extends Component {
       price: (data.wholesalePercent * productSelected.retailprice) / 100,
       isShare: data.isShare,
       maxQuantity: data.maxQuantity,
+      advanceFee: data.advancePercent
     };
     // console.log(newCampaign);
     this.props.createCampaign(newCampaign);
@@ -163,14 +164,17 @@ class CreatModal extends Component {
                     defaultValue={[moment(), moment().add(1, "days")]}
                     format="MM/DD/YYYY"
                     onChange={this.onChange}
-                    style={{ width: "60vh" }} 
+                    style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Product">
                 <Form.Item name="productId" initialValue={productList[0]?.id}>
-                  <Select onChange={this.onSelectProduct} style={{ width: "60vh" }} >
+                  <Select
+                    onChange={this.onSelectProduct}
+                    style={{ width: "60vh" }}
+                  >
                     {productList.map((item) => {
                       return (
                         <Select.Option key={item.key} value={item.id}>
@@ -184,12 +188,31 @@ class CreatModal extends Component {
 
               <Descriptions.Item label="Quantity">
                 <Form.Item name="quantity" initialValue={1}>
-                  <InputNumber addonAfter=" products" defaultValue={1} style={{ width: "60vh" }} />
+                  <InputNumber
+                    addonAfter=" products"
+                    defaultValue={1}
+                    style={{ width: "60vh" }}
+                  />
                 </Form.Item>
               </Descriptions.Item>
               <Descriptions.Item label="Max Quantity">
                 <Form.Item name="maxQuantity" initialValue={1}>
-                  <InputNumber addonAfter=" products" defaultValue={1} style={{ width: "60vh" }} />
+                  <InputNumber
+                    addonAfter=" products"
+                    defaultValue={1}
+                    style={{ width: "60vh" }}
+                  />
+                </Form.Item>
+              </Descriptions.Item>
+              <Descriptions.Item label="Advance Percent">
+                <Form.Item name="advancePercent" initialValue={0}>
+                  <InputNumber
+                    addonAfter="%"
+                    defaultValue={0}
+                    min={0}
+                    max={100}
+                    style={{ width: "60vh" }}
+                  />
                 </Form.Item>
               </Descriptions.Item>
               <Descriptions.Item label="Share">
@@ -206,7 +229,7 @@ class CreatModal extends Component {
                     onChange={this.onChangePrice}
                     min={0}
                     max={100}
-                    style={{ width: "60vh" }} 
+                    style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>

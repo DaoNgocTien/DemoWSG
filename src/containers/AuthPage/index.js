@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
 import { Input, message, Form, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Redirect } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 
 class AuthPage extends Component {
@@ -31,9 +30,7 @@ class AuthPage extends Component {
   render() {
     const { loading } = this.props;
     if (loading) return <Loader />;
-    if (localStorage.getItem("user")) {
-      return <Redirect to="/" />;
-    } else {
+    if (!localStorage.getItem("user")) {
       return (
         <div className="main_form_body">
           <div className="form__wrapper">
@@ -69,7 +66,6 @@ class AuthPage extends Component {
                   />
                 </Form.Item>
                 <Form.Item>
-
                   <a
                     className="login-form-forgot"
                     href="/#"

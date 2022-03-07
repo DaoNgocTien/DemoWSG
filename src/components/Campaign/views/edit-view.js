@@ -83,6 +83,7 @@ class UpdateModal extends Component {
       price: (data.wholesalePercent * productSelected.retailprice) / 100,
       maxQuantity: data.maxQuantity,
       isShare: data.isShare,
+      advanceFee: data.advancePercent
     };
 
     console.log(newCampaign);
@@ -279,6 +280,17 @@ class UpdateModal extends Component {
                   <InputNumber
                     addonAfter=" products"
                     defaultValue={record?.maxquantity}
+                    style={{ width: "60vh" }}
+                  />
+                </Form.Item>
+              </Descriptions.Item>
+              <Descriptions.Item label="Advance Percent">
+                <Form.Item name="advancePercent" initialValue={record?.advancefee}>
+                  <InputNumber
+                    addonAfter="%"
+                    defaultValue={record?.advancefee}
+                    min={0}
+                    max={100}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>
