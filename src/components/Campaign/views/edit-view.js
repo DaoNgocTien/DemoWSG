@@ -67,7 +67,7 @@ class UpdateModal extends Component {
   componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
-    console.log(data);
+    // console.log(data);
 
     const productSelected = !this.state.productSelected
       ? this.props.productList?.find(
@@ -86,7 +86,7 @@ class UpdateModal extends Component {
       advanceFee: data.advancePercent
     };
 
-    console.log(newCampaign);
+    // console.log(newCampaign);
     // data.image = this.state.fileList;
     this.props.updateCampaign(newCampaign);
     // this.formRef.current.resetFields();
@@ -170,10 +170,10 @@ class UpdateModal extends Component {
       shareChecked = record?.isshare,
     } = this.state;
 
-    console.log(this.state.price);
-    console.log(
-      (this.props.record?.price / productSelected?.retailprice) * 100
-    );
+    // console.log(this.state.price);
+    // console.log(
+    //   (this.props.record?.price / productSelected?.retailprice) * 100
+    // );
 
     this.state.price =
       this.state.price === 0 || !this.state.price
@@ -347,7 +347,6 @@ class UpdateModal extends Component {
                 {productSelected?.retailprice ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Wholesale price">
-                {console.log(this.state.price)}
                 {(this.state.price * productSelected?.retailprice) / 100 ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Description">

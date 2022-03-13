@@ -20,6 +20,7 @@ class Order extends Component {
         loading={this.props.loading}
         updateStatusOrder={this.props.updateStatusOrder}
         createCampaign={this.props.createCampaign}
+        rejectOrder={this.props.rejectOrder}
       />
     );
   }
@@ -37,9 +38,11 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getOrder: async () => await dispatch(action.getOrder()),
     updateStatusOrder: async (data) => {
-      console.log(data)
       await dispatch(action.updateStatusOrder(data));
       await dispatch(action.getOrder())
+    },
+    rejectOrder: async (data) => {
+      await dispatch(action.rejectOrder(data));
     },
   };
 };

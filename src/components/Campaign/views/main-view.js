@@ -222,7 +222,7 @@ class CampaignUI extends Component {
       selectedRowKeys,
       record: record,
       editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length >= 1,
+      deleteButton: selectedRowKeys.length === 1,
       addNewButton: selectedRowKeys.length === 0,
     });
   };
@@ -267,8 +267,10 @@ class CampaignUI extends Component {
               openModal={openDeleteModal}
               closeModal={this.closeModal}
               deleteCampaign={deleteCampaign}
-              selectedRowKeys={selectedRowKeys}
-              data={this.props.data}
+              productList={productList}
+              updateCampaign={updateCampaign}
+              record={this.state.record}
+              selectedRowKeys={selectedRowKeys[0]}
             />
             <EditModal
               loading={this.props.loading}

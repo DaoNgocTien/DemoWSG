@@ -89,7 +89,7 @@ class ProductUI extends Component {
     this.setState({
       selectedRowKeys,
       editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length >= 1,
+      deleteButton: selectedRowKeys.length === 1,
       addNewButton: selectedRowKeys.length === 0,
     });
   };
@@ -257,9 +257,14 @@ class ProductUI extends Component {
             <DeleteModal
               openModal={openDeleteModal}
               closeModal={this.closeModal}
+              categoryList={categoryList}
               deleteProduct={deleteProduct}
-              selectedRowKeys={selectedRowKeys}
-              data={this.props.data}
+              record={
+                this.props.data.filter((item) => {
+                  return selectedRowKeys.includes(item.id);
+                })[0]
+              }
+              selectedRowKeys={selectedRowKeys[0]}
             />
             <EditModal
               openModal={openEditModal}

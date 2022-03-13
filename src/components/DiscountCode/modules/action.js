@@ -92,6 +92,50 @@ const updateDiscountCode = (record, id) => {
   };
 };
 
+const deleteDiscountCode = (id) => {
+  return async (dispatch) => {
+    dispatch(getRequest());
+    try {
+      const [deleteResponse, discountCodes, products] = await Promise.all([
+        Axios({
+          url: `/discountcode/${id}`,
+          method: "DELETE",
+          withCredentials: true,
+        }),
+        Axios({
+          url: `/discountcode/supplier`,
+          method: "GET",
+          withCredentials: true,
+        }),
+        Axios({
+          url: `/products/All`,
+          method: "GET",
+          withCredentials: true,
+        }),
+      ]);
+
+      return dispatch(
+        getSuccess({
+          discountCodes: discountCodes.data.data.map((item) => {
+            return {
+              key: item.id,
+              ...item,
+            };
+          }),
+          products: products.data.data.map((item) => {
+            return {
+              key: item.id,
+              ...item,
+            };
+          }),
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed(error));
+    }
+  };
+};
+
 // const createCampaign = record => {
 //   return async (dispatch) => {
 //     dispatch(getRequest());
@@ -139,7 +183,8 @@ const getFailed = (err) => {
 const action = {
   getDiscountCode,
   createDiscountCode,
-  updateDiscountCode
+  updateDiscountCode,
+  deleteDiscountCode,
 };
 
 export default action;

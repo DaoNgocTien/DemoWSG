@@ -23,6 +23,7 @@ class Campaign extends Component {
         productList={this.props.data.products}
         updateCampaign={this.props.updateCampaign}
         createCampaign={this.props.createCampaign}
+        deleteCampaign={this.props.deleteCampaign}
       />
     );
   }
@@ -60,6 +61,10 @@ const mapDispatchToProps = (dispatch) => {
     updateCampaign: async (record) => {
       await dispatch(action.updateCampaign(record));
       await dispatch(action.getCampaign());
+    },
+
+    deleteCampaign: async (id) => {
+      await dispatch(action.deleteCampaign(id));
     }
   };
 };

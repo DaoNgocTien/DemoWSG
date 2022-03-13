@@ -45,7 +45,7 @@ class DiscountCodeUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   showDrawer = () => {
     this.setState({
@@ -176,8 +176,8 @@ class DiscountCodeUI extends Component {
     this.setState({
       selectedRowKeys,
       record: record,
-      editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length >= 1,
+      editButton: selectedRowKeys.length === 1 && record.status !== "deactivated",
+      deleteButton: selectedRowKeys.length === 1 && record.status !== "deactivated",
       addNewButton: selectedRowKeys.length === 0,
     });
   };
@@ -208,12 +208,13 @@ class DiscountCodeUI extends Component {
     };
     // const hasSelected = selectedRowKeys.length > 0;
     const arrayLocation = window.location.pathname.split("/");
+    const pageTitle = arrayLocation[2].split("-");
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title={arrayLocation[2].toUpperCase()}
-        subTitle={`This is a ${arrayLocation[2]} page`}
+        title={pageTitle[0].toUpperCase() + " " + pageTitle[1].toUpperCase()}
+        subTitle={`This is a ${pageTitle[0] + " " + pageTitle[1]} page`}
         footer={
           <div>
             <CreateModal
@@ -223,11 +224,13 @@ class DiscountCodeUI extends Component {
               productList={productList}
             />
             <DeleteModal
+              loading={this.props.loading}
               openModal={openDeleteModal}
               closeModal={this.closeModal}
+              productList={productList}
               deleteDiscountCode={deleteDiscountCode}
-              selectedRowKeys={selectedRowKeys}
-              data={this.props.data}
+              record={this.state.record}
+              selectedRowKeys={selectedRowKeys[0]}
             />
             <EditModal
               loading={this.props.loading}

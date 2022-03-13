@@ -5,21 +5,40 @@ const getOrder = () => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      const [orders] = await Promise.all([
+      const [orders, campaigns] = await Promise.all([
         Axios({
           url: `/order/supplier`,
           method: "GET",
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
+        Axios({
+          url: `/campaigns/All`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
       ]);
+      // orders.data.data.map((order) => {
+      //   let campL = [(campaigns.data.data).filter(camp => {
+      //     return order.campaignid ?? camp.id == order.campaignid;
+      //   }
 
+
+
+      //   )](0);
+      //   console.log(campL);
+      // });
+      // console.log(campaigns.data.data);
       return dispatch(
         getSuccess({
-          orders: orders.data.data.map((orders) => {
+          orders: orders.data.data.map((order) => {
             return {
-              key: orders.id,
-              ...orders,
+              campaign: (campaigns.data.data).filter(camp => {
+                return camp.id == order.campaignid;
+              }),
+              key: order.id,
+              ...order,
             };
           }),
         })
@@ -70,6 +89,52 @@ const updateStatusOrder = (data) => {
     }
   };
 };
+
+const rejectOrder = (data) => {
+  return async (dispatch) => {
+    console.log("rejectOrder");
+    console.log(data);
+
+    //   dispatch(getRequest());
+    //   try {
+    //     const [rejectResponse, orders, campaigns] = await Promise.all([
+    //       Axios({
+    //         url: `/order/supplier/cancel`,
+    //         method: "PUT",
+    //         data: { orderCode: data.ordercode },
+    //         withCredentials: true,
+    //       }),
+    //       Axios({
+    //         url: `/order/supplier`,
+    //         method: "GET",
+    //         withCredentials: true,
+    //         exposedHeaders: ["set-cookie"],
+    //       }),
+    //       Axios({
+    //         url: `/campaigns/All`,
+    //         method: "GET",
+    //         withCredentials: true,
+    //         exposedHeaders: ["set-cookie"],
+    //       }),
+    //     ]);
+    //     return dispatch(
+    //       getSuccess({
+    //         orders: orders.data.data.map((order) => {
+    //           return {
+    //             campaign: (campaigns.data.data).filter(camp => {
+    //               return camp.id == order.campaignid;
+    //             }),
+    //             key: order.id,
+    //             ...order,
+    //           };
+    //         }),
+    //       }))
+    //   } catch (error) {
+    //     return dispatch(getFailed());
+    //   }
+  }
+};
+
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -93,6 +158,7 @@ const getFailed = (err) => {
 const action = {
   getOrder,
   updateStatusOrder,
+  rejectOrder,
 };
 
 export default action;

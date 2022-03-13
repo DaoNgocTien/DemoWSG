@@ -9,7 +9,7 @@ import Axios from "axios";
 //         products,
 //         order = {};
 //       if (!campaignId) {
-//         console.log("test");
+//         // console.log("test");
 //         [campaigns, products] = await Promise.all([
 //           Axios({
 //             url: `/campaigns/All`,

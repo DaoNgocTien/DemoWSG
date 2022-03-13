@@ -14,7 +14,7 @@ class LoyalCustomerCondition extends Component {
   }
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <LoyalCustomerUI
         data={this.props.data.LoyalCustomers}
@@ -24,11 +24,7 @@ class LoyalCustomerCondition extends Component {
         productList={this.props.data.products}
         createLoyalCustomerCondition={this.props.createLoyalCustomerCondition}
         updateLoyalCustomerCondition={this.props.updateLoyalCustomerCondition}
-        deleteLoyalCustomer={
-          this.props.deleteLoyalCustomer
-            ? this.props.deleteLoyalCustomer
-            : () => {}
-        }
+        deleteLoyalCustomerCondition={this.props.deleteLoyalCustomerCondition}
       />
     );
   }
@@ -51,15 +47,21 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     createLoyalCustomerCondition: async (record) => {
-      console.log(record);
+      // console.log(record);
       await dispatch(action.createLoyalCustomerCondition(record));
-      await dispatch(action.getLoyalCustomerCondition());
+      // await dispatch(action.getLoyalCustomerCondition());
     },
 
     updateLoyalCustomerCondition: async (record, id) => {
-      console.log(record);
+      // console.log(record);
       await dispatch(action.updateLoyalCustomerCondition(record, id));
-      await dispatch(action.getLoyalCustomerCondition());
+      // await dispatch(action.getLoyalCustomerCondition());
+    },
+
+    deleteLoyalCustomerCondition: async (id) => {
+      alert(id);
+      await dispatch(action.deleteLoyalCustomerCondition(id));
+      // await dispatch(action.getLoyalCustomerCondition());
     },
   };
 };

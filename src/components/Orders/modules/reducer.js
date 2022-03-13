@@ -6,9 +6,10 @@ let initialState = {
   err: null,
 };
 
-const categoryReducer = (state = initialState, action) => {
+const campaignReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
+      
       state.loading = true;
       state.data = [];
       state.err = null;
@@ -30,4 +31,4 @@ const categoryReducer = (state = initialState, action) => {
   }
 };
 
-export default categoryReducer;
+export default campaignReducer;

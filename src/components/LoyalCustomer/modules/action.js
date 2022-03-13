@@ -32,52 +32,105 @@ const getLoyalCustomer = () => {
 const createLoyalCustomer = (record) => {
   return async (dispatch) => {
     dispatch(getRequest());
-    Axios({
-      url: `/loyalCustomer/`,
-      method: "POST",
-      data: record,
-      withCredentials: true,
-    })
-      .then((result) => {
-        if (result.status === 200) {
-          const data = result.data.data.map((category) => {
+
+    try {
+      const [createResponse, LoyalCustomers] = await Promise.all([
+        Axios({
+          url: `/loyalCustomer/`,
+          method: "POST",
+          data: record,
+          withCredentials: true,
+        }),
+        Axios({
+          url: `/loyalCustomer/customer`,
+          method: "GET",
+          withCredentials: true,
+        }),
+      ]);
+
+      return dispatch(
+        getSuccess({
+          LoyalCustomers: LoyalCustomers.data.data.map((item) => {
             return {
-              key: category.id,
-              ...category,
+              key: item.id,
+              ...item,
             };
-          });
-          return dispatch(getSuccess(data));
-        }
-      })
-      .catch((err) => {
-        return dispatch(getFailed(err));
-      });
+          }),
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed(error));
+    }
   };
 };
+
+
 
 const updateLoyalCustomer = (record, id) => {
   return async (dispatch) => {
     dispatch(getRequest());
-    Axios({
-      url: `/loyalCustomer/${id}`,
-      method: "PUT",
-      data: record,
-      withCredentials: true,
-    })
-      .then((result) => {
-        if (result.status === 200) {
-          const data = result.data.data.map((category) => {
+    try {
+      const [updateResponse, LoyalCustomers] = await Promise.all([
+        Axios({
+          url: `/loyalCustomer/${id}`,
+          method: "PUT",
+          data: record,
+          withCredentials: true,
+        }),
+        Axios({
+          url: `/loyalCustomer/customer`,
+          method: "GET",
+          withCredentials: true,
+        }),
+      ]);
+
+      return dispatch(
+        getSuccess({
+          LoyalCustomers: LoyalCustomers.data.data.map((item) => {
             return {
-              key: category.id,
-              ...category,
+              key: item.id,
+              ...item,
             };
-          });
-          return dispatch(getSuccess(data));
-        }
-      })
-      .catch((err) => {
-        return dispatch(getFailed(err));
-      });
+          }),
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed(error));
+    }
+  };
+};
+
+const disableLoyalCustomer = (id) => {
+  return async (dispatch) => {
+    dispatch(getRequest());
+
+    try {
+      const [deleteResponse, LoyalCustomers] = await Promise.all([
+        Axios({
+          url: `/loyalCustomer/${id}`,
+          method: "DELETE",
+          withCredentials: true,
+        }),
+        Axios({
+          url: `/loyalCustomer/customer`,
+          method: "GET",
+          withCredentials: true,
+        }),
+      ]);
+
+      return dispatch(
+        getSuccess({
+          LoyalCustomers: LoyalCustomers.data.data.map((item) => {
+            return {
+              key: item.id,
+              ...item,
+            };
+          }),
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed(error));
+    }
   };
 };
 
@@ -106,6 +159,7 @@ const action = {
   getLoyalCustomer,
   createLoyalCustomer,
   updateLoyalCustomer,
+  disableLoyalCustomer,
 };
 
 export default action;
