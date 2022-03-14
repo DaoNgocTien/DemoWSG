@@ -1,17 +1,17 @@
 import React, { Component, memo } from "react";
-import { Table, Button, Input, Row, Col } from "antd";
+import { Table, Button, Input, Row, Col, PageHeader, Radio } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
 import EditModal from "./edit-view";
+import RejectModal from "./reject-view";
 
 //  prototype
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
   defaultCampaign: PropTypes.object,
-  createCampaign: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  deleteCampaign: PropTypes.func,
+  rejectOrder: PropTypes.func,
+  updateStatusOrder: PropTypes.func,
 };
 
 //  default props
@@ -20,6 +20,8 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
+  rejectOrder: () => { },
+  updateStatusOrder: () => { },
 };
 
 class OrderUI extends Component {
@@ -28,20 +30,21 @@ class OrderUI extends Component {
   state = {
     selectedRowKeys: [], // Check here to configure the default column
     loading: false,
-    openCreateModal: false,
     addNewButton: true,
     displayData: [],
     searchKey: "",
     openEditModal: false,
+    openRejectModal: false,
     editButton: true,
+    rejectButton: true,
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     switch (openModal) {
-      case "openCreateModal":
-        this.setState({ openCreateModal: true });
+      case "openRejectModal":
+        this.setState({ openRejectModal: true });
         break;
 
       case "openEditModal":
@@ -52,29 +55,40 @@ class OrderUI extends Component {
         break;
     }
   };
+
   changeStatus = (data) => {
-    this.props.updateStatusOrder(data)
+    this.props.updateStatusOrder(data);
   };
+
   closeModal = () => {
     this.setState({
       selectedRowKeys: [],
       editButton: false,
-      deleteButton: false,
-      addNewButton: true,
+      rejectButton: false,
     });
     this.setState({
-      openCreateModal: false,
-      openDeleteModal: false,
+      openRejectModal: false,
       openEditModal: false,
     });
   };
 
   onSelectChange = (selectedRowKeys) => {
-    // console.log("selectedRowKeys changed: ", selectedRowKeys);
+    let record =
+      this.props.data.filter((item) => {
+        return selectedRowKeys.includes(item.id);
+      })[0];
+
     this.setState({
       selectedRowKeys,
       editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length >= 1,
+      rejectButton:
+        selectedRowKeys.length === 1 &&
+        record.status != "delivering" &&
+        record.status != "delivered" &&
+        record.status != "completed" &&
+        record.status != "returned" &&
+        record.status != "cancelled"
+      ,
       addNewButton: selectedRowKeys.length === 0,
     });
   };
@@ -87,7 +101,6 @@ class OrderUI extends Component {
       render: (text, object, index) => {
         return index + 1;
       },
-      width: 100,
       fixed: "left",
     },
     {
@@ -103,6 +116,25 @@ class OrderUI extends Component {
       key: "customerlastname",
       sorter: (a, b) => a.customerlastname.length - b.customerlastname.length,
       fix: "left",
+    },
+    {
+      title: "Product",
+      dataIndex: "details",
+      key: "details",
+      render: (text, object) => {
+        return object.details[0].productname;
+      },
+      fixed: "left",
+    },
+    {
+      title: "In Campaign",
+      dataIndex: "campaign",
+      key: "campaign",
+      render: (text, object) => {
+        let campaign = object.campaign;
+        return campaign.length > 0 ? moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY") : "";
+        // return moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY");
+      },
     },
     {
       title: "Total Price",
@@ -142,12 +174,14 @@ class OrderUI extends Component {
           <Button
             onClick={() => this.changeStatus(object)}
             type="primary"
+            disable={object.status === "created" || object.status === "processing" ? false : true}
           >
             Change Status
           </Button>
         );
       },
-      fixed: "right",
+      fixed: 'right',
+      width: 130,
     },
   ];
 
@@ -171,13 +205,49 @@ class OrderUI extends Component {
     });
   };
 
+  onRadioChange = e => {
+    let { data } = this.props;
+    let searchValue = e.target.value;
+    let searchData = [];
+    switch (searchValue) {
+      case "retail":
+        searchData = data.filter((item) => {
+          return item.campaign.length === 0;
+        });
+        break;
+
+      case "wholesale":
+        searchData = data.filter((item) => {
+          return item.campaign.length > 0;
+        });
+        break;
+
+      default:
+        searchValue = "";
+        break;
+    }
+
+    this.setState({
+      displayData: searchData,
+      searchKey: searchValue,
+    });
+  };
+
   render() {
+
+    const {
+      rejectOrder,
+      updateStatusOrder,
+    } = this.props;
+
     const {
       selectedRowKeys,
       displayData,
       searchKey,
       openEditModal,
       editButton,
+      openRejectModal,
+      rejectButton,
     } = this.state;
 
     const rowSelection = {
@@ -186,63 +256,126 @@ class OrderUI extends Component {
     };
     // const hasSelected = selectedRowKeys.length > 0;
 
+    const arrayLocation = window.location.pathname.split("/");
     return (
-      <div>
-        <EditModal
-          openModal={openEditModal}
-          closeModal={this.closeModal}
-          updateStatusOrder={this.props.updateStatusOrder}
-          record={
-            this.props.data.filter((item) => {
-              return selectedRowKeys.includes(item.id);
-            })[0]
-          }
-          selectedRowKeys={selectedRowKeys[0]}
-        />
+      <PageHeader
+        className="site-page-header-responsive"
+        onBack={() => window.history.back()}
+        title={arrayLocation[1].toUpperCase()}
+        subTitle={`This is a ${arrayLocation[1]} page`}
+        footer={
+          <div>
+            <EditModal
+              openModal={openEditModal}
+              closeModal={this.closeModal}
+              updateStatusOrder={updateStatusOrder}
+              record={
+                this.props.data.filter((item) => {
+                  return selectedRowKeys.includes(item.id);
+                })[0]
+              }
+              selectedRowKeys={selectedRowKeys[0]}
+            />
 
-        <div style={{ marginBottom: 16 }}>
-          <Row>
-            <Col flex={3}>
-              <Button
-                type="primary"
-                onClick={() => this.start("openEditModal")}
-                disabled={
-                  !editButton || this.state.selectedRowKeys.length === 0
-                    ? true
-                    : false
-                }
-                style={{ marginLeft: 3 }}
-              >
-                View Details
-              </Button>
-            </Col>
-            <Col flex={3}>
-              <span style={{ marginLeft: 8 }}>
-                {selectedRowKeys.length > 0
-                  ? `Selected ${selectedRowKeys.length} items`
-                  : ""}
-              </span>
-            </Col>
-            <Col flex={4}>
-              <Input
-                onChange={(e) => this.onChangeHandler(e)}
-                placeholder="Search data"
-              />
-            </Col>
-          </Row>
-        </div>
-        <Table
-          loading={this.props.loading}
-          rowSelection={rowSelection}
-          columns={this.columns}
-          dataSource={
-            displayData.length === 0 && searchKey === ""
-              ? this.props.data
-              : displayData
-          }
-          scroll={{ y: 350 }}
-        />
-      </div>
+            <RejectModal
+              openModal={openRejectModal}
+              closeModal={this.closeModal}
+              rejectOrder={rejectOrder}
+              record={
+                this.props.data.filter((item) => {
+                  return selectedRowKeys.includes(item.id);
+                })[0]
+              }
+              selectedRowKeys={selectedRowKeys[0]}
+            />
+
+            <div style={{ marginBottom: 16 }}>
+              <Row>
+                <Col flex={3}>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openEditModal")}
+                    disabled={
+                      !editButton || this.state.selectedRowKeys.length === 0
+                        ? true
+                        : false
+                    }
+                    hidden={
+                      !editButton || this.state.selectedRowKeys.length === 0
+                        ? true
+                        : false
+                    }
+
+                    style={{ marginLeft: 3 }}
+                  >
+                    View Details
+                  </Button>
+
+                  <Button
+                    type="danger"
+                    onClick={() => this.start("openRejectModal")}
+                    disabled={
+                      !rejectButton || this.state.selectedRowKeys.length === 0
+                        ? true
+                        : false
+                    }
+                    hidden={
+                      !rejectButton || this.state.selectedRowKeys.length === 0
+                        ? true
+                        : false
+                    }
+
+                    style={{ marginLeft: 3 }}
+                  >
+                    Reject Order
+                  </Button>
+
+                </Col>
+                <Col flex={3}>
+                  <span style={{ marginLeft: 8 }}>
+                    {selectedRowKeys.length > 0
+                      ? `Selected ${selectedRowKeys.length} items`
+                      : ""}
+                  </span>
+                </Col>
+
+                <Col flex={4}>
+                  <Input
+                    onChange={(e) => this.onChangeHandler(e)}
+                    placeholder="Search data"
+                  />
+                </Col>
+              </Row>
+              <Row style={{ marginTop: "10px" }}>
+                <Col flex={6}>
+                  <Radio.Group onChange={(e) => this.onRadioChange(e)} defaultValue="all">
+                    <Radio value="all">All Orders</Radio>
+                    <Radio value="retail">Retail Orders</Radio>
+                    <Radio value="wholesale">Wholesale Orders</Radio>
+                  </Radio.Group>
+                </Col>
+                <Col flex={4}>
+                  {/* <Input
+                    onChange={(e) => this.onChangeHandler(e)}
+                    placeholder="Search data"
+                  /> */}
+                </Col>
+              </Row>
+            </div>
+            <Table
+              loading={this.props.loading}
+              rowSelection={rowSelection}
+              columns={this.columns}
+              dataSource={
+                displayData.length === 0 && searchKey === ""
+                  ? this.props.data
+                  : displayData
+              }
+              scroll={{ y: 350 }}
+            />
+          </div>
+        }
+      ></PageHeader>
     );
   }
 }

@@ -8,7 +8,7 @@ import {
   DatePicker,
   InputNumber,
   Descriptions,
-  Upload,
+
 } from "antd";
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -17,36 +17,20 @@ import Axios from "axios";
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
-  updateLoyalCustomerCondition: PropTypes.func,
+  updateLoyalCustomer: PropTypes.func,
   record: PropTypes.object,
   openModal: PropTypes.bool,
 };
 
 //  default props
 const propsDefault = {
-  closeModal: () => {},
-  updateLoyalCustomerCondition: () => {},
-  defaultProduct: {
-    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    name: "test222 again Product",
-    supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    retailprice: "5.00",
-    quantity: 11,
-    description: "testttttt",
-    image: "",
-    categoryid: null,
-    status: "active",
-    typeofproduct: "",
-    createdat: "2022-01-07T14:08:02.994Z",
-    updatedat: "2022-01-13T16:34:09.908Z",
-    categoryname: null,
-  },
+  closeModal: () => { },
+  updateLoyalCustomer: () => { },
   openModal: false,
   categoryList: [],
 };
 
-class UpdateModal extends Component {
+class EditModal extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
@@ -59,18 +43,18 @@ class UpdateModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   handleUpdateAndClose = (data) => {
-    console.log(data);
-    let newLoyalCustomerCondition = {
+    // console.log(data);
+    let newLoyalCustomer = {
       minOrder: data.minOrder,
       minProduct: data.minProduct,
       discountPercent: data.discountPercent,
     };
 
-    this.props.updateLoyalCustomerCondition(
-      newLoyalCustomerCondition,
+    this.props.updateLoyalCustomer(
+      newLoyalCustomer,
       this.props.record?.id
     );
     this.props.closeModal();
@@ -87,17 +71,18 @@ class UpdateModal extends Component {
   };
 
   render() {
+    const { RangePicker } = DatePicker;
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    console.log(record);
-    if (this.props.loading || !this.props.record || !productList) {
+    console.log(this.props);
+    if (this.props.loading || !this.props.record) {
       return <></>;
     }
     return (
       <>
         <Form
-          id="updateLoyalCustomerConditionForm"
+          id="updateLoyalCustomerForm"
           ref={this.formRef}
           onFinish={this.handleUpdateAndClose}
         >
@@ -114,7 +99,7 @@ class UpdateModal extends Component {
               <Button onClick={this.handleCancel}>Cancel</Button>,
               <Button
                 type="primary"
-                form="updateLoyalCustomerConditionForm"
+                form="updateLoyalCustomerForm"
                 key="submit"
                 htmlType="submit"
               >
@@ -122,47 +107,94 @@ class UpdateModal extends Component {
               </Button>,
             ]}
           >
-            <Descriptions bordered column={2}>
-              <Descriptions.Item label="Min Order">
+            {/* <Descriptions bordered column={2}>
+              <Descriptions.Item label="Discount Code duration">
                 <Form.Item
-                  name="minOrder"
-                  initialValue={this.props.record?.minorder}
+                  name="date"
+                  initialValue={[
+                    moment(this.props.record?.startdate),
+                    moment(this.props.record?.enddate),
+                  ]}
+                >
+                  <RangePicker
+                    style={{ width: "60vh" }}
+                    ranges={{
+                      Today: [moment(), moment()],
+                      "This Week": [
+                        moment().startOf("week"),
+                        moment().endOf("week"),
+                      ],
+                      "This Month": [
+                        moment().startOf("month"),
+                        moment().endOf("month"),
+                      ],
+                    }}
+                    defaultValue={[
+                      moment(this.props.record?.startdate),
+                      moment(this.props.record?.enddate),
+                    ]}
+                    format="MM/DD/YYYY"
+                    onChange={this.onChange}
+                  />
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Code">
+                <Form.Item name="code" initialValue={this.props.record?.code}>
+                  <Input defaultValue={this.props.record?.code} style={{ width: "60vh" }} />
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Discount price">
+                <Form.Item
+                  name="discountPrice"
+                  initialValue={this.props.record?.discountprice}
                 >
                   <InputNumber
-                    defaultValue={this.props.record?.minorder}
+                    defaultValue={this.props.record?.discountprice}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
 
-              <Descriptions.Item label="Min Product">
+              <Descriptions.Item label="Minimun price">
                 <Form.Item
-                  name="minProduct"
-                  initialValue={this.props.record?.minproduct}
+                  name="minimunPrice"
+                  initialValue={this.props.record?.minimunpricecondition}
                 >
                   <InputNumber
-                    defaultValue={this.props.record?.minproduct}
+                    defaultValue={this.props.record?.minimunpricecondition}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
 
-              <Descriptions.Item label="Discount Percent">
+              <Descriptions.Item label="Product">
                 <Form.Item
-                  name="discountPercent"
-                  initialValue={this.props.record?.discountpercent}
+                  name="productId"
+                  initialValue={this.props.record?.productid}
                 >
-                  <InputNumber
-                    defaultValue={this.props.record?.discountpercent}
-                    min="0"
-                    max="100"
-                    addonAfter="%"
-                    style={{ width: "60vh" }}
-                  />
+                  <Select onChange={this.onSelectProduct} style={{ width: "60vh" }}>
+                    {productList.map((item) => {
+                      return (
+                        <Select.Option key={item.key} value={item.id}>
+                          {item.name}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
                 </Form.Item>
               </Descriptions.Item>
-              <Descriptions.Item label=""></Descriptions.Item>
-            </Descriptions>
+
+              <Descriptions.Item label="Quantity">
+                <Form.Item
+                  name="quantity"
+                  initialValue={this.props.record?.quantity}
+                >
+                  <InputNumber defaultValue={this.props.record?.quantity} style={{ width: "60vh" }} />
+                </Form.Item>
+              </Descriptions.Item>
+            </Descriptions> */}
           </Modal>
         </Form>
       </>
@@ -175,4 +207,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(UpdateModal, arePropsEqual);
+export default memo(EditModal, arePropsEqual);

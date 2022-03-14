@@ -9,7 +9,7 @@ const getCampaign = (campaignId) => {
         products,
         order = {};
       if (!campaignId) {
-        console.log("test");
+        // console.log("test");
         [campaigns, products] = await Promise.all([
           Axios({
             url: `/campaigns/All`,
@@ -59,11 +59,11 @@ const getCampaign = (campaignId) => {
           order:
             order !== {}
               ? order.data?.data.map((item) => {
-                  return {
-                    key: item.id,
-                    ...item,
-                  };
-                })
+                return {
+                  key: item.id,
+                  ...item,
+                };
+              })
               : {},
         })
       );
@@ -77,27 +77,60 @@ const getCampaign = (campaignId) => {
 const createCampaign = (record) => {
   return async (dispatch) => {
     dispatch(getRequest());
-    Axios({
-      url: `/campaigns/`,
-      method: "POST",
-      data: record,
-      withCredentials: true,
-    })
-      .then((result) => {
-        if (result.status === 200) {
-          const data = result.data.data.map((category) => {
-            return {
-              key: category.id,
-              ...category,
-            };
-          });
-          return dispatch(getSuccess(data));
-        }
+    try {
+      const [createResponse, campaigns, products, order] = await Promise.all([
+        Axios({
+          url: `/campaigns/`,
+          method: "POST",
+          data: record,
+          withCredentials: true,
+        }),
+        Axios({
+          url: `/campaigns/All`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+        Axios({
+          url: `/products/All`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+        Axios({
+          url: `/order/supplier/campaign/${record.id}`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+      ]);
+    
+      // console.log(order);
+      return dispatch(
+      getSuccess({
+        campaigns: campaigns.data.data.map((campaign) => {
+          return {
+            key: campaign.id,
+            ...campaign,
+          };
+        }),
+        products: products.data.data,
+        order:
+          order !== {}
+            ? order.data?.data.map((item) => {
+              return {
+                key: item.id,
+                ...item,
+              };
+            })
+            : {},
       })
-      .catch((err) => {
-        return dispatch(getFailed(err));
-      });
-  };
+    );
+  } catch (error) {
+    // console.log(error);
+    return dispatch(getFailed());
+  }
+};
 };
 
 const updateCampaign = (record) => {
@@ -135,6 +168,76 @@ const updateCampaign = (record) => {
   };
 };
 
+const deleteCampaign = id => {
+  return async (dispatch) => {
+    let deleteResponse,
+      campaigns,
+      products,
+      order = {};
+    dispatch(getRequest());
+    [deleteResponse, campaigns, products, order] = await Promise.all([
+      Axios({
+        url: `/campaigns/${id}`,
+        method: "DELETE",
+        withCredentials: true,
+      }),
+      Axios({
+        url: `/campaigns/All`,
+        method: "GET",
+        withCredentials: true,
+        exposedHeaders: ["set-cookie"],
+      }),
+      Axios({
+        url: `/products/All`,
+        method: "GET",
+        withCredentials: true,
+        exposedHeaders: ["set-cookie"],
+      }),
+      Axios({
+        url: `/order/supplier/campaign/${id}`,
+        method: "GET",
+        withCredentials: true,
+        exposedHeaders: ["set-cookie"],
+      }),
+    ]);
+
+    return dispatch(
+      getSuccess({
+        campaigns: campaigns.data.data.map((campaign) => {
+          return {
+            key: campaign.id,
+            ...campaign,
+          };
+        }),
+        products: products.data.data,
+        order:
+          order !== {}
+            ? order.data?.data.map((item) => {
+              return {
+                key: item.id,
+                ...item,
+              };
+            })
+            : {},
+      })
+    );
+    //     Axios({
+    //       url: `/campaigns/${id}`,
+    //       method: "DELETE",
+    //       withCredentials: true,
+    //     }).then((response) => {
+    //       // console.log(response);
+    //       if (response.status === 200) {
+    //         // console.log(response);
+    //         // return window.location.reload();
+    //       }
+    //     }).catch((err) => {
+    //       // console.log(err);
+    //       return dispatch(getFailed());
+    //     });
+  };
+}
+
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -160,6 +263,7 @@ const action = {
   getCampaign,
   createCampaign,
   updateCampaign,
+  deleteCampaign,
 };
 
 export default action;

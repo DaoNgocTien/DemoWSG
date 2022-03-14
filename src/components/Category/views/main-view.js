@@ -93,7 +93,7 @@ class CategoryUI extends Component {
       selectedRowKeys,
       record: record,
       editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length >= 1,
+      deleteButton: selectedRowKeys.length === 1,
       addNewButton: selectedRowKeys.length === 0,
     });
   };
@@ -207,6 +207,7 @@ class CategoryUI extends Component {
               deleteCategory={deleteCategory}
               selectedRowKeys={selectedRowKeys}
               data={this.props.data}
+              record={record}
             />
             <EditModal
               openModal={openEditModal}

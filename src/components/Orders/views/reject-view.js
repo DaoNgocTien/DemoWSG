@@ -18,7 +18,7 @@ const propsDefault = {
   openModal: false,
 };
 
-class EditModal extends Component {
+class RejectModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,14 +33,8 @@ class EditModal extends Component {
     // console.log(this.props);
   }
 
-  handleEditAndClose = (data) => {
-    if (data.status === "created" || data.status === "advanced") {
-      this.formRef.current.resetFields();
-      return this.props.closeModal();
-    }
-    data.orderCode = this.state.record?.orderCode;
-    delete data.status;
-    this.props.updateStatusOrder(data);
+  handleRejectAndClose = (data) => {
+    this.props.rejectOrder(this.props.record);
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
@@ -117,10 +111,10 @@ class EditModal extends Component {
     return (
       <>
         <Form
-          id="editForm"
+          id="rejectOrderForm"
           key={this.state.record?.key}
           ref={this.formRef}
-          onFinish={this.handleEditAndClose}
+          onFinish={this.handleRejectAndClose}
         >
           <Modal
             width={window.innerWidth * 0.7}
@@ -134,12 +128,12 @@ class EditModal extends Component {
             footer={[
               <Button onClick={this.handleCancel}>Cancel</Button>,
               <Button
-                type="primary"
-                form="editForm"
+                type="danger"
+                form="rejectOrderForm"
                 key="submit"
                 htmlType="submit"
               >
-                Submit
+                Reject
               </Button>,
             ]}
           >
@@ -184,4 +178,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(EditModal, arePropsEqual);
+export default memo(RejectModal, arePropsEqual);

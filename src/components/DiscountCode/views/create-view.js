@@ -45,8 +45,8 @@ class CreatModal extends Component {
   componentDidMount() {}
 
   handleCreateAndClose = (data) => {
-    console.log("DiscountCode create");
-    console.log(data);
+    // console.log("DiscountCode create");
+    // console.log(data);
     let newDiscountCode = {
       productId: data.productId,
       startDate: data.date[0],
@@ -58,7 +58,7 @@ class CreatModal extends Component {
       code: data.code
     };
 
-    console.log(newDiscountCode);
+    // console.log(newDiscountCode);
     this.props.createDiscountCode(newDiscountCode);
     // data.image = this.state.fileList;
     // this.props.createProduct(data);

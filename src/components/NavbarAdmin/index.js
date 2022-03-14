@@ -29,7 +29,7 @@ class NavbarAdmin extends Component {
   };
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const { toggleCollapsed, collapsed, showChatDrawer, showNotificationDrawer } = this.props;
     return (
       <Row>
@@ -115,7 +115,7 @@ class NavbarAdmin extends Component {
 }
 
 const arePropsEqual = (prevProps, nextProps) => {
-  console.log(prevProps !== nextProps);
+  // console.log(prevProps !== nextProps);
   return prevProps !== nextProps;
 };
 

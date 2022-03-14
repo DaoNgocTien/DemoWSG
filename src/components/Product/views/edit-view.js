@@ -49,7 +49,7 @@ class UpdateModal extends Component {
   formRef = React.createRef();
 
   componentDidMount() {
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   handleUpdateAndClose = (data) => {
@@ -57,7 +57,7 @@ class UpdateModal extends Component {
       this.state.fileList.length === 0 && this.props.record
         ? JSON.parse(this.props.record?.image)
         : this.state.fileList;
-    console.log(data);
+    // console.log(data);
     this.props.updateProduct(data);
     this.formRef.current.resetFields();
     this.props.closeModal();
@@ -99,7 +99,7 @@ class UpdateModal extends Component {
 
   handleChange = ({ fileList, file, event }) => {
     // fileList = fileList.slice(-2);
-    console.log(fileList);
+    // console.log(fileList);
     // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {

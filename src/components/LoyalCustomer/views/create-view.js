@@ -45,8 +45,8 @@ class CreatModal extends Component {
   componentDidMount() {}
 
   handleCreateAndClose = (data) => {
-    console.log("DiscountCode create");
-    console.log(data);
+    // console.log("DiscountCode create");
+    // console.log(data);
     let newLoyalCustomerCondition = {
       minOrder: data.minOrder,
       minProduct: data.minProduct,

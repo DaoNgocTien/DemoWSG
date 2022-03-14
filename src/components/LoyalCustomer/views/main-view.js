@@ -14,7 +14,7 @@ const propsProTypes = {
   defaultDiscountCode: PropTypes.object,
   createLoyalCustomer: PropTypes.func,
   updateLoyalCustomer: PropTypes.func,
-  deleteDiscountCode: PropTypes.func,
+  disableLoyalCustomer: PropTypes.func,
 };
 
 //  default props
@@ -23,18 +23,19 @@ const propsDefault = {
   data: [],
   products: [],
   defaultDiscountCode: {},
+  updateLoyalCustomer: () => {},
 };
 
-class DiscountCodeUI extends Component {
+class LoyalCustomerUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
     loading: false,
     selectedRowKeys: [], // Check here to configure the default column
     loadingActionButton: false,
-    editButton: false,
-    deleteButton: false,
-    addNewButton: true,
+    activateButton: false,
+    deactivateButton: false,
+    // addNewButton: true,
     openCreateModal: false,
     openDeleteModal: false,
     openEditModal: false,
@@ -45,7 +46,7 @@ class DiscountCodeUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   showDrawer = () => {
     this.setState({
@@ -179,17 +180,26 @@ class DiscountCodeUI extends Component {
     this.setState({
       selectedRowKeys,
       record: record,
-      editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length >= 1,
-      addNewButton: selectedRowKeys.length === 0,
+      activateButton: selectedRowKeys.length === 1 && record.status === "deactive",
+      deactivateButton: selectedRowKeys.length === 1 && record.status === "active",
+      //addNewButton: selectedRowKeys.length === 0,
     });
+  };
+
+  manageLoyalCustomerPosition = (position) => {
+    let record = {
+      ...this.state.record ?? this.state.record,
+      status: position,
+    };
+    console.log(record);
+    this.props.updateLoyalCustomer(record, this.state.record.id);
   };
 
   render() {
     const {
       selectedRowKeys,
-      deleteButton,
-      editButton,
+      deactivateButton,
+      activateButton,
       addNewButton,
       openCreateModal,
       openDeleteModal,
@@ -202,7 +212,7 @@ class DiscountCodeUI extends Component {
       productList,
       createLoyalCustomer,
       updateLoyalCustomer,
-      deleteDiscountCode,
+      disableLoyalCustomer,
     } = this.props;
 
     const rowSelection = {
@@ -219,7 +229,7 @@ class DiscountCodeUI extends Component {
         subTitle={`This is a ${arrayLocation[2]} page`}
         footer={
           <div>
-            <CreateModal
+            {/* <CreateModal
               openModal={openCreateModal}
               closeModal={this.closeModal}
               createLoyalCustomer={createLoyalCustomer}
@@ -228,11 +238,12 @@ class DiscountCodeUI extends Component {
             <DeleteModal
               openModal={openDeleteModal}
               closeModal={this.closeModal}
-              deleteDiscountCode={deleteDiscountCode}
-              selectedRowKeys={selectedRowKeys}
-              data={this.props.data}
-            />
-            <EditModal
+              disableLoyalCustomer={disableLoyalCustomer}
+              record={this.state.record}
+              selectedRowKeys={selectedRowKeys[0]}
+              productList={productList}
+            /> */}
+            {/* <EditModal
               loading={this.props.loading}
               openModal={openEditModal}
               closeModal={this.closeModal}
@@ -240,7 +251,7 @@ class DiscountCodeUI extends Component {
               updateLoyalCustomer={updateLoyalCustomer}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
-            />
+            /> */}
             <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex="auto">
@@ -254,20 +265,20 @@ class DiscountCodeUI extends Component {
                     </Button> */}
                     <Button
                       type="primary"
-                      onClick={() => this.start("openEditModal")}
-                      hidden={!editButton}
+                      onClick={() => this.manageLoyalCustomerPosition("active")}
+                      hidden={!activateButton}
                       style={{ width: 90 }}
                     >
-                      Edit
+                      Activate
                     </Button>
-                    {/* <Button
+                    <Button
                       type="danger"
-                      onClick={() => this.start("openDeleteModal")}
-                      hidden={!deleteButton}
+                      onClick={() => this.manageLoyalCustomerPosition("deactive")}
+                      hidden={!deactivateButton}
                       style={{ width: 90 }}
                     >
-                      Delete
-                    </Button> */}
+                      Deactivate
+                    </Button>
                     <span style={{ marginLeft: 8 }}>
                       {selectedRowKeys.length > 0
                         ? `Selected ${selectedRowKeys.length} items`
@@ -306,4 +317,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(DiscountCodeUI, arePropsEqual);
+export default memo(LoyalCustomerUI, arePropsEqual);

@@ -62,7 +62,7 @@ class UpdateModal extends Component {
   componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
-    console.log(data);
+    // console.log(data);
     let newDiscountCode = {
       productId: data.productId,
       startDate: data.date[0],
@@ -74,7 +74,7 @@ class UpdateModal extends Component {
       code: data.code,
     };
 
-    console.log(newDiscountCode);
+    // console.log(newDiscountCode);
     this.props.updateDiscountCode(newDiscountCode, this.props.record?.id);
     // data.image = this.state.fileList;
     // this.props.updateProduct(data);
@@ -282,22 +282,6 @@ class UpdateModal extends Component {
                   </Select>
                 </Form.Item>
               </Descriptions.Item>
-{/* 
-              <Descriptions.Item label="Status">
-                <Form.Item
-                  name="status"
-                  initialValue={this.props.record?.status}
-                >
-                  <Select>
-                    <Select.Option key="public" value="public">
-                      Public
-                    </Select.Option>
-                    <Select.Option key="private" value="private">
-                      Private
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
-              </Descriptions.Item> */}
 
               <Descriptions.Item label="Quantity">
                 <Form.Item

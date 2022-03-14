@@ -14,7 +14,7 @@ class DiscountCode extends Component {
   }
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <DiscountCodeUI
         data={this.props.data.discountCodes}
@@ -24,11 +24,7 @@ class DiscountCode extends Component {
         productList={this.props.data.products}
         createDiscountCode={this.props.createDiscountCode}
         updateDiscountCode={this.props.updateDiscountCode}
-        deleteDiscountCode={
-          this.props.deleteDiscountCode
-            ? this.props.deleteDiscountCode
-            : () => {}
-        }
+        deleteDiscountCode={this.props.deleteDiscountCode}
       />
     );
   }
@@ -51,15 +47,19 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     createDiscountCode: async (record) => {
-      console.log(record);
+      // console.log(record);
       await dispatch(action.createDiscountCode(record));
       await dispatch(action.getDiscountCode());
     },
 
     updateDiscountCode: async (record, id) => {
-      console.log(record);
+      // console.log(record);
       await dispatch(action.updateDiscountCode(record, id));
       await dispatch(action.getDiscountCode());
+    },
+
+    deleteDiscountCode: async (id) => {
+      await dispatch(action.deleteDiscountCode(id));
     },
   };
 };

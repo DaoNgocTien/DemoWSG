@@ -38,16 +38,16 @@ class AdminRender extends Component {
   };
 
   getNotif = async () => {
-    console.log(get(ref(realtime, "notif")));
+    // console.log(get(ref(realtime, "notif")));
     set(ref(realtime, "hello"), { gg: "f" });
     onValue(ref(realtime, "hello"), (snapshot) => {
-      console.log("hello");
-      console.log(snapshot.val());
+      // console.log("hello");
+      // console.log(snapshot.val());
     });
   };
 
   showChatDrawer = () => {
-    console.log("showChatDrawer");
+    // console.log("showChatDrawer");
     this.setState({
       visible: true,
       drawerLength: 0.45,
@@ -55,7 +55,7 @@ class AdminRender extends Component {
   };
 
   showNotificationDrawer = () => {
-    console.log("showNotificationDrawer");
+    // console.log("showNotificationDrawer");
     this.setState({
       visible: true,
       drawerLength: 0.3,

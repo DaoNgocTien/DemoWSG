@@ -62,7 +62,7 @@ class UpdateModal extends Component {
   componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
-    console.log(data);
+    // console.log(data);
     let newLoyalCustomerCondition = {
       minOrder: data.minOrder,
       minProduct: data.minProduct,
@@ -90,7 +90,7 @@ class UpdateModal extends Component {
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    console.log(record);
+    // console.log(record);
     if (this.props.loading || !this.props.record || !productList) {
       return <></>;
     }

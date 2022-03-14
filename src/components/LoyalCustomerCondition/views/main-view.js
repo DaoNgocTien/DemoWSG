@@ -45,7 +45,7 @@ class DiscountCodeUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   showDrawer = () => {
     this.setState({
@@ -160,7 +160,7 @@ class DiscountCodeUI extends Component {
       selectedRowKeys,
       record: record,
       editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length >= 1,
+      deleteButton: selectedRowKeys.length === 1,
       addNewButton: selectedRowKeys.length === 0,
     });
   };
@@ -182,7 +182,7 @@ class DiscountCodeUI extends Component {
       productList,
       createLoyalCustomerCondition,
       updateLoyalCustomerCondition,
-      deleteDiscountCode,
+      deleteLoyalCustomerCondition,
     } = this.props;
 
     const rowSelection = {
@@ -208,9 +208,10 @@ class DiscountCodeUI extends Component {
             <DeleteModal
               openModal={openDeleteModal}
               closeModal={this.closeModal}
-              deleteDiscountCode={deleteDiscountCode}
-              selectedRowKeys={selectedRowKeys}
-              data={this.props.data}
+              productList={productList}
+              deleteLoyalCustomerCondition={deleteLoyalCustomerCondition}
+              record={this.state.record}
+              selectedRowKeys={selectedRowKeys[0]}
             />
             <EditModal
               loading={this.props.loading}
