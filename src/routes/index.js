@@ -8,6 +8,8 @@ import Campaign from "../components/Campaign";
 import Order from "../components/Orders";
 import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
 import LoyalCustomer from "../components/LoyalCustomer";
+import Profile from "../components/Profile";
+
 const routesAdmin = [
   {
     exact: true,
@@ -51,6 +53,11 @@ const routesAdmin = [
     path: "/loyal-customer/customer",
     component: LoyalCustomer,
   }, 
+  {
+    exact: true,
+    path: "/profile",
+    component: Profile,
+  },
 ];
 
 const routesAuth = [
