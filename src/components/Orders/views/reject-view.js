@@ -1,7 +1,8 @@
 import React, { Component, memo } from "react";
-import { Modal, Button, Form, Table, Select, Descriptions } from "antd";
+import { Modal, Button, Form, Table, Input, Descriptions, Upload } from "antd";
 import PropTypes from "prop-types";
 
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -12,8 +13,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
+  closeModal: () => { },
+  updateCampaign: () => { },
   record: {},
   openModal: false,
 };
@@ -23,6 +24,11 @@ class RejectModal extends Component {
     super(props);
     this.state = {
       record: {},
+      isReasonable: true,
+      previewVisible: false,
+      previewImage: "",
+      previewTitle: "",
+      fileList: [],
     };
   }
   static propTypes = propsProTypes;
@@ -43,6 +49,57 @@ class RejectModal extends Component {
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
+
+  recordReasonToReject = e => {
+    let reason = e.target.value;
+    this.setState({
+      isReasonable: reason === "" ? true : false,
+    })
+  }
+
+
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  handleCancelUploadImage = () => this.setState({ previewVisible: false });
+
+  handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await this.getBase64(file.originFileObj);
+    }
+
+    this.setState({
+      previewImage: file.url,
+      previewVisible: true,
+      previewTitle:
+        file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
+    });
+  };
+
+  handleChange = ({ fileList, file, event }) => {
+    fileList = fileList.slice(-2);
+
+    // 2. Read from response and show file link
+    fileList = fileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response[0].url;
+        file.name = file.response[0].name;
+        file.thumbUrl = null;
+      }
+      return file;
+    });
+
+    this.setState({ fileList });
+    // console.log(this.state.fileList);
+  };
+
 
   columns = [
     {
@@ -107,7 +164,13 @@ class RejectModal extends Component {
   render() {
     this.state.record = this.props.record;
     const { openModal } = this.props;
-
+    const { isReasonable, load, imageUrl } = this.state;
+    const uploadButton = (
+      <div>
+        {load ? <LoadingOutlined /> : <PlusOutlined />}
+        <div style={{ marginTop: 8 }}>Upload</div>
+      </div>
+    );
     return (
       <>
         <Form
@@ -118,11 +181,10 @@ class RejectModal extends Component {
         >
           <Modal
             width={window.innerWidth * 0.7}
-            title={`Order of ${
-              this.state.record.customerfirstname +
+            title={`Order of ${this.state.record.customerfirstname +
               " " +
               this.state.record.customerlastname
-            }`}
+              }`}
             visible={openModal}
             onCancel={this.handleCancel}
             footer={[
@@ -132,6 +194,7 @@ class RejectModal extends Component {
                 form="rejectOrderForm"
                 key="submit"
                 htmlType="submit"
+                disabled={isReasonable}
               >
                 Reject
               </Button>,
@@ -161,11 +224,60 @@ class RejectModal extends Component {
               <Descriptions.Item label="Status">
                 {this.state.record?.status}
               </Descriptions.Item>
+
             </Descriptions>
             <Table
               columns={this.columns}
               dataSource={this.state.record.details}
             />
+
+            <Descriptions layout="vertical" column={2}>
+              <Descriptions.Item label="Reason">
+                <Form.Item
+                  name="reason"
+                  rules={[
+                    { required: true, message: "Please input your reason to reject order!" },
+                  ]}
+                >
+                  <Input.TextArea onChange={(e) => this.recordReasonToReject(e)} autoSize={{ minRows: 5, maxRows: 8 }} style={{ width: "60vh" }} />
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Image">
+                <Form.Item Dname="image"
+                  rules={[
+                    { required: true, message: "Please input your reason to reject order!" },
+                  ]}
+                >
+                  <>
+                    <Upload
+                      name="file"
+                      action="/files/upload"
+                      listType="picture-card"
+                      fileList={this.state.fileList}
+                      onPreview={this.handlePreview}
+                      onChange={this.handleChange}
+                      style={{ width: "60vh" }}
+                    >
+                      {this.state.fileList.length >= 8 ? null : uploadButton}
+                    </Upload>
+                    <Modal
+                      visible={this.state.previewVisible}
+                      title={this.state.previewTitle}
+                      footer={null}
+                      onCancel={this.handleCancelUploadImage}
+                    >
+                      <img
+                        alt="example"
+                        style={{ width: "100%" }}
+                        src={this.state.previewImage}
+                      />
+                    </Modal>
+                  </>
+                </Form.Item>
+              </Descriptions.Item>
+
+            </Descriptions>
           </Modal>
         </Form>
       </>
