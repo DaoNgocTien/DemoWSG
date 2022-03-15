@@ -102,20 +102,23 @@ class OrderUI extends Component {
         return index + 1;
       },
       fixed: "left",
+      width: 80,
     },
     {
       title: "First Name",
       dataIndex: "customerfirstname",
       key: "customerfirstname",
       sorter: (a, b) => a.customerfirstname.length - b.customerfirstname.length,
-      fix: "left",
+      fixed: "left",
+      width: 120,
     },
     {
       title: "Last Name",
       dataIndex: "customerlastname",
       key: "customerlastname",
       sorter: (a, b) => a.customerlastname.length - b.customerlastname.length,
-      fix: "left",
+      fixed: "left",
+      width: 120,
     },
     {
       title: "Product",
@@ -124,27 +127,31 @@ class OrderUI extends Component {
       render: (text, object) => {
         return object.details[0].productname;
       },
-      fixed: "left",
+      // fixed: "left",
+      width: 130,
     },
-    {
-      title: "In Campaign",
-      dataIndex: "campaign",
-      key: "campaign",
-      render: (text, object) => {
-        let campaign = object.campaign;
-        return campaign.length > 0 ? moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY") : "";
-        // return moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY");
-      },
-    },
+    // {
+    //   title: "In Campaign",
+    //   dataIndex: "campaign",
+    //   key: "campaign",
+    //   render: (text, object) => {
+    //     let campaign = object.campaign;
+    //     return campaign.length > 0 ? moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY") : "";
+    //     // return moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY");
+    //   },
+    //   width: 130,
+    // },
     {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
+      width: 130,
     },
     {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
+      width: 130,
     },
     {
       title: "Final Price",
@@ -153,6 +160,7 @@ class OrderUI extends Component {
       render: (text, object) => {
         return object.totalprice - object.discountprice;
       },
+      width: 130,
     },
     {
       title: "Created At",
@@ -161,11 +169,13 @@ class OrderUI extends Component {
       render: (data) => {
         return moment(data).format("MM/DD/YYYY");
       },
+      width: 130,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: 130,
     },
     {
       title: "Action",
@@ -181,7 +191,7 @@ class OrderUI extends Component {
         );
       },
       fixed: 'right',
-      width: 130,
+      width: 150,
     },
   ];
 
@@ -371,7 +381,7 @@ class OrderUI extends Component {
                   ? this.props.data
                   : displayData
               }
-              scroll={{ y: 350 }}
+              scroll={{ y: 350, x: 1000 }}
             />
           </div>
         }
