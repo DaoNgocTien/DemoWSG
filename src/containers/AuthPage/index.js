@@ -93,7 +93,7 @@ class AuthPage extends Component {
                 />
                 <br />
                 <a href="/#" style={{ float: "right" }}>
-                  register now!
+                  Register now!
                 </a>
               </Form>
             </div>

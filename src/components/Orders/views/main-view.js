@@ -125,7 +125,7 @@ class OrderUI extends Component {
       dataIndex: "details",
       key: "details",
       render: (text, object) => {
-        return object.details[0].productname;
+        return object.details?.length > 0 ? object.details[0]?.productname : "";
       },
       // fixed: "left",
       width: 130,
@@ -184,7 +184,7 @@ class OrderUI extends Component {
           <Button
             onClick={() => this.changeStatus(object)}
             type="primary"
-            disable={object.status === "created" || object.status === "processing" ? false : true}
+            disable={object.status === "created" || object.status === "processing" ? "false" : "true"}
           >
             Change Status
           </Button>
@@ -248,6 +248,7 @@ class OrderUI extends Component {
     const {
       rejectOrder,
       updateStatusOrder,
+      data,
     } = this.props;
 
     const {
@@ -267,6 +268,8 @@ class OrderUI extends Component {
     // const hasSelected = selectedRowKeys.length > 0;
 
     const arrayLocation = window.location.pathname.split("/");
+    // console.log(data);
+
     return (
       <PageHeader
         className="site-page-header-responsive"
