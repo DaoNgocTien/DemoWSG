@@ -11,6 +11,7 @@ class Order extends Component {
 
   componentDidMount() {
     this.props.getOrder();
+    // console.log(this.props);
   }
 
   render() {
