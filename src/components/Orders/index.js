@@ -42,8 +42,8 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.updateStatusOrder(data));
       await dispatch(action.getOrder())
     },
-    rejectOrder: async (data) => {
-      await dispatch(action.rejectOrder(data));
+    rejectOrder: async (orderCode, reasonForCancel, imageProof) => {
+      await dispatch(action.rejectOrder(orderCode, reasonForCancel, imageProof));
     },
   };
 };

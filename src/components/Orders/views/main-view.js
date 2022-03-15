@@ -121,10 +121,11 @@ class OrderUI extends Component {
       title: "Product",
       dataIndex: "details",
       key: "details",
+      fixed: "left",
       render: (text, object) => {
         return object.details?.length > 0 ? object.details[0]?.productname : "";
       },
-      fixed: "left",
+     
     },
     {
       title: "In Campaign",

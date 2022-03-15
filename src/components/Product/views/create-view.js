@@ -193,7 +193,7 @@ class CreatModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Image">
-                <Form.Item Dname="image">
+                <Form.Item name="image">
                   <>
                     <Upload
                       name="file"

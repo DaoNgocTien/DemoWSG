@@ -12,8 +12,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
+  closeModal: () => { },
+  updateCampaign: () => { },
   record: {},
   openModal: false,
 };
@@ -49,6 +49,30 @@ class EditModal extends Component {
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
+
+  checkCancelledOrder = () => {
+    const record = this.props.record;
+    if (record.status === "cancelled")
+      return (
+        <>
+          <Descriptions.Item label="Reason to cancel order">
+            {record.reasonforcancel ? record.reasonforcancel : ""}
+          </Descriptions.Item>
+          <Descriptions.Item label="Image Proof">
+            {(JSON.parse(record.imageproof ? record.imageproof : "[]")).length === 0 ? (
+              ""
+            ) : (
+              <img
+                width="100"
+                alt="show illustrative representation"
+                height="100"
+                src={JSON.parse(record.imageproof)[0].url}
+              />
+            )}
+          </Descriptions.Item>
+        </>
+      );
+  }
 
   columns = [
     {
@@ -124,11 +148,10 @@ class EditModal extends Component {
         >
           <Modal
             width={window.innerWidth * 0.7}
-            title={`Order of ${
-              this.state.record.customerfirstname +
+            title={`Order of ${this.state.record.customerfirstname +
               " " +
               this.state.record.customerlastname
-            }`}
+              }`}
             visible={openModal}
             onCancel={this.handleCancel}
             footer={[
@@ -164,6 +187,9 @@ class EditModal extends Component {
                   this.state.record?.discountprice}
                 VND
               </Descriptions.Item>
+
+              {this.checkCancelledOrder()}
+
               <Descriptions.Item label="Status">
                 {this.state.record?.status}
               </Descriptions.Item>

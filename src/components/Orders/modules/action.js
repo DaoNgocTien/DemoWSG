@@ -29,12 +29,6 @@ const getOrder = () => {
       //   )](0);
       //   console.log(campL);
       // });
-      let n = 0;
-      orders.data.data.map((order) => {
-        console.log(n)
-        console.log(order);
-        n++;
-      });
       // console.log(orders.data.data.length);
       return dispatch(
         getSuccess({
@@ -96,7 +90,7 @@ const updateStatusOrder = (data) => {
   };
 };
 
-const rejectOrder = (data) => {
+const rejectOrder = (orderCode, reasonForCancel, imageProof) => {
   return async (dispatch) => {
     dispatch(getRequest());
     try {
@@ -104,7 +98,11 @@ const rejectOrder = (data) => {
         Axios({
           url: `/order/supplier/cancel`,
           method: "PUT",
-          data: { orderCode: data.ordercode },
+          data: {
+            orderCode: orderCode,
+            reasonForCancel: reasonForCancel,
+            imageProof: imageProof,
+          },
           withCredentials: true,
         }),
         Axios({
