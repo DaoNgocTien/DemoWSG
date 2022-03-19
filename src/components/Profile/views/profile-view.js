@@ -222,12 +222,65 @@ class ProfileTab extends Component {
         >
 
           <Form.Item
-            name="name"
-            label="Fullname"
-            tooltip="What is your fullname?"
-            rules={[{ required: true, message: 'Please input your fullname!', whitespace: true }]}
+            name="firstname"
+            label="Firstname"
+            tooltip="What is your firstname?"
+            rules={[{ required: true, message: 'Please input your firstname!', whitespace: true }]}
           >
             <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="lastname"
+            label="Lastname"
+            tooltip="What is your lastname?"
+            rules={[{ required: true, message: 'Please input your lastname!', whitespace: true }]}
+          >
+            <Input />
+          </Form.Item>
+
+          <Form.Item
+            name="identificationcard"
+            label="Identification Card"
+            rules={[{ required: true, message: 'Please input your Identification Card!' }]}
+          >
+            <Input type="number" style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Form.Item
+            name="identificationimage"
+            label="Identification Image"
+            rules={[{ required: true, message: 'Please input your Identification Image!' }]}
+          >
+            <>
+              <Upload
+                name="file"
+                action="/files/upload"
+                listType="picture-card"
+                fileList={
+                  this.state.fileList.length === 0 && this.props.record
+                    ? JSON.parse(this.props.record?.image)
+                    : this.state.fileList
+                }
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+                style={{ width: "60vh" }}
+              >
+                {this.state.fileList.length >= 8 ? null : uploadButton}
+              </Upload>
+              <Modal
+                visible={this.state.previewVisible}
+                title={this.state.previewTitle}
+                footer={null}
+                onCancel={this.handleCancelUploadImage}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={this.state.previewImage}
+                />
+              </Modal>
+            </>
           </Form.Item>
 
           <Form.Item name="avatar" label="Avatar">
@@ -324,17 +377,7 @@ class ProfileTab extends Component {
             label="Phone Number"
             rules={[{ required: true, message: 'Please input your phone number!' }]}
           >
-            <Input addonBefore={this.prefixSelector} style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item
-            name="residence"
-            label="Habitual Residence"
-            rules={[
-              { type: 'array', required: true, message: 'Please select your habitual residence!' },
-            ]}
-          >
-            <Cascader options={residences} />
+            <Input style={{ width: '100%' }} />
           </Form.Item>
 
           <Form.Item
@@ -343,18 +386,6 @@ class ProfileTab extends Component {
           // rules={[{ required: true, message: 'Please input Intro' }]}
           >
             <Input.TextArea showCount maxLength={100} />
-          </Form.Item>
-
-          <Form.Item
-            name="gender"
-            label="Gender"
-            rules={[{ required: true, message: 'Please select gender!' }]}
-          >
-            <Select placeholder="select your gender">
-              <Option value="male">Male</Option>
-              <Option value="female">Female</Option>
-              <Option value="other">Other</Option>
-            </Select>
           </Form.Item>
 
           <Form.Item {...tailFormItemLayout}>

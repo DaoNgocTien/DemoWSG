@@ -68,7 +68,7 @@ class PasswordTab extends Component {
   handleUpdateAndClose = (data) => {
     // console.log("Campaign create");
     // console.log(this.state.productSelected);
-   console.log(data);
+    console.log(data);
   };
 
   handleCancel = () => {
@@ -98,7 +98,7 @@ class PasswordTab extends Component {
           }}
         >
 
-          <Form.Item
+          {/* <Form.Item
             name="oldPassword"
             label="Old Password"
             rules={[
@@ -110,7 +110,7 @@ class PasswordTab extends Component {
             hasFeedback
           >
             <Input.Password placeholder="1-255 characters" />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             name="password"
@@ -139,10 +139,7 @@ class PasswordTab extends Component {
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (getFieldValue('oldPassword') === value) {
-                    return Promise.reject(new Error('The new password can not be old password'));
-                  }
-                  else if (!value || getFieldValue('password') === value) {
+                  if (!value || getFieldValue('password') === value) {
                     return Promise.resolve();
                   }
 
@@ -166,6 +163,69 @@ class PasswordTab extends Component {
               Submit
             </Button>
           </Form.Item>
+        </Form>
+
+        <Title style={{ textAlign: "center", padding: "30px" }} level={3}>PHONE NUMBER</Title>
+
+        <Form
+          id="updatePhoneNumber"
+          ref={this.formRef}
+          onFinish={this.handleUpdatePhoneNumberAndClose}
+          {...formItemLayout}
+          initialValues={{
+            'input-number': 3,
+            'checkbox-group': ['A', 'B'],
+            rate: 3.5,
+          }}
+        >
+          <Form.Item
+            name="phone"
+            label="Phone Number"
+          // initialValue={phone}
+          // validateStatus={message === null ? "success" : "error"}
+          // help={message === null ? "We make sure phone number is available!" : message}
+          >
+            <InputNumber
+              // disabled={phoneAvailable}
+              // onChange={this.changePhoneNumber}
+              // ref={this.phoneRef}
+              // addonBefore={this.prefixSelector}
+              style={{ width: "100%" }}
+              placeholder="10-11 characters"
+            />
+
+          </Form.Item>
+
+          <Form.Item
+            label="OTP"
+          // validateStatus={OTPMessage === null ? "success" : "error"}
+          // help={OTPMessage === null ? "Correct OTP Token will let you fill the rest of registration form!" : OTPMessage}
+          // hidden={phone === null || OTP === null}
+
+          >
+            <Input
+            // onChange={e => this.checkOTP(e)}
+            // ref={this.OTPRef}
+            // disable={phoneAvailable}
+            />
+
+          </Form.Item>
+
+          <Form.Item
+            wrapperCol={{
+              span: 12,
+              offset: 6,
+            }}
+          >
+            <Button
+              type="primary"
+            //  onClick={this.onCheckPhoneNumber}
+            //   disabled={phoneAvailable}
+            >
+              {/* {phone !== null && OTP !== null ? "Re-sent OTP" : "Send OTP"} */}Submit
+            </Button>
+          </Form.Item>
+
         </Form>
       </>
     );

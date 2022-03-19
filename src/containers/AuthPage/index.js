@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { actLoginApi, googleOAuth2 } from "./modules/action";
+import action from "./modules/action";
 import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
 import { Input, message, Form, Button } from "antd";
@@ -92,7 +92,7 @@ class AuthPage extends Component {
                   className="google-button"
                 />
                 <br />
-                <a href="/#" style={{ float: "right" }}>
+                <a href="/registration" style={{ float: "right" }}>
                   Register now!
                 </a>
               </Form>
@@ -114,10 +114,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (user, history) => {
-      dispatch(actLoginApi(user, history));
+      dispatch(action.actLoginApi(user, history));
     },
     googleOAuth2: (googleResponse) => {
-      dispatch(googleOAuth2(googleResponse));
+      dispatch(action.googleOAuth2(googleResponse));
     },
   };
 };

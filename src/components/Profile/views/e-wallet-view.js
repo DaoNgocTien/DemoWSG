@@ -97,12 +97,12 @@ class EWalletTab extends Component {
         >
 
           <Form.Item
-            name="oldPassword"
-            label="Old Password"
+            name="code"
+            label="E-Wallet Code"
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: 'Please input your E-wallet code!',
               },
             ]}
             hasFeedback
@@ -111,43 +111,15 @@ class EWalletTab extends Component {
           </Form.Item>
 
           <Form.Item
-            name="password"
-            label="New Password"
+            name="secret"
+            label="E-Wallet Secret"
             rules={[
               {
                 required: true,
-                message: 'Please input your password!',
+                message: 'Please input your E-wallet secret!',
               },
             ]}
             hasFeedback
-
-          >
-            <Input.Password placeholder="1-255 characters" />
-          </Form.Item>
-
-          <Form.Item
-            name="confirm"
-            label="Confirm Password"
-            dependencies={['password']}
-            hasFeedback
-            rules={[
-              {
-                required: true,
-                message: 'Please confirm your password!',
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (getFieldValue('oldPassword') === value) {
-                    return Promise.reject(new Error('The new password can not be old password'));
-                  }
-                  else if (!value || getFieldValue('password') === value) {
-                    return Promise.resolve();
-                  }
-
-                  return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                },
-              }),
-            ]}
 
           >
             <Input.Password placeholder="1-255 characters" />

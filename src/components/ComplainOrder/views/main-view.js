@@ -1,16 +1,17 @@
 import React, { Component, memo } from "react";
+import { Route, Link, Redirect } from "react-router-dom";
 import { Table, Button, Input, Row, Col, PageHeader, Radio } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
-import EditModal from "./edit-view";
-import RejectModal from "./reject-view";
+import DetailModal from "./detail-view";
+import HandleModal from "./handle-view";
 
 //  prototype
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
   defaultCampaign: PropTypes.object,
-  rejectOrder: PropTypes.func,
+  handleOrder: PropTypes.func,
   updateStatusOrder: PropTypes.func,
 };
 
@@ -20,11 +21,11 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => { },
+  handleOrder: () => { },
   updateStatusOrder: () => { },
 };
 
-class OrderUI extends Component {
+class OrderReturningUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
@@ -33,22 +34,23 @@ class OrderUI extends Component {
     addNewButton: true,
     displayData: [],
     searchKey: "",
-    openEditModal: false,
-    openRejectModal: false,
-    editButton: true,
-    rejectButton: true,
+    openDetailModal: false,
+    openHandleModal: false,
+    viewButton: true,
+    actionButton: true,
+    record: {},
   };
 
   componentDidMount() { }
 
   start = (openModal) => {
     switch (openModal) {
-      case "openRejectModal":
-        this.setState({ openRejectModal: true });
+      case "openHandleModal":
+        this.setState({ openHandleModal: true });
         break;
 
-      case "openEditModal":
-        this.setState({ openEditModal: true });
+      case "openDetailModal":
+        this.setState({ openDetailModal: true });
         break;
 
       default:
@@ -63,12 +65,12 @@ class OrderUI extends Component {
   closeModal = () => {
     this.setState({
       selectedRowKeys: [],
-      editButton: false,
-      rejectButton: false,
+      viewButton: false,
+      actionButton: false,
     });
     this.setState({
-      openRejectModal: false,
-      openEditModal: false,
+      openHandleModal: false,
+      openDetailModal: false,
     });
   };
 
@@ -80,8 +82,9 @@ class OrderUI extends Component {
 
     this.setState({
       selectedRowKeys,
-      editButton: selectedRowKeys.length === 1,
-      rejectButton:
+      viewButton: selectedRowKeys.length === 1 &&
+        record.status != "returned",
+      actionButton:
         selectedRowKeys.length === 1 &&
         record.status != "delivering" &&
         record.status != "delivered" &&
@@ -90,6 +93,7 @@ class OrderUI extends Component {
         record.status != "cancelled"
       ,
       addNewButton: selectedRowKeys.length === 0,
+      record: record,
     });
   };
 
@@ -125,7 +129,7 @@ class OrderUI extends Component {
     //   render: (text, object) => {
     //     return object.details?.length > 0 ? object.details[0]?.productname : "";
     //   },
-     
+
     // },
     {
       title: "In Campaign",
@@ -237,19 +241,20 @@ class OrderUI extends Component {
   render() {
 
     const {
-      rejectOrder,
+      handleOrder,
       updateStatusOrder,
       data,
+      storeComplainRecord,
     } = this.props;
 
     const {
       selectedRowKeys,
       displayData,
       searchKey,
-      openEditModal,
-      editButton,
-      openRejectModal,
-      rejectButton,
+      openDetailModal,
+      viewButton,
+      openHandleModal,
+      actionButton,
     } = this.state;
 
     const rowSelection = {
@@ -265,12 +270,12 @@ class OrderUI extends Component {
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title={arrayLocation[1].toUpperCase()}
-        subTitle={`This is a ${arrayLocation[1]} page`}
+        title="ORDER RETURNING"
+        subTitle={`This is a order returning page`}
         footer={
           <div>
-            <EditModal
-              openModal={openEditModal}
+            <DetailModal
+              openModal={openDetailModal}
               closeModal={this.closeModal}
               updateStatusOrder={updateStatusOrder}
               record={
@@ -281,31 +286,31 @@ class OrderUI extends Component {
               selectedRowKeys={selectedRowKeys[0]}
             />
 
-            <RejectModal
-              openModal={openRejectModal}
+            {/* <HandleModal
+              openModal={openHandleModal}
               closeModal={this.closeModal}
-              rejectOrder={rejectOrder}
+              handleOrder={handleOrder}
               record={
                 this.props.data.filter((item) => {
                   return selectedRowKeys.includes(item.id);
                 })[0]
               }
               selectedRowKeys={selectedRowKeys[0]}
-            />
+            /> */}
 
             <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex={3}>
                   <Button
                     type="primary"
-                    onClick={() => this.start("openEditModal")}
+                    onClick={() => this.start("openDetailModal")}
                     disabled={
-                      !editButton || this.state.selectedRowKeys.length === 0
+                      !viewButton || this.state.selectedRowKeys.length === 0
                         ? true
                         : false
                     }
                     hidden={
-                      !editButton || this.state.selectedRowKeys.length === 0
+                      !viewButton || this.state.selectedRowKeys.length === 0
                         ? true
                         : false
                     }
@@ -317,21 +322,23 @@ class OrderUI extends Component {
 
                   <Button
                     type="danger"
-                    onClick={() => this.start("openRejectModal")}
+                    onClick={() => storeComplainRecord(this.state.record)}
                     disabled={
-                      !rejectButton || this.state.selectedRowKeys.length === 0
+                      !actionButton || this.state.selectedRowKeys.length === 0
                         ? true
                         : false
                     }
                     hidden={
-                      !rejectButton || this.state.selectedRowKeys.length === 0
+                      !actionButton || this.state.selectedRowKeys.length === 0
                         ? true
                         : false
                     }
 
                     style={{ marginLeft: 3 }}
                   >
-                    Reject Order
+                    <Link className="LinkDecorations" to="/complain/handle">
+                      Handle Complain
+                    </Link>
                   </Button>
 
                 </Col>
@@ -389,4 +396,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(OrderUI, arePropsEqual);
+export default memo(OrderReturningUI, arePropsEqual);
