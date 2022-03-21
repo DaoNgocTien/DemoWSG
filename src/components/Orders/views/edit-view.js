@@ -133,14 +133,14 @@ class EditModal extends Component {
             onCancel={this.handleCancel}
             footer={[
               <Button onClick={this.handleCancel}>Cancel</Button>,
-              <Button
-                type="primary"
-                form="editForm"
-                key="submit"
-                htmlType="submit"
-              >
-                Submit
-              </Button>,
+              // <Button
+              //   type="primary"
+              //   form="editForm"
+              //   key="submit"
+              //   htmlType="submit"
+              // >
+              //   Submit
+              // </Button>,
             ]}
           >
             <Descriptions
