@@ -40,7 +40,8 @@ class RejectModal extends Component {
   }
 
   handleRejectAndClose = (data) => {
-    this.props.rejectOrder(this.props.record);
+    // data.image = this.state.fileList;
+    this.props.rejectOrder(this.props.record.ordercode, data.reason, JSON.stringify(this.state.fileList));
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
@@ -99,7 +100,6 @@ class RejectModal extends Component {
     this.setState({ fileList });
     // console.log(this.state.fileList);
   };
-
 
   columns = [
     {
@@ -221,6 +221,8 @@ class RejectModal extends Component {
                   this.state.record?.discountprice}
                 VND
               </Descriptions.Item>
+
+
               <Descriptions.Item label="Status">
                 {this.state.record?.status}
               </Descriptions.Item>
@@ -244,7 +246,7 @@ class RejectModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Image">
-                <Form.Item Dname="image"
+                <Form.Item name="image"
                   rules={[
                     { required: true, message: "Please input your reason to reject order!" },
                   ]}

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import action from "./modules/action";
 import { connect } from "react-redux";
-import OrderUI from "./views/main-view";
+import OrderReturningUI from "./views/main-view";
 
-class Order extends Component {
+class OrderReturning extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -16,12 +16,13 @@ class Order extends Component {
 
   render() {
     return (
-      <OrderUI
+      <OrderReturningUI
         data={this.props.data.orders}
         loading={this.props.loading}
         updateStatusOrder={this.props.updateStatusOrder}
         createCampaign={this.props.createCampaign}
         rejectOrder={this.props.rejectOrder}
+        storeComplainRecord={this.props.storeComplainRecord}
       />
     );
   }
@@ -45,7 +46,13 @@ const mapDispatchToProps = (dispatch) => {
     rejectOrder: async (orderCode, reasonForCancel, imageProof) => {
       await dispatch(action.rejectOrder(orderCode, reasonForCancel, imageProof));
     },
+
+    storeComplainRecord: async (record) => {
+      console.log("storeComplainRecord");
+      console.log(record);
+      await dispatch(action.storeComplainRecord(record));
+    }
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Order);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderReturning);

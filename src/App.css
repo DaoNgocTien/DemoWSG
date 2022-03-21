@@ -50,6 +50,14 @@ input {
   /* background: rgba(22, 13, 148, 0.322); */
 }
 
+.registration_form__container {
+  border: 1px solid black;
+  padding: 70px 70px 100px 70px;
+  width: 900px;
+  /* border-radius: 5%; */
+  /* background: rgba(22, 13, 148, 0.322); */
+}
+
 .login-form-button {
   width: 100%;
   height: 100px;
