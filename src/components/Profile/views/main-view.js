@@ -30,7 +30,7 @@ import { UserOutlined, WalletTwoTone, IdcardTwoTone, SafetyCertificateTwoTone } 
 
 import ProfileTab from "./profile-view";
 import EWalletTab from "./e-wallet-view";
-import PasswordTab from "./password-view";
+import PasswordTab from "./security-view";
 
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
 const { Option } = Select;
@@ -70,6 +70,12 @@ class ProfileUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
+    user: {
+      username: "",
+      googleId: "",
+      loginMethod: "",
+      rolename: "",
+    },
     loading: false,
     selectedRowKeys: [], // Check here to configure the default column
     loadingActionButton: false,
@@ -86,7 +92,17 @@ class ProfileUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() { }
+  componentDidMount() {
+    let storedUser = JSON.parse(localStorage.getItem("user"));
+    this.setState({
+      user: {
+        username: storedUser.username,
+        googleId:storedUser.googleid,
+        loginMethod: storedUser.googleid ? "BY GOOGLE MAIL": "BY USERNAME",
+      ...this.props.data
+      }
+    });
+  }
 
   showDrawer = () => {
     this.setState({
@@ -285,6 +301,7 @@ class ProfileUI extends Component {
       openEditModal,
       displayData,
       searchKey,
+      user
     } = this.state;
 
     const { productList, createCampaign, updateCampaign, deleteCampaign } =
@@ -294,6 +311,8 @@ class ProfileUI extends Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
+    console.log(this.props.data);
+    console.log(user);
     // const hasSelected = selectedRowKeys.length > 0;
     const arrayLocation = window.location.pathname.split("/");
     return (
@@ -305,8 +324,8 @@ class ProfileUI extends Component {
         // subTitle={`This is a ${arrayLocation[1]} page`}
         tags={
           <>
-            <Tag color="blue">Role</Tag>
-            <Tag color="red">Login Method</Tag>
+            <Tag color="blue">{this.props.data.rolename}</Tag>
+            <Tag color="red">{user.loginMethod}</Tag>
           </>
         }
         // avatar={
@@ -344,7 +363,9 @@ class ProfileUI extends Component {
               key="security"
               style={{ background: "#ffffff" }}
             >
-              <PasswordTab />
+              <PasswordTab
+              // changePassword={this.props.changePassword}
+              />
             </TabPane>
 
             <TabPane tab={

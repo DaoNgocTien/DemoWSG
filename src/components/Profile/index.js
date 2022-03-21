@@ -10,20 +10,21 @@ class Profile extends Component {
     this.state = {};
   }
   componentDidMount() {
-    this.props.getCampaign();
+    this.props.getProfile();
   }
 
   render() {
     return (
       <ProfileUI
-        data={this.props.data.campaigns}
+        data={this.props.data}
         loading={this.props.loading}
-        getCampaign={this.props.getCampaign}
+        getProfile={this.props.getProfile}
         ordersInCampaign={this.props.data.order}
         productList={this.props.data.products}
         updateCampaign={this.props.updateCampaign}
         createCampaign={this.props.createCampaign}
         deleteCampaign={this.props.deleteCampaign}
+        changePassword={this.props.changePassword}
       />
     );
   }
@@ -31,9 +32,9 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.campaignReducer.loading,
-    data: state.campaignReducer.data,
-    error: state.campaignReducer.err,
+    loading: state.profileReducer.loading,
+    data: state.profileReducer.data,
+    error: state.profileReducer.err,
     // productList: state.productReducer.data,
     // orderList: [],
   };
@@ -41,9 +42,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getCampaign: async (campaignId) => {
+    getProfile: async () => {
       // console.log("get campaign");
-      await dispatch(action.getCampaign(campaignId));
+      await dispatch(action.getProfile());
     },
 
     getOrdersInCampaign: async (campaignID) => {
@@ -55,16 +56,20 @@ const mapDispatchToProps = (dispatch) => {
       // console.log("createProduct final");
       // console.log(record);
       await dispatch(action.createCampaign(record));
-      await dispatch(action.getCampaign());
+      // await dispatch(action.getCampaign());
     },
 
     updateCampaign: async (record) => {
       await dispatch(action.updateCampaign(record));
-      await dispatch(action.getCampaign());
+      // await dispatch(action.getCampaign());
     },
 
     deleteCampaign: async (id) => {
       await dispatch(action.deleteCampaign(id));
+    },
+
+    changePassword: async (id, password) => {
+      await dispatch(action.changePassword(id, password));
     }
   };
 };

@@ -28,6 +28,9 @@ import { UserOutlined, UploadOutlined, InboxOutlined } from '@ant-design/icons';
 import PropTypes from "prop-types";
 import moment from "moment";
 
+import action from "../modules/action";
+import { connect } from "react-redux";
+
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -62,12 +65,17 @@ class EWalletTab extends Component {
   };
   formRef = React.createRef();
 
+
   componentDidMount() {
+    this.props.getProfile();
   }
 
-  handleAddingAndClose = (data) => {
-    console.log(data);
-    this.props.closeModal();
+
+  onFinish = (data) => {
+    this.props.updateEWallet({
+      ewalletcode: data.ewalletcode,
+      ewalletsecret: data.ewalletsecret
+    })
   };
 
   handleCancel = () => {
@@ -81,23 +89,25 @@ class EWalletTab extends Component {
   };
 
   render() {
+    const { eWalletValidation } = this.props;
+    const {
+      eWalletChangeMessage,
+    } = eWalletValidation;
     return (
       <>
-        <Title style={{ textAlign: "center", padding: "30px"  }} level={3}>E-WALLET ACCOUNT</Title>
+        <Title style={{ textAlign: "center", padding: "30px" }} level={3}>E-WALLET ACCOUNT</Title>
+        <Title type="success" style={{ textAlign: "center", }} level={3}> {eWalletChangeMessage ? `${eWalletChangeMessage}` : ""}</Title>
+
+
         <Form
-          id="addEWalletAccount"
+          id="updateEWalletAccount"
           ref={this.formRef}
-          onFinish={this.handleAddingAndClose}
+          onFinish={this.onFinish}
           {...formItemLayout}
-          initialValues={{
-            'input-number': 3,
-            'checkbox-group': ['A', 'B'],
-            rate: 3.5,
-          }}
         >
 
           <Form.Item
-            name="code"
+            name="ewalletcode"
             label="E-Wallet Code"
             rules={[
               {
@@ -111,7 +121,7 @@ class EWalletTab extends Component {
           </Form.Item>
 
           <Form.Item
-            name="secret"
+            name="ewalletsecret"
             label="E-Wallet Secret"
             rules={[
               {
@@ -131,7 +141,7 @@ class EWalletTab extends Component {
               offset: 6,
             }}
           >
-            <Button type="primary" htmlType="submit" form="addEWalletAccount"
+            <Button type="primary" htmlType="submit" form="updateEWalletAccount"
               key="submit">
               Submit
             </Button>
@@ -143,9 +153,52 @@ class EWalletTab extends Component {
 }
 
 
-const arePropsEqual = (prevProps, nextProps) => {
-  return prevProps === nextProps;
+const mapStateToProps = (state) => {
+  return {
+    loading: state.profileReducer.loading,
+    data: state.profileReducer.data,
+    error: state.profileReducer.err,
+    eWalletValidation: state.profileReducer.eWalletValidation,
+    // productList: state.productReducer.data,
+    // orderList: [],
+  };
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(EWalletTab, arePropsEqual);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changePassword: async (id, password) => {
+      await dispatch(action.changePassword(id, password));
+    },
+
+    checkPhoneNumber: async phone => {
+      await dispatch(action.checkPhoneNumber(phone));
+    },
+
+    updateProfile: async profile => {
+      await dispatch(action.updateProfile(profile));
+      await dispatch(action.getProfile());
+
+    },
+
+    updateIdentifcation: async card => {
+      await dispatch(action.updateIdentifcation(card));
+      await dispatch(action.getProfile());
+
+    },
+
+
+    updateEWallet: async card => {
+      await dispatch(action.updateEWallet(card));
+      await dispatch(action.getProfile());
+
+    },
+
+
+    getProfile: async () => {
+      // console.log("get campaign");
+      await dispatch(action.getProfile());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EWalletTab);

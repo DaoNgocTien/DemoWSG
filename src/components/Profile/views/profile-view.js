@@ -28,8 +28,11 @@ import {
   Tooltip,
 } from "antd";
 
-import { LoadingOutlined, PlusOutlined, InboxOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined, UserOutlined, UploadOutlined, InboxOutlined } from '@ant-design/icons';
 import PropTypes from "prop-types";
+
+import action from "./../modules/action";
+import { connect } from "react-redux";
 import moment from "moment";
 
 const { RangePicker } = DatePicker;
@@ -111,6 +114,13 @@ class ProfileTab extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
+    user: {
+      username: "",
+      googleId: "",
+      loginMethod: "",
+      rolename: "",
+      phone: "",
+    },
     previewVisible: false,
     previewImage: "",
     previewTitle: "",
@@ -121,8 +131,16 @@ class ProfileTab extends Component {
   formRef = React.createRef();
 
   componentDidMount() {
+    this.props.getProfile();
+    let storedUser = JSON.parse(localStorage.getItem("user"));
     this.setState({
-      productSelected: this.props.productList[0],
+      user: {
+        username: storedUser.username,
+        googleId: storedUser.googleid,
+        loginMethod: storedUser.googleid ? "BY GOOGLE MAIL" : "BY USERNAME",
+        phone: storedUser.phone,
+        ...this.props.data
+      }
     });
   }
 
@@ -142,7 +160,20 @@ class ProfileTab extends Component {
   };
 
   onFinish = (values) => {
-    console.log('Received values of form: ', values);
+    values.avatar =
+      this.state.fileList.length === 0 && this.props.record
+        ? JSON.parse(this.props.record?.image)
+        : this.state.fileList;
+    this.setState({
+      user: {
+        phone: "035497658",
+        avatar: values.avatar,
+        name: values.name,
+        email: values.email,
+        address: values.address,
+      }
+    });
+    this.props.updateProfile(this.state.user);
   };
 
   prefixSelector = (
@@ -199,13 +230,16 @@ class ProfileTab extends Component {
   };
 
   render() {
-    const { load, imageUrl } = this.state;
+    const { load, imageUrl, user } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+    let storedUser = JSON.parse(localStorage.getItem("user"));
+    const { data } = this.props;
+    console.log(data);
     return (
       <>
         <Title style={{ textAlign: "center", padding: "30px" }} level={3}>USER PROFILE</Title>
@@ -214,105 +248,15 @@ class ProfileTab extends Component {
           // form={form}
           name="register"
           onFinish={this.onFinish}
-          initialValues={{
-            residence: ['zhejiang', 'hangzhou', 'xihu'],
-            prefix: '86',
-          }}
           scrollToFirstError
         >
-
           <Form.Item
-            name="firstname"
-            label="Firstname"
-            tooltip="What is your firstname?"
-            rules={[{ required: true, message: 'Please input your firstname!', whitespace: true }]}
-          >
-            <Input />
-          </Form.Item>
+            name="username"
+            label="Username"
+            tooltip="Username can not be channged!"
 
-          <Form.Item
-            name="lastname"
-            label="Lastname"
-            tooltip="What is your lastname?"
-            rules={[{ required: true, message: 'Please input your lastname!', whitespace: true }]}
           >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="identificationcard"
-            label="Identification Card"
-            rules={[{ required: true, message: 'Please input your Identification Card!' }]}
-          >
-            <Input type="number" style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item
-            name="identificationimage"
-            label="Identification Image"
-            rules={[{ required: true, message: 'Please input your Identification Image!' }]}
-          >
-            <>
-              <Upload
-                name="file"
-                action="/files/upload"
-                listType="picture-card"
-                fileList={
-                  this.state.fileList.length === 0 && this.props.record
-                    ? JSON.parse(this.props.record?.image)
-                    : this.state.fileList
-                }
-                onPreview={this.handlePreview}
-                onChange={this.handleChange}
-                style={{ width: "60vh" }}
-              >
-                {this.state.fileList.length >= 8 ? null : uploadButton}
-              </Upload>
-              <Modal
-                visible={this.state.previewVisible}
-                title={this.state.previewTitle}
-                footer={null}
-                onCancel={this.handleCancelUploadImage}
-              >
-                <img
-                  alt="example"
-                  style={{ width: "100%" }}
-                  src={this.state.previewImage}
-                />
-              </Modal>
-            </>
-          </Form.Item>
-
-          <Form.Item name="avatar" label="Avatar">
-            <>
-              <Upload
-                name="file"
-                action="/files/upload"
-                listType="picture-card"
-                fileList={
-                  this.state.fileList.length === 0 && this.props.record
-                    ? JSON.parse(this.props.record?.image)
-                    : this.state.fileList
-                }
-                onPreview={this.handlePreview}
-                onChange={this.handleChange}
-                style={{ width: "60vh" }}
-              >
-                {this.state.fileList.length >= 8 ? null : uploadButton}
-              </Upload>
-              <Modal
-                visible={this.state.previewVisible}
-                title={this.state.previewTitle}
-                footer={null}
-                onCancel={this.handleCancelUploadImage}
-              >
-                <img
-                  alt="example"
-                  style={{ width: "100%" }}
-                  src={this.state.previewImage}
-                />
-              </Modal>
-            </>
+            <Tag color="green">{storedUser.username ?? storedUser.username}</Tag>
           </Form.Item>
 
           <Form.Item
@@ -321,7 +265,7 @@ class ProfileTab extends Component {
             tooltip="User's role in WSG System"
           >
             <Tooltip placement="topLeft" title="Suppliers are those who use the WSG System and website to process their business. Their main role is to cooperate with the WSG system to do business">
-              <Tag color="blue">Role</Tag>
+              <Tag color="blue">{storedUser.rolename ?? storedUser.rolename}</Tag>
             </Tooltip>
 
           </Form.Item>
@@ -332,27 +276,51 @@ class ProfileTab extends Component {
             tooltip="User's logging method in WSG System"
           >
             <Tooltip placement="topLeft" title="Logging by username / Logging by Google Mail">
-              <Tag color="red">Logging Method</Tag>
+              <Tag color="red">{storedUser.username ? "BY USERNAME" : "BY EMAIL"}</Tag>
             </Tooltip>
 
           </Form.Item>
 
           <Form.Item
-            name="username"
-            label="Username"
-            rules={[
-              {
-                type: 'email',
-                message: 'The input is not valid username!',
-              },
-              // {
-              //   required: true,
-              //   message: 'Please input your username!',
-              // },
-            ]}
-
+            name="name"
+            label="Fullname"
+            tooltip="What is your fullname?"
+            rules={[{ required: true, message: 'Please input your fullname!', whitespace: true }]}
+            initialValue={data.name}
           >
-            <Input disabled="true" />
+            <Input />
+          </Form.Item>
+
+          <Form.Item name="avatar" label="Avatar">
+            <>
+              <Upload
+                name="file"
+                action="/files/upload"
+                listType="picture-card"
+                fileList={
+                  this.state.fileList.length === 0 && data.avt
+                    ? JSON.parse(data.avt) :
+                    this.state.fileList
+                }
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+                style={{ width: "60vh" }}
+              >
+                {this.state.fileList.length >= 8 ? null : uploadButton}
+              </Upload>
+              <Modal
+                visible={this.state.previewVisible}
+                title={this.state.previewTitle}
+                footer={null}
+                onCancel={this.handleCancelUploadImage}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={this.state.previewImage}
+                />
+              </Modal>
+            </>
           </Form.Item>
 
           <Form.Item
@@ -368,21 +336,15 @@ class ProfileTab extends Component {
                 message: 'Please input your E-mail!',
               },
             ]}
+            initialValue={data.email}
           >
             <Input />
           </Form.Item>
 
           <Form.Item
-            name="phone"
-            label="Phone Number"
-            rules={[{ required: true, message: 'Please input your phone number!' }]}
-          >
-            <Input style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item
             name="address"
             label="Address"
+            initialValue={data.address}
           // rules={[{ required: true, message: 'Please input Intro' }]}
           >
             <Input.TextArea showCount maxLength={100} />
@@ -390,7 +352,7 @@ class ProfileTab extends Component {
 
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-              Register
+              Update Profile
             </Button>
           </Form.Item>
         </Form>
@@ -399,9 +361,34 @@ class ProfileTab extends Component {
   }
 }
 
-const arePropsEqual = (prevProps, nextProps) => {
-  return prevProps === nextProps;
+
+const mapStateToProps = (state) => {
+  return {
+    loading: state.profileReducer.loading,
+    data: state.profileReducer.data,
+    error: state.profileReducer.err,
+    // productList: state.productReducer.data,
+    // orderList: [],
+  };
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(ProfileTab, arePropsEqual);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getProfile: async () => {
+      // console.log("get campaign");
+      await dispatch(action.getProfile());
+    },
+
+    checkPhoneNumber: async phone => {
+      await dispatch(action.checkPhoneNumber(phone));
+    },
+
+    updateProfile: async profile => {
+      await dispatch(action.updateProfile(profile));
+      // await dispatch(action.getProfile());
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileTab);
+
