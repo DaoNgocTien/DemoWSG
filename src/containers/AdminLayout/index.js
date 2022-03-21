@@ -133,14 +133,19 @@ class AdminRender extends Component {
                 title="Orders"
                 icon={<ReconciliationTwoTone />}
               >
-                <Menu.Item key="wholesale">
-                  <Link className="LinkDecorations" to="/orders/wholesale">
-                    Wholesale
+                <Menu.Item key="all-order">
+                  <Link className="LinkDecorations" to="/orders/all-order">
+                    All orders
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="retail">
-                  <Link className="LinkDecorations" to="/orders/retail">
-                    Retail
+                <Menu.Item key="returned">
+                  <Link className="LinkDecorations" to="/orders/returned">
+                    Returned
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="cancelled">
+                  <Link className="LinkDecorations" to="/orders/cancelled">
+                    Cancelled
                   </Link>
                 </Menu.Item>
               </SubMenu>
