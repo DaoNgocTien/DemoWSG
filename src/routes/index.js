@@ -1,4 +1,5 @@
 import DashBoard from "../containers/AdminLayout/DashBoard";
+import SettlePaymentUI from "../containers/AdminLayout/DashBoard/views/settle-payment-view";
 import AuthPage from "../containers/AuthPage";
 import Registration from "../containers/AuthPage/views/registration";
 
@@ -19,6 +20,13 @@ const routesAdmin = [
     path: "/",
     component: DashBoard,
   },
+
+  {
+    exact: true,
+    path: "/transaction/settle",
+    component: SettlePaymentUI,
+  },
+
   {
     exact: true,
     path: "/products/categories",
@@ -32,13 +40,19 @@ const routesAdmin = [
 
   {
     exact: true,
-    path: "/orders/wholesale",
+    path: "/orders/all-order",
     component: Order,
   },
 
   {
     exact: true,
-    path: "/orders/retail",
+    path: "/orders/returned",
+    component: Order,
+  },
+
+  {
+    exact: true,
+    path: "/orders/cancelled",
     component: Order,
   },
 

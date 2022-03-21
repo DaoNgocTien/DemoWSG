@@ -9,6 +9,8 @@ import loyalCustomerConditionReducer from "../../components/LoyalCustomerConditi
 import loyalCustomerReducer from "../../components/LoyalCustomer/modules/reducer";
 import complainReducer from "../../components/ComplainOrder/modules/reducer";
 import profileReducer from "../../components/Profile/modules/reducer";
+import dashboardReducer from "../../containers/AdminLayout/DashBoard/modules/reducer";
+
 
 
 //Create rootReducer to use in store. This manages CHILD REDUCERS in the project
@@ -22,7 +24,8 @@ const rootReducer = combineReducers({
   loyalCustomerConditionReducer,
   loyalCustomerReducer,
   complainReducer,
-  profileReducer
+  profileReducer,
+  dashboardReducer
 });
 
 export default rootReducer;
