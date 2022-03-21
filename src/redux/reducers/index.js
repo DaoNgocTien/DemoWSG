@@ -7,6 +7,9 @@ import campaignReducer from "../../components/Campaign/modules/reducer";
 import orderReducer from "../../components/Orders/modules/reducer";
 import loyalCustomerConditionReducer from "../../components/LoyalCustomerCondition/modules/reducer";
 import loyalCustomerReducer from "../../components/LoyalCustomer/modules/reducer";
+import complainReducer from "../../components/ComplainOrder/modules/reducer";
+import profileReducer from "../../components/Profile/modules/reducer";
+
 
 //Create rootReducer to use in store. This manages CHILD REDUCERS in the project
 const rootReducer = combineReducers({
@@ -17,7 +20,9 @@ const rootReducer = combineReducers({
   campaignReducer,
   orderReducer,
   loyalCustomerConditionReducer,
-  loyalCustomerReducer
+  loyalCustomerReducer,
+  complainReducer,
+  profileReducer
 });
 
 export default rootReducer;

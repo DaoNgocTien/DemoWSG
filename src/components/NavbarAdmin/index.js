@@ -85,7 +85,11 @@ class NavbarAdmin extends Component {
               key="Log out"
               title={<SettingTwoTone style={{ fontSize: "25px" }} />}
             >
-              <Menu.Item key="4" icon={<UserOutlined style={{ fontSize: "25px" }} />}>User Profile</Menu.Item>
+              <Menu.Item key="4" icon={<UserOutlined style={{ fontSize: "25px" }} />}>
+                <Link className="LinkDecorations" to="/profile">
+                  User Profile
+                </Link>
+              </Menu.Item>
               <Menu.Item key="5" onClick={(e) => this.handleLogOut(e)} icon={<LogoutOutlined style={{ fontSize: "25px" }} />}>
                 Logout
               </Menu.Item>

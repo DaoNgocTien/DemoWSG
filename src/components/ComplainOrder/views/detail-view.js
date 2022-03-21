@@ -18,7 +18,7 @@ const propsDefault = {
   openModal: false,
 };
 
-class EditModal extends Component {
+class DetailModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -156,14 +156,14 @@ class EditModal extends Component {
             onCancel={this.handleCancel}
             footer={[
               <Button onClick={this.handleCancel}>Cancel</Button>,
-              // <Button
-              //   type="primary"
-              //   form="editForm"
-              //   key="submit"
-              //   htmlType="submit"
-              // >
-              //   Submit
-              // </Button>,
+              <Button
+                type="primary"
+                form="editForm"
+                key="submit"
+                htmlType="submit"
+              >
+                Submit
+              </Button>,
             ]}
           >
             <Descriptions
@@ -210,4 +210,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(EditModal, arePropsEqual);
+export default memo(DetailModal, arePropsEqual);

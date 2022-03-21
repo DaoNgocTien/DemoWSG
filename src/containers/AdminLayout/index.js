@@ -105,6 +105,12 @@ class AdminRender extends Component {
                 </Link>
               </Menu.Item>
 
+              <Menu.Item key="complain" icon={<DollarCircleTwoTone />}>
+                <Link className="LinkDecorations" to="/complain">
+                  Complain
+                </Link>
+              </Menu.Item>
+
               <SubMenu
                 key="product"
                 title="Products"
@@ -122,11 +128,22 @@ class AdminRender extends Component {
                 </Menu.Item>
               </SubMenu>
 
-              <Menu.Item key="Order" icon={<ReconciliationTwoTone />}>
-                <Link className="LinkDecorations" to="/orders/catalog">
-                  Orders
-                </Link>
-              </Menu.Item>
+              <SubMenu
+                key="orders"
+                title="Orders"
+                icon={<ReconciliationTwoTone />}
+              >
+                <Menu.Item key="wholesale">
+                  <Link className="LinkDecorations" to="/orders/wholesale">
+                    Wholesale
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="retail">
+                  <Link className="LinkDecorations" to="/orders/retail">
+                    Retail
+                  </Link>
+                </Menu.Item>
+              </SubMenu>
 
               <SubMenu
                 key="Discount"
@@ -135,7 +152,7 @@ class AdminRender extends Component {
               >
                 <Menu.Item key="campaigns">
                   <Link className="LinkDecorations" to="/discount/campaigns">
-                    Campaign
+                    Campaigns
                   </Link>
                 </Menu.Item>
                 <Menu.Item key="discount-codes">
@@ -143,7 +160,7 @@ class AdminRender extends Component {
                     className="LinkDecorations"
                     to="/discount/discount-codes"
                   >
-                    Discount Code
+                    Discount Codes
                   </Link>
                 </Menu.Item>
               </SubMenu>
@@ -158,7 +175,7 @@ class AdminRender extends Component {
                     className="LinkDecorations"
                     to="/loyal-customer/conditon"
                   >
-                    Condition
+                    Conditions
                   </Link>
                 </Menu.Item>
                 <Menu.Item key="Customers">
@@ -166,7 +183,7 @@ class AdminRender extends Component {
                     className="LinkDecorations"
                     to="/loyal-customer/customer"
                   >
-                    Customers
+                    Loyal Customers
                   </Link>
                 </Menu.Item>
               </SubMenu>
