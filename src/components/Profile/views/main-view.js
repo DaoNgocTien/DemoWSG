@@ -383,7 +383,7 @@ class ProfileUI extends Component {
 
         }
       >
-        <Descriptions size="small" column={10}>
+        {/* <Descriptions size="small" column={10}>
           <Descriptions.Item>
             <Avatar
               shape="square"
@@ -449,7 +449,7 @@ class ProfileUI extends Component {
           <Descriptions.Item span={2}>
             <Statistic title="Orders" prefix="$" value={568.08} />
           </Descriptions.Item>
-        </Descriptions>
+        </Descriptions> */}
 
 
       </PageHeader >

@@ -7,8 +7,10 @@ import campaignReducer from "../../components/Campaign/modules/reducer";
 import orderReducer from "../../components/Orders/modules/reducer";
 import loyalCustomerConditionReducer from "../../components/LoyalCustomerCondition/modules/reducer";
 import loyalCustomerReducer from "../../components/LoyalCustomer/modules/reducer";
-import complainReducer from "../../components/ComplainOrder/modules/reducer";
+import complainReducer from "../../components/ReturningOrder/modules/reducer";
 import profileReducer from "../../components/Profile/modules/reducer";
+import transactionReducer from "../../components/Transaction/modules/reducer";
+
 import dashboardReducer from "../../containers/AdminLayout/DashBoard/modules/reducer";
 
 
@@ -25,7 +27,8 @@ const rootReducer = combineReducers({
   loyalCustomerReducer,
   complainReducer,
   profileReducer,
-  dashboardReducer
+  dashboardReducer,
+  transactionReducer,
 });
 
 export default rootReducer;

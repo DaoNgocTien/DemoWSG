@@ -105,11 +105,19 @@ class AdminRender extends Component {
                 </Link>
               </Menu.Item>
 
-              <Menu.Item key="complain" icon={<DollarCircleTwoTone />}>
-                <Link className="LinkDecorations" to="/complain">
-                  Complain
-                </Link>
-              </Menu.Item>
+              <SubMenu
+                key="transaction"
+                title="Transaction"
+                icon={<DollarCircleTwoTone />}
+              >
+
+                <Menu.Item key="transaction">
+                  <Link className="LinkDecorations" to="/transaction/transaction">
+                    Transaction
+                  </Link>
+                </Menu.Item>
+
+              </SubMenu>
 
               <SubMenu
                 key="product"
@@ -192,6 +200,13 @@ class AdminRender extends Component {
                   </Link>
                 </Menu.Item>
               </SubMenu>
+
+              <Menu.Item key="returning" icon={<DollarCircleTwoTone />}>
+                <Link className="LinkDecorations" to="/returning">
+                  Returning
+                </Link>
+              </Menu.Item>
+
             </Menu>
           </Sider>
           <Layout style={{ padding: "0px 5px 0px 5px" }}>
