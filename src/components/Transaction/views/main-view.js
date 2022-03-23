@@ -42,7 +42,7 @@ const propsDefault = {
   defaultCampaign: {},
 };
 
-class DashboardUI extends Component {
+class TransactionUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
@@ -299,95 +299,93 @@ class DashboardUI extends Component {
     // const hasSelected = selectedRowKeys.length > 0;
     const arrayLocation = window.location.pathname.split("/");
     return (
-      <Layout>
-        <Content>
           <PageHeader
-            // onBack={() => window.history.back()}
-            // title="WHOLESALE GROUP DASHBOARD"
-            // subTitle={`This is a ${arrayLocation[2]} page`}
-            // footer={
+            onBack={() => window.history.back()}
+            title="TRANSACTION PAGE"
+            subTitle={`This is a ${arrayLocation[2]} page`}
+            footer={
 
-              // <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              //   <div>
-              //     {/* <CreateModal
-              //       openModal={openCreateModal}
-              //       closeModal={this.closeModal}
-              //       createCampaign={createCampaign}
-              //       productList={productList}
-              //     />
-              //     <DeleteModal
-              //       openModal={openDeleteModal}
-              //       closeModal={this.closeModal}
-              //       deleteCampaign={deleteCampaign}
-              //       productList={productList}
-              //       updateCampaign={updateCampaign}
-              //       record={this.state.record}
-              //       selectedRowKeys={selectedRowKeys[0]}
-              //     />
-              //     <EditModal
-              //       loading={this.props.loading}
-              //       openModal={openEditModal}
-              //       closeModal={this.closeModal}
-              //       productList={productList}
-              //       updateCampaign={updateCampaign}
-              //       record={this.state.record}
-              //       selectedRowKeys={selectedRowKeys[0]}
-              //     /> */}
-              //     <div style={{ marginBottom: 16 }}>
-              //       <Row>
-              //         <Col flex="auto">
-              //           <Space size={4}>
-              //             <Radio.Group onChange={(e) => this.onRadioChange(e)} defaultValue="all">
-              //               <Radio value="all">All Finished Orders</Radio>
-              //               <Radio value="available">Settle Available</Radio>
-              //               <Radio value="settled">Settled</Radio>
-              //               <Radio value="returned">Returned</Radio>
-              //               <Radio value="cancelled">Cancelled</Radio>
-              //             </Radio.Group>
-              //           </Space>
-              //         </Col>
-              //         <Col flex="300px">
-              //           <Input
-              //             onChange={(e) => this.onChangeHandler(e)}
-              //             placeholder="Search data"
-              //           />
-              //         </Col>
-              //       </Row>
-              //     </div>
-              //     <Drawer
-              //       width={window.innerWidth * 0.7}
-              //       height={window.innerWidth * 0.5}
-              //       placement="bottom"
-              //       size={window.innerWidth * 0.7}
-              //       closable={false}
-              //       onClose={this.onCloseDrawer}
-              //       visible={this.state.openDrawer}
-              //     >
-              //       {/* <SettlePaymentUI
-              //         record={this.state.record}
-              //         loading={this.props.loading}
-              //       /> */}
-              //     </Drawer>
-              //     <Table
-              //       loading={this.props.loading}
-              //       // rowSelection={rowSelection}
-              //       columns={this.columns}
-              //       dataSource={
-              //         displayData.length === 0 && searchKey === ""
-              //           ? this.props.data
-              //           : displayData
-              //       }
-              //       scroll={{ y: 300 }}
-              //     />
-              //   </div>
-              // </div>
+              <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+                <div>
+                  {/* <CreateModal
+                    openModal={openCreateModal}
+                    closeModal={this.closeModal}
+                    createCampaign={createCampaign}
+                    productList={productList}
+                  />
+                  <DeleteModal
+                    openModal={openDeleteModal}
+                    closeModal={this.closeModal}
+                    deleteCampaign={deleteCampaign}
+                    productList={productList}
+                    updateCampaign={updateCampaign}
+                    record={this.state.record}
+                    selectedRowKeys={selectedRowKeys[0]}
+                  />
+                  <EditModal
+                    loading={this.props.loading}
+                    openModal={openEditModal}
+                    closeModal={this.closeModal}
+                    productList={productList}
+                    updateCampaign={updateCampaign}
+                    record={this.state.record}
+                    selectedRowKeys={selectedRowKeys[0]}
+                  /> */}
+                  <div style={{ marginBottom: 16 }}>
+                    <Row>
+                      <Col flex="auto">
+                        <Space size={4}>
+                          <Radio.Group onChange={(e) => this.onRadioChange(e)} defaultValue="all">
+                            <Radio value="all">All Finished Orders</Radio>
+                            <Radio value="available">Settle Available</Radio>
+                            <Radio value="settled">Settled</Radio>
+                            <Radio value="returned">Returned</Radio>
+                            <Radio value="cancelled">Cancelled</Radio>
+                          </Radio.Group>
+                        </Space>
+                      </Col>
+                      <Col flex="300px">
+                        <Input
+                          onChange={(e) => this.onChangeHandler(e)}
+                          placeholder="Search data"
+                        />
+                      </Col>
+                    </Row>
+                  </div>
+                  <Drawer
+                    width={window.innerWidth * 0.7}
+                    height={window.innerWidth * 0.5}
+                    placement="bottom"
+                    size={window.innerWidth * 0.7}
+                    closable={false}
+                    onClose={this.onCloseDrawer}
+                    visible={this.state.openDrawer}
+                  >
+                    {/* <SettlePaymentUI
+                      record={this.state.record}
+                      loading={this.props.loading}
+                    /> */}
+                  </Drawer>
+                  <Table
+                    loading={this.props.loading}
+                    // rowSelection={rowSelection}
+                    columns={this.columns}
+                    dataSource={
+                      displayData.length === 0 && searchKey === ""
+                        ? this.props.data
+                        : displayData
+                    }
+                    scroll={{ y: 300 }}
+                  />
+                </div>
+              </div>
 
 
 
-            // }
+            }
           >
             {/* Statistic  */}
-            <Row gutter={16}>
+            {/* <Row gutter={16}>
               <Col span={6}>
                 <Card>
                   <Statistic
@@ -456,40 +454,8 @@ class DashboardUI extends Component {
                   </Space>
                 </Card>
               </Col>
-            </Row>
+            </Row> */}
           </PageHeader >
-        </Content >
-        <Sider
-          style={{
-            background: "#fff",
-            // overflow: 'auto',
-            // height: '100vh',
-          }}
-          breakpoint="lg"
-          collapsedWidth="0"
-          onBreakpoint={broken => {
-            console.log(broken);
-          }}
-          onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
-          }}
-        >
-          <Menu theme="light">
-            <Menu.Item key="1" icon={<DownloadOutlined />} style={{ textAlign: "center" }}>
-              Report 01/2022
-            </Menu.Item>
-            <Menu.Item key="2" icon={<DownloadOutlined />} style={{ textAlign: "center" }}>
-              Report 01/2022
-            </Menu.Item>
-            <Menu.Item key="3" icon={<DownloadOutlined />} style={{ textAlign: "center" }}>
-              Report 01/2022
-            </Menu.Item>
-            <Menu.Item key="4" icon={<DownloadOutlined />} style={{ textAlign: "center" }}>
-              Report 01/2022
-            </Menu.Item>
-          </Menu>
-        </Sider>
-      </Layout >
     );
   }
 }
@@ -499,4 +465,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(DashboardUI, arePropsEqual);
+export default memo(TransactionUI, arePropsEqual);
