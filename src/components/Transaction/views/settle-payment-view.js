@@ -26,7 +26,7 @@ import {
   SafetyCertificateTwoTone,
   ClockCircleOutlined,
 } from "@ant-design/icons";
-import InformationModal from "../../../../components/ReturningOrder/views/information-view";
+import InformationModal from "../../ReturningOrder/views/information-view";
 const { Title } = Typography;
 const { TabPane } = Tabs;
 //  prototype

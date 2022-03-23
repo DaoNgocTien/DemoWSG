@@ -167,11 +167,11 @@ class OrderReturningUI extends Component {
         return moment(data).format("MM/DD/YYYY");
       },
     },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
+    // {
+    //   title: "Status",
+    //   dataIndex: "status",
+    //   key: "status",
+    // },
     {
       title: "Action",
       render: (object) => {
