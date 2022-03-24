@@ -52,10 +52,6 @@ const IconLink = ({ src, text, link }) => (
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
-  defaultCampaign: PropTypes.object,
-  createCampaign: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  deleteCampaign: PropTypes.func,
 };
 
 //  default props
@@ -63,7 +59,6 @@ const propsDefault = {
   index: 1,
   data: [],
   products: [],
-  defaultCampaign: {},
 };
 
 class ProfileUI extends Component {
@@ -119,7 +114,6 @@ class ProfileUI extends Component {
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;
-    //  Get campaign record
     let recordToEdit = data.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
@@ -142,23 +136,6 @@ class ProfileUI extends Component {
         });
 
         break;
-      case "openOrdersInCampaign": {
-        //  Get orders in campaign
-        let orderList = this.props.orderList;
-        let orderListInCampaign = orderList?.filter((item) => {
-          return selectedRowKeys.includes(item.campaignid);
-        });
-        this.props.getCampaign(selectedRowKeys);
-
-        //  Set campaign record and orders in campaign into state
-        this.setState({
-          openDrawer: true,
-          record: recordToEdit,
-          orderList: orderListInCampaign,
-        });
-
-        break;
-      }
       default:
         break;
     }
@@ -304,7 +281,7 @@ class ProfileUI extends Component {
       user
     } = this.state;
 
-    const { productList, createCampaign, updateCampaign, deleteCampaign } =
+    const { productList,  } =
       this.props;
 
     const rowSelection = {

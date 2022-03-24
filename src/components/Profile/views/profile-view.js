@@ -47,40 +47,6 @@ const formItemLayout = {
   },
 };
 
-const residences = [
-  {
-    value: 'zhejiang',
-    label: 'Zhejiang',
-    children: [
-      {
-        value: 'hangzhou',
-        label: 'Hangzhou',
-        children: [
-          {
-            value: 'xihu',
-            label: 'West Lake',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
-          {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
-          },
-        ],
-      },
-    ],
-  },
-];
 const tailFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -144,16 +110,6 @@ class ProfileTab extends Component {
     });
   }
 
-  handleCreateAndClose = (data) => {
-
-    this.props.closeModal();
-  };
-
-  handleCreate = (data) => {
-    this.props.createProduct(data);
-    this.formRef.current.resetFields();
-  };
-
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.props.closeModal();
@@ -176,17 +132,6 @@ class ProfileTab extends Component {
     this.props.updateProfile(this.state.user);
   };
 
-  prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select
-        style={{
-          width: 70,
-        }}
-      >
-        <Option value="84">+84</Option>
-      </Select>
-    </Form.Item>
-  );
 
   getBase64(file) {
     return new Promise((resolve, reject) => {

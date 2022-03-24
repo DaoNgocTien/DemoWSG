@@ -32,9 +32,9 @@ class Transaction extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.dashboardReducer.loading,
-    data: state.dashboardReducer.data,
-    error: state.dashboardReducer.err,
+    loading: state.transactionReducer.loading,
+    data: state.transactionReducer.data,
+    error: state.transactionReducer.err,
     // productList: state.productReducer.data,
     // orderList: [],
   };

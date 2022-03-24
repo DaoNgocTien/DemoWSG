@@ -6,7 +6,7 @@ let initialState = {
   err: null,
 };
 
-const campaignReducer = (state = initialState, action) => {
+const orderReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
 
@@ -31,4 +31,4 @@ const campaignReducer = (state = initialState, action) => {
   }
 };
 
-export default campaignReducer;
+export default orderReducer;

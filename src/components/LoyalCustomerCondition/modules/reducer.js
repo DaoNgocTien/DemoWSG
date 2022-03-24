@@ -6,7 +6,7 @@ let initialState = {
   err: null,
 };
 
-const Reducer = (state = initialState, action) => {
+const loyalCustomerConditionReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
       state.loading = true;
@@ -30,4 +30,4 @@ const Reducer = (state = initialState, action) => {
   }
 };
 
-export default Reducer;
+export default loyalCustomerConditionReducer;

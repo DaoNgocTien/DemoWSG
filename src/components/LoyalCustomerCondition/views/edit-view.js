@@ -76,11 +76,6 @@ class UpdateModal extends Component {
     this.props.closeModal();
   };
 
-  handleUpdate = (data) => {
-    this.props.updateProduct(data);
-    this.formRef.current.resetFields();
-  };
-
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.props.closeModal();

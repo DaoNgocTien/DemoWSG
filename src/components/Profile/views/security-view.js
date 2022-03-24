@@ -76,12 +76,6 @@ class PasswordTab extends Component {
     this.props.getProfile();
   }
 
-  handleUpdateAndClose = (data) => {
-    // console.log("Campaign create");
-    // console.log(this.state.productSelected);
-    console.log(data);
-  };
-
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.props.closeModal();

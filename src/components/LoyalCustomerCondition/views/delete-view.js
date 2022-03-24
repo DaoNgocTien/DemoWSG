@@ -240,11 +240,6 @@ class DeleteModal extends Component {
     this.props.closeModal();
   };
 
-  handleDelete = (data) => {
-    this.props.updateProduct(data);
-    this.formRef.current.resetFields();
-  };
-
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.props.closeModal();
