@@ -24,17 +24,6 @@ const getOrder = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      // orders.data.data.map((order) => {
-      //   let campL = [(campaigns.data.data).filter(camp => {
-      //     return order.campaignid ?? camp.id == order.campaignid;
-      //   }
-
-
-
-      //   )](0);
-      //   console.log(campL);
-      // });
-      // console.log(orders.data.data.length);
       const completedOrder = orders.data.data.filter(order => {
         return order.status === "completed" || order.status === "returned" || order.status === "cancelled";
       });

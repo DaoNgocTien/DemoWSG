@@ -161,6 +161,11 @@ class TransactionUI extends Component {
       key: "totalprice",
     },
     {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
       title: "Finished At",
       dataIndex: "updatedat",
       key: "updatedat",

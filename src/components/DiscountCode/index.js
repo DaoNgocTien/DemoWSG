@@ -32,9 +32,9 @@ class DiscountCode extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.discountCodeReducer.loading,
-    data: state.discountCodeReducer.data,
-    error: state.discountCodeReducer.err,
+    loading: state.discountReducer.loading,
+    data: state.discountReducer.data,
+    error: state.discountReducer.err,
     // productList: state.productReducer.data,
     // orderList: [],
   };

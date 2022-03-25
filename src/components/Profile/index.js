@@ -19,11 +19,7 @@ class Profile extends Component {
         data={this.props.data}
         loading={this.props.loading}
         getProfile={this.props.getProfile}
-        ordersInCampaign={this.props.data.order}
         productList={this.props.data.products}
-        updateCampaign={this.props.updateCampaign}
-        createCampaign={this.props.createCampaign}
-        deleteCampaign={this.props.deleteCampaign}
         changePassword={this.props.changePassword}
       />
     );
