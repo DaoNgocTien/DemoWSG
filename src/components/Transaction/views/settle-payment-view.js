@@ -562,10 +562,10 @@ class SettlePaymentUI extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.dashboardReducer.loading,
-    data: state.dashboardReducer.data,
-    error: state.dashboardReducer.err,
-    record: state.dashboardReducer.settlingPaymentList.settlingList[0],
+    loading: state.transactionReducer.loading,
+    data: state.transactionReducer.data,
+    error: state.transactionReducer.err,
+    record: state.transactionReducer.settlingPaymentList.settlingList[0],
   };
 };
 

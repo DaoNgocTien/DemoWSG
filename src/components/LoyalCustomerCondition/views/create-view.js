@@ -57,11 +57,6 @@ class CreatModal extends Component {
     this.props.closeModal();
   };
 
-  handleCreate = (data) => {
-    this.props.createProduct(data);
-    this.formRef.current.resetFields();
-  };
-
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.props.closeModal();
@@ -72,23 +67,6 @@ class CreatModal extends Component {
     // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
   };
 
-  onSelectProduct = (value) => {
-    // console.log(value);
-    this.setState({
-      productSelected: this.props.productList?.find(
-        (element) => element.id === value
-      ),
-    });
-  };
-
-  onChangePrice = (value) => {
-    if (isNaN(value)) {
-      return;
-    }
-    this.setState({
-      price: value,
-    });
-  };
 
   render() {
     const { openModal } = this.props;

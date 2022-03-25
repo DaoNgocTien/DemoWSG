@@ -18,17 +18,12 @@ const { TabPane } = Tabs;
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
-  defaultCampaign: PropTypes.object,
-  createCampaign: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  deleteCampaign: PropTypes.func,
 };
 
 const propsDefault = {
   index: 1,
   data: [],
   products: [],
-  defaultCampaign: {},
 };
 
 class ProfileUI extends Component {
@@ -84,7 +79,6 @@ class ProfileUI extends Component {
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;
-
     let recordToEdit = data.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
@@ -107,21 +101,6 @@ class ProfileUI extends Component {
         });
 
         break;
-      case "openOrdersInCampaign": {
-        let orderList = this.props.orderList;
-        let orderListInCampaign = orderList?.filter((item) => {
-          return selectedRowKeys.includes(item.campaignid);
-        });
-        this.props.getCampaign(selectedRowKeys);
-
-        this.setState({
-          openDrawer: true,
-          record: recordToEdit,
-          orderList: orderListInCampaign,
-        });
-
-        break;
-      }
       default:
         break;
     }
@@ -245,7 +224,7 @@ class ProfileUI extends Component {
   render() {
     const { selectedRowKeys, user } = this.state;
 
-    const { productList, createCampaign, updateCampaign, deleteCampaign } =
+    const { productList,  } =
       this.props;
 
     console.log(this.props.data);

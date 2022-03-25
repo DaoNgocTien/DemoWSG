@@ -57,18 +57,6 @@ class CampaignUI extends Component {
 
   componentDidMount() {}
 
-  showDrawer = () => {
-    this.setState({
-      openDrawer: true,
-    });
-  };
-
-  onCloseDrawer = () => {
-    this.setState({
-      openDrawer: false,
-    });
-  };
-
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;

@@ -75,11 +75,6 @@ class CreatModal extends Component {
     this.props.closeModal();
   };
 
-  handleCreate = (data) => {
-    this.props.createProduct(data);
-    this.formRef.current.resetFields();
-  };
-
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.props.closeModal();

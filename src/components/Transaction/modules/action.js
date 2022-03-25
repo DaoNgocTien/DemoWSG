@@ -23,7 +23,7 @@ const getOrder = () => {
       ]);
       const completedOrder = orders.data.data.filter(order => {
         return order.status === "completed" || order.status === "returned" || order.status === "cancelled";
-      });
+      });console.log(completedOrder);
       return dispatch(
         getSuccess({
           orders: completedOrder.map((order) => {
@@ -48,7 +48,7 @@ const storeSettlingPaymentList = list => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-
+console.log(list);
       return dispatch(
         storePaymentList({
           settlingList: list

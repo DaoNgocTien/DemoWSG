@@ -21,7 +21,6 @@ import { DownloadOutlined, ArrowUpOutlined, VideoCameraOutlined, ArrowDownOutlin
 import moment from "moment";
 import PropTypes from "prop-types";
 
-import SettlePaymentUI from "./settle-payment-view";
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
 //  prototype
@@ -303,86 +302,11 @@ class DashboardUI extends Component {
         <Content>
           <PageHeader
             // onBack={() => window.history.back()}
-            // title="WHOLESALE GROUP DASHBOARD"
+            title="WHOLESALE GROUP DASHBOARD"
             // subTitle={`This is a ${arrayLocation[2]} page`}
             // footer={
 
-              // <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-              //   <div>
-              //     {/* <CreateModal
-              //       openModal={openCreateModal}
-              //       closeModal={this.closeModal}
-              //       createCampaign={createCampaign}
-              //       productList={productList}
-              //     />
-              //     <DeleteModal
-              //       openModal={openDeleteModal}
-              //       closeModal={this.closeModal}
-              //       deleteCampaign={deleteCampaign}
-              //       productList={productList}
-              //       updateCampaign={updateCampaign}
-              //       record={this.state.record}
-              //       selectedRowKeys={selectedRowKeys[0]}
-              //     />
-              //     <EditModal
-              //       loading={this.props.loading}
-              //       openModal={openEditModal}
-              //       closeModal={this.closeModal}
-              //       productList={productList}
-              //       updateCampaign={updateCampaign}
-              //       record={this.state.record}
-              //       selectedRowKeys={selectedRowKeys[0]}
-              //     /> */}
-              //     <div style={{ marginBottom: 16 }}>
-              //       <Row>
-              //         <Col flex="auto">
-              //           <Space size={4}>
-              //             <Radio.Group onChange={(e) => this.onRadioChange(e)} defaultValue="all">
-              //               <Radio value="all">All Finished Orders</Radio>
-              //               <Radio value="available">Settle Available</Radio>
-              //               <Radio value="settled">Settled</Radio>
-              //               <Radio value="returned">Returned</Radio>
-              //               <Radio value="cancelled">Cancelled</Radio>
-              //             </Radio.Group>
-              //           </Space>
-              //         </Col>
-              //         <Col flex="300px">
-              //           <Input
-              //             onChange={(e) => this.onChangeHandler(e)}
-              //             placeholder="Search data"
-              //           />
-              //         </Col>
-              //       </Row>
-              //     </div>
-              //     <Drawer
-              //       width={window.innerWidth * 0.7}
-              //       height={window.innerWidth * 0.5}
-              //       placement="bottom"
-              //       size={window.innerWidth * 0.7}
-              //       closable={false}
-              //       onClose={this.onCloseDrawer}
-              //       visible={this.state.openDrawer}
-              //     >
-              //       {/* <SettlePaymentUI
-              //         record={this.state.record}
-              //         loading={this.props.loading}
-              //       /> */}
-              //     </Drawer>
-              //     <Table
-              //       loading={this.props.loading}
-              //       // rowSelection={rowSelection}
-              //       columns={this.columns}
-              //       dataSource={
-              //         displayData.length === 0 && searchKey === ""
-              //           ? this.props.data
-              //           : displayData
-              //       }
-              //       scroll={{ y: 300 }}
-              //     />
-              //   </div>
-              // </div>
-
-
+              
 
             // }
           >

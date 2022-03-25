@@ -17,31 +17,11 @@ import moment from "moment";
 const propsProTypes = {
   closeModal: PropTypes.func,
   deleteCampaign: PropTypes.func,
-  record: PropTypes.object,
-  openModal: PropTypes.bool,
 };
 
 const propsDefault = {
-  closeModal: () => {},
-  updateProduct: () => {},
-  defaultProduct: {
-    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    name: "test222 again Product",
-    supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    retailprice: "5.00",
-    quantity: 11,
-    description: "testttttt",
-    image: "",
-    categoryid: null,
-    status: "active",
-    typeofproduct: "",
-    createdat: "2022-01-07T14:08:02.994Z",
-    updatedat: "2022-01-13T16:34:09.908Z",
-    categoryname: null,
-  },
-  openModal: false,
-  categoryList: [],
+  closeModal: () => { },
+  deleteCampaign:  () => { },
 };
 
 class DeleteModal extends Component {
@@ -72,11 +52,6 @@ class DeleteModal extends Component {
         break;
     }
     this.props.closeModal();
-  };
-
-  handleUpdate = (data) => {
-    this.props.updateProduct(data);
-    this.formRef.current.resetFields();
   };
 
   handleCancel = () => {

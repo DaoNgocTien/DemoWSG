@@ -1,5 +1,5 @@
 import DashBoard from "../containers/AdminLayout/DashBoard";
-import SettlePaymentUI from "../containers/AdminLayout/DashBoard/views/settle-payment-view";
+import SettlePaymentUI from "../components/Transaction/views/settle-payment-view";
 import AuthPage from "../containers/AuthPage";
 import Registration from "../containers/AuthPage/views/registration";
 
