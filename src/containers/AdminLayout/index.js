@@ -7,6 +7,8 @@ import {
   ContactsTwoTone,
   HomeTwoTone,
   DollarCircleTwoTone,
+  GoldTwoTone,
+  InteractionTwoTone,
 } from "@ant-design/icons";
 import NavbarAdmin from "../../components/NavbarAdmin";
 import Notification from "../../components/Notification";
@@ -105,25 +107,7 @@ class AdminRender extends Component {
                 </Link>
               </Menu.Item>
 
-              <SubMenu
-                key="transaction"
-                title="Transaction"
-                icon={<DollarCircleTwoTone />}
-              >
-
-                <Menu.Item key="transaction">
-                  <Link className="LinkDecorations" to="/transaction/transaction">
-                    Transaction
-                  </Link>
-                </Menu.Item>
-
-              </SubMenu>
-
-              <SubMenu
-                key="product"
-                title="Products"
-                icon={<DollarCircleTwoTone />}
-              >
+              <SubMenu key="product" title="Products" icon={<GoldTwoTone />}>
                 <Menu.Item key="1">
                   <Link className="LinkDecorations" to="/products/categories">
                     Categories
@@ -201,12 +185,17 @@ class AdminRender extends Component {
                 </Menu.Item>
               </SubMenu>
 
-              <Menu.Item key="returning" icon={<DollarCircleTwoTone />}>
+              <Menu.Item key="returning" icon={<InteractionTwoTone />}>
                 <Link className="LinkDecorations" to="/returning">
                   Returning
                 </Link>
               </Menu.Item>
 
+              <Menu.Item key="transaction" icon={<DollarCircleTwoTone />}>
+                <Link className="LinkDecorations" to="/transaction">
+                  Transaction
+                </Link>
+              </Menu.Item>
             </Menu>
           </Sider>
           <Layout style={{ padding: "0px 5px 0px 5px" }}>

@@ -1,17 +1,25 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 
-const getOrder = () => {
+const getOrder = (status) => {
+  console.log(status)
   return async (dispatch) => {
     try {
       dispatch(getRequest());
       const [orders, campaigns] = await Promise.all([
-        Axios({
-          url: `/order/supplier`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
+        !status
+          ? Axios({
+              url: `/order/supplier`,
+              method: "GET",
+              withCredentials: true,
+              exposedHeaders: ["set-cookie"],
+            })
+          : Axios({
+              url: `/order/supplier/status?status=${status}`,
+              method: "GET",
+              withCredentials: true,
+              exposedHeaders: ["set-cookie"],
+            }),
         Axios({
           url: `/campaigns/All`,
           method: "GET",
@@ -19,22 +27,12 @@ const getOrder = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      // orders.data.data.map((order) => {
-      //   let campL = [(campaigns.data.data).filter(camp => {
-      //     return order.campaignid ?? camp.id == order.campaignid;
-      //   }
 
-
-
-      //   )](0);
-      //   console.log(campL);
-      // });
-      // console.log(orders.data.data.length);
       return dispatch(
         getSuccess({
           orders: orders.data.data.map((order) => {
             return {
-              campaign: (campaigns.data.data).filter(camp => {
+              campaign: campaigns.data.data.filter((camp) => {
                 return camp.id == order.campaignid;
               }),
               key: order.id,
@@ -60,8 +58,7 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => {
-          })
+          .then((response) => {})
           .catch((err) => {
             return dispatch(getFailed());
           });
@@ -75,8 +72,7 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => {
-          })
+          .then((response) => {})
           .catch((err) => {
             return dispatch(getFailed());
           });
@@ -122,18 +118,19 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof) => {
         getSuccess({
           orders: orders.data.data.map((order) => {
             return {
-              campaign: (campaigns.data.data).filter(camp => {
+              campaign: campaigns.data.data.filter((camp) => {
                 return camp.id == order.campaignid;
               }),
               key: order.id,
               ...order,
             };
           }),
-        }))
+        })
+      );
     } catch (error) {
       return dispatch(getFailed());
     }
-  }
+  };
 };
 
 const getRequest = () => {

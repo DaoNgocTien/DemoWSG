@@ -10,21 +10,21 @@ class Transaction extends Component {
     this.state = {};
   }
   componentDidMount() {
-    this.props.getOrder();
+    this.props.getTransaction();
   }
 
   render() {
     console.log(this.props.data);
     return (
       <TransactionUI
-        data={this.props.data.orders}
+        data={this.props.data.transactions}
         loading={this.props.loading}
         storeSettlingPaymentList={this.props.storeSettlingPaymentList}
-        ordersInCampaign={this.props.data.order}
+        ordersInTransaction={this.props.data.order}
         productList={this.props.data.products}
-        updateCampaign={this.props.updateCampaign}
-        createCampaign={this.props.createCampaign}
-        deleteCampaign={this.props.deleteCampaign}
+        updateTransaction={this.props.updateTransaction}
+        createTransaction={this.props.createTransaction}
+        deleteTransaction={this.props.deleteTransaction}
       />
     );
   }
@@ -42,36 +42,36 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getOrder: async () => {
-      // console.log("get campaign");
-      await dispatch(action.getOrder());
+    getTransaction: async () => {
+      // console.log("get Transaction");
+      await dispatch(action.getTransaction());
     },
 
-    storeSettlingPaymentList: async (list) => {
-      // console.log("get campaign");
-      await dispatch(action.storeSettlingPaymentList(list));
+    // storeSettlingPaymentList: async (list) => {
+    //   // console.log("get Transaction");
+    //   await dispatch(action.storeSettlingPaymentList(list));
+    // },
+
+    // getOrdersInTransaction: async (TransactionID) => {
+    //   // console.log("getOrdersInTransaction final");
+    //   // console.log(TransactionID);
+    // },
+
+    // createTransaction: async (record) => {
+    //   // console.log("createProduct final");
+    //   // console.log(record);
+    //   await dispatch(action.createTransaction(record));
+    //   await dispatch(action.getTransaction());
+    // },
+
+    updateTransaction: async (record) => {
+      await dispatch(action.updateTransaction(record));
+      await dispatch(action.getTransaction());
     },
 
-    getOrdersInCampaign: async (campaignID) => {
-      // console.log("getOrdersInCampaign final");
-      // console.log(campaignID);
-    },
-
-    createCampaign: async (record) => {
-      // console.log("createProduct final");
-      // console.log(record);
-      await dispatch(action.createCampaign(record));
-      await dispatch(action.getCampaign());
-    },
-
-    updateCampaign: async (record) => {
-      await dispatch(action.updateCampaign(record));
-      await dispatch(action.getCampaign());
-    },
-
-    deleteCampaign: async (id) => {
-      await dispatch(action.deleteCampaign(id));
-    }
+    // deleteTransaction: async (id) => {
+    //   await dispatch(action.deleteTransaction(id));
+    // }
   };
 };
 

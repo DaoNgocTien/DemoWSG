@@ -30,9 +30,9 @@ class OrderReturning extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.orderReducer.loading,
-    data: state.orderReducer.data,
-    error: state.orderReducer.err,
+    loading: state.ReturningOrderReducer.loading,
+    data: state.ReturningOrderReducer.data,
+    error: state.ReturningOrderReducer.err,
   };
 };
 

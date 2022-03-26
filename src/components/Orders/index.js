@@ -11,12 +11,12 @@ class Order extends Component {
 
   componentDidMount() {
     this.props.getOrder();
-    // console.log(this.props);
   }
 
   render() {
     return (
       <OrderUI
+        getOrder={this.props.getOrder}
         data={this.props.data.orders}
         loading={this.props.loading}
         updateStatusOrder={this.props.updateStatusOrder}
@@ -37,13 +37,15 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getOrder: async () => await dispatch(action.getOrder()),
+    getOrder: async (status) => await dispatch(action.getOrder(status)),
     updateStatusOrder: async (data) => {
       await dispatch(action.updateStatusOrder(data));
-      await dispatch(action.getOrder())
+      await dispatch(action.getOrder());
     },
     rejectOrder: async (orderCode, reasonForCancel, imageProof) => {
-      await dispatch(action.rejectOrder(orderCode, reasonForCancel, imageProof));
+      await dispatch(
+        action.rejectOrder(orderCode, reasonForCancel, imageProof)
+      );
     },
   };
 };

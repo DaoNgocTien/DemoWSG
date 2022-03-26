@@ -44,7 +44,7 @@ class UpdateModal extends Component {
     previewVisible: false,
     previewImage: "",
     previewTitle: "",
-    fileList: [],
+    fileList: undefined,
   };
   formRef = React.createRef();
 
@@ -69,6 +69,9 @@ class UpdateModal extends Component {
     }
 
     this.formRef.current.resetFields();
+    this.setState({
+      fileList: undefined,
+    });
     this.props.closeModal();
   };
 
@@ -79,6 +82,9 @@ class UpdateModal extends Component {
 
   handleCancel = () => {
     this.formRef.current.resetFields();
+    this.setState({
+      fileList: undefined,
+    });
     this.props.closeModal();
   };
 
@@ -127,7 +133,7 @@ class UpdateModal extends Component {
     const { openModal, record } = this.props;
 
     const { data, categoryList } = this.props;
-    const { load, imageUrl } = this.state;
+    const { load, fileList = JSON.parse(record?.image || "[]") } = this.state;
     // this.state.fileList =
     //   this.props.record && this.state.fileList !== 0
     //     ? JSON.parse(this.props.record?.image)
@@ -250,16 +256,12 @@ class UpdateModal extends Component {
                       name="file"
                       action="/files/upload"
                       listType="picture-card"
-                      fileList={
-                        this.state.fileList.length === 0 && this.props.record
-                          ? JSON.parse(this.props.record?.image)
-                          : this.state.fileList
-                      }
+                      fileList={this.props.record ? fileList : []}
                       onPreview={this.handlePreview}
                       onChange={this.handleChange}
                       style={{ width: "60vh" }}
                     >
-                      {this.state.fileList.length >= 8 ? null : uploadButton}
+                      {fileList.length >= 8 ? null : uploadButton}
                     </Upload>
                     <Modal
                       visible={this.state.previewVisible}

@@ -48,13 +48,7 @@ const routesAdmin = [
 
   {
     exact: true,
-    path: "/orders/returned",
-    component: Order,
-  },
-
-  {
-    exact: true,
-    path: "/orders/cancelled",
+    path: "/orders/:status",
     component: Order,
   },
 
@@ -66,7 +60,7 @@ const routesAdmin = [
 
   {
     exact: true,
-    path: "/transaction/transaction",
+    path: "/transaction",
     component: Transaction,
   },
 
@@ -90,12 +84,12 @@ const routesAdmin = [
     exact: true,
     path: "/loyal-customer/conditon",
     component: LoyalCustomerCondition,
-  }, 
+  },
   {
     exact: true,
     path: "/loyal-customer/customer",
     component: LoyalCustomer,
-  }, 
+  },
   {
     exact: true,
     path: "/profile",

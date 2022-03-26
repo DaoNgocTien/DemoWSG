@@ -10,9 +10,15 @@ const getOrder = () => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      const [orders, campaigns] = await Promise.all([
+      const [returning, returned, campaigns] = await Promise.all([
         Axios({
-          url: `/order/supplier`,
+          url: `/order/supplier/status?status=returning`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+        Axios({
+          url: `/order/supplier/status?status=returned`,
           method: "GET",
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
@@ -24,23 +30,24 @@ const getOrder = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      const completedOrder = orders.data.data.filter(order => {
-        return order.status === "completed" || order.status === "returned" || order.status === "cancelled";
-      });
+      const orders = [];
+      orders.push(...returning.data.data, ...returned.data.data);
+      console.log(orders);
       return dispatch(
         getSuccess({
-          orders: completedOrder.data.data.map((order) => {
+          orders: orders.map((order) => {
             return {
-              campaign: (campaigns.data.data).filter(camp => {
+              campaign: campaigns.data.data.filter((camp) => {
                 return camp.id == order.campaignid;
               }),
-              key: completedOrder.id,
+              key: order.id,
               ...order,
             };
           }),
         })
       );
     } catch (error) {
+      console.log(error);
       return dispatch(getFailed());
     }
   };
@@ -57,8 +64,7 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => {
-          })
+          .then((response) => {})
           .catch((err) => {
             return dispatch(getFailed());
           });
@@ -72,8 +78,7 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => {
-          })
+          .then((response) => {})
           .catch((err) => {
             return dispatch(getFailed());
           });
@@ -119,18 +124,19 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof) => {
         getSuccess({
           orders: orders.data.data.map((order) => {
             return {
-              campaign: (campaigns.data.data).filter(camp => {
+              campaign: campaigns.data.data.filter((camp) => {
                 return camp.id == order.campaignid;
               }),
               key: order.id,
               ...order,
             };
           }),
-        }))
+        })
+      );
     } catch (error) {
       return dispatch(getFailed());
     }
-  }
+  };
 };
 
 const storeComplainRecord = (record) => {
@@ -138,15 +144,12 @@ const storeComplainRecord = (record) => {
   console.log(record);
   return async (dispatch) => {
     try {
-      return dispatch(
-        getComplainRecord({ complainRecord: record })
-      );
+      return dispatch(getComplainRecord({ complainRecord: record }));
     } catch (error) {
       return dispatch(getFailed());
     }
-  }
+  };
 };
-
 
 const getRequest = () => {
   return {
