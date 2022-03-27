@@ -1,10 +1,8 @@
 import React, { Component, memo } from "react";
 import { Route, Link, Redirect } from "react-router-dom";
-import { Table, Button, Input, Row, Col, PageHeader, Radio } from "antd";
+import { Table, Button, Input, Row, Col, PageHeader, Radio, Tag } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
-import DetailModal from "./detail-view";
-import HandleModal from "./handle-view";
 
 //  prototype
 const propsProTypes = {
@@ -180,28 +178,33 @@ class OrderReturningUI extends Component {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (data) => {
+        return data === "returned" ?  
+        <Tag color="blue">{data}</Tag>:
+        <Tag color="red">{data}</Tag>
+      },
       width: 100,
     },
-    {
-      title: "Action",
-      render: (object) => {
-        return (
-          <Button
-            onClick={() => this.changeStatus(object)}
-            type="primary"
-            disable={
-              object.status === "created" || object.status === "processing"
-                ? "false"
-                : "true"
-            }
-          >
-            Change Status
-          </Button>
-        );
-      },
-      fixed: "right",
-      width: 130,
-    },
+    // {
+    //   title: "Action",
+    //   render: (object) => {
+    //     return (
+    //       <Button
+    //         onClick={() => this.changeStatus(object)}
+    //         type="primary"
+    //         disable={
+    //           object.status === "created" || object.status === "processing"
+    //             ? "false"
+    //             : "true"
+    //         }
+    //       >
+    //         Change Status
+    //       </Button>
+    //     );
+    //   },
+    //   fixed: "right",
+    //   width: 130,
+    // },
   ];
 
   onChangeHandler = (e) => {
@@ -283,53 +286,15 @@ class OrderReturningUI extends Component {
         subTitle={`This is a order returning page`}
         footer={
           <div>
-            <DetailModal
-              openModal={openDetailModal}
-              closeModal={this.closeModal}
-              updateStatusOrder={updateStatusOrder}
-              record={
-                this.props.data.filter((item) => {
-                  return selectedRowKeys.includes(item.id);
-                })[0]
-              }
-              selectedRowKeys={selectedRowKeys[0]}
-            />
-
-            {/* <HandleModal
-              openModal={openHandleModal}
-              closeModal={this.closeModal}
-              handleOrder={handleOrder}
-              record={
-                this.props.data.filter((item) => {
-                  return selectedRowKeys.includes(item.id);
-                })[0]
-              }
-              selectedRowKeys={selectedRowKeys[0]}
-            /> */}
+           
 
             <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex={3}>
-                  <Button
-                    type="primary"
-                    onClick={() => this.start("openDetailModal")}
-                    disabled={
-                      !viewButton || this.state.selectedRowKeys.length === 0
-                        ? true
-                        : false
-                    }
-                    hidden={
-                      !viewButton || this.state.selectedRowKeys.length === 0
-                        ? true
-                        : false
-                    }
-                    style={{ marginLeft: 3 }}
-                  >
-                    View Details
-                  </Button>
+                  
 
                   <Button
-                    type="danger"
+                    type="primary"
                     onClick={() => storeComplainRecord(this.state.record)}
                     disabled={
                       !actionButton || this.state.selectedRowKeys.length === 0
@@ -343,8 +308,8 @@ class OrderReturningUI extends Component {
                     }
                     style={{ marginLeft: 3 }}
                   >
-                    <Link className="LinkDecorations" to="/complain/handle">
-                      Handle Complain
+                    <Link className="LinkDecorations" to={"handle-returning-order/" + this.state.record.ordercode}>
+                      Handle Returning Request
                     </Link>
                   </Button>
                 </Col>
