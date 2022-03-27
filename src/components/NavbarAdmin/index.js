@@ -1,8 +1,8 @@
 import React, { Component, memo } from "react";
-// import { Link } from "react-router-dom";
+
 import Axios from "axios";
 import { Link } from "react-router-dom";
-import { Menu, Button, Divider, Row, Col, Space } from "antd";
+import { Menu, Button, Divider, Row, Col } from "antd";
 import {
   SettingTwoTone,
   MenuUnfoldOutlined,
@@ -29,8 +29,12 @@ class NavbarAdmin extends Component {
   };
 
   render() {
-    // console.log(this.props);
-    const { toggleCollapsed, collapsed, showChatDrawer, showNotificationDrawer } = this.props;
+    const {
+      toggleCollapsed,
+      collapsed,
+      showChatDrawer,
+      showNotificationDrawer,
+    } = this.props;
     return (
       <Row>
         {/* <Space size={1}> */}
@@ -51,10 +55,9 @@ class NavbarAdmin extends Component {
           </Link>
         </Col>
 
-        <Col flex="auto" style={{ height: "50px" }}  ></Col>
+        <Col flex="auto" style={{ height: "50px" }}></Col>
 
         <Col flex="260px">
-
           <Menu
             theme="light"
             mode="horizontal"
@@ -63,17 +66,19 @@ class NavbarAdmin extends Component {
               justifyContent: "left",
               lineHeight: "64px",
               fontSize: "20px",
-            }}>
+            }}
+          >
             <Menu.Item
               key="Chat"
-              icon={<MessageTwoTone style={{ fontSize: "25px" }} onClick={showChatDrawer} />}
-            >
-            </Menu.Item>
+              onClick={showChatDrawer}
+              icon={<MessageTwoTone style={{ fontSize: "25px" }} />}
+            ></Menu.Item>
 
             <Menu.Item
               key="Notice"
-              icon={<BellTwoTone style={{ fontSize: "25px" }} onClick={showNotificationDrawer} />} >
-            </Menu.Item>
+              onClick={showNotificationDrawer}
+              icon={<BellTwoTone style={{ fontSize: "25px" }} />}
+            ></Menu.Item>
 
             <Menu.SubMenu
               style={{
@@ -85,12 +90,19 @@ class NavbarAdmin extends Component {
               key="Log out"
               title={<SettingTwoTone style={{ fontSize: "25px" }} />}
             >
-              <Menu.Item key="4" icon={<UserOutlined style={{ fontSize: "25px" }} />}>
+              <Menu.Item
+                key="4"
+                icon={<UserOutlined style={{ fontSize: "25px" }} />}
+              >
                 <Link className="LinkDecorations" to="/profile">
                   User Profile
                 </Link>
               </Menu.Item>
-              <Menu.Item key="5" onClick={(e) => this.handleLogOut(e)} icon={<LogoutOutlined style={{ fontSize: "25px" }} />}>
+              <Menu.Item
+                key="5"
+                onClick={(e) => this.handleLogOut(e)}
+                icon={<LogoutOutlined style={{ fontSize: "25px" }} />}
+              >
                 Logout
               </Menu.Item>
             </Menu.SubMenu>
@@ -98,30 +110,13 @@ class NavbarAdmin extends Component {
           </Menu>
         </Col>
         {/* </Space> */}
-      </Row >
-      // <div style={{ width: 256 }}>
-
-      //   </div>
-
-      //   <Menu.Item key="1" className="nav-menu">
-      //     <Button type="primary" onClick={toggleCollapsed()} style={{ marginBottom: 16 }}>
-      //       {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
-      //     </Button>
-      //   </Menu.Item>
-      //   <Menu.Item key="2" className="nav-menu">
-      //   </Menu.Item>
-      //   <Menu.Item key="3" className="nav-menu">
-      //   </Menu.Item>
-
-      // </Menu>
+      </Row>
     );
   }
 }
 
 const arePropsEqual = (prevProps, nextProps) => {
-  // console.log(prevProps !== nextProps);
   return prevProps !== nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(NavbarAdmin, arePropsEqual);

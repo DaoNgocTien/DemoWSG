@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Route, Link, Redirect } from "react-router-dom";
-import { Layout, Menu, Drawer, Button } from "antd";
+import { Route, Link } from "react-router-dom";
+import { Layout, Menu, Drawer } from "antd";
+import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
   ReconciliationTwoTone,
   RedEnvelopeTwoTone,
@@ -10,10 +11,26 @@ import {
   GoldTwoTone,
   InteractionTwoTone,
 } from "@ant-design/icons";
+import {
+  MainContainer,
+  ChatContainer,
+  MessageList,
+  Message,
+  MessageInput,
+  Sidebar,
+  ConversationList,
+  Conversation,
+  Avatar,
+  ConversationHeader,
+  EllipsisButton,
+  AttachmentButton,
+  InputToolbox
+} from "@chatscope/chat-ui-kit-react";
+
 import NavbarAdmin from "../../components/NavbarAdmin";
 import Notification from "../../components/Notification";
 
-import { ref, onValue, get, set } from "firebase/database";
+import { ref, onValue, set } from "firebase/database";
 import { realtime } from "../../services/firebase";
 
 const { SubMenu } = Menu;
@@ -23,7 +40,13 @@ class AdminRender extends Component {
   state = {
     collapsed: false,
     visible: false,
+    chatVisible: false,
     drawerLength: 0,
+    userMessages: [],
+    messages: {},
+    messageDetails: {},
+    from: null,
+    to: null,
   };
 
   toggleCollapsed = () => {
@@ -36,6 +59,25 @@ class AdminRender extends Component {
     this.getNotif();
     if (!localStorage.getItem("user")) {
       return window.location.replace("/login");
+    } else {
+      const user = JSON.parse(localStorage.getItem("user"));
+      this.setState({
+        from: JSON.parse(localStorage.getItem("user")).id,
+      });
+      onValue(ref(realtime, `message/${user.id}`), (snapshot) => {
+        if (snapshot.val()) {
+          console.log(snapshot.val());
+          this.setState({
+            userMessages: Object.keys(snapshot.val()),
+            messages: snapshot.val(),
+          });
+          if (this.state.to) {
+            this.setState({
+              messageDetails: snapshot.val()[this.state.to],
+            });
+          }
+        }
+      });
     }
   };
 
@@ -49,10 +91,9 @@ class AdminRender extends Component {
   };
 
   showChatDrawer = () => {
-    // console.log("showChatDrawer");
     this.setState({
-      visible: true,
-      drawerLength: 0.45,
+      chatVisible: true,
+      visible: false,
     });
   };
 
@@ -60,13 +101,14 @@ class AdminRender extends Component {
     // console.log("showNotificationDrawer");
     this.setState({
       visible: true,
-      drawerLength: 0.3,
+      chatVisible: false,
     });
   };
 
   onClose = () => {
     this.setState({
       visible: false,
+      chatVisible: false,
     });
   };
 
@@ -74,8 +116,25 @@ class AdminRender extends Component {
     return this.state.drawerLength == 0.3 ? <Notification /> : <Notification />;
   };
 
+  setMessagesDetail = (data) => {
+    this.setState({
+      from: JSON.parse(localStorage.getItem("user")).id,
+      to: data.userinfo.id,
+      messageDetails: data,
+    });
+  };
+  setMessageInputValue = (data) => {
+    console.log(this.state);
+    set(ref(realtime, "chat-message"), {
+      to: this.state.to,
+      from: this.state.from,
+      message: data,
+    });
+  };
+
   render() {
-    const { collapsed, visible, drawerLength } = this.state;
+    const { collapsed, messages } = this.state;
+    console.log(this.state);
     return (
       <Layout>
         <Header
@@ -209,14 +268,101 @@ class AdminRender extends Component {
             >
               {this.props.children}
               <Drawer
-                width={window.innerWidth * drawerLength}
+                width={window.innerWidth * 0.3}
                 placement="right"
                 size={"736px"}
                 closable={false}
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                {this.getDrawerContent()}
+                {/* {this.getDrawerContent()} */}
+              </Drawer>
+
+              <Drawer
+                width={window.innerWidth * 0.45}
+                placement="right"
+                size={"736px"}
+                closable={false}
+                onClose={this.onClose}
+                visible={this.state.chatVisible}
+              >
+                <MainContainer responsive>
+                  <Sidebar position="left" scrollable={false}>
+                    <ConversationList>
+                      {this.state.userMessages.map((element, index) => {
+                        // console.log(messages[element])
+                        return (
+                          <Conversation
+                            name={
+                              messages[element].userinfo.firstname +
+                              " " +
+                              messages[element].userinfo.lastname
+                            }
+                            onClick={() =>
+                              this.setMessagesDetail(messages[element])
+                            }
+                          >
+                            <Avatar src={messages[element].userinfo.avt} />
+                          </Conversation>
+                        );
+                      })}
+                    </ConversationList>
+                  </Sidebar>
+
+                  <ChatContainer>
+                    <ConversationHeader>
+                      <ConversationHeader.Back />
+                      {/* <Avatar src={zoeIco} name="Zoe" /> */}
+                      <ConversationHeader.Content
+                        userName={
+                          (this.state.messageDetails.userinfo?.firstname ||
+                            "") +
+                          " " +
+                          (this.state.messageDetails.userinfo?.lastname || "")
+                        }
+                      />
+                      <ConversationHeader.Actions>
+                        <EllipsisButton orientation="vertical" />
+                      </ConversationHeader.Actions>
+                    </ConversationHeader>
+                    <MessageList>
+                      {this.state.messageDetails.data?.map((message) => {
+                        if (
+                          message.from ===
+                          JSON.parse(localStorage.getItem("user")).id
+                        ) {
+                          return (
+                            <Message
+                              model={{
+                                message: `${message.message}`,
+                                direction: "outgoing",
+                                position: "normal",
+                                sender: "Me",
+                              }}
+                            />
+                          );
+                        }
+                        return (
+                          <Message
+                            model={{
+                              message: `${message.message}`,
+                              direction: "incoming",
+                              position: "normal",
+                            }}
+                          />
+                        );
+                      })}
+                    </MessageList>
+                    <InputToolbox>
+                      <AttachmentButton />
+                    </InputToolbox>
+                    <MessageInput
+                      placeholder="Type message here"
+                      // value={messageInputValue}
+                      onSend={(val) => this.setMessageInputValue(val)}
+                    />
+                  </ChatContainer>
+                </MainContainer>
               </Drawer>
             </Content>
           </Layout>

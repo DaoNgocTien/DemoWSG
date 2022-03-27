@@ -568,10 +568,10 @@ class HandleUI extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.complainReducer.loading,
-    data: state.complainReducer.data,
-    error: state.complainReducer.err,
-    record: state.complainReducer.complainRecord,
+    loading: state.ReturningOrderReducer.loading,
+    data: state.ReturningOrderReducer.data,
+    error: state.ReturningOrderReducer.err,
+    record: state.ReturningOrderReducer.complainRecord,
   };
 };
 
