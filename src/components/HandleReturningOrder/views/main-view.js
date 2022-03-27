@@ -1,35 +1,19 @@
 import React, { Component, memo } from "react";
-import action from "../modules/action";
-import { connect } from "react-redux";
-import {
-  Modal,
-  Button,
-  Form,
-  Table,
-  Input,
-  Descriptions,
-  Upload,
-  Tabs,
-  Col,
-  Row,
-  PageHeader,
-  Typography,
-  Timeline,
-} from "antd";
+import Loader from "../../../components/Loader";
+import { Button, Tabs, PageHeader, Typography, Timeline, Image } from "antd";
 import PropTypes from "prop-types";
-
+import moment from "moment";
 import {
   LoadingOutlined,
   PlusOutlined,
   IdcardTwoTone,
-  WalletTwoTone,
   SafetyCertificateTwoTone,
   ClockCircleOutlined,
 } from "@ant-design/icons";
 import InformationModal from "./information-view";
 const { Title } = Typography;
 const { TabPane } = Tabs;
-//  prototype
+
 const propsProTypes = {
   closeModal: PropTypes.func,
   updateCampaign: PropTypes.func,
@@ -37,10 +21,9 @@ const propsProTypes = {
   openModal: PropTypes.bool,
 };
 
-//  default props
 const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
+  closeModal: () => {},
+  updateCampaign: () => {},
   record: {},
   openModal: false,
 };
@@ -65,13 +48,14 @@ class HandleReturningOrderUI extends Component {
     console.log(this.props.record);
   }
 
-  handleAccept = data => {
-    
-  }
+  handleAccept = () => {};
 
   handleReject = (data) => {
-    // data.image = this.state.fileList;
-    this.props.rejectOrder(this.props.record.ordercode, data.reason, JSON.stringify(this.state.fileList));
+    this.props.rejectOrder(
+      this.props.record.ordercode,
+      data.reason,
+      JSON.stringify(this.state.fileList)
+    );
     this.formRef.current.resetFields();
   };
 
@@ -79,13 +63,12 @@ class HandleReturningOrderUI extends Component {
     this.formRef.current.resetFields();
   };
 
-  recordReasonToReject = e => {
+  recordReasonToReject = (e) => {
     let reason = e.target.value;
     this.setState({
       isReasonable: reason === "" ? true : false,
-    })
-  }
-
+    });
+  };
 
   getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -111,13 +94,11 @@ class HandleReturningOrderUI extends Component {
     });
   };
 
-  handleChange = ({ fileList, file, event }) => {
+  handleChange = ({ fileList }) => {
     fileList = fileList.slice(-2);
 
-    // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
-        // Component will show file.url as link
         file.url = file.response[0].url;
         file.name = file.response[0].name;
         file.thumbUrl = null;
@@ -126,7 +107,6 @@ class HandleReturningOrderUI extends Component {
     });
 
     this.setState({ fileList });
-    // console.log(this.state.fileList);
   };
 
   columns = [
@@ -144,7 +124,7 @@ class HandleReturningOrderUI extends Component {
       dataIndex: "image",
       key: "image",
       render: (data) => {
-        return (JSON.parse(data)).length === 0 ? (
+        return JSON.parse(data).length === 0 ? (
           ""
         ) : (
           <img
@@ -186,26 +166,16 @@ class HandleReturningOrderUI extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-    }
+    },
   ];
 
   render() {
-
+    const { loading } = this.props;
+    if (loading) return <Loader />;
     this.state.record = this.props.record;
-    const {
-      openModal,
-      closeModal,
-      acceptRequest,
-      record,
-      selectedRowKeys,
-    } = this.props;
-    const { isReasonable, load, imageUrl } = this.state;
-    const uploadButton = (
-      <div>
-        {load ? <LoadingOutlined /> : <PlusOutlined />}
-        <div style={{ marginTop: 8 }}>Upload</div>
-      </div>
-    );
+    const { data } = this.props;
+    console.log(data);
+    const { load } = this.state;
     return (
       <>
         <PageHeader
@@ -217,17 +187,6 @@ class HandleReturningOrderUI extends Component {
             <Button
               type="danger"
               onClick={() => this.start("openDetailModal")}
-              // disabled={
-              //   !viewButton || this.state.selectedRowKeys.length === 0
-              //     ? true
-              //     : false
-              // }
-              // hidden={
-              //   !viewButton || this.state.selectedRowKeys.length === 0
-              //     ? true
-              //     : false
-              // }
-
               style={{ marginLeft: 3 }}
             >
               Reject
@@ -236,161 +195,89 @@ class HandleReturningOrderUI extends Component {
             <Button
               type="primary"
               onClick={() => this.start("openHandleModal")}
-              // disabled={
-              //   !actionButton || this.state.selectedRowKeys.length === 0
-              //     ? true
-              //     : false
-              // }
-              // hidden={
-              //   !actionButton || this.state.selectedRowKeys.length === 0
-              //     ? true
-              //     : false
-              // }
-
               style={{ marginLeft: 3 }}
             >
               Submit
-            </Button>
+            </Button>,
           ]}
           footer={
             <>
               <Tabs defaultActiveKey="returning" centered type="card">
-                <TabPane tab={
-                  <span>
-                    <IdcardTwoTone style={{ fontSize: "25px" }} />
-                    Returning Request
-                  </span>
-                }
+                <TabPane
+                  tab={
+                    <span>
+                      <IdcardTwoTone style={{ fontSize: "25px" }} />
+                      Returning Request
+                    </span>
+                  }
                   key="returning"
                   style={{ background: "#ffffff" }}
-                >
+                ></TabPane>
 
-                </TabPane>
-
-                {/* <TabPane tab={
-                  <span>
-                    <WalletTwoTone style={{ fontSize: "25px" }} />
-                    Order Information
-                  </span>
-                }
-                  key="information"
-                  style={{ background: "#ffffff" }}
-                >
-
-                </TabPane> */}
-
-                <TabPane tab={
-                  <span style={{ alignItems: "center" }}>
-                    <SafetyCertificateTwoTone style={{ fontSize: "25px" }} />
-                    Order History
-                  </span>
-                }
+                <TabPane
+                  tab={
+                    <span style={{ alignItems: "center" }}>
+                      <SafetyCertificateTwoTone style={{ fontSize: "25px" }} />
+                      Order History
+                    </span>
+                  }
                   key="history"
                   style={{ background: "#ffffff" }}
                 >
                   <>
-                    <Title style={{ textAlign: "center", padding: "30px" }} level={3}>ORDER HISTORY</Title>
-                    <Timeline pending="Recording..." mode="left" reverse="true">
-                      <Timeline.Item label="2015-09-01">Create a services</Timeline.Item>
-                      <Timeline.Item label="2015-09-01 09:12:11">Solve initial network problems</Timeline.Item>
-                      <Timeline.Item dot={<ClockCircleOutlined className="timeline-clock-icon" />} color="red">
-                        Technical testing 2015-09-01
-                      </Timeline.Item>
-                      <Timeline.Item>Technical testing</Timeline.Item>
-                      <Timeline.Item label="2015-09-01 09:12:11">Network problems being solved</Timeline.Item>
+                    <Title
+                      style={{ textAlign: "center", padding: "30px" }}
+                      level={3}
+                    >
+                      ORDER HISTORY
+                    </Title>
+                    <Timeline mode="left" reverse="true">
+                      {data.orderHistories?.map((orderHistory) => {
+                        return (
+                          <Timeline.Item
+                            label={moment(orderHistory.createdat).format(
+                              "MM/DD/YYYY HH:mm:ss"
+                            )}
+                          >
+                            <h4>{orderHistory.statushistory}</h4>
+                            <p>{orderHistory.description}</p>
+                            {orderHistory.image
+                              ? JSON.parse(orderHistory.image)?.map((image) => {
+                                  return (
+                                    <Image
+                                      width={200}
+                                      src={image.url}
+                                      preview={{
+                                        src: image.url,
+                                      }}
+                                    />
+                                  );
+                                })
+                              : null}
+                          </Timeline.Item>
+                        );
+                      })}
                     </Timeline>
                   </>
                 </TabPane>
-
               </Tabs>
             </>
           }
         >
-          <> <Title style={{ textAlign: "center", padding: "30px" }} level={3}>ORDER INFORMATION</Title>
-
-            <InformationModal
-              // openModal={openModal}
-              // closeModal={closeModal}
-              record={this.props.record.complainRecord}
-              // selectedRowKeys={selectedRowKeys}
-            />
+          <>
+            <Title style={{ textAlign: "center", padding: "30px" }} level={3}>
+              ORDER INFORMATION
+            </Title>
+            <InformationModal record={data} />
           </>
-          {/* <Descriptions
-            bordered
-            title="Order Infomation"
-            column={2}
-            style={{ marginBottom: "10px" }}
-          >
-            <Descriptions.Item label="Order Code">
-              {this.state.record?.ordercode}
-            </Descriptions.Item>
-            <Descriptions.Item label="Total Price">
-              {this.state.record?.totalprice}VND
-            </Descriptions.Item>
-            <Descriptions.Item label="Discount Price">
-              {this.state.record?.discountprice}VND
-            </Descriptions.Item>
-            <Descriptions.Item label="Final Price">
-              {" "}
-              {this.state.record?.totalprice -
-                this.state.record?.discountprice}
-              VND
-            </Descriptions.Item>
-
-
-            <Descriptions.Item label="Status">
-              {this.state.record?.status}
-            </Descriptions.Item>
-
-          </Descriptions>
-          <Table
-            columns={this.columns}
-            dataSource={this.state.record.details}
-          /> */}
-
-
         </PageHeader>
-       
       </>
     );
   }
 }
 
-
-// const mapStateToProps = (state) => {
-//   return {
-//     loading: state.handleReturningOrderReducer.loading,
-//     data: state.handleReturningOrderReducer.data,
-//     error: state.handleReturningOrderReducer.err,
-//     record: state.handleReturningOrderReducer.complainRecord,
-//   };
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     getReturningOrder: async () => await dispatch(action.getOrder()),
-
-//     acceptRequest: async (data) => {
-//       // await dispatch(action.updateStatusOrder(data));
-//       // await dispatch(action.getOrder())
-//     },
-//     rejectRequest: async (orderCode, reasonForCancel, imageProof) => {
-//       // await dispatch(action.rejectOrder(orderCode, reasonForCancel, imageProof));
-//     },
-
-//     // storeComplainRecord: async (record) => {
-//     //   console.log("storeComplainRecord");
-//     //   console.log(record);
-//     //   await dispatch(action.storeComplainRecord(record));
-//     // }
-//   };
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(HandleReturningOrderUI);
-
 const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(HandleReturningOrderUI, arePropsEqual);

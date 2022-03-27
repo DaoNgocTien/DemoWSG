@@ -6,7 +6,49 @@ import {
 } from "./constant";
 import Axios from "axios";
 
-
+const getData = (orderCode) => {
+  return async (dispatch) => {
+    try {
+      dispatch(getRequest());
+      const [orderHistories, order] = await Promise.all([
+        Axios({
+          url: `/history/orderCode`,
+          method: "POST",
+          data: {
+            orderCode: orderCode,
+          },
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+        Axios({
+          url: `/order/getOrderByCode?orderCode=${orderCode}`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+      ]);
+      console.log(order);
+      return dispatch(
+        getSuccess({
+          orderHistories: orderHistories.data.data.map((orderHistory) => {
+            return {
+              key: orderHistory.id,
+              ...orderHistory,
+            };
+          }),
+          order: {
+            ...order.data.data.order,
+          },
+          customerAccId: { ...order.data.data.customerId },
+          supplierAccId: { ...order.data.data.supplierId },
+        })
+      );
+    } catch (error) {
+      console.error(error);
+      return dispatch(getFailed());
+    }
+  };
+};
 
 const storeComplainRecord = (record) => {
   console.log("storeComplainRecord action");
@@ -48,6 +90,7 @@ const getFailed = (err) => {
 };
 
 const action = {
+  getData,
   storeComplainRecord,
 };
 

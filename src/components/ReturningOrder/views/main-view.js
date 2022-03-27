@@ -308,7 +308,7 @@ class OrderReturningUI extends Component {
                     }
                     style={{ marginLeft: 3 }}
                   >
-                    <Link className="LinkDecorations" to={"handle-returning-order/" + this.state.record.ordercode}>
+                    <Link className="LinkDecorations" to={"/order/handle/returning/" + this.state.record.ordercode}>
                       Handle Returning Request
                     </Link>
                   </Button>

@@ -95,7 +95,7 @@ const routesAdmin = [
 
   {
     exact: true,
-    path: "/handle-returning-order/:orderCode",
+    path: "/order/handle/returning/:orderCode",
     component: HandleReturningOrder,
   },
 ];

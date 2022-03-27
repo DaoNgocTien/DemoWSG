@@ -10,6 +10,8 @@ class HandleReturningOrder extends Component {
   }
 
   componentDidMount() {
+    const orderCode = this.props.match.params.orderCode;
+    this.props.getReturningOrder(orderCode)
   }
 
   render() {
@@ -37,7 +39,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getReturningOrder: async () => await dispatch(action.getOrder()),
+    getReturningOrder: async (orderCode) => await dispatch(action.getData(orderCode)),
 
     acceptRequest: async (data) => {
       // await dispatch(action.updateStatusOrder(data));
@@ -49,4 +51,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HandleReturningOrder);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HandleReturningOrder);
