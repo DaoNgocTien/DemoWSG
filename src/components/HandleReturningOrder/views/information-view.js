@@ -12,8 +12,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
+  closeModal: () => {},
+  updateCampaign: () => {},
   record: {},
   openModal: false,
 };
@@ -59,7 +59,8 @@ class InformationModal extends Component {
             {record.reasonforcancel ? record.reasonforcancel : ""}
           </Descriptions.Item>
           <Descriptions.Item label="Image Proof">
-            {(JSON.parse(record.imageproof ? record.imageproof : "[]")).length === 0 ? (
+            {JSON.parse(record.imageproof ? record.imageproof : "[]").length ===
+            0 ? (
               ""
             ) : (
               <img
@@ -72,7 +73,7 @@ class InformationModal extends Component {
           </Descriptions.Item>
         </>
       );
-  }
+  };
 
   columns = [
     {
@@ -89,7 +90,7 @@ class InformationModal extends Component {
       dataIndex: "image",
       key: "image",
       render: (data) => {
-        return (JSON.parse(data)).length === 0 ? (
+        return JSON.parse(data).length === 0 ? (
           ""
         ) : (
           <img
@@ -106,11 +107,6 @@ class InformationModal extends Component {
       dataIndex: "productname",
       key: "productname",
       sorter: (a, b) => a.productname.length - b.productname.length,
-    },
-    {
-      title: "Type",
-      dataIndex: "typeofproduct",
-      key: "typeofproduct",
     },
     {
       title: "Price",
@@ -131,7 +127,7 @@ class InformationModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-    }
+    },
   ];
 
   render() {
@@ -140,38 +136,38 @@ class InformationModal extends Component {
 
     return (
       <>
-          <Descriptions
-            bordered
-            title="Order Infomation"
-            column={2}
-            style={{ marginBottom: "10px" }}
-          >
-            <Descriptions.Item label="Order Code">
-              {this.state.record?.ordercode}
-            </Descriptions.Item>
-            <Descriptions.Item label="Total Price">
-              {this.state.record?.totalprice}VND
-            </Descriptions.Item>
-            <Descriptions.Item label="Discount Price">
-              {this.state.record?.discountprice}VND
-            </Descriptions.Item>
-            <Descriptions.Item label="Final Price">
-              {" "}
-              {this.state.record?.totalprice -
-                this.state.record?.discountprice}
-              VND
-            </Descriptions.Item>
+        <Descriptions
+          bordered
+          title="Order Infomation"
+          column={2}
+          style={{ marginBottom: "10px" }}
+        >
+          <Descriptions.Item label="Order Code">
+            {this.state.record.order?.ordercode}
+          </Descriptions.Item>
+          <Descriptions.Item label="Total Price">
+            {this.state.record.order?.totalprice}VND
+          </Descriptions.Item>
+          <Descriptions.Item label="Discount Price">
+            {this.state.record.order?.discountprice}VND
+          </Descriptions.Item>
+          <Descriptions.Item label="Final Price">
+            {" "}
+            {this.state.record.order?.totalprice -
+              this.state.record.order?.discountprice}
+            VND
+          </Descriptions.Item>
 
-            {this.checkCancelledOrder()}
+          {this.checkCancelledOrder()}
 
-            <Descriptions.Item label="Status">
-              {this.state.record?.status}
-            </Descriptions.Item>
-          </Descriptions>
-          <Table
-            columns={this.columns}
-            dataSource={this.state.record.details}
-          />
+          <Descriptions.Item label="Status">
+            {this.state.record.order?.status}
+          </Descriptions.Item>
+        </Descriptions>
+        <Table
+          columns={this.columns}
+          dataSource={this.state.record.order.details}
+        />
       </>
     );
   }
