@@ -14,14 +14,12 @@ import {
 import PropTypes from "prop-types";
 import moment from "moment";
 
-//  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
   updateCampaign: PropTypes.func,
   openModal: PropTypes.bool,
 };
 
-//  default props
 const propsDefault = {
   closeModal: () => {},
   updateCampaign: () => {},
@@ -36,42 +34,43 @@ class UpdateModal extends Component {
     previewImage: "",
     previewTitle: "",
     fileList: [],
-    // productSelected: null,
+
     price: 0,
-    // (this.props.record?.price /
-    //   this.props.productList?.find(
-    //     (element) => element.id === this.props.record?.productid
-    //   )?.retailprice) *
-    //   100 || 0,
   };
   formRef = React.createRef();
 
   componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
-    // console.log(data);
+    switch (this.props.record?.status) {
+      case "active":
+        alert("This campaign is actived");
+        break;
+      case "done":
+        alert("This campaign is done");
+        break;
+      default: {
+        const productSelected = !this.state.productSelected
+          ? this.props.productList?.find(
+              (element) => element.id === this.props.record?.productid
+            )
+          : this.state.productSelected;
+        let newCampaign = {
+          id: this.props.record?.id,
+          productId: data.productId,
+          fromDate: data.date[0].format("MM/DD/YYYY"),
+          toDate: data.date[1].format("MM/DD/YYYY"),
+          quantity: data.quantity,
+          price: (data.wholesalePercent * productSelected.retailprice) / 100,
+          maxQuantity: data.maxQuantity,
+          isShare: data.isShare,
+          advanceFee: data.advancePercent,
+        };
 
-    const productSelected = !this.state.productSelected
-      ? this.props.productList?.find(
-          (element) => element.id === this.props.record?.productid
-        )
-      : this.state.productSelected;
-    let newCampaign = {
-      id: this.props.record?.id,
-      productId: data.productId,
-      fromDate: data.date[0].format("MM/DD/YYYY"),
-      toDate: data.date[1].format("MM/DD/YYYY"),
-      quantity: data.quantity,
-      price: (data.wholesalePercent * productSelected.retailprice) / 100,
-      maxQuantity: data.maxQuantity,
-      isShare: data.isShare,
-      advanceFee: data.advancePercent
-    };
-
-    // console.log(newCampaign);
-    // data.image = this.state.fileList;
-    this.props.updateCampaign(newCampaign);
-    // this.formRef.current.resetFields();
+        this.props.updateCampaign(newCampaign);
+        break;
+      }
+    }
     this.props.closeModal();
   };
 
@@ -104,13 +103,11 @@ class UpdateModal extends Component {
     });
   };
 
-  handleChange = ({ fileList, file, event }) => {
+  handleChange = ({ fileList }) => {
     fileList = fileList.slice(-2);
 
-    // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
-        // Component will show file.url as link
         file.url = file.response[0].url;
         file.name = file.response[0].name;
         file.thumbUrl = null;
@@ -146,11 +143,6 @@ class UpdateModal extends Component {
       ) || {},
       shareChecked = record?.isshare,
     } = this.state;
-
-    // console.log(this.state.price);
-    // console.log(
-    //   (this.props.record?.price / productSelected?.retailprice) * 100
-    // );
 
     this.state.price =
       this.state.price === 0 || !this.state.price
@@ -262,7 +254,10 @@ class UpdateModal extends Component {
                 </Form.Item>
               </Descriptions.Item>
               <Descriptions.Item label="Advance Percent">
-                <Form.Item name="advancePercent" initialValue={record?.advancefee}>
+                <Form.Item
+                  name="advancePercent"
+                  initialValue={record?.advancefee}
+                >
                   <InputNumber
                     addonAfter="%"
                     defaultValue={record?.advancefee}
@@ -343,8 +338,6 @@ class UpdateModal extends Component {
                       ? JSON.parse(productSelected?.image)
                       : []
                   }
-                  // onPreview={this.handlePreview}
-                  // onChange={this.handleChange}
                 >
                   {/* {this.state.fileList.length >= 8 ? null : uploadButton} */}
                 </Upload>
@@ -361,5 +354,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(UpdateModal, arePropsEqual);

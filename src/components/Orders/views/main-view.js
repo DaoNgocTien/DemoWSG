@@ -1,5 +1,14 @@
 import React, { Component, memo } from "react";
-import { Table, Button, Input, Row, Col, PageHeader, Radio } from "antd";
+import {
+  Table,
+  Button,
+  Input,
+  Row,
+  Col,
+  PageHeader,
+  Radio,
+  Select,
+} from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
 import EditModal from "./edit-view";
@@ -12,6 +21,7 @@ const propsProTypes = {
   defaultCampaign: PropTypes.object,
   rejectOrder: PropTypes.func,
   updateStatusOrder: PropTypes.func,
+  getOrder: PropTypes.func,
 };
 
 //  default props
@@ -20,8 +30,9 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => { },
-  updateStatusOrder: () => { },
+  rejectOrder: () => {},
+  updateStatusOrder: () => {},
+  getOrder: (status) => {},
 };
 
 class OrderUI extends Component {
@@ -39,7 +50,7 @@ class OrderUI extends Component {
     rejectButton: true,
   };
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -73,10 +84,9 @@ class OrderUI extends Component {
   };
 
   onSelectChange = (selectedRowKeys) => {
-    let record =
-      this.props.data.filter((item) => {
-        return selectedRowKeys.includes(item.id);
-      })[0];
+    let record = this.props.data.filter((item) => {
+      return selectedRowKeys.includes(item.id);
+    })[0];
 
     this.setState({
       selectedRowKeys,
@@ -87,12 +97,13 @@ class OrderUI extends Component {
         record.status != "delivered" &&
         record.status != "completed" &&
         record.status != "returned" &&
-        record.status != "cancelled"
-      ,
+        record.status != "cancelled",
       addNewButton: selectedRowKeys.length === 0,
     });
   };
-
+  handleChange = (data) => {
+    this.props.getOrder(data);
+  };
   columns = [
     {
       title: "No.",
@@ -102,50 +113,56 @@ class OrderUI extends Component {
         return index + 1;
       },
       fixed: "left",
+      width: 80,
     },
     {
       title: "First Name",
       dataIndex: "customerfirstname",
       key: "customerfirstname",
       sorter: (a, b) => a.customerfirstname.length - b.customerfirstname.length,
-      fix: "left",
+      fixed: "left",
+      width: 120,
     },
     {
       title: "Last Name",
       dataIndex: "customerlastname",
       key: "customerlastname",
       sorter: (a, b) => a.customerlastname.length - b.customerlastname.length,
-      fix: "left",
+      fixed: "left",
+      width: 120,
+    },
+    {
+      title: "Product",
+      dataIndex: "details",
+      key: "details",
+      render: (text, object) => {
+        return object.details?.length > 0 ? object.details[0]?.productname : "";
+      },
+      // fixed: "left",
+      width: 130,
     },
     // {
-    //   title: "Product",
-    //   dataIndex: "details",
-    //   key: "details",
-    //   fixed: "left",
+    //   title: "In Campaign",
+    //   dataIndex: "campaign",
+    //   key: "campaign",
     //   render: (text, object) => {
-    //     return object.details?.length > 0 ? object.details[0]?.productname : "";
+    //     let campaign = object.campaign;
+    //     return campaign.length > 0 ? moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY") : "";
+    //     // return moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY");
     //   },
-     
+    //   width: 130,
     // },
-    {
-      title: "In Campaign",
-      dataIndex: "campaign",
-      key: "campaign",
-      render: (text, object) => {
-        let campaign = object.campaign;
-        return campaign.length > 0 ? moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY") : "";
-        // return moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY");
-      },
-    },
     {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
+      width: 130,
     },
     {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
+      width: 130,
     },
     {
       title: "Final Price",
@@ -154,6 +171,7 @@ class OrderUI extends Component {
       render: (text, object) => {
         return object.totalprice - object.discountprice;
       },
+      width: 130,
     },
     {
       title: "Created At",
@@ -162,11 +180,13 @@ class OrderUI extends Component {
       render: (data) => {
         return moment(data).format("MM/DD/YYYY");
       },
+      width: 130,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: 130,
     },
     {
       title: "Action",
@@ -175,14 +195,18 @@ class OrderUI extends Component {
           <Button
             onClick={() => this.changeStatus(object)}
             type="primary"
-            disable={object.status === "created" || object.status === "processing" ? "false" : "true"}
+            disable={
+              object.status === "created" || object.status === "processing"
+                ? "false"
+                : "true"
+            }
           >
             Change Status
           </Button>
         );
       },
-      fixed: 'right',
-      width: 130,
+      fixed: "right",
+      width: 150,
     },
   ];
 
@@ -206,9 +230,10 @@ class OrderUI extends Component {
     });
   };
 
-  onRadioChange = e => {
+  onRadioChange = (e) => {
+    console.log(e);
     let { data } = this.props;
-    let searchValue = e.target.value;
+    let searchValue = e.target.value || e;
     let searchData = [];
     switch (searchValue) {
       case "retail":
@@ -235,12 +260,7 @@ class OrderUI extends Component {
   };
 
   render() {
-
-    const {
-      rejectOrder,
-      updateStatusOrder,
-      data,
-    } = this.props;
+    const { rejectOrder, updateStatusOrder, data } = this.props;
 
     const {
       selectedRowKeys,
@@ -309,7 +329,6 @@ class OrderUI extends Component {
                         ? true
                         : false
                     }
-
                     style={{ marginLeft: 3 }}
                   >
                     View Details
@@ -328,12 +347,10 @@ class OrderUI extends Component {
                         ? true
                         : false
                     }
-
                     style={{ marginLeft: 3 }}
                   >
                     Reject Order
                   </Button>
-
                 </Col>
                 <Col flex={3}>
                   <span style={{ marginLeft: 8 }}>
@@ -352,18 +369,35 @@ class OrderUI extends Component {
               </Row>
               <Row style={{ marginTop: "10px" }}>
                 <Col flex={6}>
-                  <Radio.Group onChange={(e) => this.onRadioChange(e)} defaultValue="all">
+                  <Radio.Group
+                    onChange={(e) => this.onRadioChange(e)}
+                    onFocus={(e) => this.onRadioChange(e)}
+                    defaultValue="all"
+                  >
                     <Radio value="all">All Orders</Radio>
                     <Radio value="retail">Retail Orders</Radio>
                     <Radio value="wholesale">Wholesale Orders</Radio>
                   </Radio.Group>
+                  Status:
+                  <Select
+                    title="Status"
+                    defaultValue="All"
+                    style={{ width: 120, marginLeft: "2px" }}
+                    onChange={this.handleChange}
+                  >
+                    <Select.Option value={undefined}>All</Select.Option>
+                    <Select.Option value="advanced">Advanced</Select.Option>
+                    <Select.Option value="unpaid">Unpaid</Select.Option>
+                    <Select.Option value="created">Created</Select.Option>
+                    <Select.Option value="processing">Processing</Select.Option>
+                    <Select.Option value="delivering">Delivering</Select.Option>
+                    <Select.Option value="delivered">Delivered</Select.Option>
+                    <Select.Option value="cancelled">Cancelled</Select.Option>
+                    <Select.Option value="completed">Completed</Select.Option>
+                    <Select.Option value="returned">returned</Select.Option>
+                  </Select>
                 </Col>
-                <Col flex={4}>
-                  {/* <Input
-                    onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search data"
-                  /> */}
-                </Col>
+                <Col flex={4}></Col>
               </Row>
             </div>
             <Table
@@ -375,7 +409,7 @@ class OrderUI extends Component {
                   ? this.props.data
                   : displayData
               }
-              scroll={{ y: 350 }}
+              scroll={{ y: 350, x: 1000 }}
             />
           </div>
         }

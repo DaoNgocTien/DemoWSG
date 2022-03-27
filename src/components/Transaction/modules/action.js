@@ -1,40 +1,26 @@
 import {
-  GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_SETTLING_PAYMENT,
+  GET_DATA_FAIL,
+  GET_DATA_REQUEST,
+  GET_DATA_SUCCESS,
+  STORE_SETTLING_PAYMENT,
 } from "./constant";
 import Axios from "axios";
 
-const getOrder = () => {
+const getTransaction = () => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      const [orders, campaigns] = await Promise.all([
+      const [transactions] = await Promise.all([
         Axios({
-          url: `/order/supplier`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
-        Axios({
-          url: `/campaigns/All`,
+          url: `/transaction`,
           method: "GET",
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      const completedOrder = orders.data.data.filter(order => {
-        return order.status === "completed" || order.status === "returned" || order.status === "cancelled";
-      });console.log(completedOrder);
       return dispatch(
         getSuccess({
-          orders: completedOrder.map((order) => {
-            return {
-              campaign: (campaigns.data.data).filter(camp => {
-                return camp.id == order.campaignid;
-              }),
-              key: order.id,
-              ...order,
-            };
-          }),
+          transactions: transactions.data.data,
         })
       );
     } catch (error) {
@@ -43,81 +29,28 @@ const getOrder = () => {
   };
 };
 
-const storeSettlingPaymentList = list => {
-
+const updateTransaction = (transaction) => {
   return async (dispatch) => {
-    try {
-      dispatch(getRequest());
-console.log(list);
-      return dispatch(
-        storePaymentList({
-          settlingList: list
-        })
-      );
-    } catch (error) {
-      return dispatch(getFailed());
-    }
+    dispatch(getRequest());
+    Axios({
+      url: `/transaction/createWithdrawableRequest/`,
+      method: "POST",
+      data: transaction,
+      withCredentials: true,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          // console.log(response.data.data);
+        }
+      })
+      .catch((err) => {
+        // // console.log(err);
+        // // console.log(typeof (err));
+        return dispatch(getFailed());
+      })
+      .finally(() => {});
   };
 };
-
-// const createCampaign = (record) => {
-//   return async (dispatch) => {
-//     dispatch(getRequest());
-//     try {
-//       const [createResponse, campaigns, products, order] = await Promise.all([
-//         Axios({
-//           url: `/campaigns/`,
-//           method: "POST",
-//           data: record,
-//           withCredentials: true,
-//         }),
-//         Axios({
-//           url: `/campaigns/All`,
-//           method: "GET",
-//           withCredentials: true,
-//           exposedHeaders: ["set-cookie"],
-//         }),
-//         Axios({
-//           url: `/products/All`,
-//           method: "GET",
-//           withCredentials: true,
-//           exposedHeaders: ["set-cookie"],
-//         }),
-//         Axios({
-//           url: `/order/supplier/campaign/${record.id}`,
-//           method: "GET",
-//           withCredentials: true,
-//           exposedHeaders: ["set-cookie"],
-//         }),
-//       ]);
-
-//       // console.log(order);
-//       return dispatch(
-//         getSuccess({
-//           campaigns: campaigns.data.data.map((campaign) => {
-//             return {
-//               key: campaign.id,
-//               ...campaign,
-//             };
-//           }),
-//           products: products.data.data,
-//           order:
-//             order !== {}
-//               ? order.data?.data.map((item) => {
-//                 return {
-//                   key: item.id,
-//                   ...item,
-//                 };
-//               })
-//               : {},
-//         })
-//       );
-//     } catch (error) {
-//       // console.log(error);
-//       return dispatch(getFailed());
-//     }
-//   };
-// };
 
 const getRequest = () => {
   return {
@@ -147,9 +80,8 @@ const storePaymentList = (data) => {
 };
 
 const action = {
-  getOrder,
-  storeSettlingPaymentList,
-
+  getTransaction,
+  updateTransaction,
 };
 
 export default action;

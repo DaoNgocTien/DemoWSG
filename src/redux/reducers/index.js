@@ -8,10 +8,10 @@ import orderReducer from "../../components/Orders/modules/reducer";
 import loyalCustomerConditionReducer from "../../components/LoyalCustomerCondition/modules/reducer";
 import loyalCustomerReducer from "../../components/LoyalCustomer/modules/reducer";
 import notificationReducer from "../../components/Notification/modules/reducer";
-import complainReducer from "../../components/ReturningOrder/modules/reducer";
+import ReturningOrderReducer from "../../components/ReturningOrder/modules/reducer";
 import profileReducer from "../../components/Profile/modules/reducer";
 import transactionReducer from "../../components/Transaction/modules/reducer";
-
+// import ReturningOrder from "../../components/ReturningOrder/modules/reducer";
 import dashboardReducer from "../../containers/AdminLayout/DashBoard/modules/reducer";
 
 
@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
   orderReducer,
   loyalCustomerConditionReducer,
   loyalCustomerReducer,
-  complainReducer,
+  ReturningOrderReducer,
   profileReducer,
   dashboardReducer,
   transactionReducer,

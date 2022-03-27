@@ -1,5 +1,4 @@
 
-
 import React, { Component, memo } from "react";
 import { Modal, Button, Form, Input, Descriptions } from "antd";
 import PropTypes from "prop-types";
@@ -17,8 +16,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  deleteProduct: () => { },
+  closeModal: () => {},
+  deleteProduct: () => {},
   defaultProduct: {
     key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
     id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
@@ -56,7 +55,15 @@ class DeleteModal extends Component {
 
   handleDeleteAndClose = (data) => {
     // console.log(data);
-    this.props.deleteProduct(this.props.record?.id);
+    switch (this.props.record?.status) {
+      case "incampaign":
+        alert("This product in campaign cannot delete");
+        break;
+
+      default:
+        this.props.deleteProduct(this.props.record?.id);
+        break;
+    }
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
@@ -157,7 +164,6 @@ class DeleteModal extends Component {
               </Button>,
             ]}
           >
-
             <Form.Item
               label="Product ID"
               name="id"
@@ -175,16 +181,21 @@ class DeleteModal extends Component {
             <Descriptions layout="vertical" column={2}>
               <Descriptions.Item label="Name">
                 <Form.Item name="name" initialValue={record?.name}>
-                  <Input defaultValue={record?.name} style={{ width: "60vh" }} disabled={true}/>
+                  <Input
+                    defaultValue={record?.name}
+                    style={{ width: "60vh" }}
+                    disabled={true}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Category">
-                <Form.Item
-                  name="categoryId"
-                  initialValue={record?.categoryid}
-                >
-                  <Select defaultValue={record?.categoryid} style={{ width: "60vh" }} disabled={true}>
+                <Form.Item name="categoryId" initialValue={record?.categoryid}>
+                  <Select
+                    defaultValue={record?.categoryid}
+                    style={{ width: "60vh" }}
+                    disabled={true}
+                  >
                     {categoryList.map((item) => (
                       <Select.Option key={item.key} value={item.id}>
                         {item.categoryname}
@@ -195,11 +206,13 @@ class DeleteModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
-                <Form.Item
-                  name="quantity"
-                  initialValue={record?.quantity}
-                >
-                  <InputNumber min={0} defaultValue={record?.quantity} style={{ width: "60vh" }} disabled={true}/>
+                <Form.Item name="quantity" initialValue={record?.quantity}>
+                  <InputNumber
+                    min={0}
+                    defaultValue={record?.quantity}
+                    style={{ width: "60vh" }}
+                    disabled={true}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -208,7 +221,12 @@ class DeleteModal extends Component {
                   name="retailPrice"
                   initialValue={record?.retailprice}
                 >
-                  <InputNumber min={0} defaultValue={record?.retailprice} style={{ width: "60vh" }} disabled={true}/>
+                  <InputNumber
+                    min={0}
+                    defaultValue={record?.retailprice}
+                    style={{ width: "60vh" }}
+                    disabled={true}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -218,10 +236,10 @@ class DeleteModal extends Component {
                   initialValue={record?.description}
                 >
                   <Input.TextArea
-                  disabled={true}
+                    disabled={true}
                     autoSize={{ minRows: 3, maxRows: 5 }}
                     defaultValue={record?.description}
-                    style={{ width: "60vh" }} 
+                    style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
@@ -230,7 +248,7 @@ class DeleteModal extends Component {
                 <Form.Item name="image">
                   <>
                     <Upload
-                    disabled={true}
+                      disabled={true}
                       name="file"
                       action="/files/upload"
                       listType="picture-card"
@@ -241,7 +259,7 @@ class DeleteModal extends Component {
                       }
                       onPreview={this.handlePreview}
                       onChange={this.handleChange}
-                      style={{ width: "60vh" }} 
+                      style={{ width: "60vh" }}
                     >
                       {this.state.fileList.length >= 8 ? null : uploadButton}
                     </Upload>
@@ -260,10 +278,6 @@ class DeleteModal extends Component {
                   </>
                 </Form.Item>
               </Descriptions.Item>
-
-
-
-
             </Descriptions>
           </Modal>
         </Form>

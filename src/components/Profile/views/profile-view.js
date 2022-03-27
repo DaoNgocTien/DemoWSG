@@ -1,39 +1,23 @@
-import React, { Component, memo } from "react";
+import React, { Component } from "react";
 import {
-  Table,
   Button,
   Input,
-  Row,
-  Col,
-  PageHeader,
-  Space,
   Form,
   Select,
-  InputNumber,
-  Switch,
-  Radio,
-  Slider,
   Upload,
-  Rate,
-  Checkbox,
-  Avatar,
-  Descriptions,
   Tag,
-  Statistic,
   Modal,
   Typography,
   DatePicker,
-  Cascader,
-  AutoComplete,
   Tooltip,
 } from "antd";
 
-import { LoadingOutlined, PlusOutlined, UserOutlined, UploadOutlined, InboxOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import PropTypes from "prop-types";
 
 import action from "./../modules/action";
 import { connect } from "react-redux";
-import moment from "moment";
+import Loader from "./../../../components/Loader";
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -175,6 +159,9 @@ class ProfileTab extends Component {
   };
 
   render() {
+    const { loading } = this.props;
+    if (loading) return <Loader />;
+
     const { load, imageUrl, user } = this.state;
     const uploadButton = (
       <div>
@@ -182,8 +169,8 @@ class ProfileTab extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    let storedUser = JSON.parse(localStorage.getItem("user"));
     const { data } = this.props;
+    let storedUser = data
     console.log(data);
     return (
       <>

@@ -21,8 +21,8 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  handleOrder: () => { },
-  updateStatusOrder: () => { },
+  handleOrder: () => {},
+  updateStatusOrder: () => {},
 };
 
 class OrderReturningUI extends Component {
@@ -41,7 +41,7 @@ class OrderReturningUI extends Component {
     record: {},
   };
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -75,23 +75,20 @@ class OrderReturningUI extends Component {
   };
 
   onSelectChange = (selectedRowKeys) => {
-    let record =
-      this.props.data.filter((item) => {
-        return selectedRowKeys.includes(item.id);
-      })[0];
+    let record = this.props.data.filter((item) => {
+      return selectedRowKeys.includes(item.id);
+    })[0];
 
     this.setState({
       selectedRowKeys,
-      viewButton: selectedRowKeys.length === 1 &&
-        record.status != "returned",
+      viewButton: selectedRowKeys.length === 1 && record.status != "returned",
       actionButton:
         selectedRowKeys.length === 1 &&
         record.status != "delivering" &&
         record.status != "delivered" &&
         record.status != "completed" &&
         record.status != "returned" &&
-        record.status != "cancelled"
-      ,
+        record.status != "cancelled",
       addNewButton: selectedRowKeys.length === 0,
       record: record,
     });
@@ -106,6 +103,7 @@ class OrderReturningUI extends Component {
         return index + 1;
       },
       fixed: "left",
+      width: 100,
     },
     {
       title: "First Name",
@@ -113,6 +111,7 @@ class OrderReturningUI extends Component {
       key: "customerfirstname",
       sorter: (a, b) => a.customerfirstname.length - b.customerfirstname.length,
       fix: "left",
+      width: 100,
     },
     {
       title: "Last Name",
@@ -120,6 +119,7 @@ class OrderReturningUI extends Component {
       key: "customerlastname",
       sorter: (a, b) => a.customerlastname.length - b.customerlastname.length,
       fix: "left",
+      width: 100,
     },
     // {
     //   title: "Product",
@@ -137,19 +137,26 @@ class OrderReturningUI extends Component {
       key: "campaign",
       render: (text, object) => {
         let campaign = object.campaign;
-        return campaign.length > 0 ? moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY") : "";
+        return campaign.length > 0
+          ? moment(campaign[0].fromdate).format("MM/DD/YYYY") +
+              " " +
+              moment(campaign[0].todate).format("MM/DD/YYYY")
+          : "";
         // return moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY");
       },
+      width: 100,
     },
     {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
+      width: 100,
     },
     {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
+      width: 100,
     },
     {
       title: "Final Price",
@@ -158,6 +165,7 @@ class OrderReturningUI extends Component {
       render: (text, object) => {
         return object.totalprice - object.discountprice;
       },
+      width: 100,
     },
     {
       title: "Created At",
@@ -166,12 +174,14 @@ class OrderReturningUI extends Component {
       render: (data) => {
         return moment(data).format("MM/DD/YYYY");
       },
+      width: 100,
     },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   key: "status",
-    // },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      width: 100,
+    },
     {
       title: "Action",
       render: (object) => {
@@ -179,13 +189,17 @@ class OrderReturningUI extends Component {
           <Button
             onClick={() => this.changeStatus(object)}
             type="primary"
-            disable={object.status === "created" || object.status === "processing" ? "false" : "true"}
+            disable={
+              object.status === "created" || object.status === "processing"
+                ? "false"
+                : "true"
+            }
           >
             Change Status
           </Button>
         );
       },
-      fixed: 'right',
+      fixed: "right",
       width: 130,
     },
   ];
@@ -210,7 +224,7 @@ class OrderReturningUI extends Component {
     });
   };
 
-  onRadioChange = e => {
+  onRadioChange = (e) => {
     let { data } = this.props;
     let searchValue = e.target.value;
     let searchData = [];
@@ -239,14 +253,9 @@ class OrderReturningUI extends Component {
   };
 
   render() {
-
-    const {
-      handleOrder,
-      updateStatusOrder,
-      data,
-      storeComplainRecord,
-    } = this.props;
-
+    const { handleOrder, updateStatusOrder, data, storeComplainRecord } =
+      this.props;
+    console.log(data);
     const {
       selectedRowKeys,
       displayData,
@@ -314,7 +323,6 @@ class OrderReturningUI extends Component {
                         ? true
                         : false
                     }
-
                     style={{ marginLeft: 3 }}
                   >
                     View Details
@@ -333,14 +341,12 @@ class OrderReturningUI extends Component {
                         ? true
                         : false
                     }
-
                     style={{ marginLeft: 3 }}
                   >
                     <Link className="LinkDecorations" to="/complain/handle">
                       Handle Complain
                     </Link>
                   </Button>
-
                 </Col>
                 <Col flex={3}>
                   <span style={{ marginLeft: 8 }}>
@@ -359,7 +365,10 @@ class OrderReturningUI extends Component {
               </Row>
               <Row style={{ marginTop: "10px" }}>
                 <Col flex={6}>
-                  <Radio.Group onChange={(e) => this.onRadioChange(e)} defaultValue="all">
+                  <Radio.Group
+                    onChange={(e) => this.onRadioChange(e)}
+                    defaultValue="all"
+                  >
                     <Radio value="all">All Orders</Radio>
                     <Radio value="retail">Retail Orders</Radio>
                     <Radio value="wholesale">Wholesale Orders</Radio>

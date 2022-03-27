@@ -15,8 +15,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  updateProduct: () => { },
+  closeModal: () => {},
+  updateProduct: () => {},
   defaultProduct: {
     key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
     id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
@@ -44,7 +44,7 @@ class UpdateModal extends Component {
     previewVisible: false,
     previewImage: "",
     previewTitle: "",
-    fileList: [],
+    fileList: undefined,
   };
   formRef = React.createRef();
 
@@ -53,13 +53,25 @@ class UpdateModal extends Component {
   }
 
   handleUpdateAndClose = (data) => {
-    data.image =
-      this.state.fileList.length === 0 && this.props.record
-        ? JSON.parse(this.props.record?.image)
-        : this.state.fileList;
-    // console.log(data);
-    this.props.updateProduct(data);
+    switch (this.props.record?.status) {
+      case "incampaign":
+        alert("This product in campaign cannot update");
+        break;
+
+      default:
+        data.image =
+          this.state.fileList.length === 0 && this.props.record
+            ? JSON.parse(this.props.record?.image)
+            : this.state.fileList;
+        // console.log(data);
+        this.props.updateProduct(data);
+        break;
+    }
+
     this.formRef.current.resetFields();
+    this.setState({
+      fileList: undefined,
+    });
     this.props.closeModal();
   };
 
@@ -70,6 +82,9 @@ class UpdateModal extends Component {
 
   handleCancel = () => {
     this.formRef.current.resetFields();
+    this.setState({
+      fileList: undefined,
+    });
     this.props.closeModal();
   };
 
@@ -118,7 +133,7 @@ class UpdateModal extends Component {
     const { openModal, record } = this.props;
 
     const { data, categoryList } = this.props;
-    const { load, imageUrl } = this.state;
+    const { load, fileList = JSON.parse(record?.image || "[]") } = this.state;
     // this.state.fileList =
     //   this.props.record && this.state.fileList !== 0
     //     ? JSON.parse(this.props.record?.image)
@@ -159,7 +174,6 @@ class UpdateModal extends Component {
               </Button>,
             ]}
           >
-
             <Form.Item
               label="Product ID"
               name="id"
@@ -177,16 +191,19 @@ class UpdateModal extends Component {
             <Descriptions layout="vertical" column={2}>
               <Descriptions.Item label="Name">
                 <Form.Item name="name" initialValue={record?.name}>
-                  <Input defaultValue={record?.name} style={{ width: "60vh" }} />
+                  <Input
+                    defaultValue={record?.name}
+                    style={{ width: "60vh" }}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Category">
-                <Form.Item
-                  name="categoryId"
-                  initialValue={record?.categoryid}
-                >
-                  <Select defaultValue={record?.categoryid} style={{ width: "60vh" }} >
+                <Form.Item name="categoryId" initialValue={record?.categoryid}>
+                  <Select
+                    defaultValue={record?.categoryid}
+                    style={{ width: "60vh" }}
+                  >
                     {categoryList.map((item) => (
                       <Select.Option key={item.key} value={item.id}>
                         {item.categoryname}
@@ -197,11 +214,12 @@ class UpdateModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
-                <Form.Item
-                  name="quantity"
-                  initialValue={record?.quantity}
-                >
-                  <InputNumber min={0} defaultValue={record?.quantity} style={{ width: "60vh" }} />
+                <Form.Item name="quantity" initialValue={record?.quantity}>
+                  <InputNumber
+                    min={0}
+                    defaultValue={record?.quantity}
+                    style={{ width: "60vh" }}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -210,7 +228,11 @@ class UpdateModal extends Component {
                   name="retailPrice"
                   initialValue={record?.retailprice}
                 >
-                  <InputNumber min={0} defaultValue={record?.retailprice} style={{ width: "60vh" }} />
+                  <InputNumber
+                    min={0}
+                    defaultValue={record?.retailprice}
+                    style={{ width: "60vh" }}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -222,7 +244,7 @@ class UpdateModal extends Component {
                   <Input.TextArea
                     autoSize={{ minRows: 3, maxRows: 5 }}
                     defaultValue={record?.description}
-                    style={{ width: "60vh" }} 
+                    style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
@@ -234,16 +256,12 @@ class UpdateModal extends Component {
                       name="file"
                       action="/files/upload"
                       listType="picture-card"
-                      fileList={
-                        this.state.fileList.length === 0 && this.props.record
-                          ? JSON.parse(this.props.record?.image)
-                          : this.state.fileList
-                      }
+                      fileList={this.props.record ? fileList : []}
                       onPreview={this.handlePreview}
                       onChange={this.handleChange}
-                      style={{ width: "60vh" }} 
+                      style={{ width: "60vh" }}
                     >
-                      {this.state.fileList.length >= 8 ? null : uploadButton}
+                      {fileList.length >= 8 ? null : uploadButton}
                     </Upload>
                     <Modal
                       visible={this.state.previewVisible}
@@ -260,10 +278,6 @@ class UpdateModal extends Component {
                   </>
                 </Form.Item>
               </Descriptions.Item>
-
-
-
-
             </Descriptions>
           </Modal>
         </Form>
