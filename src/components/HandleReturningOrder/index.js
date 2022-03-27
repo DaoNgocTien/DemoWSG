@@ -42,10 +42,12 @@ const mapDispatchToProps = (dispatch) => {
     getReturningOrder: async (orderCode) => await dispatch(action.getData(orderCode)),
 
     acceptRequest: async (data) => {
+      console.log("Accept returning request");
       // await dispatch(action.updateStatusOrder(data));
       // await dispatch(action.getOrder())
     },
     rejectRequest: async (orderCode, reasonForCancel, imageProof) => {
+      console.log("Reject returning request");
       // await dispatch(action.rejectOrder(orderCode, reasonForCancel, imageProof));
     },
   };
