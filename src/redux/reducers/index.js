@@ -11,6 +11,10 @@ import notificationReducer from "../../components/Notification/modules/reducer";
 import ReturningOrderReducer from "../../components/ReturningOrder/modules/reducer";
 import profileReducer from "../../components/Profile/modules/reducer";
 import transactionReducer from "../../components/Transaction/modules/reducer";
+import complainOrder from "../../components/ReturningOrder/modules/reducer";
+
+import handleReturningOrderReducer from "../../components/HandleReturningOrder/modules/reducer";
+
 // import ReturningOrder from "../../components/ReturningOrder/modules/reducer";
 import dashboardReducer from "../../containers/AdminLayout/DashBoard/modules/reducer";
 
@@ -31,6 +35,8 @@ const rootReducer = combineReducers({
   dashboardReducer,
   transactionReducer,
   notificationReducer,
+  handleReturningOrderReducer,
+  complainOrder,
 });
 
 export default rootReducer;

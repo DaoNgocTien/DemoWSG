@@ -138,11 +138,19 @@ class OrdersInCampaign extends React.Component {
 
   onChangeHandler = (e) => {
     let { data } = this.props;
+    let searchString = e.target.value;
     let searchList = data.filter((item) => {
       return (
-        item.categoryname.includes(e.target.value) ||
-        item.createdat.includes(e.target.value) ||
-        item.updatedat.includes(e.target.value)
+        item.status.toUpperCase().includes(searchString.toUpperCase()) ||
+        item.createdat.includes(searchString) ||
+        item.notes.includes(searchString) ||
+        item.finalprice.includes(searchString) ||
+        item.discountprice.includes(searchString) ||
+        item.totalprice.includes(searchString) ||
+        item.quantity.includes(searchString) ||
+        item.productname.includes(searchString) ||
+        item.price.includes(searchString) 
+
       );
     });
     this.setState({
@@ -155,12 +163,16 @@ class OrdersInCampaign extends React.Component {
     const { selectedRowKeys, deleteButton, displayData, searchData } =
       this.state;
 
-    const { record, ordersInCampaign, loading } = this.props;
+    const { record, ordersInCampaign, loading,orderList } = this.props;
     // console.log(ordersInCampaign);
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
+
+    console.log(ordersInCampaign);
+    console.log(orderList);
+
     // const hasSelected = selectedRowKeys.length > 0;
 
     // const arr = window.location.pathname.split("/");

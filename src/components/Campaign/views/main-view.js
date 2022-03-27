@@ -181,9 +181,16 @@ class CampaignUI extends Component {
     let searchString = e.target.value;
     let searchList = data.filter((item) => {
       return (
-        item.productname.toUpperCase().includes(searchString.toUpperCase()) ||
+        item.status.toUpperCase().includes(searchString.toUpperCase()) ||
         item.fromdate.includes(searchString) ||
-        item.todate.includes(searchString)
+        item.todate.includes(searchString) ||
+        item.productname.includes(searchString) ||
+        item.quantity.includes(searchString) ||
+        item.maxquantity.includes(searchString) ||
+        item.numorder.includes(searchString) ||
+        item.advancefee.includes(searchString) ||
+        item.price.includes(searchString) 
+
       );
     });
     this.setState({

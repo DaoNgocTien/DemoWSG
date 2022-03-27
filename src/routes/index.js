@@ -4,6 +4,8 @@ import AuthPage from "../containers/AuthPage";
 import Registration from "../containers/AuthPage/views/registration";
 
 import Product from "../components/Product";
+import HandleReturningOrder from "../components/HandleReturningOrder";
+
 
 import Transaction from "../components/Transaction";
 import Category from "../components/Category";
@@ -11,7 +13,7 @@ import DiscountCode from "../components/DiscountCode";
 import Campaign from "../components/Campaign";
 import Order from "../components/Orders";
 import ReturningOrder from "../components/ReturningOrder";
-import HandleUI from "../components/ReturningOrder/views/handle-view";
+// import HandleUI from "../components/ReturningOrder/views/handle-view";
 import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
 import LoyalCustomer from "../components/LoyalCustomer";
 import Profile from "../components/Profile";
@@ -64,11 +66,6 @@ const routesAdmin = [
     component: Transaction,
   },
 
-  {
-    exact: true,
-    path: "/complain/handle",
-    component: HandleUI,
-  },
 
   {
     exact: true,
@@ -94,6 +91,12 @@ const routesAdmin = [
     exact: true,
     path: "/profile",
     component: Profile,
+  },
+
+  {
+    exact: true,
+    path: "/handle-returning-order/:orderCode",
+    component: HandleReturningOrder,
   },
 ];
 

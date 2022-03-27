@@ -18,7 +18,7 @@ const propsDefault = {
   openModal: false,
 };
 
-class DetailModal extends Component {
+class InformationModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -136,70 +136,42 @@ class DetailModal extends Component {
 
   render() {
     this.state.record = this.props.record;
-    const { openModal } = this.props;
+    console.log(this.props.record);
 
     return (
       <>
-        <Form
-          id="editForm"
-          key={this.state.record?.key}
-          ref={this.formRef}
-          onFinish={this.handleEditAndClose}
-        >
-          <Modal
-            width={window.innerWidth * 0.7}
-            title={`Order of ${this.state.record.customerfirstname +
-              " " +
-              this.state.record.customerlastname
-              }`}
-            visible={openModal}
-            onCancel={this.handleCancel}
-            footer={[
-              <Button onClick={this.handleCancel}>Cancel</Button>,
-              <Button
-                type="primary"
-                form="editForm"
-                key="submit"
-                htmlType="submit"
-              >
-                Submit
-              </Button>,
-            ]}
+          <Descriptions
+            bordered
+            title="Order Infomation"
+            column={2}
+            style={{ marginBottom: "10px" }}
           >
-            <Descriptions
-              bordered
-              title="Order Infomation"
-              column={2}
-              style={{ marginBottom: "10px" }}
-            >
-              <Descriptions.Item label="Order Code">
-                {this.state.record?.ordercode}
-              </Descriptions.Item>
-              <Descriptions.Item label="Total Price">
-                {this.state.record?.totalprice}VND
-              </Descriptions.Item>
-              <Descriptions.Item label="Discount Price">
-                {this.state.record?.discountprice}VND
-              </Descriptions.Item>
-              <Descriptions.Item label="Final Price">
-                {" "}
-                {this.state.record?.totalprice -
-                  this.state.record?.discountprice}
-                VND
-              </Descriptions.Item>
+            <Descriptions.Item label="Order Code">
+              {this.state.record?.ordercode}
+            </Descriptions.Item>
+            <Descriptions.Item label="Total Price">
+              {this.state.record?.totalprice}VND
+            </Descriptions.Item>
+            <Descriptions.Item label="Discount Price">
+              {this.state.record?.discountprice}VND
+            </Descriptions.Item>
+            <Descriptions.Item label="Final Price">
+              {" "}
+              {this.state.record?.totalprice -
+                this.state.record?.discountprice}
+              VND
+            </Descriptions.Item>
 
-              {this.checkCancelledOrder()}
+            {this.checkCancelledOrder()}
 
-              <Descriptions.Item label="Status">
-                {this.state.record?.status}
-              </Descriptions.Item>
-            </Descriptions>
-            <Table
-              columns={this.columns}
-              dataSource={this.state.record.details}
-            />
-          </Modal>
-        </Form>
+            <Descriptions.Item label="Status">
+              {this.state.record?.status}
+            </Descriptions.Item>
+          </Descriptions>
+          <Table
+            columns={this.columns}
+            dataSource={this.state.record.details}
+          />
       </>
     );
   }
@@ -210,4 +182,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(DetailModal, arePropsEqual);
+export default memo(InformationModal, arePropsEqual);
