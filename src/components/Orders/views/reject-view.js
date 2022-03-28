@@ -164,7 +164,7 @@ class RejectModal extends Component {
   render() {
     this.state.record = this.props.record;
     const { openModal } = this.props;
-    const { isReasonable, load, imageUrl } = this.state;
+    const { isReasonable, load, imageUrl,fileList } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
@@ -247,16 +247,16 @@ class RejectModal extends Component {
 
               <Descriptions.Item label="Image">
                 <Form.Item name="image"
-                  rules={[
-                    { required: true, message: "Please input your reason to reject order!" },
-                  ]}
+                  // rules={[
+                  //   { required: true, message: "Please input your reason to reject order!" },
+                  // ]}
                 >
                   <>
                     <Upload
                       name="file"
                       action="/files/upload"
                       listType="picture-card"
-                      fileList={this.state.fileList}
+                      fileList={this.props.record ? fileList : []}
                       onPreview={this.handlePreview}
                       onChange={this.handleChange}
                       style={{ width: "60vh" }}

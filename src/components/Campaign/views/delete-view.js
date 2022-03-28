@@ -21,7 +21,7 @@ const propsProTypes = {
 
 const propsDefault = {
   closeModal: () => { },
-  deleteCampaign:  () => { },
+  deleteCampaign: () => { },
 };
 
 class DeleteModal extends Component {
@@ -37,7 +37,7 @@ class DeleteModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   handleDeleteAndClose = (data) => {
     switch (this.props.record?.status) {
@@ -115,7 +115,7 @@ class DeleteModal extends Component {
   render() {
     const { RangePicker } = DatePicker;
     const { openModal } = this.props;
-
+    const { fileList } = this.state;
     const { productList, record } = this.props;
     const {
       productSelected = this.props.productList?.find(
@@ -323,7 +323,7 @@ class DeleteModal extends Component {
                   action="/files/upload"
                   listType="picture-card"
                   fileList={
-                    productSelected.image
+                    productSelected?.image
                       ? JSON.parse(productSelected?.image)
                       : []
                   }

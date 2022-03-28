@@ -289,7 +289,7 @@ class HandleUI extends Component {
                               name="file"
                               action="/files/upload"
                               listType="picture-card"
-                              fileList={this.state.fileList}
+                              fileList={this.props.record ? fileList : []}
                               onPreview={this.handlePreview}
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}
@@ -335,7 +335,7 @@ class HandleUI extends Component {
                               name="file"
                               action="/files/upload"
                               listType="picture-card"
-                              fileList={this.state.fileList}
+                              fileList={this.props.record ? fileList : []}
                               onPreview={this.handlePreview}
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}
@@ -381,7 +381,7 @@ class HandleUI extends Component {
                               name="file"
                               action="/files/upload"
                               listType="picture-card"
-                              fileList={this.state.fileList}
+                              fileList={this.props.record ? fileList : []}
                               onPreview={this.handlePreview}
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}
@@ -480,8 +480,7 @@ class HandleUI extends Component {
                     name="file"
                     action="/files/upload"
                     listType="picture-card"
-                    fileList={this.state.fileList}
-                    onPreview={this.handlePreview}
+                    fileList={this.props.record ? fileList : []}
                     onChange={this.handleChange}
                     style={{ width: "60vh" }}
 

@@ -185,26 +185,39 @@ class OrderReturningUI extends Component {
       },
       width: 100,
     },
-    // {
-    //   title: "Action",
-    //   render: (object) => {
-    //     return (
-    //       <Button
-    //         onClick={() => this.changeStatus(object)}
-    //         type="primary"
-    //         disable={
-    //           object.status === "created" || object.status === "processing"
-    //             ? "false"
-    //             : "true"
-    //         }
-    //       >
-    //         Change Status
-    //       </Button>
-    //     );
-    //   },
-    //   fixed: "right",
-    //   width: 130,
-    // },
+    {
+      title: "Action",
+      render: (object) => {
+        //  Condition:
+        //  - Order in returning
+        //  - Order status history: có tồn tại statusHistory là finishReturning hay không, có thì cho confirm
+        if (object.status === "returning" && object.status === "returning" ) {
+          return (
+            <Button
+              // onClick={() => this.changeStatus(object)}
+              type="primary"
+            >
+              Confirm Received 
+            </Button>
+          );
+        }
+
+        // if (object.status === "processing") {
+        //   return (
+        //     <Button
+        //       onClick={() => this.changeStatus(object)}
+        //       type="primary"
+        //     >
+        //       Deliver Order
+        //     </Button>
+        //   );
+        // }
+
+
+      },
+      fixed: "right",
+      width: 150,
+    },
   ];
 
   onChangeHandler = (e) => {
@@ -308,7 +321,7 @@ class OrderReturningUI extends Component {
                     // }
                     style={{ marginLeft: 3 }}
                   >
-                    <Link className="LinkDecorations" to={"/order/handle/returning/" + this.state.record.ordercode}>
+                    <Link className="LinkDecorations" to={"/order/handle/returning/" + this.state.record?.ordercode}>
                       Handle Returning Request
                     </Link>
                   </Button>
