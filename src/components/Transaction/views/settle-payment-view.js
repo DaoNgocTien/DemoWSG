@@ -244,7 +244,7 @@ class SettlePaymentUI extends Component {
             //       ? true
             //       : false
             //   }
-            //   hidden={
+            //   disabled={
             //     !viewButton || this.state.selectedRowKeys.length === 0
             //       ? true
             //       : false
@@ -263,7 +263,7 @@ class SettlePaymentUI extends Component {
               //     ? true
               //     : false
               // }
-              // hidden={record.status === "cancelled" || record.status === "returned" ? `true` : `false`}
+              // disabled={record.status === "cancelled" || record.status === "returned" ? `true` : `false`}
 
               style={{ marginLeft: 3 }}
             >

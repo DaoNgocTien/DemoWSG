@@ -247,14 +247,14 @@ class LoyalCustomerUI extends Component {
                     {/* <Button
                       type="primary"
                       onClick={() => this.start("openCreateModal")}
-                      hidden={!addNewButton}
+                      disabled={!addNewButton}
                     >
                       Add New
                     </Button> */}
                     <Button
                       type="primary"
                       onClick={() => this.manageLoyalCustomerPosition("active")}
-                      hidden={!activateButton}
+                      disabled={!activateButton}
                       style={{ width: 90 }}
                     >
                       Activate
@@ -262,7 +262,7 @@ class LoyalCustomerUI extends Component {
                     <Button
                       type="danger"
                       onClick={() => this.manageLoyalCustomerPosition("deactive")}
-                      hidden={!deactivateButton}
+                      disabled={!deactivateButton}
                       style={{ width: 90 }}
                     >
                       Deactivate

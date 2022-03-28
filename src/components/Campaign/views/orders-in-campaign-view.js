@@ -217,7 +217,7 @@ class OrdersInCampaign extends React.Component {
                       <Button
                         type="danger"
                         onClick={() => this.start("openDeleteModal")}
-                        hidden={!deleteButton}
+                        disabled={!deleteButton}
                         style={{ width: 90 }}
                       >
                         Delete

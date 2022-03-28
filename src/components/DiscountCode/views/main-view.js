@@ -236,14 +236,14 @@ class DiscountCodeUI extends Component {
                     <Button
                       type="primary"
                       onClick={() => this.start("openCreateModal")}
-                      hidden={!addNewButton}
+                      disabled={!addNewButton}
                     >
                       Add New
                     </Button>
                     <Button
                       type="primary"
                       onClick={() => this.start("openEditModal")}
-                      hidden={!editButton}
+                      disabled={!editButton}
                       style={{ width: 90 }}
                     >
                       Edit
@@ -251,7 +251,7 @@ class DiscountCodeUI extends Component {
                     <Button
                       type="danger"
                       onClick={() => this.start("openDeleteModal")}
-                      hidden={!deleteButton}
+                      disabled={!deleteButton}
                       style={{ width: 90 }}
                     >
                       Delete

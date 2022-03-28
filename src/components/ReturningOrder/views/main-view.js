@@ -301,11 +301,11 @@ class OrderReturningUI extends Component {
                         ? true
                         : false
                     }
-                    hidden={
-                      !actionButton || this.state.selectedRowKeys.length === 0
-                        ? true
-                        : false
-                    }
+                    // disabled={
+                    //   !actionButton || this.state.selectedRowKeys.length === 0
+                    //     ? true
+                    //     : false
+                    // }
                     style={{ marginLeft: 3 }}
                   >
                     <Link className="LinkDecorations" to={"/order/handle/returning/" + this.state.record.ordercode}>

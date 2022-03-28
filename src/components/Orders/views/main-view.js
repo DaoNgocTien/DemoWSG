@@ -324,11 +324,11 @@ class OrderUI extends Component {
                         ? true
                         : false
                     }
-                    hidden={
-                      !editButton || this.state.selectedRowKeys.length === 0
-                        ? true
-                        : false
-                    }
+                    // disabled={
+                    //   !editButton || this.state.selectedRowKeys.length === 0
+                    //     ? true
+                    //     : false
+                    // }
                     style={{ marginLeft: 3 }}
                   >
                     View Details
@@ -342,11 +342,11 @@ class OrderUI extends Component {
                         ? true
                         : false
                     }
-                    hidden={
-                      !rejectButton || this.state.selectedRowKeys.length === 0
-                        ? true
-                        : false
-                    }
+                    // disabled={
+                    //   !rejectButton || this.state.selectedRowKeys.length === 0
+                    //     ? true
+                    //     : false
+                    // }
                     style={{ marginLeft: 3 }}
                   >
                     Reject Order
