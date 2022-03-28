@@ -22,8 +22,8 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
+  closeModal: () => { },
+  updateCampaign: () => { },
   record: {},
   openModal: false,
 };
@@ -45,23 +45,22 @@ class HandleReturningOrderUI extends Component {
   formRef = React.createRef();
 
   componentDidMount() {
-    console.log(this.props.record);
   }
 
-  handleAccept = () => {};
+  // handleAccept = () => { };
 
-  handleReject = (data) => {
-    this.props.rejectOrder(
-      this.props.record.ordercode,
-      data.reason,
-      JSON.stringify(this.state.fileList)
-    );
-    this.formRef.current.resetFields();
-  };
+  // handleReject = (data) => {
+  //   this.props.rejectOrder(
+  //     this.props.record.ordercode,
+  //     data.reason,
+  //     JSON.stringify(this.state.fileList)
+  //   );
+  //   this.formRef.current.resetFields();
+  // };
 
-  handleCancel = () => {
-    this.formRef.current.resetFields();
-  };
+  // handleCancel = () => {
+  //   this.formRef.current.resetFields();
+  // };
 
   recordReasonToReject = (e) => {
     let reason = e.target.value;
@@ -170,11 +169,11 @@ class HandleReturningOrderUI extends Component {
   ];
 
   render() {
-    const { loading } = this.props;
+    const { loading, acceptRequest, rejectRequest } = this.props;
     if (loading) return <Loader />;
     this.state.record = this.props.record;
     const { data } = this.props;
-    console.log(data);
+    console.log(this.props);
     const { load } = this.state;
     return (
       <>
@@ -186,7 +185,7 @@ class HandleReturningOrderUI extends Component {
           extra={[
             <Button
               type="danger"
-              onClick={() => this.start("openDetailModal")}
+              onClick={() => acceptRequest("")}
               style={{ marginLeft: 3 }}
             >
               Reject
@@ -194,7 +193,7 @@ class HandleReturningOrderUI extends Component {
 
             <Button
               type="primary"
-              onClick={() => this.start("openHandleModal")}
+              onClick={() => rejectRequest("")}
               style={{ marginLeft: 3 }}
             >
               Submit
@@ -243,16 +242,16 @@ class HandleReturningOrderUI extends Component {
                             <p>{orderHistory.description}</p>
                             {orderHistory.image
                               ? JSON.parse(orderHistory.image)?.map((image) => {
-                                  return (
-                                    <Image
-                                      width={200}
-                                      src={image.url}
-                                      preview={{
-                                        src: image.url,
-                                      }}
-                                    />
-                                  );
-                                })
+                                return (
+                                  <Image
+                                    width={200}
+                                    src={image.url}
+                                    preview={{
+                                      src: image.url,
+                                    }}
+                                  />
+                                );
+                              })
                               : null}
                           </Timeline.Item>
                         );

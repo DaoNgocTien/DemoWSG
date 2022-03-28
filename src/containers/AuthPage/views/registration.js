@@ -356,7 +356,7 @@ class Registration extends Component {
                                     label="OTP"
                                     validateStatus={OTPMessage === null ? "success" : "error"}
                                     help={OTPMessage === null ? "Correct OTP Token will let you fill the rest of registration form!" : OTPMessage}
-                                    hidden={phone === null || OTP === null}
+                                    disabled={phone === null || OTP === null}
 
                                 >
                                     <Input
@@ -379,7 +379,7 @@ class Registration extends Component {
                                         },
                                     ]}
                                     hasFeedback
-                                    hidden={!phoneAvailable}
+                                    disabled={!phoneAvailable}
 
                                 >
                                     <Input />
@@ -395,7 +395,7 @@ class Registration extends Component {
                                         },
                                     ]}
                                     hasFeedback
-                                    hidden={!phoneAvailable}
+                                    disabled={!phoneAvailable}
 
                                 >
                                     <Input.Password placeholder="1-255 characters" />
@@ -421,7 +421,7 @@ class Registration extends Component {
                                             },
                                         }),
                                     ]}
-                                    hidden={!phoneAvailable}
+                                    disabled={!phoneAvailable}
 
                                 >
                                     <Input.Password placeholder="1-255 characters" />
@@ -432,7 +432,7 @@ class Registration extends Component {
                                     label="Firstname"
                                     tooltip="What is your firstname?"
                                     rules={[{ required: true, message: 'Please input your firstname!', whitespace: true }]}
-                                    hidden={!phoneAvailable}
+                                    disabled={!phoneAvailable}
 
                                 >
                                     <Input />
@@ -443,7 +443,7 @@ class Registration extends Component {
                                     label="Lastname"
                                     tooltip="What is your lastname?"
                                     rules={[{ required: true, message: 'Please input your lastname!', whitespace: true }]}
-                                    hidden={!phoneAvailable}
+                                    disabled={!phoneAvailable}
 
                                 >
                                     <Input />
@@ -454,7 +454,7 @@ class Registration extends Component {
                                     name="role"
                                     label="Role"
                                     tooltip="User's role in WSG System"
-                                    hidden={!phoneAvailable}
+                                    disabled={!phoneAvailable}
 
                                 >
                                     <Tooltip placement="topLeft" title="Suppliers are those who use the WSG System and website to process their business. Their main role is to cooperate with the WSG system to do business">
@@ -467,7 +467,7 @@ class Registration extends Component {
                                     name="loggingMethod"
                                     label="Logging method"
                                     tooltip="User's logging method in WSG System"
-                                    hidden={!phoneAvailable}
+                                    disabled={!phoneAvailable}
 
                                 >
                                     <Tooltip placement="topLeft" title="Logging by username / Logging by Google Mail">
@@ -489,13 +489,13 @@ class Registration extends Component {
                                             message: 'Please input your E-mail!',
                                         },
                                     ]}
-                                    hidden={!phoneAvailable}
+                                    disabled={!phoneAvailable}
 
                                 >
                                     <Input />
                                 </Form.Item>
 
-                                <Form.Item {...tailFormItemLayout} hidden={!phoneAvailable}
+                                <Form.Item {...tailFormItemLayout} disabled={!phoneAvailable}
                                 >
                                     <Space>
                                         <Button htmlType="submit">

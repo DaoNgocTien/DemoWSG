@@ -220,7 +220,7 @@ class HandleUI extends Component {
               //     ? true
               //     : false
               // }
-              // hidden={
+              // disabled={
               //   !viewButton || this.state.selectedRowKeys.length === 0
               //     ? true
               //     : false
@@ -239,7 +239,7 @@ class HandleUI extends Component {
               //     ? true
               //     : false
               // }
-              // hidden={
+              // disabled={
               //   !actionButton || this.state.selectedRowKeys.length === 0
               //     ? true
               //     : false
