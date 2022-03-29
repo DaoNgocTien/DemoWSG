@@ -220,7 +220,7 @@ class SettlePaymentUI extends Component {
       record,
       selectedRowKeys,
     } = this.props;
-    const { isReasonable, load, imageUrl } = this.state;
+    const { isReasonable, load, imageUrl,fileList } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
@@ -310,7 +310,7 @@ class SettlePaymentUI extends Component {
                               name="file"
                               action="/files/upload"
                               listType="picture-card"
-                              fileList={this.state.fileList}
+                              fileList={this.props.record ? fileList : []}
                               onPreview={this.handlePreview}
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}
@@ -356,7 +356,7 @@ class SettlePaymentUI extends Component {
                               name="file"
                               action="/files/upload"
                               listType="picture-card"
-                              fileList={this.state.fileList}
+                              fileList={this.props.record ? fileList : []}
                               onPreview={this.handlePreview}
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}
@@ -402,7 +402,7 @@ class SettlePaymentUI extends Component {
                               name="file"
                               action="/files/upload"
                               listType="picture-card"
-                              fileList={this.state.fileList}
+                              fileList={this.props.record ? fileList : []}
                               onPreview={this.handlePreview}
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}
@@ -448,7 +448,7 @@ class SettlePaymentUI extends Component {
                               name="file"
                               action="/files/upload"
                               listType="picture-card"
-                              fileList={this.state.fileList}
+                              fileList={this.props.record ? fileList : []}
                               onPreview={this.handlePreview}
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}

@@ -222,6 +222,11 @@ class CampaignUI extends Component {
     });
   };
 
+  onCloseDrawer = () => {
+    this.setState({
+      openDrawer: false,
+    })
+  }
   render() {
     const {
       selectedRowKeys,

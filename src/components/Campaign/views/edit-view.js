@@ -21,8 +21,8 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
+  closeModal: () => { },
+  updateCampaign: () => { },
   openModal: false,
 };
 
@@ -39,7 +39,7 @@ class UpdateModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   handleUpdateAndClose = (data) => {
     switch (this.props.record?.status) {
@@ -52,8 +52,8 @@ class UpdateModal extends Component {
       default: {
         const productSelected = !this.state.productSelected
           ? this.props.productList?.find(
-              (element) => element.id === this.props.record?.productid
-            )
+            (element) => element.id === this.props.record?.productid
+          )
           : this.state.productSelected;
         let newCampaign = {
           id: this.props.record?.id,
@@ -135,7 +135,7 @@ class UpdateModal extends Component {
   render() {
     const { RangePicker } = DatePicker;
     const { openModal } = this.props;
-
+    const { fileList } = this.state;
     const { productList, record } = this.props;
     const {
       productSelected = this.props.productList?.find(
@@ -334,7 +334,7 @@ class UpdateModal extends Component {
                   action="/files/upload"
                   listType="picture-card"
                   fileList={
-                    productSelected.image
+                    productSelected?.image
                       ? JSON.parse(productSelected?.image)
                       : []
                   }

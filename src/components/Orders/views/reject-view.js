@@ -1,5 +1,5 @@
 import React, { Component, memo } from "react";
-import { Modal, Button, Form, Table, Input, Descriptions, Upload } from "antd";
+import { Modal, Button, Form, Table, Input, Descriptions, Upload, Switch } from "antd";
 import PropTypes from "prop-types";
 
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
@@ -29,6 +29,7 @@ class RejectModal extends Component {
       previewImage: "",
       previewTitle: "",
       fileList: [],
+      requester: "Customer",
     };
   }
   static propTypes = propsProTypes;
@@ -40,8 +41,9 @@ class RejectModal extends Component {
   }
 
   handleRejectAndClose = (data) => {
+    // console.log(data);
     // data.image = this.state.fileList;
-    this.props.rejectOrder(this.props.record.ordercode, data.reason, JSON.stringify(this.state.fileList));
+    this.props.rejectOrder(this.props.record.ordercode, data.reason, JSON.stringify(this.state.fileList), this.state.requester);
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
@@ -161,16 +163,24 @@ class RejectModal extends Component {
     }
   ];
 
+  getRequester = checked => {
+    console.log(checked)
+    this.setState({
+      requester: checked ? "Customer" : "Supplier"
+    })
+  }
+
   render() {
     this.state.record = this.props.record;
-    const { openModal } = this.props;
-    const { isReasonable, load, imageUrl } = this.state;
+    const { openModal, record } = this.props;
+    const { isReasonable, load, imageUrl, fileList, requester } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+    console.log(record);
     return (
       <>
         <Form
@@ -178,6 +188,7 @@ class RejectModal extends Component {
           key={this.state.record?.key}
           ref={this.formRef}
           onFinish={this.handleRejectAndClose}
+          layout="vertical"
         >
           <Modal
             width={window.innerWidth * 0.7}
@@ -240,6 +251,7 @@ class RejectModal extends Component {
                   rules={[
                     { required: true, message: "Please input your reason to reject order!" },
                   ]}
+                  initialValue={record?.reasonforcancel ?record?.reasonforcancel: ""}
                 >
                   <Input.TextArea onChange={(e) => this.recordReasonToReject(e)} autoSize={{ minRows: 5, maxRows: 8 }} style={{ width: "60vh" }} />
                 </Form.Item>
@@ -248,7 +260,19 @@ class RejectModal extends Component {
               <Descriptions.Item label="Image">
                 <Form.Item name="image"
                   rules={[
-                    { required: true, message: "Please input your reason to reject order!" },
+                    // {
+                    //   required: true,
+                    //   message: 'Please confirm your password!',
+                    // },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (fileList.length >= 1) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Image proof for cancel order please!!'));
+                      },
+                    }),
                   ]}
                 >
                   <>
@@ -256,7 +280,7 @@ class RejectModal extends Component {
                       name="file"
                       action="/files/upload"
                       listType="picture-card"
-                      fileList={this.state.fileList}
+                      fileList={this.props.record ? fileList : []}
                       onPreview={this.handlePreview}
                       onChange={this.handleChange}
                       style={{ width: "60vh" }}
@@ -278,7 +302,21 @@ class RejectModal extends Component {
                   </>
                 </Form.Item>
               </Descriptions.Item>
-
+              {/* <Descriptions.Item label="Request from"> */}
+              <Form.Item
+                label="Request from"
+                name="cancellingRequester"
+              // initialValue={record?.isshare}
+              >
+                <Switch
+                  checkedChildren="Customer"
+                  unCheckedChildren="Supplier"
+                  defaultChecked={record?.cancellingRequester === "Customer" ? "true": "false"}
+                  onChange={(e) =>
+                    this.getRequester(e)
+                  }
+                />
+              </Form.Item>
             </Descriptions>
           </Modal>
         </Form>
