@@ -136,7 +136,7 @@ class PasswordTab extends Component {
   }
 
   render() {
-    const { load, imageUrl, phoneAvailable, OTPMessage } = this.state;
+    const { load, imageUrl, phoneAvailable, OTPMessage, fileList } = this.state;
     const { data, phoneValidation, identificationValidation } = this.props;
     const {
       checkPhoneMessage,
@@ -372,7 +372,7 @@ class PasswordTab extends Component {
                 //     ? JSON.parse(data.avt)
                 //     : this.state.fileList
                 // }
-                fileList={this.state.fileList}
+                fileList={this.props.record ? fileList : []}
                 onPreview={this.handlePreview}
                 onChange={this.handleChange}
                 style={{ width: "60vh" }}

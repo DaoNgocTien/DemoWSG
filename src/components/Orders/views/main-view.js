@@ -30,9 +30,9 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => {},
-  updateStatusOrder: () => {},
-  getOrder: (status) => {},
+  rejectOrder: () => { },
+  updateStatusOrder: () => { },
+  getOrder: (status) => { },
 };
 
 class OrderUI extends Component {
@@ -50,7 +50,7 @@ class OrderUI extends Component {
     rejectButton: true,
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     switch (openModal) {
@@ -191,19 +191,31 @@ class OrderUI extends Component {
     {
       title: "Action",
       render: (object) => {
-        return (
-          <Button
-            onClick={() => this.changeStatus(object)}
-            type="primary"
-            disable={
-              object.status === "created" || object.status === "processing"
-                ? "false"
-                : "true"
-            }
-          >
-            Change Status
-          </Button>
-        );
+        // let disabled = object.status === "created" ? "false" : "true";
+        // console.log(disabled);
+        if (object.status === "created") {
+          return (
+            <Button
+              onClick={() => this.changeStatus(object)}
+              type="primary"
+            >
+              Processing Order
+            </Button>
+          );
+        }
+
+        if (object.status === "processing") {
+          return (
+            <Button
+              onClick={() => this.changeStatus(object)}
+              type="primary"
+            >
+              Deliver Order
+            </Button>
+          );
+        }
+
+
       },
       fixed: "right",
       width: 150,

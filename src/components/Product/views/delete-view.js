@@ -123,7 +123,7 @@ class DeleteModal extends Component {
     const { openModal, record } = this.props;
 
     const { data, categoryList } = this.props;
-    const { load, imageUrl } = this.state;
+    const { load, imageUrl,fileList } = this.state;
     // this.state.fileList =
     //   this.props.record && this.state.fileList !== 0
     //     ? JSON.parse(this.props.record?.image)
@@ -252,11 +252,7 @@ class DeleteModal extends Component {
                       name="file"
                       action="/files/upload"
                       listType="picture-card"
-                      fileList={
-                        this.state.fileList.length === 0 && this.props.record
-                          ? JSON.parse(this.props.record?.image)
-                          : this.state.fileList
-                      }
+                      fileList={this.props.record ? fileList : []}
                       onPreview={this.handlePreview}
                       onChange={this.handleChange}
                       style={{ width: "60vh" }}

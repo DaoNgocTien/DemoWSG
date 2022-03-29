@@ -9,17 +9,17 @@ const getOrder = (status) => {
       const [orders, campaigns] = await Promise.all([
         !status
           ? Axios({
-              url: `/order/supplier`,
-              method: "GET",
-              withCredentials: true,
-              exposedHeaders: ["set-cookie"],
-            })
+            url: `/order/supplier`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          })
           : Axios({
-              url: `/order/supplier/status?status=${status}`,
-              method: "GET",
-              withCredentials: true,
-              exposedHeaders: ["set-cookie"],
-            }),
+            url: `/order/supplier/status?status=${status}`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
         Axios({
           url: `/campaigns/All`,
           method: "GET",
@@ -58,7 +58,7 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => {})
+          .then((response) => { })
           .catch((err) => {
             return dispatch(getFailed());
           });
@@ -72,7 +72,7 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => {})
+          .then((response) => { })
           .catch((err) => {
             return dispatch(getFailed());
           });
@@ -86,7 +86,14 @@ const updateStatusOrder = (data) => {
   };
 };
 
-const rejectOrder = (orderCode, reasonForCancel, imageProof) => {
+const rejectOrder = (orderCode, reasonForCancel, imageProof, requester) => {
+  let reject = {
+    orderCode: orderCode,
+    reasonForCancel: reasonForCancel,
+    imageProof: imageProof,
+    cancellingRequester: requester,
+  }
+  console.log(reject);
   return async (dispatch) => {
     dispatch(getRequest());
     try {
@@ -94,11 +101,7 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof) => {
         Axios({
           url: `/order/supplier/cancel`,
           method: "PUT",
-          data: {
-            orderCode: orderCode,
-            reasonForCancel: reasonForCancel,
-            imageProof: imageProof,
-          },
+          data: reject,
           withCredentials: true,
         }),
         Axios({

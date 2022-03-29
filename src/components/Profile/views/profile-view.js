@@ -162,7 +162,7 @@ class ProfileTab extends Component {
     const { loading } = this.props;
     if (loading) return <Loader />;
 
-    const { load, imageUrl, user } = this.state;
+    const { load, imageUrl, user,fileList } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
@@ -229,11 +229,7 @@ class ProfileTab extends Component {
                 name="file"
                 action="/files/upload"
                 listType="picture-card"
-                fileList={
-                  this.state.fileList.length === 0 && data.avt
-                    ? JSON.parse(data.avt) :
-                    this.state.fileList
-                }
+                fileList={this.props.record ? fileList : []}
                 onPreview={this.handlePreview}
                 onChange={this.handleChange}
                 style={{ width: "60vh" }}
