@@ -5,6 +5,7 @@ import {
   STORE_COMPLAIN_ORDER,
 } from "./constant";
 import Axios from "axios";
+import { Redirect } from "react-router";
 
 const getData = (orderCode) => {
   return async (dispatch) => {
@@ -45,6 +46,28 @@ const getData = (orderCode) => {
       );
     } catch (error) {
       console.error(error);
+      return dispatch(getFailed());
+    }
+  };
+};
+
+const rejectOrder = (data) => {
+  return async (dispatch) => {
+    dispatch(getRequest());
+    try {
+      const [rejectResponse] = await Promise.all([
+        Axios({
+          url: `/order/status/supplier/delivered`,
+          method: "PUT",
+          data: {
+            ...data,
+          },
+          withCredentials: true,
+        }),
+      ]);
+
+      return window.location.replace("/returning")
+    } catch (error) {
       return dispatch(getFailed());
     }
   };
@@ -92,6 +115,7 @@ const getFailed = (err) => {
 const action = {
   getData,
   storeComplainRecord,
+  rejectOrder,
 };
 
 export default action;
