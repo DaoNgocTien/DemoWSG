@@ -11,6 +11,7 @@ import {
   Modal,
   Form,
   Upload,
+  Tag,
 } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -112,7 +113,7 @@ class OrderUI extends Component {
       addNewButton: selectedRowKeys.length === 0,
     });
   };
-  handleChange = (data) => {
+  handleChangeInSelect = (data) => {
     this.props.getOrder(data);
   };
   columns = [
@@ -187,6 +188,9 @@ class OrderUI extends Component {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (data) => {
+        return <Tag>{data}</Tag>
+      },
       width: 130,
     },
     {
@@ -521,12 +525,12 @@ class OrderUI extends Component {
                     <Radio value="retail">Retail Orders</Radio>
                     <Radio value="wholesale">Wholesale Orders</Radio>
                   </Radio.Group>
-                  {/* Status:
+                  Status:
                   <Select
                     title="Status"
                     defaultValue="All"
                     style={{ width: 120, marginLeft: "2px" }}
-                    onChange={this.handleChange}
+                    onChange={this.handleChangeInSelect}
                   >
                     <Select.Option value={undefined}>All</Select.Option>
                     <Select.Option value="advanced">Advanced</Select.Option>
@@ -538,7 +542,7 @@ class OrderUI extends Component {
                     <Select.Option value="cancelled">Cancelled</Select.Option>
                     <Select.Option value="completed">Completed</Select.Option>
                     <Select.Option value="returned">returned</Select.Option>
-                  </Select> */}
+                  </Select>
                 </Col>
                 <Col flex={4}></Col>
               </Row>

@@ -7,6 +7,7 @@ import {
   Space,
   Table,
   Popconfirm,
+  Tag
 } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
@@ -143,6 +144,9 @@ class TransactionUI extends Component {
       dataIndex: "status",
       width: 100,
       key: "status",
+      render: (data) => {
+        return <Tag>{data}</Tag>
+      },
     },
 
     {
