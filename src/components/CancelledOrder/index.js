@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import action from "./modules/action";
 import { connect } from "react-redux";
-import OrderUI from "./views/main-view";
+import CancelledOrderUI from "./views/main-view";
 
-class Order extends Component {
+class CancelledOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -15,7 +15,7 @@ class Order extends Component {
 
   render() {
     return (
-      <OrderUI
+      <CancelledOrderUI
         getOrder={this.props.getOrder}
         data={this.props.data.orders}
         loading={this.props.loading}
@@ -29,17 +29,17 @@ class Order extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.orderReducer.loading,
-    data: state.orderReducer.data,
-    error: state.orderReducer.err,
+    loading: state.cancelledOrderReducer.loading,
+    data: state.cancelledOrderReducer.data,
+    error: state.cancelledOrderReducer.err,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getOrder: async (status) => await dispatch(action.getOrder(status)),
-    updateStatusOrder: async (data, image) => {
-      await dispatch(action.updateStatusOrder(data, image));
+    updateStatusOrder: async (data) => {
+      await dispatch(action.updateStatusOrder(data));
       await dispatch(action.getOrder());
     },
     rejectOrder: async (orderCode, reasonForCancel, imageProof, requester) => {
@@ -50,4 +50,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Order);
+export default connect(mapStateToProps, mapDispatchToProps)(CancelledOrder);

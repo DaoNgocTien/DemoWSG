@@ -251,7 +251,7 @@ class RejectModal extends Component {
                   rules={[
                     { required: true, message: "Please input your reason to reject order!" },
                   ]}
-                  initialValue={record?.reasonforcancel ?record?.reasonforcancel: ""}
+                  initialValue={record?.reasonforcancel ? record?.reasonforcancel : ""}
                 >
                   <Input.TextArea onChange={(e) => this.recordReasonToReject(e)} autoSize={{ minRows: 5, maxRows: 8 }} style={{ width: "60vh" }} />
                 </Form.Item>
@@ -311,7 +311,7 @@ class RejectModal extends Component {
                 <Switch
                   checkedChildren="Customer"
                   unCheckedChildren="Supplier"
-                  defaultChecked={record?.cancellingRequester === "Customer" ? "true": "false"}
+                  defaultChecked={record?.cancellingRequester === "Customer" ? "true" : "false"}
                   onChange={(e) =>
                     this.getRequester(e)
                   }

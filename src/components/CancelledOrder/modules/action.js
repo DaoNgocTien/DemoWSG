@@ -2,12 +2,12 @@ import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 
 const getOrder = (status) => {
-  console.log(status)
+  const statusz = "cancelled";
   return async (dispatch) => {
     try {
       dispatch(getRequest());
       const [orders, campaigns] = await Promise.all([
-        !status
+        !statusz
           ? Axios({
             url: `/order/supplier`,
             method: "GET",
@@ -15,7 +15,7 @@ const getOrder = (status) => {
             exposedHeaders: ["set-cookie"],
           })
           : Axios({
-            url: `/order/supplier/status?status=${status}`,
+            url: `/order/supplier/status?status=${statusz}`,
             method: "GET",
             withCredentials: true,
             exposedHeaders: ["set-cookie"],
@@ -47,41 +47,29 @@ const getOrder = (status) => {
   };
 };
 
-const updateStatusOrder = (data, image) => {
-  console.log(data);
-  console.log(image);
+const updateStatusOrder = (data) => {
   return async (dispatch) => {
     dispatch(getRequest());
     switch (data.status) {
       case "created": {
         Axios({
-          url: `/order/status/supplier/processing`,
+          url: `/order/supplier`,
           method: "PUT",
-          data: {
-            orderCode: data.ordercode,
-            orderId: data.id,
-            type: data.campaignid !== null ? "campaign" : "retail",
-            // image: image
-          },
+          data: { orderCode: data.ordercode },
           withCredentials: true,
         })
           .then((response) => { })
           .catch((err) => {
-            return dispatch(getFailed(err));
+            return dispatch(getFailed());
           });
 
         break;
       }
       case "processing": {
         Axios({
-          url: `/order/status/supplier/delivering`,
+          url: `/order/supplier/delivering`,
           method: "PUT",
-          data: {
-            orderCode: data.ordercode,
-            orderId: data.id,
-            type: data.campaignid !== null ? "campaign" : "retail",
-            image: image
-          },
+          data: { orderCode: data.ordercode },
           withCredentials: true,
         })
           .then((response) => { })

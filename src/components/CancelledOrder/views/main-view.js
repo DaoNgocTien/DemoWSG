@@ -8,12 +8,7 @@ import {
   PageHeader,
   Radio,
   Select,
-  Modal,
-  Form,
-  Upload,
 } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-
 import moment from "moment";
 import PropTypes from "prop-types";
 import EditModal from "./edit-view";
@@ -38,7 +33,7 @@ const propsDefault = {
   getOrder: (status) => { },
 };
 
-class OrderUI extends Component {
+class CancelledOrderUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
@@ -51,13 +46,6 @@ class OrderUI extends Component {
     openRejectModal: false,
     editButton: true,
     rejectButton: true,
-    openUploadModal: false,
-    closeUploadModal: true,
-    previewVisible: false,
-    previewImage: "",
-    previewTitle: "",
-    fileList: [],
-    record: {},
   };
 
   componentDidMount() { }
@@ -77,9 +65,8 @@ class OrderUI extends Component {
     }
   };
 
-  changeStatus = (data, image) => {
-    // console.log(data);
-    this.props.updateStatusOrder(data, image);
+  changeStatus = (data) => {
+    this.props.updateStatusOrder(data);
   };
 
   closeModal = () => {
@@ -112,9 +99,9 @@ class OrderUI extends Component {
       addNewButton: selectedRowKeys.length === 0,
     });
   };
-  handleChange = (data) => {
-    this.props.getOrder(data);
-  };
+  // handleChange = (data) => {
+  //   this.props.getOrder(data);
+  // };
   columns = [
     {
       title: "No.",
@@ -142,16 +129,16 @@ class OrderUI extends Component {
       fixed: "left",
       width: 120,
     },
-    // {
-    //   title: "Product",
-    //   dataIndex: "details",
-    //   key: "details",
-    //   render: (text, object) => {
-    //     return object.details?.length > 0 ? object.details[0]?.productname : "";
-    //   },
+    {
+      title: "Product",
+      dataIndex: "details",
+      key: "details",
+      render: (text, object) => {
+        return object.details?.length > 0 ? object.details[0]?.productname : "";
+      },
 
-    //   width: 130,
-    // },
+      width: 130,
+    },
 
     {
       title: "Total Price",
@@ -189,38 +176,38 @@ class OrderUI extends Component {
       key: "status",
       width: 130,
     },
-    {
-      title: "Action",
-      render: (object) => {
-        // let disabled = object.status === "created" ? "false" : "true";
-        // console.log(disabled);
-        if (object.status === "created") {
-          return (
-            <Button
-              onClick={() => this.changeStatus(object, [])}
-              type="primary"
-            >
-              Processing Order
-            </Button>
-          );
-        }
+    // {
+    //   title: "Action",
+    //   render: (object) => {
+    //     // let disabled = object.status === "created" ? "false" : "true";
+    //     // console.log(disabled);
+    //     if (object.status === "created") {
+    //       return (
+    //         <Button
+    //           onClick={() => this.changeStatus(object)}
+    //           type="primary"
+    //         >
+    //           Processing Order
+    //         </Button>
+    //       );
+    //     }
 
-        if (object.status === "processing") {
-          return (
-            <Button
-              onClick={() => this.openUploadModal(object)}
-              type="primary"
-            >
-              Deliver Order
-            </Button>
-          );
-        }
+    //     if (object.status === "processing") {
+    //       return (
+    //         <Button
+    //           onClick={() => this.changeStatus(object)}
+    //           type="primary"
+    //         >
+    //           Deliver Order
+    //         </Button>
+    //       );
+    //     }
 
 
-      },
-      fixed: "right",
-      width: 150,
-    },
+    //   },
+    //   fixed: "right",
+    //   width: 150,
+    // },
   ];
 
   onChangeHandler = (e) => {
@@ -234,7 +221,7 @@ class OrderUI extends Component {
           .toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
         item.totalprice.includes(e.target.value) ||
-        item.status.includes(e.target.value)
+        item.createdat.includes(e.target.value)
       );
     });
     this.setState({
@@ -272,69 +259,6 @@ class OrderUI extends Component {
     });
   };
 
-  openUploadModal = object => {
-    this.setState({
-      openUploadModal: true,
-      record: object,
-    });
-  }
-
-  cancelUploadImage = () => {
-    this.setState({
-      openUploadModal: false,
-    })
-  }
-
-  getBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  }
-
-  handleCancelUploadImage = () => this.setState({ previewVisible: false });
-
-  handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await this.getBase64(file.originFileObj);
-    }
-
-    this.setState({
-      previewImage: file.url,
-      previewVisible: true,
-      previewTitle:
-        file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
-    });
-  };
-
-  handleChange = ({ fileList, file, event }) => {
-    // fileList = fileList.slice(-2);
-    // console.log(fileList);
-    // 2. Read from response and show file link
-    fileList = fileList.map((file) => {
-      if (file.response) {
-        // Component will show file.url as link
-        file.url = file.response[0].url;
-        file.name = file.response[0].name;
-        file.thumbUrl = null;
-      }
-      return file;
-    });
-
-    this.setState({ fileList });
-  };
-
-  uploadImageForDelivering = data => {
-    console.log(this.state.fileList);
-    console.log(this.state.record);
-    this.changeStatus(this.state.record, this.state.fileList);
-    this.setState({
-      openUploadModal: false,
-    })
-  }
-
   render() {
     const { rejectOrder, updateStatusOrder, data } = this.props;
 
@@ -346,8 +270,6 @@ class OrderUI extends Component {
       editButton,
       openRejectModal,
       rejectButton,
-      openUploadModal,
-      closeUploadModal
     } = this.state;
 
     const rowSelection = {
@@ -356,17 +278,7 @@ class OrderUI extends Component {
     };
 
     const arrayLocation = window.location.pathname.split("/");
-    const { load, fileList } = this.state;
-    // this.state.fileList =
-    //   this.props.record && this.state.fileList !== 0
-    //     ? JSON.parse(this.props.record?.image)
-    //     : [];
-    const uploadButton = (
-      <div>
-        {load ? <LoadingOutlined /> : <PlusOutlined />}
-        <div style={{ marginTop: 8 }}>Upload</div>
-      </div>
-    );
+
     return (
       <PageHeader
         className="site-page-header-responsive"
@@ -375,7 +287,7 @@ class OrderUI extends Component {
         subTitle={`This is a ${arrayLocation[1]} page`}
         footer={
           <div>
-            <EditModal
+            {/* <EditModal
               openModal={openEditModal}
               closeModal={this.closeModal}
               updateStatusOrder={updateStatusOrder}
@@ -385,9 +297,9 @@ class OrderUI extends Component {
                 })[0]
               }
               selectedRowKeys={selectedRowKeys[0]}
-            />
+            /> */}
 
-            <RejectModal
+            {/* <RejectModal
               openModal={openRejectModal}
               closeModal={this.closeModal}
               rejectOrder={rejectOrder}
@@ -397,79 +309,12 @@ class OrderUI extends Component {
                 })[0]
               }
               selectedRowKeys={selectedRowKeys[0]}
-            />
+            /> */}
 
-            <Form
-              id="uploadImageForDeliveringForm"
-              onFinish={this.uploadImageForDelivering}
-              layout="vertical"
-
-            >
-              <Modal
-                width={window.innerWidth * 0.7}
-                title="Upload image when supplier finish order preparation"
-                visible={openUploadModal}
-                onCancel={this.cancelUploadImage}
-                footer={[
-                  <Button onClick={this.cancelUploadImage}>Cancel</Button>,
-                  <Button
-                    type="primary"
-                    form="uploadImageForDeliveringForm"
-                    key="submit"
-                    htmlType="submit"
-                  >
-                    Submit
-                  </Button>,
-                ]}
-              >
-
-                <Form.Item name="image">
-                  <>
-                    <Upload
-                      name="file"
-                      action="/files/upload"
-                      listType="picture-card"
-                      fileList={this.state.fileList}
-                      onPreview={this.handlePreview}
-                      onChange={this.handleChange}
-                      style={{ width: "60vh" }}
-                    >
-                      {this.state.fileList.length >= 8 ? null : uploadButton}
-                    </Upload>
-                    <Modal
-                      visible={this.state.previewVisible}
-                      title={this.state.previewTitle}
-                      footer={null}
-                      onCancel={this.handleCancelUploadImage}
-                    >
-                      <img
-                        alt="example"
-                        style={{ width: "100%" }}
-                        src={this.state.previewImage}
-                      />
-                    </Modal>
-                  </>
-                </Form.Item>
-                {/* <Form.Item>
-                  <Button onClick={this.handleCancel}>Cancel</Button>
-                </Form.Item>
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    form="uploadImageForDeliveringForm"
-                    key="submit"
-                    htmlType="submit"
-                  >
-                    Submit
-                  </Button>
-                </Form.Item> */}
-
-              </Modal>
-            </Form>
             <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex={3}>
-                  <Button
+                  {/* <Button
                     type="primary"
                     onClick={() => this.start("openEditModal")}
                     disabled={
@@ -480,7 +325,7 @@ class OrderUI extends Component {
                     style={{ marginLeft: 3 }}
                   >
                     View Details
-                  </Button>
+                  </Button> */}
 
                   <Button
                     type="danger"
@@ -492,7 +337,7 @@ class OrderUI extends Component {
                     }
                     style={{ marginLeft: 3 }}
                   >
-                    Reject Order
+                    View Details
                   </Button>
                 </Col>
                 <Col flex={3}>
@@ -565,4 +410,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-export default memo(OrderUI, arePropsEqual);
+export default memo(CancelledOrderUI, arePropsEqual);

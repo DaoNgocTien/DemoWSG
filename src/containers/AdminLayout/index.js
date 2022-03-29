@@ -189,11 +189,11 @@ class AdminRender extends Component {
                     All orders
                   </Link>
                 </Menu.Item>
-                <Menu.Item key="returned">
+                {/* <Menu.Item key="returned">
                   <Link className="LinkDecorations" to="/orders/returned">
                     Returned
                   </Link>
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item key="cancelled">
                   <Link className="LinkDecorations" to="/orders/cancelled">
                     Cancelled
