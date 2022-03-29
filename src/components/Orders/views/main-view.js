@@ -14,7 +14,6 @@ import PropTypes from "prop-types";
 import EditModal from "./edit-view";
 import RejectModal from "./reject-view";
 
-//  prototype
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
@@ -24,7 +23,6 @@ const propsProTypes = {
   getOrder: PropTypes.func,
 };
 
-//  default props
 const propsDefault = {
   index: 1,
   data: [],
@@ -39,7 +37,7 @@ class OrderUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
-    selectedRowKeys: [], // Check here to configure the default column
+    selectedRowKeys: [],
     loading: false,
     addNewButton: true,
     displayData: [],
@@ -138,20 +136,10 @@ class OrderUI extends Component {
       render: (text, object) => {
         return object.details?.length > 0 ? object.details[0]?.productname : "";
       },
-      // fixed: "left",
+
       width: 130,
     },
-    // {
-    //   title: "In Campaign",
-    //   dataIndex: "campaign",
-    //   key: "campaign",
-    //   render: (text, object) => {
-    //     let campaign = object.campaign;
-    //     return campaign.length > 0 ? moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY") : "";
-    //     // return moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY");
-    //   },
-    //   width: 130,
-    // },
+
     {
       title: "Total Price",
       dataIndex: "totalprice",
@@ -288,10 +276,8 @@ class OrderUI extends Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-    // const hasSelected = selectedRowKeys.length > 0;
 
     const arrayLocation = window.location.pathname.split("/");
-    // console.log(data);
 
     return (
       <PageHeader
@@ -336,11 +322,6 @@ class OrderUI extends Component {
                         ? true
                         : false
                     }
-                    // disabled={
-                    //   !editButton || this.state.selectedRowKeys.length === 0
-                    //     ? true
-                    //     : false
-                    // }
                     style={{ marginLeft: 3 }}
                   >
                     View Details
@@ -354,11 +335,6 @@ class OrderUI extends Component {
                         ? true
                         : false
                     }
-                    // disabled={
-                    //   !rejectButton || this.state.selectedRowKeys.length === 0
-                    //     ? true
-                    //     : false
-                    // }
                     style={{ marginLeft: 3 }}
                   >
                     Reject Order
@@ -434,5 +410,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(OrderUI, arePropsEqual);

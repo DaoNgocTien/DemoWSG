@@ -11,7 +11,7 @@ class HandleReturningOrder extends Component {
 
   componentDidMount() {
     const orderCode = this.props.match.params.orderCode;
-    this.props.getReturningOrder(orderCode)
+    this.props.getReturningOrder(orderCode);
   }
 
   render() {
@@ -39,16 +39,17 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getReturningOrder: async (orderCode) => await dispatch(action.getData(orderCode)),
+    getReturningOrder: async (orderCode) =>
+      await dispatch(action.getData(orderCode)),
 
     acceptRequest: async (data) => {
       console.log("Accept returning request");
       // await dispatch(action.updateStatusOrder(data));
       // await dispatch(action.getOrder())
     },
-    rejectRequest: async (orderCode, reasonForCancel, imageProof) => {
-      console.log("Reject returning request");
-      // await dispatch(action.rejectOrder(orderCode, reasonForCancel, imageProof));
+    rejectRequest: async (data) => {
+      await dispatch(action.rejectOrder(data));
+      await dispatch(action.getData(data.orderCode));
     },
   };
 };
