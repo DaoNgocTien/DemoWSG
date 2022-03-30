@@ -1,5 +1,5 @@
 import React, { Component, memo } from "react";
-import { Table, Button, Input, Row, Col, PageHeader, Space } from "antd";
+import { Table, Button, Input, Row, Col, PageHeader, Space, Tag } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
 
@@ -139,6 +139,9 @@ class LoyalCustomerUI extends Component {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (data) => {
+        return <Tag>{data}</Tag>
+      },
     },
   ];
 

@@ -12,6 +12,7 @@ import Category from "../components/Category";
 import DiscountCode from "../components/DiscountCode";
 import Campaign from "../components/Campaign";
 import Order from "../components/Orders";
+import CancelledOrder from "../components/CancelledOrder";
 import ReturningOrder from "../components/ReturningOrder";
 // import HandleUI from "../components/ReturningOrder/views/handle-view";
 import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
@@ -46,6 +47,12 @@ const routesAdmin = [
     exact: true,
     path: "/orders/all-order",
     component: Order,
+  },
+
+  {
+    exact: true,
+    path: "/orders/cancelled",
+    component: CancelledOrder,
   },
 
   {

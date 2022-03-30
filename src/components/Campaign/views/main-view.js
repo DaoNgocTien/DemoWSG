@@ -8,6 +8,7 @@ import {
   PageHeader,
   Space,
   Drawer,
+  Tag,
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -55,7 +56,7 @@ class CampaignUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
@@ -173,6 +174,9 @@ class CampaignUI extends Component {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (data) => {
+        return <Tag>{data}</Tag>
+      },
     },
   ];
 
@@ -189,7 +193,7 @@ class CampaignUI extends Component {
         item.maxquantity.includes(searchString) ||
         item.numorder.includes(searchString) ||
         item.advancefee.includes(searchString) ||
-        item.price.includes(searchString) 
+        item.price.includes(searchString)
 
       );
     });
@@ -312,7 +316,7 @@ class CampaignUI extends Component {
                       type="primary"
                       onClick={() => this.start("openOrdersInCampaign")}
                       disabled={!editButton}
-                      // style={{ width: 90 }}
+                    // style={{ width: 90 }}
                     >
                       Orders in campaigns
                     </Button>

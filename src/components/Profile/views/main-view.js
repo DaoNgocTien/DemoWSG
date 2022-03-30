@@ -174,6 +174,9 @@ class ProfileUI extends Component {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (data) => {
+        return <Tag>{data}</Tag>
+      },
     },
   ];
 

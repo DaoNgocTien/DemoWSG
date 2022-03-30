@@ -15,6 +15,7 @@ import {
   PageHeader,
   Typography,
   Timeline,
+  Tag,
 } from "antd";
 import PropTypes from "prop-types";
 
@@ -194,6 +195,9 @@ class SettlePaymentUI extends Component {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (data) => {
+        return <Tag>{data}</Tag>
+      },
       sorter: (a, b) => a.status.length - b.status.length,
     },
     {

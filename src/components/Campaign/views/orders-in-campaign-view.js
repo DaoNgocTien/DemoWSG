@@ -10,6 +10,7 @@ import {
   PageHeader,
   Descriptions,
   Form,
+  Tag,
 } from "antd";
 
 class OrdersInCampaign extends React.Component {
@@ -132,6 +133,9 @@ class OrdersInCampaign extends React.Component {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      render: (data) => {
+        return <Tag>{data}</Tag>
+      },
       width: 100,
     },
   ];

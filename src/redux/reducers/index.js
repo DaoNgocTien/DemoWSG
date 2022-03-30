@@ -6,6 +6,8 @@ import discountReducer from "../../components/DiscountCode/modules/reducer";
 import campaignReducer from "../../components/Campaign/modules/reducer";
 import orderReducer from "../../components/Orders/modules/reducer";
 import loyalCustomerConditionReducer from "../../components/LoyalCustomerCondition/modules/reducer";
+import cancelledOrderReducer from "../../components/CancelledOrder/modules/reducer";
+
 import loyalCustomerReducer from "../../components/LoyalCustomer/modules/reducer";
 import notificationReducer from "../../components/Notification/modules/reducer";
 import ReturningOrderReducer from "../../components/ReturningOrder/modules/reducer";
@@ -37,6 +39,8 @@ const rootReducer = combineReducers({
   notificationReducer,
   handleReturningOrderReducer,
   complainOrder,
+  cancelledOrderReducer,
+
 });
 
 export default rootReducer;
