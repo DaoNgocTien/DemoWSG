@@ -65,7 +65,12 @@ class CreatModal extends Component {
     const { openModal } = this.props;
     return (
       <>
-        <Form id="createCategoryForm" ref={this.formRef} onFinish={this.handleCreateAndClose}>
+        <Form
+          id="createCategoryForm"
+          ref={this.formRef}
+          onFinish={this.handleCreateAndClose}
+          layout="vertical"
+        >
           <Modal
             title="Add New"
             visible={openModal}
@@ -82,8 +87,27 @@ class CreatModal extends Component {
               </Button>,
             ]}
           >
-            <Form.Item label="Category Name" name="categoryName">
-              <Input placeholder="Category Name" />
+            <Form.Item
+              label="Category Name"
+              name="categoryName"
+              
+              rules={[
+                {
+                  required: true,
+                  message: 'Name is required!',
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (value.length > 0 && value.length <= 20) {
+                      return Promise.resolve();
+                    }
+
+                    return Promise.reject(new Error('Category Name length is 1-20 characters!'));
+                  },
+                }),
+              ]}
+            >
+              <Input placeholder="Name is required, 1-20 characters!" />
             </Form.Item>
           </Modal>
         </Form>

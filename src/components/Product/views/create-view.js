@@ -114,14 +114,18 @@ class CreatModal extends Component {
   };
 
   render() {
-    const { openModal, categoryList } = this.props;
-    const { load, } = this.state;
+    const { openModal, categoryList, data } = this.props;
+    const { load, fileList } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+    let listName = [];
+    data.map(record => {
+      listName.push(record.name);
+    })
 
     return (
       <>
@@ -149,13 +153,49 @@ class CreatModal extends Component {
           >
             <Descriptions layout="vertical" column={2}>
               <Descriptions.Item label="Name">
-                <Form.Item name="name">
+                <Form.Item name="name"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Name is required!',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+
+                        if (listName.includes(value)) {
+                          return Promise.reject(new Error('Product Name exists!'));
+                        }
+                        if (value.length >= 0 && value.length <= 20) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Product Name length is 1-20 characters!'));
+                      },
+                    }),
+                  ]}
+                >
                   <Input style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Category">
-                <Form.Item name="categoryId">
+                <Form.Item name="categoryId"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Category is required!',
+                    },
+                    // ({ getFieldValue }) => ({
+                    //   validator(_, value) {
+                    //     if (value.length >= 0 && value.length <= 20) {
+                    //       return Promise.resolve();
+                    //     }
+
+                    //     return Promise.reject(new Error('Category Name length is 1-20 characters!'));
+                    //   },
+                    // }),
+                  ]}
+                >
                   <Select style={{ width: "60vh" }}>
                     {categoryList.map((item) => (
                       <Select.Option key={item.key} value={item.id}>
@@ -167,7 +207,23 @@ class CreatModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
-                <Form.Item name="quantity" initialValue={0}>
+                <Form.Item name="quantity" initialValue={0}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Quantity is required!',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (Number(value) > 0) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Quantity is positive number!'));
+                      },
+                    }),
+                  ]}
+                >
                   <InputNumber min={0} default={0} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
@@ -176,19 +232,55 @@ class CreatModal extends Component {
                 <Form.Item
                   name="retailPrice"
                   initialValue={0}
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Price is required!',
+                    },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (Number(value) > 0) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Price is positive number!'));
+                      },
+                    }),
+                  ]}
                 >
                   <InputNumber min={0} default={0} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Description">
-                <Form.Item name="description">
+                <Form.Item name="description"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Description is required!',
+                    },
+
+                  ]}
+                >
                   <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Image">
-                <Form.Item name="image">
+                <Form.Item name="image"
+                  rules={[
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (fileList.length >= 1) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Product Image is required!!'));
+                      },
+                    }),
+                  ]}
+                >
+
                   <>
                     <Upload
                       name="file"

@@ -82,6 +82,7 @@ class EditModal extends Component {
                     id="editCategoryForm"
                     ref={this.formRef}
                     onFinish={this.handleEditAndClose}
+                    layout="vertical"
                 >
                     <Modal
                         title="Edit a record"
@@ -116,9 +117,24 @@ class EditModal extends Component {
                             label="Category Name"
                             name="categoryName"
                             initialValue={record?.categoryname}
+                            rules={[
+                                {
+                                  required: true,
+                                  message: 'Name is required!',
+                                },
+                                ({ getFieldValue }) => ({
+                                  validator(_, value) {
+                                    if (value.length > 0 && value.length <= 20) {
+                                      return Promise.resolve();
+                                    }
+                
+                                    return Promise.reject(new Error('Category Name length is 1-20 characters!'));
+                                  },
+                                }),
+                              ]}
                         >
                             <Input
-                                placeholder="Category Name"
+                                placeholder="Name is required, 1-20 characters!"
 
                                 value={record?.categoryname}
                             />

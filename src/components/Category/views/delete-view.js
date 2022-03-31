@@ -227,6 +227,7 @@ class DeleteModel extends Component {
                     id="deleteCategoryForm"
                     ref={this.formRef}
                     onFinish={this.handleDeleteAndClose}
+                    layout="vertical"
                 >
                     <Modal
                         title="Delete a record"

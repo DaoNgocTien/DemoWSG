@@ -253,6 +253,7 @@ class ProductUI extends Component {
               closeModal={this.closeModal}
               categoryList={categoryList}
               createProduct={createProduct}
+              data={this.props.data}
             />
             <DeleteModal
               openModal={openDeleteModal}
@@ -277,6 +278,7 @@ class ProductUI extends Component {
                 })[0]
               }
               selectedRowKeys={selectedRowKeys[0]}
+              data={this.props.data}
             />
 
             <div style={{ marginBottom: 16 }}>

@@ -427,7 +427,21 @@ class OrderUI extends Component {
                 ]}
               >
 
-                <Form.Item name="image">
+                <Form.Item name="image" rules={[
+                    // {
+                    //   required: true,
+                    //   message: 'Please confirm your password!',
+                    // },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (fileList.length >= 1) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Image required!!'));
+                      },
+                    }),
+                  ]}>
                   <>
                     <Upload
                       name="file"

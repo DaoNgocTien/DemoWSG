@@ -287,8 +287,8 @@ class CancelledOrderUI extends Component {
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title={arrayLocation[1].toUpperCase()}
-        subTitle={`This is a ${arrayLocation[1]} page`}
+        title="CANCELLED ORDER"
+        subTitle={`This is a cancelled order page`}
         footer={
           <div>
             {/* <EditModal
