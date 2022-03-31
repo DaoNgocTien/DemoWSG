@@ -1,35 +1,14 @@
-import React, { Component, memo } from "react";
+import { InboxOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import {
-  Table,
-  Button,
-  Input,
-  Row,
-  Col,
-  PageHeader,
-  Space,
-  Form,
-  Select,
-  InputNumber,
-  Switch,
-  Radio,
-  Slider,
-  Upload,
-  Rate,
-  Checkbox,
-  Avatar,
-  Descriptions,
-  Tag,
-  Statistic,
-  Typography,
-  DatePicker,
+  Avatar, Button, Checkbox, Col, DatePicker, Descriptions, Form, Input, InputNumber, PageHeader, Radio, Rate, Row, Select, Slider, Space, Statistic, Switch, Table, Tag, Typography, Upload
 } from "antd";
-
-import { UserOutlined, UploadOutlined, InboxOutlined } from '@ant-design/icons';
-import PropTypes from "prop-types";
 import moment from "moment";
-
-import action from "../modules/action";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 import { connect } from "react-redux";
+import action from "../modules/action";
+
+
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
@@ -70,22 +49,11 @@ class EWalletTab extends Component {
     this.props.getProfile();
   }
 
-
   onFinish = (data) => {
     this.props.updateEWallet({
       ewalletcode: data.ewalletcode,
       ewalletsecret: data.ewalletsecret
     })
-  };
-
-  handleCancel = () => {
-    this.formRef.current.resetFields();
-    this.props.closeModal();
-  };
-
-  onChange = (dates, dateStrings) => {
-    // console.log("From: ", dates[0], ", to: ", dates[1]);
-    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
   };
 
   render() {

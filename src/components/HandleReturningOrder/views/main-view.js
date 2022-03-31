@@ -1,26 +1,14 @@
+import {
+  IdcardTwoTone, LoadingOutlined,
+  PlusOutlined, SafetyCertificateTwoTone
+} from "@ant-design/icons";
+import {
+  Button, Descriptions, Form, Image, Input, Modal, PageHeader, Tabs, Timeline, Typography, Upload
+} from "antd";
+import moment from "moment";
+import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import Loader from "../../../components/Loader";
-import {
-  Button,
-  Tabs,
-  PageHeader,
-  Typography,
-  Timeline,
-  Image,
-  Modal,
-  Form,
-  Upload,
-  Descriptions,
-  Input,
-} from "antd";
-import PropTypes from "prop-types";
-import moment from "moment";
-import {
-  IdcardTwoTone,
-  SafetyCertificateTwoTone,
-  LoadingOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
 import InformationModal from "./information-view";
 const { Title } = Typography;
 const { TabPane } = Tabs;

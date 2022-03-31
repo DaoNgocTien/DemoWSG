@@ -1,17 +1,9 @@
-import React, { memo } from "react";
-import moment from "moment";
 import {
-  Table,
-  Button,
-  Input,
-  Row,
-  Col,
-  Space,
-  PageHeader,
-  Descriptions,
-  Form,
-  Tag,
+  Button, Col, Descriptions,
+  Form, Input, PageHeader, Row, Space, Table, Tag
 } from "antd";
+import moment from "moment";
+import React, { memo } from "react";
 
 class OrdersInCampaign extends React.Component {
   state = {
@@ -43,7 +35,7 @@ class OrdersInCampaign extends React.Component {
       title: "No.",
       dataIndex: "No.",
       key: "No.",
-      render: (text, object, index) => {
+      render: (_text, _object, index) => {
         return index + 1;
       },
       width: 100,
@@ -52,7 +44,7 @@ class OrdersInCampaign extends React.Component {
     {
       title: "Customer Name",
       width: 150,
-      render: (text, object, index) => {
+      render: (_text, object, _index) => {
         // console.log(object);
         return object.customerfirstname + " " + object.customerlastname;
       },
@@ -61,7 +53,7 @@ class OrdersInCampaign extends React.Component {
     {
       title: "Product Name",
       width: 200,
-      render: (text, object, index) => {
+      render: (_text, object, _index) => {
         // console.log(object);
         return object.details[0].productname;
       },
@@ -69,7 +61,7 @@ class OrdersInCampaign extends React.Component {
     {
       title: "Product Image",
       width: 150,
-      render: (text, object, index) => {
+      render: (_text, object, _index) => {
         // console.log(object);
         return object.details[0].image === "" ? (
           ""
@@ -86,7 +78,7 @@ class OrdersInCampaign extends React.Component {
     {
       title: "Quantity",
       width: 100,
-      render: (text, object, index) => {
+      render: (_text, object, _index) => {
         // console.log(object);
         return object.details[0].quantity;
       },
@@ -108,14 +100,14 @@ class OrdersInCampaign extends React.Component {
       dataIndex: "finalprice",
       key: "finalprice",
       width: 100,
-      render: (text, object) => {
+      render: (_text, object) => {
         return object.totalprice - object.discountprice;
       },
     },
     {
       title: "Notes",
       width: 300,
-      render: (text, object, index) => {
+      render: (_text, object, _index) => {
         // console.log(object);
         return object.details[0].notes;
       },

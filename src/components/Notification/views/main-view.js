@@ -1,17 +1,11 @@
-import React, { Component, memo } from "react";
+import { AndroidOutlined, AppleOutlined, ClockCircleTwoTone, ContactsTwoTone } from '@ant-design/icons';
 import {
-  Table,
-  Button,
-  Input,
-  Tabs,
-  Descriptions,
-  List,
-  Space,
-  Avatar,
+  Avatar, Button, Descriptions, Input, List,
+  Space, Table, Tabs
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
-import { ClockCircleTwoTone, ContactsTwoTone, AppleOutlined, AndroidOutlined } from '@ant-design/icons';
+import React, { Component, memo } from "react";
 
 const { TabPane } = Tabs;
 //  prototype

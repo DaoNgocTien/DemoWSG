@@ -1,14 +1,10 @@
-import React, { Component, memo } from "react";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  Descriptions,
+  Button, Descriptions, Form,
+  Input, InputNumber, Modal, Select, Upload
 } from "antd";
 import PropTypes from "prop-types";
-import { Select, Upload, InputNumber } from "antd";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -56,7 +52,6 @@ class CreatModal extends Component {
 
 
   componentDidMount() {
-    // console.log(this.props);
   }
 
   handleCreateAndClose = (data) => {

@@ -146,14 +146,13 @@
 // export default memo(DeleteModal, arePropsEqual);
 
 
-import React, { Component, memo } from "react";
 import {
-    Modal,
     Button,
     Form,
-    Input,
+    Input, Modal
 } from "antd";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -209,17 +208,6 @@ class DeleteModel extends Component {
 
     render() {
         const { openModal, record, } = this.props;
-        // this.handelOpenModal(data, selectedRowKeys);
-        // const record = data.filter((item) => {
-        //     return selectedRowKeys?.includes(item.id);
-        // })[0];
-        // let record = data.filter((item) => {
-        //     return selectedRowKeys.includes(item.id);
-        //   })[0];
-        // console.log("Record EditModal");
-
-        // console.log(record);
-        // console.log(this.state.record);
         return (
             <>
                 <Form

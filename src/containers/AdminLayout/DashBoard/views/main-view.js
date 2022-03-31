@@ -1,25 +1,13 @@
-import React, { Component, memo } from "react";
-import { Route, Link, Redirect } from "react-router-dom";
+import { ArrowDownOutlined, ArrowUpOutlined, DownloadOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import {
-  Table,
-  Button,
-  Input,
-  Row,
-  Col,
-  PageHeader,
-  Space,
-  Drawer,
-  Statistic,
-  Layout,
-  Menu,
-  Card,
-  Typography,
-  Radio,
+  Button, Card, Col, Drawer, Input, Layout,
+  Menu, PageHeader, Radio, Row, Space, Statistic, Table, Typography
 } from "antd";
-import { DownloadOutlined, ArrowUpOutlined, VideoCameraOutlined, ArrowDownOutlined } from '@ant-design/icons';
-
 import moment from "moment";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
+import { Link, Redirect, Route } from "react-router-dom";
+
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
@@ -63,237 +51,13 @@ class DashboardUI extends Component {
 
   componentDidMount() { }
 
-  showDrawer = () => {
-    this.setState({
-      openDrawer: true,
-    });
-  };
-
-  onCloseDrawer = () => {
-    this.setState({
-      openDrawer: false,
-    });
-  };
-
-  start = (openModal) => {
-    let selectedRowKeys = this.state.selectedRowKeys;
-    let data = this.props.data;
-    //  Get campaign record
-    let recordToEdit = data.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-
-    switch (openModal) {
-      case "openCreateModal":
-        this.setState({ loadingActionButton: true, openCreateModal: true });
-        break;
-
-      case "openDeleteModal":
-        this.setState({ loadingActionButton: true, openDeleteModal: true });
-
-        break;
-
-      case "openEditModal":
-        this.setState({
-          loadingActionButton: true,
-          openEditModal: true,
-          record: recordToEdit,
-        });
-
-        break;
-      case "openSettlePaymentUI": {
-        //  Get orders in campaign
-        let orderList = this.props.orderList;
-        let orderListInCampaign = orderList?.filter((item) => {
-          return selectedRowKeys.includes(item.campaignid);
-        });
-        this.props.getCampaign(selectedRowKeys);
-
-        //  Set campaign record and orders in campaign into state
-        this.setState({
-          openDrawer: true,
-          record: recordToEdit,
-          orderList: orderListInCampaign,
-        });
-
-        break;
-      }
-      default:
-        break;
-    }
-  };
-
-  closeModal = () => {
-    this.setState({
-      openCreateModal: false,
-      openDeleteModal: false,
-      openEditModal: false,
-    });
-  };
-
-  columns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      width: 100,
-      fixed: "left",
-    },
-    {
-      title: "Order Code",
-      dataIndex: "ordercode",
-      key: "ordercode",
-      sorter: (a, b) => a.ordercode.length - b.ordercode.length,
-      fix: "left",
-    },
-    {
-      title: "Customer",
-      dataIndex: "customerlastname",
-      key: "customerlastname",
-    },
-    {
-      title: "Value",
-      dataIndex: "totalprice",
-      key: "totalprice",
-    },
-    {
-      title: "Finished At",
-      dataIndex: "updatedat",
-      key: "updatedat",
-      render: (data) => moment(data).format("MM/DD/YYYY"),
-    },
-    {
-      title: "Action",
-      render: (object) => {
-        return (
-          <Button
-            onClick={() => this.settlePayment(object)}
-            type="primary"
-          >
-            <Link className="LinkDecorations" to="/transaction/settle">
-              {object.status === "cancelled" || object.status === "returned" ? `View Transaction` : `Settle Payment`}
-            </Link>
-          </Button>
-        );
-      },
-      fixed: 'right',
-      width: 130,
-    },
-  ];
-
-  onChangeHandler = (e) => {
-    let { data } = this.props;
-    let searchString = e.target.value;
-    let searchList = data.filter((item) => {
-      return (
-        item.productname.toUpperCase().includes(searchString.toUpperCase()) ||
-        item.fromdate.includes(searchString) ||
-        item.todate.includes(searchString)
-      );
-    });
-    this.setState({
-      displayData: searchList,
-      searchKey: searchString ?? "",
-    });
-  };
-
-  onSelectChange = (selectedRowKeys) => {
-    // console.log("selectedRowKeys changed: ", selectedRowKeys);
-    // console.log(this.props.data);
-    let record = this.props.data.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-
-    // console.log(record);
-    // this.setState({
-    //   record: this.props.data.filter((item) => {
-    //     return selectedRowKeys.includes(item.id);
-    //   })[0]
-    // });
-    // // console.log(this.state.record);
-    this.setState({
-      selectedRowKeys,
-      record: record,
-      editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length === 1,
-      addNewButton: selectedRowKeys.length === 0,
-    });
-  };
-
-  onRadioChange = e => {
-    let { data } = this.props;
-    let searchValue = e.target.value;
-    let searchData = [];
-    switch (searchValue) {
-      case "available":
-        searchData = data.filter((item) => {
-          return item.status === "completed";
-        });
-        break;
-
-      case "settled":
-        searchData = data.filter((item) => {
-          return item.status === "completed";
-        });
-        break;
-
-      case "returned":
-        searchData = data.filter((item) => {
-          return item.status === "returned";
-        });
-        break;
-
-      case "cancelled":
-        searchData = data.filter((item) => {
-          return item.status === "cancelled";
-        });
-        break;
-
-      default:
-        searchData = data;
-        searchValue = "";
-        break;
-    }
-
-    this.setState({
-      displayData: searchData,
-      searchKey: searchValue,
-    });
-  };
-
-  settlePayment = item => {
-    const list = [];
-    list.push(item);
-    this.props.storeSettlingPaymentList(list);
-    // this.setState({
-    //   openDrawer: true,
-    //   record: item,
-    // });
-  }
-
   render() {
     const {
       selectedRowKeys,
-      deleteButton,
-      editButton,
-      addNewButton,
-      openCreateModal,
-      openDeleteModal,
-      openEditModal,
-      displayData,
-      searchKey,
     } = this.state;
 
     const { productList, createCampaign, updateCampaign, deleteCampaign, data } =
       this.props;
-
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-    };
     // console.log(data);
     // const hasSelected = selectedRowKeys.length > 0;
     const arrayLocation = window.location.pathname.split("/");

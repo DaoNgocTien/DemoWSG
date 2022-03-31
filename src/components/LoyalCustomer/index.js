@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import action from "./modules/action";
 // import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
+import action from "./modules/action";
 import LoyalCustomerUI from "./views/main-view";
 
 class LoyalCustomer extends Component {

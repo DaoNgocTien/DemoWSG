@@ -161,21 +161,14 @@
 // export default memo(DeleteModal, arePropsEqual);
 
 
-import React, { Component, memo } from "react";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  InputNumber,
-  Descriptions,
-  Upload,
+  Button, DatePicker, Descriptions, Form,
+  Input, InputNumber, Modal, Select, Upload
 } from "antd";
-import PropTypes from "prop-types";
-import moment from "moment";
 import Axios from "axios";
+import moment from "moment";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -225,17 +218,6 @@ class DeleteModal extends Component {
   componentDidMount() { }
 
   handleDeleteAndClose = (data) => {
-    // console.log(data);
-    // let newLoyalCustomerCondition = {
-    //   minOrder: data.minOrder,
-    //   minProduct: data.minProduct,
-    //   discountPercent: data.discountPercent,
-    // };
-
-    // this.props.updateLoyalCustomerCondition(
-    //   newLoyalCustomerCondition,
-    //   this.props.record?.id
-    // );
     this.props.deleteLoyalCustomerCondition(this.props.record?.id);
     this.props.closeModal();
   };

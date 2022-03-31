@@ -1,18 +1,10 @@
-import React, { Component, memo } from "react";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  InputNumber,
-  Descriptions,
-  Upload,
-  Switch,
+  Button, DatePicker, Descriptions, Form,
+  Input, InputNumber, Modal, Select, Switch, Upload
 } from "antd";
-import PropTypes from "prop-types";
 import moment from "moment";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 const propsProTypes = {
   closeModal: PropTypes.func,

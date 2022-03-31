@@ -1,23 +1,23 @@
-import DashBoard from "../containers/AdminLayout/DashBoard";
+import Campaign from "../components/Campaign";
+import CancelledOrder from "../components/CancelledOrder";
+import Category from "../components/Category";
+import DiscountCode from "../components/DiscountCode";
+import HandleReturningOrder from "../components/HandleReturningOrder";
+import LoyalCustomer from "../components/LoyalCustomer";
+// import HandleUI from "../components/ReturningOrder/views/handle-view";
+import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
+import Order from "../components/Orders";
+import Product from "../components/Product";
+import Profile from "../components/Profile";
+import ReturningOrder from "../components/ReturningOrder";
+import Transaction from "../components/Transaction";
 import SettlePaymentUI from "../components/Transaction/views/settle-payment-view";
+import DashBoard from "../containers/AdminLayout/DashBoard";
 import AuthPage from "../containers/AuthPage";
 import Registration from "../containers/AuthPage/views/registration";
 
-import Product from "../components/Product";
-import HandleReturningOrder from "../components/HandleReturningOrder";
 
 
-import Transaction from "../components/Transaction";
-import Category from "../components/Category";
-import DiscountCode from "../components/DiscountCode";
-import Campaign from "../components/Campaign";
-import Order from "../components/Orders";
-import CancelledOrder from "../components/CancelledOrder";
-import ReturningOrder from "../components/ReturningOrder";
-// import HandleUI from "../components/ReturningOrder/views/handle-view";
-import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
-import LoyalCustomer from "../components/LoyalCustomer";
-import Profile from "../components/Profile";
 
 const routesAdmin = [
   {
@@ -121,3 +121,4 @@ const routesAuth = [
   },
 ];
 export { routesAdmin, routesAuth };
+

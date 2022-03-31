@@ -1,18 +1,8 @@
-import React, { Component, memo } from "react";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  DatePicker,
-  InputNumber,
-  Descriptions,
+  Button, DatePicker, Descriptions, Form, InputNumber, Modal
 } from "antd";
 import PropTypes from "prop-types";
-import { Select, Upload } from "antd";
-import moment from "moment";
-
-const { RangePicker } = DatePicker;
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -60,11 +50,6 @@ class CreatModal extends Component {
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.props.closeModal();
-  };
-
-  onChange = (dates, dateStrings) => {
-    // console.log("From: ", dates[0], ", to: ", dates[1]);
-    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
   };
 
   render() {

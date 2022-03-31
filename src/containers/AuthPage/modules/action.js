@@ -1,13 +1,10 @@
-import {
-  AUTH_PAGE_REQUEST,
-  AUTH_PAGE_SUCCESS,
-  AUTH_PAGE_FAILED,
-  GOOGLE_OAUTH2,
-  PROFILE,
-  REGISTRATION,
-} from "./constant";
 import Axios from "axios";
-import { Redirect } from 'react-router';
+import {
+  AUTH_PAGE_FAILED, AUTH_PAGE_REQUEST,
+  AUTH_PAGE_SUCCESS, GOOGLE_OAUTH2,
+  PROFILE,
+  REGISTRATION
+} from "./constant";
 // 
 // import APISettings from "../../../redux/url/APISettings";
 

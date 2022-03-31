@@ -1,24 +1,14 @@
-import React, { Component, memo } from "react";
-import {
-  Table,
-  Button,
-  Input,
-  Row,
-  Col,
-  PageHeader,
-  Radio,
-  Select,
-  Modal,
-  Form,
-  Upload,
-  Tag,
-} from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-
+import {
+  Button, Col, Form, Input, Modal, PageHeader,
+  Radio, Row, Select, Table, Tag, Upload
+} from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 import EditModal from "./edit-view";
 import RejectModal from "./reject-view";
+
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -113,9 +103,11 @@ class OrderUI extends Component {
       addNewButton: selectedRowKeys.length === 0,
     });
   };
+
   handleChangeInSelect = (data) => {
     this.props.getOrder(data);
   };
+
   columns = [
     {
       title: "No.",
@@ -143,17 +135,6 @@ class OrderUI extends Component {
       fixed: "left",
       width: 120,
     },
-    // {
-    //   title: "Product",
-    //   dataIndex: "details",
-    //   key: "details",
-    //   render: (text, object) => {
-    //     return object.details?.length > 0 ? object.details[0]?.productname : "";
-    //   },
-
-    //   width: 130,
-    // },
-
     {
       title: "Total Price",
       dataIndex: "totalprice",
@@ -226,7 +207,7 @@ class OrderUI extends Component {
       width: 150,
     },
   ];
-
+  
   onChangeHandler = (e) => {
     let { data } = this.props;
     let searchData = data.filter((item) => {
@@ -238,7 +219,9 @@ class OrderUI extends Component {
           .toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
         item.totalprice.includes(e.target.value) ||
-        item.status.includes(e.target.value)
+        item.discountprice.includes(e.target.value) ||
+        item.createdat.includes(e.target.value) ||
+        item.status.includes(e.target.value) 
       );
     });
     this.setState({
@@ -331,8 +314,6 @@ class OrderUI extends Component {
   };
 
   uploadImageForDelivering = data => {
-    console.log(this.state.fileList);
-    console.log(this.state.record);
     this.changeStatus(this.state.record, this.state.fileList);
     this.setState({
       openUploadModal: false,

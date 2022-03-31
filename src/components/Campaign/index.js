@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import action from "./modules/action";
 // import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
+import action from "./modules/action";
 import CampaignUI from "./views/main-view";
 
 class Campaign extends Component {
@@ -46,7 +46,7 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.getCampaign(campaignId));
     },
 
-    getOrdersInCampaign: async (campaignID) => {
+    getOrdersInCampaign: async () => {
       // console.log("getOrdersInCampaign final");
       // console.log(campaignID);
     },

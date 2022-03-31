@@ -136,29 +136,6 @@ const deleteDiscountCode = (id) => {
   };
 };
 
-// const createCampaign = record => {
-//   return async (dispatch) => {
-//     dispatch(getRequest());
-//     Axios({
-//       url: `/campaigns/`,
-//       method: "POST",
-//       data: record,
-//       withCredentials: true,
-//     }).then((response) => {
-//       if (response.status === 200) {
-//         // console.log(response.data.data);
-//       }
-//     })
-//       .catch((err) => {
-//         // // console.log(err);
-//         // // console.log(typeof (err));
-//         return dispatch(getFailed());
-//       })
-//       .finally(() => {
-//       });
-//   };
-// }
-
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,

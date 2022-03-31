@@ -1,7 +1,7 @@
-import React, { Component, memo } from "react";
+import { Button, Col, Input, PageHeader, Row, Space, Table } from "antd";
 import moment from "moment";
-import { Table, Button, Input, Row, Col, Space, PageHeader } from "antd";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
@@ -195,7 +195,7 @@ class ProductUI extends Component {
       },
     },
   ];
-
+  
   onChangeHandler = (e) => {
     let { data } = this.props;
     // console.log(data);
@@ -203,12 +203,13 @@ class ProductUI extends Component {
     let searchList = data.filter((item) => {
       // console.log(item);
       return (
+        item.name.includes(searchString) ||
         item.categoryname.includes(searchString) ||
+        item.retailprice.includes(searchString) ||
+        item.quantity.includes(searchString) ||
         item.createdat.includes(searchString) ||
         item.description.includes(searchString) ||
-        item.name.includes(searchString) ||
-        item.quantity.includes(searchString) ||
-        item.retailprice.includes(searchString)
+        item.status.includes(searchString)
       );
     });
     this.setState({

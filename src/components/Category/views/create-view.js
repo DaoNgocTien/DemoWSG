@@ -1,11 +1,10 @@
-import React, { Component, memo } from "react";
 import {
-  Modal,
   Button,
   Form,
-  Input,
+  Input, Modal
 } from "antd";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -44,12 +43,6 @@ class CreatModal extends Component {
   }
 
   handleCreateAndClose = (data) => {
-    this.formRef.current.resetFields();
-    this.props.createCategory(data);
-    this.props.closeModal();
-  };
-
-  handleCreate = (data) => {
     this.formRef.current.resetFields();
     this.props.createCategory(data);
     this.props.closeModal();
@@ -96,7 +89,7 @@ class CreatModal extends Component {
                   required: true,
                   message: 'Name is required!',
                 },
-                ({ getFieldValue }) => ({
+                ({getFieldValue }) => ({
                   validator(_, value) {
                     if (value.length > 0 && value.length <= 20) {
                       return Promise.resolve();

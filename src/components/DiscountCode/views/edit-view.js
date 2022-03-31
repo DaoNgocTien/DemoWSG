@@ -1,18 +1,11 @@
-import React, { Component, memo } from "react";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  InputNumber,
-  Descriptions,
-  Upload,
+  Button, DatePicker, Descriptions, Form,
+  Input, InputNumber, Modal, Select, Upload
 } from "antd";
-import PropTypes from "prop-types";
-import moment from "moment";
 import Axios from "axios";
+import moment from "moment";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -135,22 +128,11 @@ class UpdateModal extends Component {
     });
   };
 
-  onChangePrice = (value) => {
-    this.setState({
-      price: value,
-    });
-  };
-
   render() {
     const { RangePicker } = DatePicker;
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    // const {
-    //   productSelected = this.props.productList?.find(
-    //     (element) => element.id === this.props.record?.productid
-    //   ) || {},
-    // } = this.state;
 
     if (this.props.loading || !this.props.record || !productList) {
       return <></>;

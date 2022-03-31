@@ -1,6 +1,6 @@
-import React, { Component, memo } from "react";
-import { Modal, Button, Form, Table, Select, Descriptions } from "antd";
+import { Button, Descriptions, Form, Modal, Table } from "antd";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {

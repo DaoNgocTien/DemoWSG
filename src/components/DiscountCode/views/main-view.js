@@ -1,11 +1,11 @@
-import React, { Component, memo } from "react";
-import { Table, Button, Input, Row, Col, PageHeader, Space, Tag } from "antd";
+import { Button, Col, Input, PageHeader, Row, Space, Table, Tag } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
-
+import React, { Component, memo } from "react";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
+
 
 //  prototype
 const propsProTypes = {
@@ -140,15 +140,20 @@ class DiscountCodeUI extends Component {
       },
     },
   ];
-
+  
   onChangeHandler = (e) => {
     let { data } = this.props;
     let searchString = e.target.value;
     let searchList = data.filter((item) => {
       return (
         item.productname.toUpperCase().includes(searchString.toUpperCase()) ||
-        item.fromdate.includes(searchString) ||
-        item.todate.includes(searchString)
+        item.code.includes(searchString) ||
+        item.quantity.includes(searchString) ||
+        item.discountprice.includes(searchString) ||
+        item.minimunpricecondition.includes(searchString) ||
+        item.startdate.includes(searchString) ||
+        item.enddate.includes(searchString) ||
+        item.status.includes(searchString)
       );
     });
     this.setState({

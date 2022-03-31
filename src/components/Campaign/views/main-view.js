@@ -1,22 +1,14 @@
-import React, { Component, memo } from "react";
 import {
-  Table,
-  Button,
-  Input,
-  Row,
-  Col,
-  PageHeader,
-  Space,
-  Drawer,
-  Tag,
+  Button, Col, Drawer, Input, PageHeader, Row, Space, Table, Tag
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
-
+import React, { Component, memo } from "react";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 import OrdersInCampaign from "./orders-in-campaign-view";
+
 
 //  prototype
 const propsProTypes = {

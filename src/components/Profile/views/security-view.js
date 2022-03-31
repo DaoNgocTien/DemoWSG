@@ -1,35 +1,13 @@
-import React, { Component, memo } from "react";
+import { InboxOutlined, LoadingOutlined, PlusOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import {
-  Table,
-  Button,
-  Input,
-  Row,
-  Col,
-  PageHeader,
-  Space,
-  Form,
-  Select,
-  InputNumber,
-  Switch,
-  Radio,
-  Slider,
-  Upload,
-  Rate,
-  Checkbox,
-  Avatar,
-  Descriptions,
-  Tag,
-  Statistic,
-  Typography,
-  DatePicker,
-  Modal,
+  Avatar, Button, Checkbox, Col, DatePicker, Descriptions, Form, Input, InputNumber, Modal, PageHeader, Radio, Rate, Row, Select, Slider, Space, Statistic, Switch, Table, Tag, Typography, Upload
 } from "antd";
-
-import { LoadingOutlined, PlusOutlined, UserOutlined, UploadOutlined, InboxOutlined } from '@ant-design/icons';
-import PropTypes from "prop-types";
 import moment from "moment";
-import action from "../modules/action";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 import { connect } from "react-redux";
+import action from "../modules/action";
+
 
 const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
@@ -80,12 +58,7 @@ class PasswordTab extends Component {
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
-
-  onChange = (dates, dateStrings) => {
-    // console.log("From: ", dates[0], ", to: ", dates[1]);
-    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
-  };
-
+  
   changePassword = (values) => {
     let password = values.password;
     let user = JSON.parse(localStorage.getItem("user"));

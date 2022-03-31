@@ -1,17 +1,10 @@
-import React, { Component, memo } from "react";
 import {
-  Table,
-  Button,
-  Input,
-  Row,
-  Col,
-  PageHeader,
-  Radio,
-  Select,
-  Tag,
+  Button, Col, Input, PageHeader,
+  Radio, Row, Select, Table, Tag
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 import EditModal from "./edit-view";
 import RejectModal from "./reject-view";
 
@@ -130,16 +123,16 @@ class CancelledOrderUI extends Component {
       fixed: "left",
       width: 120,
     },
-    {
-      title: "Product",
-      dataIndex: "details",
-      key: "details",
-      render: (text, object) => {
-        return object.details?.length > 0 ? object.details[0]?.productname : "";
-      },
+    // {
+    //   title: "Product",
+    //   dataIndex: "details",
+    //   key: "details",
+    //   render: (text, object) => {
+    //     return object.details?.length > 0 ? object.details[0]?.productname : "";
+    //   },
 
-      width: 130,
-    },
+    //   width: 130,
+    // },
 
     {
       title: "Total Price",
@@ -180,38 +173,6 @@ class CancelledOrderUI extends Component {
       },
       width: 130,
     },
-    // {
-    //   title: "Action",
-    //   render: (object) => {
-    //     // let disabled = object.status === "created" ? "false" : "true";
-    //     // console.log(disabled);
-    //     if (object.status === "created") {
-    //       return (
-    //         <Button
-    //           onClick={() => this.changeStatus(object)}
-    //           type="primary"
-    //         >
-    //           Processing Order
-    //         </Button>
-    //       );
-    //     }
-
-    //     if (object.status === "processing") {
-    //       return (
-    //         <Button
-    //           onClick={() => this.changeStatus(object)}
-    //           type="primary"
-    //         >
-    //           Deliver Order
-    //         </Button>
-    //       );
-    //     }
-
-
-    //   },
-    //   fixed: "right",
-    //   width: 150,
-    // },
   ];
 
   onChangeHandler = (e) => {
@@ -225,6 +186,8 @@ class CancelledOrderUI extends Component {
           .toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
         item.totalprice.includes(e.target.value) ||
+        item.discountprice.includes(e.target.value) ||
+        item.finalprice.includes(e.target.value) ||
         item.createdat.includes(e.target.value)
       );
     });
@@ -291,45 +254,10 @@ class CancelledOrderUI extends Component {
         subTitle={`This is a cancelled order page`}
         footer={
           <div>
-            {/* <EditModal
-              openModal={openEditModal}
-              closeModal={this.closeModal}
-              updateStatusOrder={updateStatusOrder}
-              record={
-                this.props.data.filter((item) => {
-                  return selectedRowKeys.includes(item.id);
-                })[0]
-              }
-              selectedRowKeys={selectedRowKeys[0]}
-            /> */}
-
-            {/* <RejectModal
-              openModal={openRejectModal}
-              closeModal={this.closeModal}
-              rejectOrder={rejectOrder}
-              record={
-                this.props.data.filter((item) => {
-                  return selectedRowKeys.includes(item.id);
-                })[0]
-              }
-              selectedRowKeys={selectedRowKeys[0]}
-            /> */}
 
             <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex={3}>
-                  {/* <Button
-                    type="primary"
-                    onClick={() => this.start("openEditModal")}
-                    disabled={
-                      !editButton || this.state.selectedRowKeys.length === 0
-                        ? true
-                        : false
-                    }
-                    style={{ marginLeft: 3 }}
-                  >
-                    View Details
-                  </Button> */}
 
                   <Button
                     type="danger"
@@ -370,24 +298,6 @@ class CancelledOrderUI extends Component {
                     <Radio value="retail">Retail Orders</Radio>
                     <Radio value="wholesale">Wholesale Orders</Radio>
                   </Radio.Group>
-                  {/* Status:
-                  <Select
-                    title="Status"
-                    defaultValue="All"
-                    style={{ width: 120, marginLeft: "2px" }}
-                    onChange={this.handleChange}
-                  >
-                    <Select.Option value={undefined}>All</Select.Option>
-                    <Select.Option value="advanced">Advanced</Select.Option>
-                    <Select.Option value="unpaid">Unpaid</Select.Option>
-                    <Select.Option value="created">Created</Select.Option>
-                    <Select.Option value="processing">Processing</Select.Option>
-                    <Select.Option value="delivering">Delivering</Select.Option>
-                    <Select.Option value="delivered">Delivered</Select.Option>
-                    <Select.Option value="cancelled">Cancelled</Select.Option>
-                    <Select.Option value="completed">Completed</Select.Option>
-                    <Select.Option value="returned">returned</Select.Option>
-                  </Select> */}
                 </Col>
                 <Col flex={4}></Col>
               </Row>

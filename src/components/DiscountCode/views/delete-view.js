@@ -1,181 +1,11 @@
-// import React, { Component, memo } from "react";
-// import moment from "moment";
-// import {
-//   Modal,
-//   Button,
-//   Form,
-//   Table,
-// } from "antd";
-// import PropTypes from "prop-types";
-
-// //  prototype
-// const propsProTypes = {
-//   data: PropTypes.array,
-//   selectedRowKeys: PropTypes.array,
-//   closeModal: PropTypes.func,
-//   deleteDiscountCode: PropTypes.func,
-//   openModal: PropTypes.bool,
-// };
-
-// //  default props
-// const propsDefault = {
-//   data: [],
-//   selectedRowKeys: [],
-//   closeModal: () => { },
-//   deleteDiscountCode: () => { },
-//   openModal: false,
-// };
-
-// class DeleteModal extends Component {
-//   static propTypes = propsProTypes;
-//   static defaultProps = propsDefault;
-
-//   componentDidMount() {
-//     // console.log("DeleteDiscountCodeModal");
-//     // console.log(this.props);
-//   }
-
-//   handleDelete = () => {
-//     (this.props.selectedRowKeys).map(item => {
-//       // console.log(item);
-//       return this.props.deleteDiscountCode(item);
-//     })
-//     this.props.closeModal();
-//   };
-
-//   handleCancel = () => {
-//     this.props.closeModal();
-//   };
-
-
-//   columns = [
-//     {
-//       title: "No.",
-//       dataIndex: "No.",
-//       key: "No.",
-//       width: 60,
-//       render: (text, object, index) => index + 1,
-//     },
-//     {
-//       title: "Product Image",
-//       dataIndex: "productimage",
-//       width: 100,
-//       key: "productimage",
-//       render: (url) => {
-//         if (url.length > 0) {
-//           url = JSON.parse(url);
-//           return (
-//             <img
-//               src={url[0]?.url}
-//               alt="show illustrative representation"
-//               style={{ width: "90px", height: "70px", margin: "auto" }}
-//             />
-//           );
-//         }
-//       },
-//     },
-//     {
-//       title: "Product Name",
-//       dataIndex: "productname",
-//       width: 200,
-//       key: "productname",
-//     },
-//     {
-//       title: "Retail Price",
-//       dataIndex: "retailprice",
-//       width: 200,
-//       key: "retailprice",
-//     },
-//     {
-//       title: "Wholesale Price",
-//       dataIndex: "wholesaleprice",
-//       width: 200,
-//       key: "wholesaleprice",
-//     },
-//     {
-//       title: "Quantity",
-//       dataIndex: "quantity",
-//       key: "quantity",
-//       width: 100,
-//     },
-//     {
-//       title: "Created Date",
-//       dataIndex: "createdat",
-//       key: "createdat",
-//       width: 150,
-//       render: (data) => moment(data).format("DD-MM-YYYY"),
-//     },
-//     {
-//       title: "Description",
-//       dataIndex: "description",
-//       key: "description",
-//       width: 250,
-//     },
-//   ];
-
-//   render() {
-//     const { openModal, selectedRowKeys } = this.props;
-//     return (
-//       <>
-
-//         <Form id="deleteDiscountCodeForm" onFinish={this.handleDelete}>
-//           <Modal
-//             width={window.innerWidth * 0.7}
-//             heigh={window.innerHeight * 0.5}
-//             style={{
-//               top: 10,
-//             }}
-//             title={`Records to be deleted: ${selectedRowKeys.length} items`}
-//             visible={openModal}
-//             // onOk={this.handleOk}
-//             onCancel={this.handleCancel}
-//             footer={[
-//               <Button onClick={this.handleCancel}>Cancel</Button>,
-//               <Button
-//                 type="primary"
-//                 form="deleteDiscountCodeForm"
-//                 key="submit"
-//                 htmlType="submit"
-//               >
-//                 Submit
-//               </Button>,
-//             ]}
-//           >
-//             { }
-//             <Table
-//               columns={this.columns}
-//               dataSource={(this.props.data).filter(item => { return selectedRowKeys.includes(item.id) })}
-//               scroll={{ y: 350 }} />
-//           </Modal>
-//         </Form>
-//       </>
-//     );
-//   }
-// }
-
-// const arePropsEqual = (prevProps, nextProps) => {
-//   return prevProps === nextProps;
-// };
-
-// // Wrap component using `React.memo()` and pass `arePropsEqual`
-// export default memo(DeleteModal, arePropsEqual);
-
-
-import React, { Component, memo } from "react";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  InputNumber,
-  Descriptions,
-  Upload,
+  Button, DatePicker, Descriptions, Form,
+  Input, InputNumber, Modal, Select
 } from "antd";
-import PropTypes from "prop-types";
-import moment from "moment";
 import Axios from "axios";
+import moment from "moment";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -187,8 +17,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => {},
-  deleteDiscountCode: () => {},
+  closeModal: () => { },
+  deleteDiscountCode: () => { },
   openModal: false,
   categoryList: [],
 };
@@ -206,33 +36,11 @@ class DeleteModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   handleDeleteAndClose = (data) => {
-    // console.log(data);
-    // let newDiscountCode = {
-    //   productId: data.productId,
-    //   startDate: data.date[0],
-    //   endDate: data.date[1],
-    //   quantity: data.quantity,
-    //   discountPrice: data.discountPrice,
-    //   minimunPriceCondition: data.minimunPrice,
-    //   // status: "private",
-    //   code: data.code,
-    // };
-
-    // console.log(newDiscountCode);
     this.props.deleteDiscountCode(this.props.record?.id);
-    // this.props.updateDiscountCode(newDiscountCode, this.props.record?.id);
-    // data.image = this.state.fileList;
-    // this.props.updateProduct(data);
-    // this.formRef.current.resetFields();
     this.props.closeModal();
-  };
-
-  handleDelete = (data) => {
-    this.props.deleteDiscountCode(this.props.record?.id);
-    this.formRef.current.resetFields();
   };
 
   handleCancel = () => {
@@ -304,22 +112,11 @@ class DeleteModal extends Component {
     });
   };
 
-  onChangePrice = (value) => {
-    this.setState({
-      price: value,
-    });
-  };
-
   render() {
     const { RangePicker } = DatePicker;
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    // const {
-    //   productSelected = this.props.productList?.find(
-    //     (element) => element.id === this.props.record?.productid
-    //   ) || {},
-    // } = this.state;
 
     if (this.props.loading || !this.props.record || !productList) {
       return <></>;
@@ -362,8 +159,8 @@ class DeleteModal extends Component {
                   ]}
                 >
                   <RangePicker
-                  disabled={true}
-                  style={{ width: "60vh" }}
+                    disabled={true}
+                    style={{ width: "60vh" }}
                     ranges={{
                       Today: [moment(), moment()],
                       "This Week": [
@@ -387,7 +184,7 @@ class DeleteModal extends Component {
 
               <Descriptions.Item label="Code">
                 <Form.Item name="code" initialValue={this.props.record?.code}>
-                  <Input defaultValue={this.props.record?.code} style={{ width: "60vh" }} disabled={true}/>
+                  <Input defaultValue={this.props.record?.code} style={{ width: "60vh" }} disabled={true} />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -397,7 +194,7 @@ class DeleteModal extends Component {
                   initialValue={this.props.record?.discountprice}
                 >
                   <InputNumber
-                  disabled={true}
+                    disabled={true}
                     defaultValue={this.props.record?.discountprice}
                     style={{ width: "60vh" }}
                   />
@@ -410,7 +207,7 @@ class DeleteModal extends Component {
                   initialValue={this.props.record?.minimunpricecondition}
                 >
                   <InputNumber
-                  disabled={true}
+                    disabled={true}
                     defaultValue={this.props.record?.minimunpricecondition}
                     style={{ width: "60vh" }}
                   />
@@ -433,7 +230,7 @@ class DeleteModal extends Component {
                   </Select>
                 </Form.Item>
               </Descriptions.Item>
-{/* 
+              {/* 
               <Descriptions.Item label="Status">
                 <Form.Item
                   name="status"
@@ -455,7 +252,7 @@ class DeleteModal extends Component {
                   name="quantity"
                   initialValue={this.props.record?.quantity}
                 >
-                  <InputNumber defaultValue={this.props.record?.quantity} style={{ width: "60vh" }} disabled={true}/>
+                  <InputNumber defaultValue={this.props.record?.quantity} style={{ width: "60vh" }} disabled={true} />
                 </Form.Item>
               </Descriptions.Item>
             </Descriptions>

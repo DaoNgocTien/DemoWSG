@@ -1,23 +1,14 @@
-import React, { Component } from "react";
-import {
-  Button,
-  Input,
-  Form,
-  Select,
-  Upload,
-  Tag,
-  Modal,
-  Typography,
-  DatePicker,
-  Tooltip,
-} from "antd";
-
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  Button, DatePicker, Form, Input, Modal, Select, Tag, Tooltip, Typography, Upload
+} from "antd";
 import PropTypes from "prop-types";
-
-import action from "./../modules/action";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import Loader from "./../../../components/Loader";
+import action from "./../modules/action";
+
+
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -116,7 +107,6 @@ class ProfileTab extends Component {
     this.props.updateProfile(this.state.user);
   };
 
-
   getBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -141,7 +131,7 @@ class ProfileTab extends Component {
     });
   };
 
-  handleChange = ({ fileList, file, event }) => {
+  handleChange = ({ fileList }) => {
     // fileList = fileList.slice(-2);
     // console.log(fileList);
     // 2. Read from response and show file link
@@ -162,7 +152,7 @@ class ProfileTab extends Component {
     const { loading } = this.props;
     if (loading) return <Loader />;
 
-    const { load, imageUrl, user,fileList } = this.state;
+    const { load, fileList } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}

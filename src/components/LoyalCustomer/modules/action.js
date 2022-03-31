@@ -1,5 +1,5 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 
 const getLoyalCustomer = () => {
   return async (dispatch) => {
@@ -63,8 +63,6 @@ const createLoyalCustomer = (record) => {
     }
   };
 };
-
-
 
 const updateLoyalCustomer = (record, id) => {
   return async (dispatch) => {

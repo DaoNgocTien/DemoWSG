@@ -1,18 +1,10 @@
-import React, { Component, memo } from "react";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  InputNumber,
-  Descriptions,
-  Upload,
-  Switch,
+  Button, DatePicker, Descriptions, Form,
+  Input, InputNumber, Modal, Select, Switch, Upload
 } from "antd";
-import PropTypes from "prop-types";
 import moment from "moment";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -68,35 +60,35 @@ class DeleteModal extends Component {
     });
   }
 
-  handleCancelUploadImage = () => this.setState({ previewVisible: false });
+  // handleCancelUploadImage = () => this.setState({ previewVisible: false });
 
-  handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await this.getBase64(file.originFileObj);
-    }
+  // handlePreview = async (file) => {
+  //   if (!file.url && !file.preview) {
+  //     file.preview = await this.getBase64(file.originFileObj);
+  //   }
 
-    this.setState({
-      previewImage: file.url,
-      previewVisible: true,
-      previewTitle:
-        file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
-    });
-  };
+  //   this.setState({
+  //     previewImage: file.url,
+  //     previewVisible: true,
+  //     previewTitle:
+  //       file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
+  //   });
+  // };
 
-  handleChange = ({ fileList, file, event }) => {
-    fileList = fileList.slice(-2);
+  // handleChange = ({ fileList, file, event }) => {
+  //   fileList = fileList.slice(-2);
 
-    fileList = fileList.map((file) => {
-      if (file.response) {
-        file.url = file.response[0].url;
-        file.name = file.response[0].name;
-        file.thumbUrl = null;
-      }
-      return file;
-    });
+  //   fileList = fileList.map((file) => {
+  //     if (file.response) {
+  //       file.url = file.response[0].url;
+  //       file.name = file.response[0].name;
+  //       file.thumbUrl = null;
+  //     }
+  //     return file;
+  //   });
 
-    this.setState({ fileList });
-  };
+  //   this.setState({ fileList });
+  // };
 
   onSelectProduct = (value) => {
     this.setState({

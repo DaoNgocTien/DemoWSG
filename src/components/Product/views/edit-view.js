@@ -1,8 +1,7 @@
-import React, { Component, memo } from "react";
-import { Modal, Button, Form, Input, Descriptions } from "antd";
-import PropTypes from "prop-types";
-import { Select, Upload, InputNumber } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Descriptions, Form, Input, InputNumber, Modal, Select, Upload } from "antd";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -75,11 +74,6 @@ class UpdateModal extends Component {
     this.props.closeModal();
   };
 
-  handleUpdate = (data) => {
-    this.props.updateProduct(data);
-    this.formRef.current.resetFields();
-  };
-
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.setState({
@@ -112,7 +106,7 @@ class UpdateModal extends Component {
     });
   };
 
-  handleChange = ({ fileList, file, event }) => {
+  handleChange = ({ fileList }) => {
     // fileList = fileList.slice(-2);
     // console.log(fileList);
     // 2. Read from response and show file link
@@ -202,7 +196,7 @@ class UpdateModal extends Component {
                       required: true,
                       message: 'Name is required!',
                     },
-                    ({ getFieldValue }) => ({
+                    () => ({
                       validator(_, value) {
 
                         if (listName.includes(value)) {
@@ -257,7 +251,7 @@ class UpdateModal extends Component {
                       required: true,
                       message: 'Quantity is required!',
                     },
-                    ({ getFieldValue }) => ({
+                    () => ({
                       validator(_, value) {
                         if (Number(value) > 0) {
                           return Promise.resolve();
@@ -281,7 +275,7 @@ class UpdateModal extends Component {
                       required: true,
                       message: 'Price is required!',
                     },
-                    ({ getFieldValue }) => ({
+                    () => ({
                       validator(_, value) {
                         if (Number(value) > 0) {
                           return Promise.resolve();
@@ -313,8 +307,8 @@ class UpdateModal extends Component {
 
               <Descriptions.Item label="Image">
                 <Form.Item name="image" rules={[
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
+                  () => ({
+                    validator(_) {
                       if (fileList.length >= 1) {
                         return Promise.resolve();
                       }

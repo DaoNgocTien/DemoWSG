@@ -1,10 +1,10 @@
+import Axios from "axios";
 import {
   GET_DATA_FAIL,
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
-  STORE_SETTLING_PAYMENT,
+  STORE_SETTLING_PAYMENT
 } from "./constant";
-import Axios from "axios";
 
 const getTransaction = () => {
   return async (dispatch) => {
