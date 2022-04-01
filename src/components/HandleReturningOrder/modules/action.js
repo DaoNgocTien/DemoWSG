@@ -3,7 +3,7 @@ import {
   GET_DATA_FAIL,
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
-  STORE_COMPLAIN_ORDER
+  STORE_COMPLAIN_ORDER,
 } from "./constant";
 
 const getData = (orderCode) => {
@@ -65,7 +65,7 @@ const rejectOrder = (data) => {
         }),
       ]);
 
-      return window.location.replace("/returning")
+      return dispatch(getSuccess(rejectResponse));
     } catch (error) {
       return dispatch(getFailed());
     }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import { Layout, Menu, Drawer } from "antd";
+import { Layout, Menu, Drawer, notification, Upload, Image } from "antd";
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
   ReconciliationTwoTone,
@@ -24,13 +24,13 @@ import {
   ConversationHeader,
   EllipsisButton,
   AttachmentButton,
-  InputToolbox
+  InputToolbox,
 } from "@chatscope/chat-ui-kit-react";
 
 import NavbarAdmin from "../../components/NavbarAdmin";
 import Notification from "../../components/Notification";
 
-import { ref, onValue, set } from "firebase/database";
+import { ref, onValue, set, remove } from "firebase/database";
 import { realtime } from "../../services/firebase";
 
 const { SubMenu } = Menu;
@@ -56,7 +56,6 @@ class AdminRender extends Component {
   };
 
   componentDidMount = () => {
-    this.getNotif();
     if (!localStorage.getItem("user")) {
       return window.location.replace("/login");
     } else {
@@ -78,16 +77,33 @@ class AdminRender extends Component {
           }
         }
       });
+      this.getNotif();
     }
   };
 
   getNotif = async () => {
     // console.log(get(ref(realtime, "notif")));
-    set(ref(realtime, "hello"), { gg: "f" });
-    onValue(ref(realtime, "hello"), (snapshot) => {
-      // console.log("hello");
-      // console.log(snapshot.val());
-    });
+    onValue(
+      ref(realtime, `notif/${JSON.parse(localStorage.getItem("user")).id}`),
+      (snapshot) => {
+        if (snapshot.val()) {
+          notification.info({
+            description: snapshot.val().message,
+            placement: "topRight",
+
+            onClose: () => {
+              // remove(
+              //   ref(
+              //     realtime,
+              //     `notif/${JSON.parse(localStorage.getItem("user")).id}`
+              //   )
+              // );
+            },
+          });
+          // notification.close();
+        }
+      }
+    );
   };
 
   showChatDrawer = () => {
@@ -130,6 +146,31 @@ class AdminRender extends Component {
       from: this.state.from,
       message: data,
     });
+  };
+  onSendFile = (info) => {
+    if (info.file.status === "done") {
+      console.log(this.state);
+
+      if (this.state.from && this.state.to) {
+        set(ref(realtime, "chat-message"), {
+          to: this.state.to,
+          from: this.state.from,
+          file: info.file.response[0].url,
+        });
+      }
+    }
+  };
+
+  uploadConf = {
+    name: "file",
+    action: "/files/upload",
+    headers: {
+      authorization: "authorization-text",
+    },
+    showUploadList: false,
+    onChange: (info) => {
+      this.onSendFile(info);
+    },
   };
 
   render() {
@@ -331,34 +372,80 @@ class AdminRender extends Component {
                           message.from ===
                           JSON.parse(localStorage.getItem("user")).id
                         ) {
+                          if (message.message) {
+                            return (
+                              <Message
+                                model={{
+                                  message: `${message.message}`,
+                                  direction: "outgoing",
+                                  position: "normal",
+                                  sender: "Me",
+                                }}
+                              />
+                            );
+                          } else {
+                            return (
+                              <Message
+                                type="custom"
+                                Model={{
+                                  direction: "outgoing",
+                                }}
+                              >
+                                <Message.CustomContent>
+                                  <Image
+                                    width={150}
+                                    height={150}
+                                    src={message.file}
+                                    preview={{
+                                      src: message.file,
+                                    }}
+                                  />
+                                </Message.CustomContent>
+                              </Message>
+                            );
+                          }
+                        }
+                        if (message.message) {
                           return (
                             <Message
                               model={{
                                 message: `${message.message}`,
-                                direction: "outgoing",
+                                direction: "incoming",
                                 position: "normal",
-                                sender: "Me",
                               }}
                             />
                           );
+                        } else {
+                          return (
+                            <Message
+                              type="custom"
+                              Model={{
+                                direction: "outgoing",
+                              }}
+                            >
+                              <Message.CustomContent>
+                                <Image
+                                  width={150}
+                                  height={150}
+                                  src={message.file}
+                                  preview={{
+                                    src: message.file,
+                                  }}
+                                />
+                              </Message.CustomContent>
+                            </Message>
+                          );
                         }
-                        return (
-                          <Message
-                            model={{
-                              message: `${message.message}`,
-                              direction: "incoming",
-                              position: "normal",
-                            }}
-                          />
-                        );
                       })}
                     </MessageList>
                     <InputToolbox>
-                      <AttachmentButton />
+                      <Upload {...this.uploadConf}>
+                        <AttachmentButton />
+                      </Upload>
                     </InputToolbox>
                     <MessageInput
                       placeholder="Type message here"
-                      // value={messageInputValue}
+                      attachButton={false}
                       onSend={(val) => this.setMessageInputValue(val)}
                     />
                   </ChatContainer>
