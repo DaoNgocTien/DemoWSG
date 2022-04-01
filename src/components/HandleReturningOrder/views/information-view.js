@@ -2,7 +2,6 @@ import { Descriptions, Table } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
-//  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
   updateCampaign: PropTypes.func,
@@ -10,7 +9,6 @@ const propsProTypes = {
   openModal: PropTypes.bool,
 };
 
-//  default props
 const propsDefault = {
   closeModal: () => {},
   updateCampaign: () => {},
@@ -29,9 +27,7 @@ class InformationModal extends Component {
   static defaultProps = propsDefault;
   formRef = React.createRef();
 
-  componentDidMount() {
-    // console.log(this.props);
-  }
+  componentDidMount() {}
 
   checkCancelledOrder = () => {
     const record = this.props.record;
@@ -160,5 +156,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(InformationModal, arePropsEqual);

@@ -1,9 +1,25 @@
 import {
-  ClockCircleOutlined, IdcardTwoTone, LoadingOutlined,
-  PlusOutlined, SafetyCertificateTwoTone, WalletTwoTone
+  ClockCircleOutlined,
+  IdcardTwoTone,
+  LoadingOutlined,
+  PlusOutlined,
+  SafetyCertificateTwoTone,
+  WalletTwoTone,
 } from "@ant-design/icons";
 import {
-  Button, Col, Descriptions, Form, Input, Modal, PageHeader, Row, Table, Tabs, Timeline, Typography, Upload
+  Button,
+  Col,
+  Descriptions,
+  Form,
+  Input,
+  Modal,
+  PageHeader,
+  Row,
+  Table,
+  Tabs,
+  Timeline,
+  Typography,
+  Upload,
 } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
@@ -13,7 +29,7 @@ import InformationModal from "./information-view";
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
-//  prototype
+
 const propsProTypes = {
   closeModal: PropTypes.func,
   updateCampaign: PropTypes.func,
@@ -21,10 +37,9 @@ const propsProTypes = {
   openModal: PropTypes.bool,
 };
 
-//  default props
 const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
+  closeModal: () => {},
+  updateCampaign: () => {},
   record: {},
   openModal: false,
 };
@@ -45,12 +60,14 @@ class HandleUI extends Component {
   static defaultProps = propsDefault;
   formRef = React.createRef();
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   handleRejectAndClose = (data) => {
-    // data.image = this.state.fileList;
-    this.props.rejectOrder(this.props.record.ordercode, data.reason, JSON.stringify(this.state.fileList));
+    this.props.rejectOrder(
+      this.props.record.ordercode,
+      data.reason,
+      JSON.stringify(this.state.fileList)
+    );
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
@@ -60,12 +77,12 @@ class HandleUI extends Component {
     this.props.closeModal();
   };
 
-  recordReasonToReject = e => {
+  recordReasonToReject = (e) => {
     let reason = e.target.value;
     this.setState({
       isReasonable: reason === "" ? true : false,
-    })
-  }
+    });
+  };
 
   getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -94,10 +111,8 @@ class HandleUI extends Component {
   handleChange = ({ fileList, file, event }) => {
     fileList = fileList.slice(-2);
 
-    // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
-        // Component will show file.url as link
         file.url = file.response[0].url;
         file.name = file.response[0].name;
         file.thumbUrl = null;
@@ -106,7 +121,6 @@ class HandleUI extends Component {
     });
 
     this.setState({ fileList });
-    // console.log(this.state.fileList);
   };
 
   columns = [
@@ -124,7 +138,7 @@ class HandleUI extends Component {
       dataIndex: "image",
       key: "image",
       render: (data) => {
-        return (JSON.parse(data)).length === 0 ? (
+        return JSON.parse(data).length === 0 ? (
           ""
         ) : (
           <img
@@ -166,11 +180,10 @@ class HandleUI extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-    }
+    },
   ];
 
   render() {
-
     this.state.record = this.props.record;
     const {
       openModal,
@@ -208,39 +221,61 @@ class HandleUI extends Component {
               style={{ marginLeft: 3 }}
             >
               Submit
-            </Button>
+            </Button>,
           ]}
           footer={
             <>
               <Tabs defaultActiveKey="complain" centered type="card">
-                <TabPane tab={
-                  <span>
-                    <IdcardTwoTone style={{ fontSize: "25px" }} />
-                    Complain Handle
-                  </span>
-                }
+                <TabPane
+                  tab={
+                    <span>
+                      <IdcardTwoTone style={{ fontSize: "25px" }} />
+                      Complain Handle
+                    </span>
+                  }
                   key="complain"
                   style={{ background: "#ffffff" }}
                 >
                   <div>
-
-                    <Title style={{ textAlign: "center", padding: "30px" }} level={3}>COMPLAIN PROOF</Title>
-                    <Descriptions layout="vertical" column={2} title="Complain Information">
+                    <Title
+                      style={{ textAlign: "center", padding: "30px" }}
+                      level={3}
+                    >
+                      COMPLAIN PROOF
+                    </Title>
+                    <Descriptions
+                      layout="vertical"
+                      column={2}
+                      title="Complain Information"
+                    >
                       <Descriptions.Item label="Supplier comment">
                         <Form.Item
                           name="supplierReason"
                           rules={[
-                            { required: true, message: "Please input your reason to reject order!" },
+                            {
+                              required: true,
+                              message:
+                                "Please input your reason to reject order!",
+                            },
                           ]}
                         >
-                          <Input.TextArea onChange={(e) => this.recordReasonToReject(e)} autoSize={{ minRows: 5, maxRows: 8 }} style={{ width: "60vh" }} />
+                          <Input.TextArea
+                            onChange={(e) => this.recordReasonToReject(e)}
+                            autoSize={{ minRows: 5, maxRows: 8 }}
+                            style={{ width: "60vh" }}
+                          />
                         </Form.Item>
                       </Descriptions.Item>
 
                       <Descriptions.Item label="Image">
-                        <Form.Item name="image"
+                        <Form.Item
+                          name="image"
                           rules={[
-                            { required: true, message: "Please input your reason to reject order!" },
+                            {
+                              required: true,
+                              message:
+                                "Please input your reason to reject order!",
+                            },
                           ]}
                         >
                           <>
@@ -254,7 +289,9 @@ class HandleUI extends Component {
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}
                             >
-                              {this.state.fileList.length >= 8 ? null : uploadButton}
+                              {this.state.fileList.length >= 8
+                                ? null
+                                : uploadButton}
                             </Upload>
                             <Modal
                               visible={this.state.previewVisible}
@@ -276,17 +313,30 @@ class HandleUI extends Component {
                         <Form.Item
                           name="reason"
                           rules={[
-                            { required: true, message: "Please input your reason to reject order!" },
+                            {
+                              required: true,
+                              message:
+                                "Please input your reason to reject order!",
+                            },
                           ]}
                         >
-                          <Input.TextArea onChange={(e) => this.recordReasonToReject(e)} autoSize={{ minRows: 5, maxRows: 8 }} style={{ width: "60vh" }} />
+                          <Input.TextArea
+                            onChange={(e) => this.recordReasonToReject(e)}
+                            autoSize={{ minRows: 5, maxRows: 8 }}
+                            style={{ width: "60vh" }}
+                          />
                         </Form.Item>
                       </Descriptions.Item>
 
                       <Descriptions.Item label="Image">
-                        <Form.Item name="image"
+                        <Form.Item
+                          name="image"
                           rules={[
-                            { required: true, message: "Please input your reason to reject order!" },
+                            {
+                              required: true,
+                              message:
+                                "Please input your reason to reject order!",
+                            },
                           ]}
                         >
                           <>
@@ -300,7 +350,9 @@ class HandleUI extends Component {
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}
                             >
-                              {this.state.fileList.length >= 8 ? null : uploadButton}
+                              {this.state.fileList.length >= 8
+                                ? null
+                                : uploadButton}
                             </Upload>
                             <Modal
                               visible={this.state.previewVisible}
@@ -322,17 +374,30 @@ class HandleUI extends Component {
                         <Form.Item
                           name="reason"
                           rules={[
-                            { required: true, message: "Please input your reason to reject order!" },
+                            {
+                              required: true,
+                              message:
+                                "Please input your reason to reject order!",
+                            },
                           ]}
                         >
-                          <Input.TextArea onChange={(e) => this.recordReasonToReject(e)} autoSize={{ minRows: 5, maxRows: 8 }} style={{ width: "60vh" }} />
+                          <Input.TextArea
+                            onChange={(e) => this.recordReasonToReject(e)}
+                            autoSize={{ minRows: 5, maxRows: 8 }}
+                            style={{ width: "60vh" }}
+                          />
                         </Form.Item>
                       </Descriptions.Item>
 
                       <Descriptions.Item label="Image">
-                        <Form.Item name="image"
+                        <Form.Item
+                          name="image"
                           rules={[
-                            { required: true, message: "Please input your reason to reject order!" },
+                            {
+                              required: true,
+                              message:
+                                "Please input your reason to reject order!",
+                            },
                           ]}
                         >
                           <>
@@ -346,7 +411,9 @@ class HandleUI extends Component {
                               onChange={this.handleChange}
                               style={{ width: "60vh" }}
                             >
-                              {this.state.fileList.length >= 8 ? null : uploadButton}
+                              {this.state.fileList.length >= 8
+                                ? null
+                                : uploadButton}
                             </Upload>
                             <Modal
                               visible={this.state.previewVisible}
@@ -363,23 +430,28 @@ class HandleUI extends Component {
                           </>
                         </Form.Item>
                       </Descriptions.Item>
-
                     </Descriptions>
-
                   </div>
                 </TabPane>
 
-                <TabPane tab={
-                  <span>
-                    <WalletTwoTone style={{ fontSize: "25px" }} />
-                    Order Information
-                  </span>
-                }
+                <TabPane
+                  tab={
+                    <span>
+                      <WalletTwoTone style={{ fontSize: "25px" }} />
+                      Order Information
+                    </span>
+                  }
                   key="information"
                   style={{ background: "#ffffff" }}
                 >
-                  <> <Title style={{ textAlign: "center", padding: "30px" }} level={3}>ORDER INFORMATION</Title>
-
+                  <>
+                    {" "}
+                    <Title
+                      style={{ textAlign: "center", padding: "30px" }}
+                      level={3}
+                    >
+                      ORDER INFORMATION
+                    </Title>
                     <InformationModal
                       openModal={openModal}
                       closeModal={closeModal}
@@ -390,49 +462,75 @@ class HandleUI extends Component {
                   </>
                 </TabPane>
 
-                <TabPane tab={
-                  <span style={{ alignItems: "center" }}>
-                    <SafetyCertificateTwoTone style={{ fontSize: "25px" }} />
-                    Order History
-                  </span>
-                }
+                <TabPane
+                  tab={
+                    <span style={{ alignItems: "center" }}>
+                      <SafetyCertificateTwoTone style={{ fontSize: "25px" }} />
+                      Order History
+                    </span>
+                  }
                   key="history"
                   style={{ background: "#ffffff" }}
                 >
                   <>
-                    <Title style={{ textAlign: "center", padding: "30px" }} level={3}>ORDER HISTORY</Title>
+                    <Title
+                      style={{ textAlign: "center", padding: "30px" }}
+                      level={3}
+                    >
+                      ORDER HISTORY
+                    </Title>
                     <Timeline pending="Recording..." mode="left" reverse="true">
-                      <Timeline.Item label="2015-09-01">Create a services</Timeline.Item>
-                      <Timeline.Item label="2015-09-01 09:12:11">Solve initial network problems</Timeline.Item>
-                      <Timeline.Item dot={<ClockCircleOutlined className="timeline-clock-icon" />} color="red">
+                      <Timeline.Item label="2015-09-01">
+                        Create a services
+                      </Timeline.Item>
+                      <Timeline.Item label="2015-09-01 09:12:11">
+                        Solve initial network problems
+                      </Timeline.Item>
+                      <Timeline.Item
+                        dot={
+                          <ClockCircleOutlined className="timeline-clock-icon" />
+                        }
+                        color="red"
+                      >
                         Technical testing 2015-09-01
                       </Timeline.Item>
                       <Timeline.Item>Technical testing</Timeline.Item>
-                      <Timeline.Item label="2015-09-01 09:12:11">Network problems being solved</Timeline.Item>
+                      <Timeline.Item label="2015-09-01 09:12:11">
+                        Network problems being solved
+                      </Timeline.Item>
                     </Timeline>
                   </>
                 </TabPane>
-
               </Tabs>
             </>
           }
         >
-
-          <Descriptions layout="vertical" column={2} >
+          <Descriptions layout="vertical" column={2}>
             <Descriptions.Item label="Customer service comment">
               <Form.Item
                 name="reason"
                 rules={[
-                  { required: true, message: "Please input your reason to reject order!" },
+                  {
+                    required: true,
+                    message: "Please input your reason to reject order!",
+                  },
                 ]}
               >
-                <Input.TextArea onChange={(e) => this.recordReasonToReject(e)} autoSize={{ minRows: 5, maxRows: 8 }} style={{ width: "60vh" }} />
+                <Input.TextArea
+                  onChange={(e) => this.recordReasonToReject(e)}
+                  autoSize={{ minRows: 5, maxRows: 8 }}
+                  style={{ width: "60vh" }}
+                />
               </Form.Item>
             </Descriptions.Item>
             <Descriptions.Item label="Image">
-              <Form.Item name="image"
+              <Form.Item
+                name="image"
                 rules={[
-                  { required: true, message: "Please input your reason to reject order!" },
+                  {
+                    required: true,
+                    message: "Please input your reason to reject order!",
+                  },
                 ]}
               >
                 <>
@@ -443,7 +541,6 @@ class HandleUI extends Component {
                     fileList={this.props.record ? fileList : []}
                     onChange={this.handleChange}
                     style={{ width: "60vh" }}
-
                   >
                     {this.state.fileList.length >= 8 ? null : uploadButton}
                   </Upload>
@@ -469,7 +566,6 @@ class HandleUI extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   return {
     loading: state.ReturningOrderReducer.loading,
@@ -484,25 +580,20 @@ const mapDispatchToProps = (dispatch) => {
     getComplainingOrder: async () => await dispatch(action.getOrder()),
     updateStatusOrder: async (data) => {
       await dispatch(action.updateStatusOrder(data));
-      await dispatch(action.getOrder())
+      await dispatch(action.getOrder());
     },
     rejectOrder: async (orderCode, reasonForCancel, imageProof) => {
-      await dispatch(action.rejectOrder(orderCode, reasonForCancel, imageProof));
+      await dispatch(
+        action.rejectOrder(orderCode, reasonForCancel, imageProof)
+      );
     },
 
     storeComplainRecord: async (record) => {
       console.log("storeComplainRecord");
       console.log(record);
       await dispatch(action.storeComplainRecord(record));
-    }
+    },
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HandleUI);
-
-// const arePropsEqual = (prevProps, nextProps) => {
-//   return prevProps === nextProps;
-// };
-
-// // Wrap component using `React.memo()` and pass `arePropsEqual`
-// export default memo(HandleUI, arePropsEqual);

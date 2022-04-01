@@ -1,9 +1,21 @@
 import {
-  IdcardTwoTone, LoadingOutlined,
-  PlusOutlined, SafetyCertificateTwoTone
+  IdcardTwoTone,
+  LoadingOutlined,
+  PlusOutlined,
+  SafetyCertificateTwoTone,
 } from "@ant-design/icons";
 import {
-  Button, Descriptions, Form, Image, Input, Modal, PageHeader, Tabs, Timeline, Typography, Upload
+  Button,
+  Descriptions,
+  Form,
+  Image,
+  Input,
+  Modal,
+  PageHeader,
+  Tabs,
+  Timeline,
+  Typography,
+  Upload,
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -19,12 +31,14 @@ const propsProTypes = {
   record: PropTypes.object,
   openModal: PropTypes.bool,
   rejectOrder: PropTypes.func,
+  acceptRequest: PropTypes.func,
 };
 
 const propsDefault = {
   closeModal: () => {},
   updateCampaign: () => {},
-  rejectOrder: () => {},  
+  rejectOrder: () => {},
+  acceptRequest: () => {},
   record: {},
   openModal: false,
 };
@@ -221,15 +235,7 @@ class HandleReturningOrderUI extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Image">
-                <Form.Item
-                  name="image"
-                  // rules={[
-                  //   {
-                  //     required: true,
-                  //     message: "Please input your reason to reject order!",
-                  //   },
-                  // ]}
-                >
+                <Form.Item name="image">
                   <>
                     <Upload
                       name="file"
@@ -276,7 +282,7 @@ class HandleReturningOrderUI extends Component {
 
             <Button
               type="primary"
-              onClick={() => rejectRequest("")}
+              onClick={ this.props.acceptRequest}
               style={{ marginLeft: 3 }}
             >
               Submit

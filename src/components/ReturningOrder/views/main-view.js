@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import { Link, Redirect, Route } from "react-router-dom";
 
-//  prototype
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
@@ -13,7 +12,6 @@ const propsProTypes = {
   updateStatusOrder: PropTypes.func,
 };
 
-//  default props
 const propsDefault = {
   index: 1,
   data: [],
@@ -27,7 +25,7 @@ class OrderReturningUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
-    selectedRowKeys: [], // Check here to configure the default column
+    selectedRowKeys: [],
     loading: false,
     addNewButton: true,
     displayData: [],
@@ -107,16 +105,7 @@ class OrderReturningUI extends Component {
       fix: "left",
       width: 100,
     },
-    // {
-    //   title: "Product",
-    //   dataIndex: "details",
-    //   key: "details",
-    //   fixed: "left",
-    //   render: (text, object) => {
-    //     return object.details?.length > 0 ? object.details[0]?.productname : "";
-    //   },
 
-    // },
     {
       title: "In Campaign",
       dataIndex: "campaign",
@@ -128,7 +117,6 @@ class OrderReturningUI extends Component {
               " " +
               moment(campaign[0].todate).format("MM/DD/YYYY")
           : "";
-        // return moment(campaign[0].fromdate).format("MM/DD/YYYY") + " " + moment(campaign[0].todate).format("MM/DD/YYYY");
       },
       width: 100,
     },
@@ -167,47 +155,26 @@ class OrderReturningUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return data === "returned" ?  
-        <Tag color="blue">{data}</Tag>:
-        <Tag color="red">{data}</Tag>
+        return data === "returned" ? (
+          <Tag color="blue">{data}</Tag>
+        ) : (
+          <Tag color="red">{data}</Tag>
+        );
       },
       width: 100,
     },
     {
       title: "Action",
       render: (object) => {
-        //  Condition:
-        //  - Order in returning
-        //  - Order status history: có tồn tại statusHistory là finishReturning hay không, có thì cho confirm
-        if (object.status === "returning" && object.status === "returning" ) {
-          return (
-            <Button
-              // onClick={() => this.changeStatus(object)}
-              type="primary"
-            >
-              Confirm Received 
-            </Button>
-          );
+        if (object.status === "returning" && object.status === "returning") {
+          return <Button type="primary">Confirm Received</Button>;
         }
-
-        // if (object.status === "processing") {
-        //   return (
-        //     <Button
-        //       onClick={() => this.changeStatus(object)}
-        //       type="primary"
-        //     >
-        //       Deliver Order
-        //     </Button>
-        //   );
-        // }
-
-
       },
       fixed: "right",
       width: 150,
     },
   ];
-  
+
   onChangeHandler = (e) => {
     let { data } = this.props;
     let searchData = data.filter((item) => {
@@ -221,7 +188,7 @@ class OrderReturningUI extends Component {
         item.totalprice.includes(e.target.value) ||
         item.discountprice.includes(e.target.value) ||
         item.createdat.includes(e.target.value) ||
-        item.status.includes(e.target.value) 
+        item.status.includes(e.target.value)
       );
     });
     this.setState({
@@ -276,10 +243,8 @@ class OrderReturningUI extends Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-    // const hasSelected = selectedRowKeys.length > 0;
 
     const arrayLocation = window.location.pathname.split("/");
-    // console.log(data);
 
     return (
       <PageHeader
@@ -289,13 +254,9 @@ class OrderReturningUI extends Component {
         subTitle={`This is a order returning page`}
         footer={
           <div>
-           
-
             <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex={3}>
-                  
-
                   <Button
                     type="primary"
                     onClick={() => storeComplainRecord(this.state.record)}
@@ -304,14 +265,15 @@ class OrderReturningUI extends Component {
                         ? true
                         : false
                     }
-                    // disabled={
-                    //   !actionButton || this.state.selectedRowKeys.length === 0
-                    //     ? true
-                    //     : false
-                    // }
                     style={{ marginLeft: 3 }}
                   >
-                    <Link className="LinkDecorations" to={"/order/handle/returning/" + this.state.record?.ordercode}>
+                    <Link
+                      className="LinkDecorations"
+                      to={
+                        "/order/handle/returning/" +
+                        this.state.record?.ordercode
+                      }
+                    >
                       Handle Returning Request
                     </Link>
                   </Button>
@@ -372,5 +334,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(OrderReturningUI, arePropsEqual);
