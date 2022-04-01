@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import action from "./modules/action";
 import { connect } from "react-redux";
+import action from "./modules/action";
 import ProductUI from "./views/main-view";
 
 class ProductPage extends Component {

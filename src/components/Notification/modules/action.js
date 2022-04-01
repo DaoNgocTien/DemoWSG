@@ -1,5 +1,4 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
-import Axios from "axios";
 
 
 const getRequest = () => {
@@ -24,9 +23,6 @@ const getFailed = (err) => {
 };
 
 const action = {
-  // getCampaign,
-  // createCampaign,
-  // updateCampaign,
 };
 
 export default action;

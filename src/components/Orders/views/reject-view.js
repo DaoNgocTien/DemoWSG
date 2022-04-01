@@ -1,8 +1,8 @@
-import React, { Component, memo } from "react";
-import { Modal, Button, Form, Table, Input, Descriptions, Upload, Switch } from "antd";
-import PropTypes from "prop-types";
-
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Descriptions, Form, Input, Modal, Switch, Table, Upload } from "antd";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
+
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -37,12 +37,9 @@ class RejectModal extends Component {
   formRef = React.createRef();
 
   componentDidMount() {
-    // console.log(this.props);
   }
 
   handleRejectAndClose = (data) => {
-    // console.log(data);
-    // data.image = this.state.fileList;
     this.props.rejectOrder(this.props.record.ordercode, data.reason, JSON.stringify(this.state.fileList), this.state.requester);
     this.formRef.current.resetFields();
     this.props.closeModal();
@@ -59,7 +56,6 @@ class RejectModal extends Component {
       isReasonable: reason === "" ? true : false,
     })
   }
-
 
   getBase64(file) {
     return new Promise((resolve, reject) => {

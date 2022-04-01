@@ -1,32 +1,16 @@
-import React, { Component, memo } from "react";
-import action from "../modules/action";
-import { connect } from "react-redux";
 import {
-  Modal,
-  Button,
-  Form,
-  Table,
-  Input,
-  Descriptions,
-  Upload,
-  Tabs,
-  Col,
-  Row,
-  PageHeader,
-  Typography,
-  Timeline,
+  ClockCircleOutlined, IdcardTwoTone, LoadingOutlined,
+  PlusOutlined, SafetyCertificateTwoTone, WalletTwoTone
+} from "@ant-design/icons";
+import {
+  Button, Col, Descriptions, Form, Input, Modal, PageHeader, Row, Table, Tabs, Timeline, Typography, Upload
 } from "antd";
 import PropTypes from "prop-types";
-
-import {
-  LoadingOutlined,
-  PlusOutlined,
-  IdcardTwoTone,
-  WalletTwoTone,
-  SafetyCertificateTwoTone,
-  ClockCircleOutlined,
-} from "@ant-design/icons";
+import React, { Component, memo } from "react";
+import { connect } from "react-redux";
+import action from "../modules/action";
 import InformationModal from "./information-view";
+
 const { Title } = Typography;
 const { TabPane } = Tabs;
 //  prototype
@@ -62,7 +46,6 @@ class HandleUI extends Component {
   formRef = React.createRef();
 
   componentDidMount() {
-    console.log(this.props.record);
   }
 
   handleRejectAndClose = (data) => {
@@ -83,7 +66,6 @@ class HandleUI extends Component {
       isReasonable: reason === "" ? true : false,
     })
   }
-
 
   getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -215,17 +197,6 @@ class HandleUI extends Component {
             <Button
               type="danger"
               onClick={() => this.start("openDetailModal")}
-              // disabled={
-              //   !viewButton || this.state.selectedRowKeys.length === 0
-              //     ? true
-              //     : false
-              // }
-              // disabled={
-              //   !viewButton || this.state.selectedRowKeys.length === 0
-              //     ? true
-              //     : false
-              // }
-
               style={{ marginLeft: 3 }}
             >
               Reject
@@ -234,17 +205,6 @@ class HandleUI extends Component {
             <Button
               type="primary"
               onClick={() => this.start("openHandleModal")}
-              // disabled={
-              //   !actionButton || this.state.selectedRowKeys.length === 0
-              //     ? true
-              //     : false
-              // }
-              // disabled={
-              //   !actionButton || this.state.selectedRowKeys.length === 0
-              //     ? true
-              //     : false
-              // }
-
               style={{ marginLeft: 3 }}
             >
               Submit
@@ -503,62 +463,7 @@ class HandleUI extends Component {
               </Form.Item>
             </Descriptions.Item>
           </Descriptions>
-          {/* <Descriptions
-            bordered
-            title="Order Infomation"
-            column={2}
-            style={{ marginBottom: "10px" }}
-          >
-            <Descriptions.Item label="Order Code">
-              {this.state.record?.ordercode}
-            </Descriptions.Item>
-            <Descriptions.Item label="Total Price">
-              {this.state.record?.totalprice}VND
-            </Descriptions.Item>
-            <Descriptions.Item label="Discount Price">
-              {this.state.record?.discountprice}VND
-            </Descriptions.Item>
-            <Descriptions.Item label="Final Price">
-              {" "}
-              {this.state.record?.totalprice -
-                this.state.record?.discountprice}
-              VND
-            </Descriptions.Item>
-
-
-            <Descriptions.Item label="Status">
-              {this.state.record?.status}
-            </Descriptions.Item>
-
-          </Descriptions>
-          <Table
-            columns={this.columns}
-            dataSource={this.state.record.details}
-          /> */}
-
-
         </PageHeader>
-        {/* <Form
-          id="rejectOrderForm"
-          key={this.state.record?.key}
-          ref={this.formRef}
-          onFinish={this.handleRejectAndClose}
-        >
-          <Modal
-            width={window.innerWidth * 0.7}
-            title={`Order of ${this.state.record.customerfirstname +
-              " " +
-              this.state.record.customerlastname
-              }`}
-            visible={openModal}
-            onCancel={this.handleCancel}
-            footer={
-
-            }
-          >
-
-          </Modal>
-        </Form> */}
       </>
     );
   }

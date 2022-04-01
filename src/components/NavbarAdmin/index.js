@@ -1,17 +1,12 @@
-import React, { Component, memo } from "react";
-
-import Axios from "axios";
-import { Link } from "react-router-dom";
-import { Menu, Button, Divider, Row, Col } from "antd";
 import {
-  SettingTwoTone,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  UserOutlined,
   BellTwoTone,
-  LogoutOutlined,
-  MessageTwoTone,
+  LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MessageTwoTone, SettingTwoTone, UserOutlined
 } from "@ant-design/icons";
+import { Button, Col, Divider, Menu, Row } from "antd";
+import Axios from "axios";
+import React, { Component, memo } from "react";
+import { Link } from "react-router-dom";
+
 class NavbarAdmin extends Component {
   handleLogOut = (e) => {
     Axios({

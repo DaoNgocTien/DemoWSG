@@ -1,10 +1,10 @@
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Form, Input, message } from "antd";
 import React, { Component } from "react";
-import action from "./modules/action";
+import { GoogleLogin } from "react-google-login";
 import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
-import { Input, message, Form, Button } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { GoogleLogin } from "react-google-login";
+import action from "./modules/action";
 
 class AuthPage extends Component {
   openMessage = () => {

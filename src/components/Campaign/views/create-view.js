@@ -1,17 +1,10 @@
-import React, { Component, memo } from "react";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  DatePicker,
-  InputNumber,
-  Descriptions,
-  Switch,
+  Button, DatePicker, Descriptions, Form,
+  Input, InputNumber, Modal, Select, Switch, Upload
 } from "antd";
-import PropTypes from "prop-types";
-import { Select, Upload } from "antd";
 import moment from "moment";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -25,8 +18,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => {},
-  createCampaign: () => {},
+  closeModal: () => { },
+  createCampaign: () => { },
   openModal: false,
   productList: [],
 };
@@ -78,11 +71,6 @@ class CreatModal extends Component {
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.props.closeModal();
-  };
-
-  onChange = (dates, dateStrings) => {
-    // console.log("From: ", dates[0], ", to: ", dates[1]);
-    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
   };
 
   onSelectProduct = (value) => {
@@ -266,8 +254,8 @@ class CreatModal extends Component {
                       ? JSON.parse(productSelected?.image)
                       : []
                   }
-                  // onPreview={this.handlePreview}
-                  // onChange={this.handleChange}
+                // onPreview={this.handlePreview}
+                // onChange={this.handleChange}
                 >
                   {/* {this.state.fileList.length >= 8 ? null : uploadButton} */}
                 </Upload>

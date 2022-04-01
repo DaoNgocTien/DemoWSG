@@ -1,33 +1,16 @@
-import React, { Component, memo } from "react";
-import action from "../modules/action";
-import { connect } from "react-redux";
 import {
-  Modal,
-  Button,
-  Form,
-  Table,
-  Input,
-  Descriptions,
-  Upload,
-  Tabs,
-  Col,
-  Row,
-  PageHeader,
-  Typography,
-  Timeline,
-  Tag,
+  ClockCircleOutlined, IdcardTwoTone, LoadingOutlined,
+  PlusOutlined, SafetyCertificateTwoTone, WalletTwoTone
+} from "@ant-design/icons";
+import {
+  Button, Col, Descriptions, Form, Input, Modal, PageHeader, Row, Table, Tabs, Tag, Timeline, Typography, Upload
 } from "antd";
 import PropTypes from "prop-types";
-
-import {
-  LoadingOutlined,
-  PlusOutlined,
-  IdcardTwoTone,
-  WalletTwoTone,
-  SafetyCertificateTwoTone,
-  ClockCircleOutlined,
-} from "@ant-design/icons";
+import React, { Component, memo } from "react";
+import { connect } from "react-redux";
 import InformationModal from "../../HandleReturningOrder/views/information-view";
+import action from "../modules/action";
+
 const { Title } = Typography;
 const { TabPane } = Tabs;
 //  prototype
@@ -224,7 +207,7 @@ class SettlePaymentUI extends Component {
       record,
       selectedRowKeys,
     } = this.props;
-    const { isReasonable, load, imageUrl,fileList } = this.state;
+    const { isReasonable, load, imageUrl, fileList } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
@@ -240,35 +223,10 @@ class SettlePaymentUI extends Component {
           title="SETTLE AND WITHDRAW PAYMENT"
           subTitle={`In this page, suppliers can settle payment and withdraw cash into their E-wallet Account`}
           extra={[
-            // <Button
-            //   type="danger"
-            //   onClick={() => this.start("openDetailModal")}
-            //   disabled={
-            //     !viewButton || this.state.selectedRowKeys.length === 0
-            //       ? true
-            //       : false
-            //   }
-            //   disabled={
-            //     !viewButton || this.state.selectedRowKeys.length === 0
-            //       ? true
-            //       : false
-            //   }
-
-            //   style={{ marginLeft: 3 }}
-            // >
-            //   Reject
-            // </Button>,
 
             <Button
               type="primary"
               onClick={() => this.start("openHandleModal")}
-              // disabled={
-              //   !actionButton || this.state.selectedRowKeys.length === 0
-              //     ? true
-              //     : false
-              // }
-              // disabled={record.status === "cancelled" || record.status === "returned" ? `true` : `false`}
-
               style={{ marginLeft: 3 }}
             >
               Submit

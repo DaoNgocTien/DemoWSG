@@ -1,9 +1,8 @@
 
-import React, { Component, memo } from "react";
-import { Modal, Button, Form, Input, Descriptions } from "antd";
-import PropTypes from "prop-types";
-import { Select, Upload, InputNumber } from "antd";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Descriptions, Form, Input, InputNumber, Modal, Select, Upload } from "antd";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {

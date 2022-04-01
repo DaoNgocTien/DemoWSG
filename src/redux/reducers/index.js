@@ -1,24 +1,23 @@
 import { combineReducers } from "redux";
-import authReducer from "../../containers/AuthPage/modules/reducer";
-import categoryReducer from "../../components/Category/modules/reducer";
-import productReducer from "../../components/Product/modules/reducer";
-import discountReducer from "../../components/DiscountCode/modules/reducer";
 import campaignReducer from "../../components/Campaign/modules/reducer";
-import orderReducer from "../../components/Orders/modules/reducer";
-import loyalCustomerConditionReducer from "../../components/LoyalCustomerCondition/modules/reducer";
 import cancelledOrderReducer from "../../components/CancelledOrder/modules/reducer";
-
-import loyalCustomerReducer from "../../components/LoyalCustomer/modules/reducer";
-import notificationReducer from "../../components/Notification/modules/reducer";
-import ReturningOrderReducer from "../../components/ReturningOrder/modules/reducer";
-import profileReducer from "../../components/Profile/modules/reducer";
-import transactionReducer from "../../components/Transaction/modules/reducer";
-import complainOrder from "../../components/ReturningOrder/modules/reducer";
-
+import categoryReducer from "../../components/Category/modules/reducer";
+import discountReducer from "../../components/DiscountCode/modules/reducer";
 import handleReturningOrderReducer from "../../components/HandleReturningOrder/modules/reducer";
-
+import loyalCustomerReducer from "../../components/LoyalCustomer/modules/reducer";
+import loyalCustomerConditionReducer from "../../components/LoyalCustomerCondition/modules/reducer";
+import notificationReducer from "../../components/Notification/modules/reducer";
+import orderReducer from "../../components/Orders/modules/reducer";
+import productReducer from "../../components/Product/modules/reducer";
+import profileReducer from "../../components/Profile/modules/reducer";
+import { default as complainOrder, default as ReturningOrderReducer } from "../../components/ReturningOrder/modules/reducer";
+import transactionReducer from "../../components/Transaction/modules/reducer";
 // import ReturningOrder from "../../components/ReturningOrder/modules/reducer";
 import dashboardReducer from "../../containers/AdminLayout/DashBoard/modules/reducer";
+import authReducer from "../../containers/AuthPage/modules/reducer";
+
+
+
 
 
 

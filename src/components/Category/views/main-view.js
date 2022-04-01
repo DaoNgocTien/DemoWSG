@@ -1,7 +1,7 @@
-import React, { Component, memo } from "react";
+import { Button, Col, Input, PageHeader, Row, Space, Table } from "antd";
 import moment from "moment";
-import { Table, Button, Input, Row, Col, Space, PageHeader, } from "antd";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
@@ -117,7 +117,7 @@ class CategoryUI extends Component {
       title: "No.",
       dataIndex: "No.",
       key: "No.",
-      render: (text, object, index) => {
+      render: (_text, _object, index) => {
         return index + 1;
       },
       width: 100,

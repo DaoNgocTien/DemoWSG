@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import action from "./modules/action";
 // import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
+import action from "./modules/action";
 import ProfileUI from "./views/main-view";
 
 class Profile extends Component {

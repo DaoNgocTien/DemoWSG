@@ -1,13 +1,10 @@
 import {
   Button,
   Col,
-  PageHeader,
-  Radio,
+  PageHeader, Popconfirm, Radio,
   Row,
   Space,
-  Table,
-  Popconfirm,
-  Tag
+  Table, Tag
 } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
@@ -46,19 +43,7 @@ class TransactionUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() {}
-
-  showDrawer = () => {
-    this.setState({
-      openDrawer: true,
-    });
-  };
-
-  onCloseDrawer = () => {
-    this.setState({
-      openDrawer: false,
-    });
-  };
+  componentDidMount() { }
 
   onOKWithdraw = (data) => {
     console.log(data);
@@ -178,24 +163,6 @@ class TransactionUI extends Component {
     },
   ];
 
-  onChangeHandler = () => {
-    let { data } = this.props;
-  };
-
-  onSelectChange = (selectedRowKeys) => {
-    let record = this.props.data.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-
-    this.setState({
-      selectedRowKeys,
-      record: record,
-      editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length === 1,
-      addNewButton: selectedRowKeys.length === 0,
-    });
-  };
-
   onRadioChange = (e) => {
     let { data } = this.props;
     let searchValue = e.target.value;
@@ -220,12 +187,6 @@ class TransactionUI extends Component {
       displayData: searchData,
       searchKey: searchValue,
     });
-  };
-
-  settlePayment = (item) => {
-    const list = [];
-    list.push(item);
-    this.props.storeSettlingPaymentList(list);
   };
 
   render() {

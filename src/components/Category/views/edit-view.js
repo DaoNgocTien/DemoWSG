@@ -1,11 +1,10 @@
-import React, { Component, memo } from "react";
 import {
-    Modal,
     Button,
     Form,
-    Input,
+    Input, Modal
 } from "antd";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -53,10 +52,6 @@ class EditModal extends Component {
         this.props.closeModal();
     };
 
-    handleEdit = (data) => {
-        // this.props.updateCategory(data);
-    };
-
     handleCancel = () => {
         this.formRef.current.resetFields();
         this.props.closeModal();
@@ -64,17 +59,6 @@ class EditModal extends Component {
 
     render() {
         const { openModal, record, } = this.props;
-        // this.handelOpenModal(data, selectedRowKeys);
-        // const record = data.filter((item) => {
-        //     return selectedRowKeys?.includes(item.id);
-        // })[0];
-        // let record = data.filter((item) => {
-        //     return selectedRowKeys.includes(item.id);
-        //   })[0];
-        // console.log("Record EditModal");
-
-        // console.log(record);
-        // console.log(this.state.record);
         return (
             <>
                 <Form
@@ -82,6 +66,7 @@ class EditModal extends Component {
                     id="editCategoryForm"
                     ref={this.formRef}
                     onFinish={this.handleEditAndClose}
+                    layout="vertical"
                 >
                     <Modal
                         title="Edit a record"
@@ -116,9 +101,24 @@ class EditModal extends Component {
                             label="Category Name"
                             name="categoryName"
                             initialValue={record?.categoryname}
+                            rules={[
+                                {
+                                  required: true,
+                                  message: 'Name is required!',
+                                },
+                                () => ({
+                                  validator(_, value) {
+                                    if (value.length > 0 && value.length <= 20) {
+                                      return Promise.resolve();
+                                    }
+                
+                                    return Promise.reject(new Error('Category Name length is 1-20 characters!'));
+                                  },
+                                }),
+                              ]}
                         >
                             <Input
-                                placeholder="Category Name"
+                                placeholder="Name is required, 1-20 characters!"
 
                                 value={record?.categoryname}
                             />

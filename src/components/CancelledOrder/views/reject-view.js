@@ -1,14 +1,9 @@
-import React, { Component, memo } from "react";
-import { Modal, Button, Form, Table, Input, Descriptions, Upload, Switch,
-  Image,
-  Tabs,
-  PageHeader,
-  Typography,
-  Timeline, } from "antd";
-import PropTypes from "prop-types";
+import { IdcardTwoTone, LoadingOutlined, PlusOutlined, SafetyCertificateTwoTone } from "@ant-design/icons";
+import { Button, Descriptions, Form, Image, Input, Modal, Switch, Table, Tabs, Timeline, Typography, Upload } from "antd";
 import moment from "moment";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
-import { LoadingOutlined, PlusOutlined, IdcardTwoTone, SafetyCertificateTwoTone } from "@ant-design/icons";
 
 const { TabPane } = Tabs;
 const {Title} = Typography;

@@ -1,40 +1,11 @@
-import React, { Component } from "react";
-import action from "../modules/action";
-import { connect } from "react-redux";
-import Loader from "../../../components/Loader";
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {
-    Table,
-    Button,
-    Input,
-    Row,
-    Col,
-    PageHeader,
-    Space,
-    Form,
-    Select,
-    InputNumber,
-    Switch,
-    Radio,
-    Slider,
-    Upload,
-    Rate,
-    Checkbox,
-    Avatar,
-    Descriptions,
-    Tag,
-    Statistic,
-    Modal,
-    Typography,
-    DatePicker,
-    Cascader,
-    AutoComplete,
-    Tooltip,
-    Layout,
-} from "antd";
-
-import { LoadingOutlined, PlusOutlined, InboxOutlined } from '@ant-design/icons';
+    Button, Col, DatePicker, Form, Input, InputNumber, Layout, Row, Select, Space, Tag, Tooltip, Typography} from "antd";
 import PropTypes from "prop-types";
-import moment from "moment";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import action from "../modules/action";
+
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -136,31 +107,7 @@ class Registration extends Component {
     OTPRef = React.createRef();
 
     componentDidMount() {
-
-        // let profile = this.props.profile;
-        // console.log(this.props.profile);
-        // this.setState({
-        //     checkedProfile: {
-        //         validateStatus: profile === null ? "success" : "error",
-        //         errorMsg: profile === null ? null : "Phone number exist",
-        //     }
-        // });
     }
-
-    handleCreateAndClose = (data) => {
-
-        this.props.closeModal();
-    };
-
-    handleCreate = (data) => {
-        this.props.createProduct(data);
-        this.formRef.current.resetFields();
-    };
-
-    handleCancel = () => {
-        this.formRef.current.resetFields();
-        this.props.closeModal();
-    };
 
     onFinish = (values) => {
         console.log('Received values of form: ', values);
@@ -188,23 +135,6 @@ class Registration extends Component {
         });
 
     }
-
-    resetDataField = () => {
-
-    }
-
-
-    prefixSelector = (
-        <Form.Item name="prefix" noStyle>
-            <Select
-                style={{
-                    width: 70,
-                }}
-            >
-                <Option value="84">+84</Option>
-            </Select>
-        </Form.Item>
-    );
 
     getBase64(file) {
         return new Promise((resolve, reject) => {
@@ -336,7 +266,6 @@ class Registration extends Component {
                                                     disabled={phoneAvailable}
                                                     onChange={this.changePhoneNumber}
                                                     ref={this.phoneRef}
-                                                    // addonBefore={this.prefixSelector}
                                                     style={{ width: "60vh" }}
                                                     placeholder="10-11 characters"
                                                 />

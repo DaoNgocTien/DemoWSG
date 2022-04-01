@@ -1,18 +1,11 @@
-import React, { Component, memo } from "react";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  InputNumber,
-  Descriptions,
-
+  Button, DatePicker, Descriptions, Form,
+  Input, InputNumber, Modal, Select
 } from "antd";
-import PropTypes from "prop-types";
-import moment from "moment";
 import Axios from "axios";
+import moment from "moment";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {

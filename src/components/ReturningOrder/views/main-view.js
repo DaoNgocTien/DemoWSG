@@ -1,8 +1,8 @@
-import React, { Component, memo } from "react";
-import { Route, Link, Redirect } from "react-router-dom";
-import { Table, Button, Input, Row, Col, PageHeader, Radio, Tag } from "antd";
+import { Button, Col, Input, PageHeader, Radio, Row, Table, Tag } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
+import { Link, Redirect, Route } from "react-router-dom";
 
 //  prototype
 const propsProTypes = {
@@ -58,18 +58,6 @@ class OrderReturningUI extends Component {
 
   changeStatus = (data) => {
     this.props.updateStatusOrder(data);
-  };
-
-  closeModal = () => {
-    this.setState({
-      selectedRowKeys: [],
-      viewButton: false,
-      actionButton: false,
-    });
-    this.setState({
-      openHandleModal: false,
-      openDetailModal: false,
-    });
   };
 
   onSelectChange = (selectedRowKeys) => {
@@ -219,7 +207,7 @@ class OrderReturningUI extends Component {
       width: 150,
     },
   ];
-
+  
   onChangeHandler = (e) => {
     let { data } = this.props;
     let searchData = data.filter((item) => {
@@ -231,7 +219,9 @@ class OrderReturningUI extends Component {
           .toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
         item.totalprice.includes(e.target.value) ||
-        item.createdat.includes(e.target.value)
+        item.discountprice.includes(e.target.value) ||
+        item.createdat.includes(e.target.value) ||
+        item.status.includes(e.target.value) 
       );
     });
     this.setState({

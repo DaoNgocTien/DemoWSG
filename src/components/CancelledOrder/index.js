@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import action from "./modules/action";
 import { connect } from "react-redux";
+import action from "./modules/action";
 import CancelledOrderUI from "./views/main-view";
 
 class CancelledOrder extends Component {
@@ -37,7 +37,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getOrder: async (status) => await dispatch(action.getOrder(status)),
+    getOrder: async () => await dispatch(action.getOrder()),
     updateStatusOrder: async (data) => {
       await dispatch(action.updateStatusOrder(data));
       await dispatch(action.getOrder());

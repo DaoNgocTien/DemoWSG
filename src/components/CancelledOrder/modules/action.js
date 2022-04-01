@@ -1,7 +1,7 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 
-const getOrder = (status) => {
+const getOrder = () => {
   const statusz = "cancelled";
   return async (dispatch) => {
     try {

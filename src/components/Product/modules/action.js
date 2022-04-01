@@ -1,6 +1,6 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
 import { default as categoryAction } from "../../Category/modules/action";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 
 const getAllProduct = () => {
   return async (dispatch) => {
@@ -44,7 +44,7 @@ const createProduct = record => {
         // console.log(response.data.data);
       }
     })
-      .catch((err) => {
+      .catch(() => {
         // // console.log(err);
         // // console.log(typeof (err));
         return dispatch(getFailed());
@@ -77,7 +77,7 @@ const updateProduct = (record) => {
         // return window.location.reload();
         // console.log(response.data.data);
       }
-    }).catch((err) => {
+    }).catch(() => {
       // console.log(err);
       // console.log(typeof (err));
       return dispatch(getFailed());
@@ -98,7 +98,7 @@ const deleteProduct = id => {
         // console.log(response);
         // return window.location.reload();
       }
-    }).catch((err) => {
+    }).catch(() => {
       // console.log(err);
       // console.log(typeof (err));
       return dispatch(getFailed());

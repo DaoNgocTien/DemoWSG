@@ -1,6 +1,6 @@
-import React, { Component, memo } from "react";
-import { Modal, Button, Form, Table, Select, Descriptions } from "antd";
+import { Descriptions, Table } from "antd";
 import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 //  prototype
 const propsProTypes = {
@@ -32,23 +32,6 @@ class InformationModal extends Component {
   componentDidMount() {
     // console.log(this.props);
   }
-
-  handleEditAndClose = (data) => {
-    if (data.status === "created" || data.status === "advanced") {
-      this.formRef.current.resetFields();
-      return this.props.closeModal();
-    }
-    data.orderCode = this.state.record?.orderCode;
-    delete data.status;
-    this.props.updateStatusOrder(data);
-    this.formRef.current.resetFields();
-    this.props.closeModal();
-  };
-
-  handleCancel = () => {
-    this.formRef.current.resetFields();
-    this.props.closeModal();
-  };
 
   checkCancelledOrder = () => {
     const record = this.props.record;

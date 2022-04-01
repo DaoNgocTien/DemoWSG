@@ -1,16 +1,10 @@
-import React, { Component, memo } from "react";
 import {
-  Modal,
-  Button,
-  Form,
-  Input,
-  DatePicker,
-  InputNumber,
-  Descriptions,
+  Button, DatePicker, Descriptions, Form,
+  Input, InputNumber, Modal, Select
 } from "antd";
-import PropTypes from "prop-types";
-import { Select, Upload } from "antd";
 import moment from "moment";
+import PropTypes from "prop-types";
+import React, { Component, memo } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -24,8 +18,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => {},
-  createDiscountCode: () => {},
+  closeModal: () => { },
+  createDiscountCode: () => { },
   openModal: false,
   productList: [],
 };
@@ -42,11 +36,9 @@ class CreatModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   handleCreateAndClose = (data) => {
-    // console.log("DiscountCode create");
-    // console.log(data);
     let newDiscountCode = {
       productId: data.productId,
       startDate: data.date[0],
@@ -54,26 +46,15 @@ class CreatModal extends Component {
       quantity: data.quantity,
       discountPrice: data.discountPrice,
       minimunPriceCondition: data.minimunPrice,
-      // status: "private",
       code: data.code
     };
-
-    // console.log(newDiscountCode);
     this.props.createDiscountCode(newDiscountCode);
-    // data.image = this.state.fileList;
-    // this.props.createProduct(data);
-    // this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
   handleCancel = () => {
     this.formRef.current.resetFields();
     this.props.closeModal();
-  };
-
-  onChange = (dates, dateStrings) => {
-    // console.log("From: ", dates[0], ", to: ", dates[1]);
-    // console.log("From: ", dateStrings[0], ", to: ", dateStrings[1]);
   };
 
   onSelectProduct = (value) => {
@@ -84,16 +65,7 @@ class CreatModal extends Component {
       ),
     });
   };
-
-  onChangePrice = (value) => {
-    if (isNaN(value)) {
-      return;
-    }
-    this.setState({
-      price: value,
-    });
-  };
-
+  
   render() {
     const { openModal } = this.props;
 
@@ -136,7 +108,7 @@ class CreatModal extends Component {
                   initialValue={[moment(), moment().add(1, "days")]}
                 >
                   <RangePicker
-                  style={{ width: "60vh" }} 
+                    style={{ width: "60vh" }}
                     ranges={{
                       Today: [moment(), moment()],
                       "This Week": [
@@ -186,7 +158,7 @@ class CreatModal extends Component {
                   </Select>
                 </Form.Item>
               </Descriptions.Item>
-{/* 
+              {/* 
               <Descriptions.Item label="Status">
                 <Form.Item name="status" initialValue={"public"}>
                   <Select style={{ width: "60vh" }} >

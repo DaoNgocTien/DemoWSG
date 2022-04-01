@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import action from "./modules/action";
 import { connect } from "react-redux";
+import action from "./modules/action";
 import OrderReturningUI from "./views/main-view";
 
 class OrderReturning extends Component {
