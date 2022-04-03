@@ -42,7 +42,7 @@ const getOrder = (status) => {
         })
       );
     } catch (error) {
-      return dispatch(getFailed());
+      return dispatch(getFailed(error));
     }
   };
 };
@@ -86,7 +86,7 @@ const updateStatusOrder = (data, image) => {
         })
           .then((response) => { })
           .catch((err) => {
-            return dispatch(getFailed());
+            return dispatch(getFailed(err));
           });
 
         break;
@@ -98,24 +98,55 @@ const updateStatusOrder = (data, image) => {
   };
 };
 
-const rejectOrder = (orderCode, reasonForCancel, imageProof, requester) => {
+const rejectOrder = (orderCode, type, description, image, orderId) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  // console.log(user);
   let reject = {
     orderCode: orderCode,
-    reasonForCancel: reasonForCancel,
-    imageProof: imageProof,
-    cancellingRequester: requester,
-  }
-  console.log(reject);
+    type: type,
+    description: "has been cancelled by " + user.rolename + " for: " + description,
+    image: image,
+    orderId: orderId,
+  };
   return async (dispatch) => {
     dispatch(getRequest());
     try {
       const [rejectResponse, orders, campaigns] = await Promise.all([
         Axios({
-          url: `/order/supplier/cancel`,
+          url: `/order/status/supplier/cancel`,
           method: "PUT",
           data: reject,
           withCredentials: true,
         }),
+        // Axios({
+        //   url: `/order/supplier`,
+        //   method: "GET",
+        //   withCredentials: true,
+        //   exposedHeaders: ["set-cookie"],
+        // }),
+        // Axios({
+        //   url: `/campaigns/All`,
+        //   method: "GET",
+        //   withCredentials: true,
+        //   exposedHeaders: ["set-cookie"],
+        // }),
+      ]);
+      return dispatch(
+        getSuccess({
+          orders: [],
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed(error));
+    }
+  };
+};
+
+const getOrderByCampaignId = (id) => {
+  return async (dispatch) => {
+    try {
+      dispatch(getRequest());
+      const [orders, campaigns] = await Promise.all([
         Axios({
           url: `/order/supplier`,
           method: "GET",
@@ -129,13 +160,14 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof, requester) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      const orderInCampaign = orders.data.data.filter(order => {
+        return id === order.campaignid;
+      });
+      console.log(orderInCampaign);
       return dispatch(
         getSuccess({
-          orders: orders.data.data.map((order) => {
+          orders: orderInCampaign.map((order) => {
             return {
-              campaign: campaigns.data.data.filter((camp) => {
-                return camp.id == order.campaignid;
-              }),
               key: order.id,
               ...order,
             };
@@ -143,7 +175,7 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof, requester) => {
         })
       );
     } catch (error) {
-      return dispatch(getFailed());
+      return dispatch(getFailed(error));
     }
   };
 };
@@ -172,6 +204,7 @@ const action = {
   getOrder,
   updateStatusOrder,
   rejectOrder,
+  getOrderByCampaignId,
 };
 
 export default action;

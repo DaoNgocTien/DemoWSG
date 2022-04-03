@@ -17,8 +17,8 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  handleOrder: () => {},
-  updateStatusOrder: () => {},
+  handleOrder: () => { },
+  updateStatusOrder: () => { },
 };
 
 class OrderReturningUI extends Component {
@@ -37,7 +37,7 @@ class OrderReturningUI extends Component {
     record: {},
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     switch (openModal) {
@@ -114,8 +114,8 @@ class OrderReturningUI extends Component {
         let campaign = object.campaign;
         return campaign.length > 0
           ? moment(campaign[0].fromdate).format("MM/DD/YYYY") +
-              " " +
-              moment(campaign[0].todate).format("MM/DD/YYYY")
+          " " +
+          moment(campaign[0].todate).format("MM/DD/YYYY")
           : "";
       },
       width: 100,
@@ -166,9 +166,24 @@ class OrderReturningUI extends Component {
     {
       title: "Action",
       render: (object) => {
-        if (object.status === "returning" && object.status === "returning") {
-          return <Button type="primary">Confirm Received</Button>;
+
+        let showButton = false;
+        if (object.status === "returning") {
+          object.orderstatushistory.filter(history => {
+
+            if (history.statushistory === "finishReturning") {
+              showButton = true;
+            }
+          })
         }
+        return showButton ?
+          <Button type="primary"
+            onClick={() => this.confirmReceivedRequest(object)}
+          >
+            Confirm Received
+          </Button>
+          : "";
+
       },
       fixed: "right",
       width: 150,
@@ -224,6 +239,15 @@ class OrderReturningUI extends Component {
       searchKey: searchValue,
     });
   };
+
+  confirmReceivedRequest = object => {
+    console.log(object);
+    this.props.confirmReceived(
+      object.ordercode,
+      object.campaignid ? "campaign" : "retail",
+      object.id
+    )
+  }
 
   render() {
     const { handleOrder, updateStatusOrder, data, storeComplainRecord } =

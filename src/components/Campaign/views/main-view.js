@@ -38,6 +38,7 @@ class CampaignUI extends Component {
     editButton: false,
     deleteButton: false,
     addNewButton: true,
+    orderInCampaignButton: false,
     openCreateModal: false,
     openDeleteModal: false,
     openEditModal: false,
@@ -45,7 +46,7 @@ class CampaignUI extends Component {
     searchKey: "",
     openDrawer: false,
     record: {},
-    orderList: [],
+    orderListInSelectedCampaign: [],
   };
 
   componentDidMount() { }
@@ -77,18 +78,18 @@ class CampaignUI extends Component {
 
         break;
       case "openOrdersInCampaign": {
-        //  Get orders in campaign
+        //  List orders
         let orderList = this.props.orderList;
-        let orderListInCampaign = orderList?.filter((item) => {
+        //  List orders in campaign
+        let orderListInSelectedCampaignInCampaign = orderList?.filter((item) => {
           return selectedRowKeys.includes(item.campaignid);
         });
-        this.props.getCampaign(selectedRowKeys);
 
         //  Set campaign record and orders in campaign into state
         this.setState({
           openDrawer: true,
           record: recordToEdit,
-          orderList: orderListInCampaign,
+          orderListInSelectedCampaign: orderListInSelectedCampaignInCampaign,
         });
 
         break;
@@ -177,15 +178,15 @@ class CampaignUI extends Component {
     let searchString = e.target.value;
     let searchList = data.filter((item) => {
       return (
-        item.status.toUpperCase().includes(searchString.toUpperCase()) ||
-        item.fromdate.includes(searchString) ||
-        item.todate.includes(searchString) ||
-        item.productname.includes(searchString) ||
-        item.quantity.includes(searchString) ||
-        item.maxquantity.includes(searchString) ||
-        item.numorder.includes(searchString) ||
-        item.advancefee.includes(searchString) ||
-        item.price.includes(searchString)
+        String(item.status).toUpperCase().includes(searchString.toUpperCase()) ||
+        String(item.fromdate).toUpperCase().includes(searchString.toUpperCase()) ||
+        String(item.todate).toUpperCase().includes(searchString.toUpperCase()) ||
+        String( item.productname).toUpperCase().includes(searchString.toUpperCase()) ||
+        String(item.quantity).toUpperCase().includes(searchString.toUpperCase()) ||
+        String( item.maxquantity).toUpperCase().includes(searchString.toUpperCase()) ||
+        String( item.numorder).toUpperCase().includes(searchString.toUpperCase()) ||
+        String(item.advancefee).toUpperCase().includes(searchString.toUpperCase()) ||
+        String(item.price).toUpperCase().includes(searchString.toUpperCase())
 
       );
     });
@@ -212,9 +213,12 @@ class CampaignUI extends Component {
     this.setState({
       selectedRowKeys,
       record: record,
-      editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length === 1,
+      editButton: selectedRowKeys.length === 1 &&
+        record.status === "ready",
+      deleteButton: selectedRowKeys.length === 1 &&
+        record.status === "ready",
       addNewButton: selectedRowKeys.length === 0,
+      orderInCampaignButton: selectedRowKeys.length === 1,
     });
   };
 
@@ -229,14 +233,16 @@ class CampaignUI extends Component {
       deleteButton,
       editButton,
       addNewButton,
+      orderInCampaignButton,
       openCreateModal,
       openDeleteModal,
       openEditModal,
       displayData,
       searchKey,
+      orderListInSelectedCampaign
     } = this.state;
 
-    const { productList, createCampaign, updateCampaign, deleteCampaign } =
+    const { productList = [], createCampaign, updateCampaign, deleteCampaign, data } =
       this.props;
 
     const rowSelection = {
@@ -257,7 +263,10 @@ class CampaignUI extends Component {
               openModal={openCreateModal}
               closeModal={this.closeModal}
               createCampaign={createCampaign}
-              productList={productList}
+              productList={productList.filter(product => {
+                return product.quantity - product.maxquantity >= 10;
+              })}
+              campaingList={data}
             />
             <DeleteModal
               openModal={openDeleteModal}
@@ -307,7 +316,7 @@ class CampaignUI extends Component {
                     <Button
                       type="primary"
                       onClick={() => this.start("openOrdersInCampaign")}
-                      disabled={!editButton}
+                      disabled={!orderInCampaignButton}
                     // style={{ width: 90 }}
                     >
                       Orders in campaigns
@@ -336,11 +345,11 @@ class CampaignUI extends Component {
               visible={this.state.openDrawer}
             >
               <OrdersInCampaign
-                record={this.state.record}
-                orderList={this.state.orderList}
-                loading={this.props.loading}
-                ordersInCampaign={this.props.ordersInCampaign}
-                productList={productList}
+                campaign={this.state.record}
+                // orderList={this.state.orderListInSelectedCampaign}
+                // loading={this.props.loading}
+                // productList={productList}
+                // rejectOrder={this.props.rejectOrder}
               />
             </Drawer>
             <Table

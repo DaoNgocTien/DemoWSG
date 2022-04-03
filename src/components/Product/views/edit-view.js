@@ -192,10 +192,10 @@ class UpdateModal extends Component {
                 <Form.Item name="name"
                   initialValue={record?.name}
                   rules={[
-                    {
-                      required: true,
-                      message: 'Name is required!',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: 'Name is required!',
+                    // },
                     () => ({
                       validator(_, value) {
 
@@ -206,12 +206,12 @@ class UpdateModal extends Component {
                           return Promise.resolve();
                         }
 
-                        return Promise.reject(new Error('Product Name length is 1-20 characters!'));
+                        return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
                       },
                     }),
                   ]}
                 >
-                  <Input style={{ width: "60vh" }} defaultValue={record?.name} />
+                  <Input style={{ width: "60vh" }} defaultValue={record?.name} placeholder="Name is required, length is 1-20 characters"/>
                 </Form.Item>
               </Descriptions.Item>
 
@@ -247,10 +247,10 @@ class UpdateModal extends Component {
               <Descriptions.Item label="Quantity">
                 <Form.Item name="quantity" initialValue={record?.quantity}
                   rules={[
-                    {
-                      required: true,
-                      message: 'Quantity is required!',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: 'Quantity is required!',
+                    // },
                     () => ({
                       validator(_, value) {
                         if (Number(value) > 0) {
@@ -262,7 +262,7 @@ class UpdateModal extends Component {
                     }),
                   ]}
                 >
-                  <InputNumber min={0} style={{ width: "60vh" }} defaultValue={record?.quantity} />
+                  <InputNumber min={0} max={999999999999} style={{ width: "60vh" }} defaultValue={record?.quantity} />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -271,10 +271,10 @@ class UpdateModal extends Component {
                   name="retailPrice"
                   initialValue={record?.retailprice}
                   rules={[
-                    {
-                      required: true,
-                      message: 'Price is required!',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: 'Price is required!',
+                    // },
                     () => ({
                       validator(_, value) {
                         if (Number(value) > 0) {
@@ -286,7 +286,7 @@ class UpdateModal extends Component {
                     }),
                   ]}
                 >
-                  <InputNumber min={0} defaultValue={record?.retailprice} style={{ width: "60vh" }} />
+                  <InputNumber min={0} max={999999999999} defaultValue={record?.retailprice} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -301,7 +301,7 @@ class UpdateModal extends Component {
 
                   ]}
                 >
-                  <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} defaultValue={record?.description} />
+                  <Input.TextArea placeholder="Description is required!" autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} defaultValue={record?.description} />
                 </Form.Item>
               </Descriptions.Item>
 

@@ -38,10 +38,27 @@ class RejectModal extends Component {
 
   componentDidMount() {
   }
-
+  // orderCode, type, description, image, orderId
   handleRejectAndClose = (data) => {
-    this.props.rejectOrder(this.props.record.ordercode, data.reason, JSON.stringify(this.state.fileList), this.state.requester);
-    this.formRef.current.resetFields();
+    // console.log(this.props.record);
+    //  this.props.campaignId != null => request from orders-in-campaign component
+    this.props.campaignId != null ?
+
+      this.props.rejectOrder(
+        this.props.record.ordercode,
+        "campaign",
+        data.reason,
+        JSON.stringify(this.state.fileList),
+        this.props.record.id,
+        this.props.campaignId)
+      :
+      this.props.rejectOrder(
+        this.props.record.ordercode,
+        "retail",
+        data.reason,
+        JSON.stringify(this.state.fileList),
+        this.props.record.id);
+    // this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -176,7 +193,7 @@ class RejectModal extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    console.log(record);
+    // console.log(record);
     return (
       <>
         <Form
@@ -249,7 +266,7 @@ class RejectModal extends Component {
                   ]}
                   initialValue={record?.reasonforcancel ? record?.reasonforcancel : ""}
                 >
-                  <Input.TextArea onChange={(e) => this.recordReasonToReject(e)} autoSize={{ minRows: 5, maxRows: 8 }} style={{ width: "60vh" }} />
+                  <Input.TextArea placeholder="Reason is required!" onChange={(e) => this.recordReasonToReject(e)} autoSize={{ minRows: 5, maxRows: 8 }} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 

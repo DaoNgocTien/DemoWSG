@@ -22,6 +22,7 @@ class OrderReturning extends Component {
         updateStatusOrder={this.props.updateStatusOrder}
         createCampaign={this.props.createCampaign}
         rejectOrder={this.props.rejectOrder}
+        confirmReceived={this.props.confirmReceived}
         storeComplainRecord={this.props.storeComplainRecord}
       />
     );
@@ -41,16 +42,20 @@ const mapDispatchToProps = (dispatch) => {
     getOrder: async () => await dispatch(action.getOrder()),
     updateStatusOrder: async (data) => {
       await dispatch(action.updateStatusOrder(data));
-      await dispatch(action.getOrder())
+      await dispatch(action.getOrder());
     },
     rejectOrder: async (orderCode, reasonForCancel, imageProof) => {
       await dispatch(action.rejectOrder(orderCode, reasonForCancel, imageProof));
+      await dispatch(action.getOrder());
+    },
+    storeComplainRecord: async (record) => {
+      await dispatch(action.storeComplainRecord(record));
+      await dispatch(action.getOrder());
     },
 
-    storeComplainRecord: async (record) => {
-      console.log("storeComplainRecord");
-      console.log(record);
-      await dispatch(action.storeComplainRecord(record));
+    confirmReceived: async (orderCode, type, orderId) => {
+      await dispatch(action.confirmReceived(orderCode, type, orderId));
+      await dispatch(action.getOrder());
     }
   };
 };

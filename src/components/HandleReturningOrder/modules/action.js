@@ -50,7 +50,7 @@ const getData = (orderCode) => {
   };
 };
 
-const rejectOrder = (data) => {
+const rejectRequest = (data) => {
   return async (dispatch) => {
     dispatch(getRequest());
     try {
@@ -78,6 +78,37 @@ const storeComplainRecord = (record) => {
   return async (dispatch) => {
     try {
       return dispatch(getComplainRecord({ complainRecord: record }));
+    } catch (error) {
+      return dispatch(getFailed());
+    }
+  };
+};
+
+const acceptRequest = (orderCode, type, image = [], orderId) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  let body = {
+    orderId: orderId,
+    orderCode: orderCode,
+    type: type,
+    description: "has been accepted by " + user.rolename + " for: Customer requests to return order",
+    image: image,
+    status: "requestAccepted"
+  }
+  console.log(body);
+  return async (dispatch) => {
+    dispatch(getRequest());
+    try {
+      const [acceptRequestResponse] = await Promise.all([
+        Axios({
+          url: `/history/status`,
+          method: "POST",
+          data: body,
+          withCredentials: true,
+        }),
+      ]);
+
+      return dispatch(getSuccess(acceptRequestResponse));
     } catch (error) {
       return dispatch(getFailed());
     }
@@ -114,7 +145,8 @@ const getFailed = (err) => {
 const action = {
   getData,
   storeComplainRecord,
-  rejectOrder,
+  rejectRequest,
+  acceptRequest,
 };
 
 export default action;

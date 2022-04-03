@@ -2,6 +2,7 @@ import React, { Component } from "react";
 // import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
 import action from "./modules/action";
+import { default as orderAction } from "../Orders/modules/action";
 import CampaignUI from "./views/main-view";
 
 class Campaign extends Component {
@@ -19,11 +20,13 @@ class Campaign extends Component {
         data={this.props.data.campaigns}
         loading={this.props.loading}
         getCampaign={this.props.getCampaign}
-        ordersInCampaign={this.props.data.order}
+        // orderList={this.props.orderList}
         productList={this.props.data.products}
         updateCampaign={this.props.updateCampaign}
         createCampaign={this.props.createCampaign}
         deleteCampaign={this.props.deleteCampaign}
+        // rejectOrder={this.props.rejectOrder}
+
       />
     );
   }
@@ -35,7 +38,7 @@ const mapStateToProps = (state) => {
     data: state.campaignReducer.data,
     error: state.campaignReducer.err,
     // productList: state.productReducer.data,
-    // orderList: [],
+    // orderList: state.orderReducer.data.orders,
   };
 };
 
@@ -44,11 +47,7 @@ const mapDispatchToProps = (dispatch) => {
     getCampaign: async (campaignId) => {
       // console.log("get campaign");
       await dispatch(action.getCampaign(campaignId));
-    },
-
-    getOrdersInCampaign: async () => {
-      // console.log("getOrdersInCampaign final");
-      // console.log(campaignID);
+      // await dispatch(orderAction.getOrder());
     },
 
     createCampaign: async (record) => {
@@ -65,7 +64,13 @@ const mapDispatchToProps = (dispatch) => {
 
     deleteCampaign: async (id) => {
       await dispatch(action.deleteCampaign(id));
-    }
+      await dispatch(action.getCampaign());
+    },
+
+    // rejectOrder: async (orderCode, reasonForCancel, imageProof, requester) => {
+    //   await dispatch(orderAction.rejectOrder(orderCode, reasonForCancel, imageProof, requester));
+    //   await dispatch(orderAction.getOrder());
+    // },
   };
 };
 

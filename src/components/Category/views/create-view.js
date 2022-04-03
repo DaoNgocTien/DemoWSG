@@ -85,17 +85,17 @@ class CreatModal extends Component {
               name="categoryName"
               
               rules={[
-                {
-                  required: true,
-                  message: 'Name is required!',
-                },
+                // {
+                //   required: true,
+                //   message: 'Name is required!',
+                // },
                 ({getFieldValue }) => ({
                   validator(_, value) {
                     if (value.length > 0 && value.length <= 20) {
                       return Promise.resolve();
                     }
 
-                    return Promise.reject(new Error('Category Name length is 1-20 characters!'));
+                    return Promise.reject(new Error('Category Name is required, length is 1-20 characters!'));
                   },
                 }),
               ]}
