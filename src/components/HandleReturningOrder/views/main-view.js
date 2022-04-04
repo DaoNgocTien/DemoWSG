@@ -108,7 +108,7 @@ class HandleReturningOrderUI extends Component {
   };
 
   handleRejectAndClose = (data) => {
-    alert("handleRejectAndClose");
+    // alert("handleRejectAndClose");
     const user = JSON.parse(localStorage.getItem("user"));
 
     this.props.rejectRequest({
@@ -305,6 +305,7 @@ class HandleReturningOrderUI extends Component {
               type="danger"
               onClick={this.showModal}
               style={{ marginLeft: 3 }}
+              hidden={this.props.record?.status === "returned"}
             >
 
               Reject Returning Request
@@ -314,6 +315,7 @@ class HandleReturningOrderUI extends Component {
               type="primary"
               onClick={this.handleAcceptAndClose}
               style={{ marginLeft: 3 }}
+              hidden={this.props.record?.status === "returned"}
             >
               <Link
                 className="LinkDecorations"

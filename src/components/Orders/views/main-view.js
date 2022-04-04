@@ -110,11 +110,11 @@ class OrderUI extends Component {
       editButton: selectedRowKeys.length === 1,
       rejectButton:
         selectedRowKeys.length === 1 &&
-        record.status != "delivering" &&
-        record.status != "delivered" &&
-        record.status != "completed" &&
-        record.status != "returned" &&
-        record.status != "cancelled",
+        record?.status != "delivering" &&
+        record?.status != "delivered" &&
+        record?.status != "completed" &&
+        record?.status != "returned" &&
+        record?.status != "cancelled",
       addNewButton: selectedRowKeys.length === 0,
     });
   };

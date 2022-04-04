@@ -170,8 +170,8 @@ class LoyalCustomerUI extends Component {
     this.setState({
       selectedRowKeys,
       record: record,
-      activateButton: selectedRowKeys.length === 1 && record.status === "deactive",
-      deactivateButton: selectedRowKeys.length === 1 && record.status === "active",
+      activateButton: selectedRowKeys.length === 1 && record?.status === "deactive",
+      deactivateButton: selectedRowKeys.length === 1 && record?.status === "active",
       //addNewButton: selectedRowKeys.length === 0,
     });
   };
@@ -182,7 +182,7 @@ class LoyalCustomerUI extends Component {
       status: position,
     };
     console.log(record);
-    this.props.updateLoyalCustomer(record, this.state.record.id);
+    this.props.updateLoyalCustomer(record, this.state.record?.id);
   };
 
   render() {

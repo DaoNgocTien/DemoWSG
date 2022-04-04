@@ -35,6 +35,7 @@ class OrderReturningUI extends Component {
     viewButton: true,
     actionButton: true,
     record: {},
+    buttonTitle: "Handle Returning Request",
   };
 
   componentDidMount() { }
@@ -65,16 +66,12 @@ class OrderReturningUI extends Component {
 
     this.setState({
       selectedRowKeys,
-      viewButton: selectedRowKeys.length === 1 && record.status != "returned",
+      viewButton: selectedRowKeys.length === 1 && record?.status != "returned",
       actionButton:
-        selectedRowKeys.length === 1 &&
-        record.status != "delivering" &&
-        record.status != "delivered" &&
-        record.status != "completed" &&
-        record.status != "returned" &&
-        record.status != "cancelled",
+        selectedRowKeys.length === 1,
       addNewButton: selectedRowKeys.length === 0,
       record: record,
+      buttonTitle: record?.status === "returned" ? "View Details" : "Handle Returning Request",
     });
   };
 
@@ -298,7 +295,7 @@ class OrderReturningUI extends Component {
                         this.state.record?.ordercode
                       }
                     >
-                      Handle Returning Request
+                      {this.state.buttonTitle}
                     </Link>
                   </Button>
                 </Col>
