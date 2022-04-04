@@ -7,19 +7,12 @@ const getOrder = () => {
     try {
       dispatch(getRequest());
       const [orders, campaigns] = await Promise.all([
-        !statusz
-          ? Axios({
-            url: `/order/supplier`,
-            method: "GET",
-            withCredentials: true,
-            exposedHeaders: ["set-cookie"],
-          })
-          : Axios({
-            url: `/order/supplier/status?status=${statusz}`,
-            method: "GET",
-            withCredentials: true,
-            exposedHeaders: ["set-cookie"],
-          }),
+        Axios({
+          url: `/order/supplier/status?status=cancelled`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
         Axios({
           url: `/campaigns/All`,
           method: "GET",
@@ -27,7 +20,6 @@ const getOrder = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-
       return dispatch(
         getSuccess({
           orders: orders.data.data.map((order) => {

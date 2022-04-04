@@ -172,8 +172,8 @@ class DiscountCodeUI extends Component {
     this.setState({
       selectedRowKeys,
       record: record,
-      editButton: selectedRowKeys.length === 1 && record.status !== "deactivated",
-      deleteButton: selectedRowKeys.length === 1 && record.status !== "deactivated",
+      editButton: selectedRowKeys.length === 1 && record?.status !== "deactivated",
+      deleteButton: selectedRowKeys.length === 1 && record?.status !== "deactivated",
       addNewButton: selectedRowKeys.length === 0,
     });
   };

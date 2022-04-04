@@ -176,10 +176,6 @@ class DeleteModal extends Component {
                         moment().endOf("month"),
                       ],
                     }}
-                    defaultValue={[
-                      moment(this.props.record?.fromdate),
-                      moment(this.props.record?.todate),
-                    ]}
                     format="MM/DD/YYYY"
                     onChange={this.onChange}
                     style={{ width: "60vh" }}
@@ -210,7 +206,6 @@ class DeleteModal extends Component {
                   <InputNumber
                     disabled={true}
                     addonAfter=" products"
-                    defaultValue={record?.quantity}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>
@@ -224,7 +219,6 @@ class DeleteModal extends Component {
                   <InputNumber
                     disabled={true}
                     addonAfter=" products"
-                    defaultValue={record?.maxquantity}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>
@@ -238,7 +232,6 @@ class DeleteModal extends Component {
                   <InputNumber
                     disabled={true}
                     addonAfter="%"
-                    defaultValue={record?.advancefee}
                     min={0}
                     max={100}
                     style={{ width: "60vh" }}
@@ -269,11 +262,6 @@ class DeleteModal extends Component {
                   <InputNumber
                     disabled={true}
                     addonAfter="%"
-                    defaultValue={
-                      (this.props.record?.price /
-                        productSelected?.retailprice) *
-                      100
-                    }
                     onChange={this.onChangePrice}
                     min={0}
                     max={100}

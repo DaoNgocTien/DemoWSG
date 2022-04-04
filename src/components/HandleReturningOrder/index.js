@@ -43,12 +43,13 @@ const mapDispatchToProps = (dispatch) => {
     getReturningOrder: async (orderCode) =>
       await dispatch(action.getData(orderCode)),
 
-    acceptRequest: async (data) => {
-      return window.location.reload()
+    acceptRequest: async (orderCode, type, image = [], orderId) => {
+      await dispatch(action.acceptRequest(orderCode, type, image = [], orderId));
+      return window.history.back()
     },
     rejectRequest: async (data) => {
-      await dispatch(action.rejectOrder(data));
-      return window.location.reload()
+      await dispatch(action.rejectRequest(data));
+      return window.history.back()
     },
   };
 };

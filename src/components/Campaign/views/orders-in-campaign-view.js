@@ -3,22 +3,37 @@ import {
   Form, Input, PageHeader, Row, Space, Table, Tag
 } from "antd";
 import moment from "moment";
+import action from "../../Orders/modules/action";
+import { connect } from "react-redux";
 import React, { memo } from "react";
+import RejectModal from "../../Orders/views/reject-view";
 
 class OrdersInCampaign extends React.Component {
   state = {
     loading: false,
     selectedRowKeys: [], // Check here to configure the default column
     loadingActionButton: false,
-    deleteButton: false,
-    openDeleteModal: false,
+    rejectButton: false,
+    openRejectModal: false,
     displayData: [],
     searchData: "",
   };
 
+  componentDidMount() {
+    console.log("did mount");
+    console.log(this.props);
+    this.props.getOrder(this.props.campaign.id);
+  }
+
+  componentDidUpdate() {
+    console.log("did update");
+    console.log(this.props);
+    // this.props.getOrder();
+  }
+
+
   onSelectChange = (selectedRowKeys) => {
     // console.log("selectedRowKeys changed: ", selectedRowKeys);
-    // console.log(this.props.orderList);
     let record = this.props.orderList?.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
@@ -26,7 +41,22 @@ class OrdersInCampaign extends React.Component {
     this.setState({
       selectedRowKeys,
       record: record,
-      deleteButton: selectedRowKeys.length >= 1,
+      rejectButton: selectedRowKeys.length === 1 ,
+    });
+  };
+
+  openModal = () => {
+    this.setState({ openRejectModal: true });
+
+  };
+
+  closeModal = () => {
+    this.setState({
+      selectedRowKeys: [],
+      rejectButton: false,
+    });
+    this.setState({
+      openRejectModal: false,
     });
   };
 
@@ -70,7 +100,7 @@ class OrdersInCampaign extends React.Component {
             width="100"
             alt="show illustrative representation"
             height="100"
-            src={JSON.parse(object.details[0].image)[0].url}
+            src={JSON.parse(object.details[0]?.image)[0].url}
           />
         );
       },
@@ -133,19 +163,20 @@ class OrdersInCampaign extends React.Component {
   ];
 
   onChangeHandler = (e) => {
-    let { data } = this.props;
-    let searchString = e.target.value;
-    let searchList = data.filter((item) => {
+    let orderList = this.props.orderList.filter(order => order.campaignid === this.props.campaign.id);
+
+    let searchList = orderList.filter((item) => {
       return (
-        item.status.toUpperCase().includes(searchString.toUpperCase()) ||
-        item.createdat.includes(searchString) ||
-        item.notes.includes(searchString) ||
-        item.finalprice.includes(searchString) ||
-        item.discountprice.includes(searchString) ||
-        item.totalprice.includes(searchString) ||
-        item.quantity.includes(searchString) ||
-        item.productname.includes(searchString) ||
-        item.price.includes(searchString) 
+        item.customerfirstname
+          .toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
+        item.customerlastname
+          .toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
+        item.totalprice.includes(e.target.value) ||
+        item.discountprice.includes(e.target.value) ||
+        item.createdat.includes(e.target.value) ||
+        item.status.includes(e.target.value)
 
       );
     });
@@ -156,49 +187,47 @@ class OrdersInCampaign extends React.Component {
   };
 
   render() {
-    const { selectedRowKeys, deleteButton, displayData, searchData } =
+    const {
+      selectedRowKeys,
+      rejectButton,
+      displayData,
+      searchData,
+      openRejectModal,
+
+    } =
       this.state;
 
-    const { record, ordersInCampaign, loading,orderList } = this.props;
+    const { campaign, loading, rejectOrder, orderList = [] } = this.props;
     // console.log(ordersInCampaign);
+
+    console.log(this.props);
+
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
 
-    console.log(ordersInCampaign);
-    console.log(orderList);
-
-    // const hasSelected = selectedRowKeys.length > 0;
-
-    // const arr = window.location.pathname.split("/");
-
-    // let productSelected =
-    //   this.props.productList?.find(
-    //     (element) => element.id === this.props.record?.productid
-    //   ) || {};
-    // let price = 0;
     return (
       <>
         {" "}
         <Form>
           <Descriptions bordered title="Campaign information" column={2}>
             <Descriptions.Item label="Campaign duration">
-              {moment(record?.fromdate).format("MM/DD/YYYY") +
+              {moment(campaign?.fromdate).format("MM/DD/YYYY") +
                 ` - ` +
-                moment(record?.todate).format("MM/DD/YYYY")}
+                moment(campaign?.todate).format("MM/DD/YYYY")}
             </Descriptions.Item>
 
             <Descriptions.Item label="Product">
-              {record?.productname}
+              {campaign?.productname}
             </Descriptions.Item>
 
             <Descriptions.Item label="Quantity">
-              {record?.quantity}
+              {campaign?.quantity}
             </Descriptions.Item>
 
             <Descriptions.Item label="Wholesale percent">
-              {(record?.price / record?.productretailprice) * 100 + " %"}
+              {(campaign?.price / campaign?.productretailprice) * 100 + " %"}
             </Descriptions.Item>
           </Descriptions>
         </Form>
@@ -206,17 +235,28 @@ class OrdersInCampaign extends React.Component {
           className="site-page-header-responsive"
           footer={
             <div>
+              <RejectModal
+                openModal={openRejectModal}
+                closeModal={this.closeModal}
+                rejectOrder={rejectOrder}
+                record={
+                  orderList.find((item) => {
+                    return selectedRowKeys[0] === item.id;
+                  })
+                }
+                campaignId={campaign.id}
+              />
               <div style={{ marginBottom: 16 }}>
                 <Row>
                   <Col flex="auto">
                     <Space size={3}>
                       <Button
                         type="danger"
-                        onClick={() => this.start("openDeleteModal")}
-                        disabled={!deleteButton}
+                        onClick={() => this.openModal()}
+                        disabled={!rejectButton}
                         style={{ width: 90 }}
                       >
-                        Delete
+                        Reject
                       </Button>
                       <span style={{ marginLeft: 8 }}>
                         {selectedRowKeys.length > 0
@@ -239,7 +279,7 @@ class OrdersInCampaign extends React.Component {
                 columns={this.columns}
                 dataSource={
                   displayData.length === 0 && searchData === ""
-                    ? ordersInCampaign
+                    ? orderList
                     : displayData
                 }
                 scroll={{ y: 350 }}
@@ -252,9 +292,31 @@ class OrdersInCampaign extends React.Component {
   }
 }
 
-const arePropsEqual = (prevProps, nextProps) => {
-  return prevProps === nextProps;
+
+const mapStateToProps = (state) => {
+  return {
+    loading: state.orderReducer.loading,
+    orderList: state.orderReducer.data.orders,
+    error: state.orderReducer.err,
+  };
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(OrdersInCampaign, arePropsEqual);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getOrder: async (id) => {
+      await dispatch(action.getOrderByCampaignId(id))
+    },
+    rejectOrder: async (orderCode, type, description, image, orderId, campaignId = null) => {
+      console.log("Campaign");
+
+      await dispatch(
+        action.rejectOrder(orderCode, type, description, image, orderId)
+      );
+      await dispatch(
+        action.getOrderByCampaignId(campaignId)
+      );
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrdersInCampaign);

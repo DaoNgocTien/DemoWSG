@@ -17,6 +17,8 @@ import {
   Typography,
   Upload,
 } from "antd";
+import { Link, Redirect, Route } from "react-router-dom";
+
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
@@ -35,10 +37,10 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
-  rejectOrder: () => {},
-  acceptRequest: () => {},
+  closeModal: () => { },
+  updateCampaign: () => { },
+  rejectOrder: () => { },
+  acceptRequest: () => { },
   record: {},
   openModal: false,
 };
@@ -59,7 +61,7 @@ class HandleReturningOrderUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
 
-  componentDidMount() {}
+  componentDidMount() { }
   showModal = () => {
     this.setState({ isModalVisible: true });
   };
@@ -106,15 +108,34 @@ class HandleReturningOrderUI extends Component {
   };
 
   handleRejectAndClose = (data) => {
-    // data.image = this.state.fileList;
+    // alert("handleRejectAndClose");
+    const user = JSON.parse(localStorage.getItem("user"));
+
     this.props.rejectRequest({
       type: this.props.data.order.campaignid ? "campaign" : "retail",
       orderId: this.props.data.order.id,
       orderCode: this.props.data.order.ordercode,
-      description: data.reason,
+      description: "has been rejected by " + user.rolename + " for: " + data.reason,
       image: this.state.fileList || [],
     });
     this.handleCancel();
+    window.history.back();
+  };
+
+  handleAcceptAndClose = () => {
+    // data.image = this.state.fileList;
+    //orderCode, type, image = [], orderId
+    console.log(this.props.data);
+    this.props.acceptRequest(
+
+
+      this.props.data.order.ordercode,
+      this.props.data.order.campaignid ? "campaign" : "retail",
+      [],
+      this.props.data.order.id
+    );
+    // this.handleCancel();
+    // window.history.back();
   };
 
   columns = [
@@ -206,7 +227,15 @@ class HandleReturningOrderUI extends Component {
                 key="submit"
                 htmlType="submit"
               >
+                {/* <Link
+                  className="LinkDecorations"
+                  to={
+                    "/returning"
+                  } */}
+                {/* > */}
                 Reject
+                {/* </Link> */}
+
               </Button>,
             ]}
           >
@@ -276,16 +305,26 @@ class HandleReturningOrderUI extends Component {
               type="danger"
               onClick={this.showModal}
               style={{ marginLeft: 3 }}
+              hidden={this.props.record?.status === "returned"}
             >
-              Reject
+
+              Reject Returning Request
             </Button>,
 
             <Button
               type="primary"
-              onClick={ this.props.acceptRequest}
+              onClick={this.handleAcceptAndClose}
               style={{ marginLeft: 3 }}
+              hidden={this.props.record?.status === "returned"}
             >
-              Submit
+              <Link
+                className="LinkDecorations"
+                to={
+                  "/returning"
+                }
+              >
+                Accept Returning Request
+              </Link>
             </Button>,
           ]}
           footer={

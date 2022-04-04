@@ -150,26 +150,26 @@ class CreatModal extends Component {
               <Descriptions.Item label="Name">
                 <Form.Item name="name"
                   rules={[
-                    {
-                      required: true,
-                      message: 'Name is required!',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: 'Name is required!',
+                    // },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
 
                         if (listName.includes(value)) {
                           return Promise.reject(new Error('Product Name exists!'));
                         }
-                        if (value.length >= 0 && value.length <= 20) {
+                        if (value.length > 0 && value.length <= 20) {
                           return Promise.resolve();
                         }
 
-                        return Promise.reject(new Error('Product Name length is 1-20 characters!'));
+                        return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
                       },
                     }),
                   ]}
                 >
-                  <Input style={{ width: "60vh" }} />
+                  <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-20 characters"/>
                 </Form.Item>
               </Descriptions.Item>
 
@@ -204,10 +204,10 @@ class CreatModal extends Component {
               <Descriptions.Item label="Quantity">
                 <Form.Item name="quantity" initialValue={0}
                   rules={[
-                    {
-                      required: true,
-                      message: 'Quantity is required!',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: 'Quantity is required!',
+                    // },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (Number(value) > 0) {
@@ -219,7 +219,7 @@ class CreatModal extends Component {
                     }),
                   ]}
                 >
-                  <InputNumber min={0} default={0} style={{ width: "60vh" }} />
+                  <InputNumber min={0} max={999999999999} default={0} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -228,10 +228,10 @@ class CreatModal extends Component {
                   name="retailPrice"
                   initialValue={0}
                   rules={[
-                    {
-                      required: true,
-                      message: 'Price is required!',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: 'Price is required!',
+                    // },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (Number(value) > 0) {
@@ -243,7 +243,7 @@ class CreatModal extends Component {
                     }),
                   ]}
                 >
-                  <InputNumber min={0} default={0} style={{ width: "60vh" }} />
+                  <InputNumber min={0} max={999999999999} default={0} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -257,7 +257,7 @@ class CreatModal extends Component {
 
                   ]}
                 >
-                  <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} />
+                  <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} placeholder="Description is required!"/>
                 </Form.Item>
               </Descriptions.Item>
 

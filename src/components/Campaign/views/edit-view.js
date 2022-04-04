@@ -28,6 +28,10 @@ class UpdateModal extends Component {
     fileList: [],
 
     price: 0,
+    productSelected: undefined,
+    availableQuantity: 10,
+    minQuantity: null,
+    maxQuantity: null,
   };
   formRef = React.createRef();
 
@@ -111,10 +115,24 @@ class UpdateModal extends Component {
   };
 
   onSelectProduct = (value) => {
+    //  Get selected product
+    let productSelected = this.props.productList?.find(
+      (element) => element.id === value
+    );
+    //  Get campaign list of selected product
+    let campaignListOfSelectedProduct = [];
+    let campaignList = this.props.campaingList ? this.props.campaingList : [];
+    campaignListOfSelectedProduct = campaignList.filter(camp => {
+      return camp.productid === value && (camp.status === "ready" || camp.status === "active");
+    });
+    //  Get quantity of product in exist active campaign
+    let productQuantityOfExistCampaign = 0;
+    campaignListOfSelectedProduct.map(camp => productQuantityOfExistCampaign += Number(camp.maxquantity))
+
+    //  Set selected product and available quantity into state
     this.setState({
-      productSelected: this.props.productList?.find(
-        (element) => element.id === value
-      ),
+      productSelected: productSelected,
+      availableQuantity: productSelected.quantity - productQuantityOfExistCampaign,
     });
   };
 
@@ -124,10 +142,31 @@ class UpdateModal extends Component {
     });
   };
 
+  onChangeQuantity = (value, str) => {
+    switch (str) {
+      case "min":
+        this.setState({
+          minQuantity: value,
+        })
+        break;
+      case "max":
+        this.setState({
+          maxQuantity: value,
+        })
+        break;
+    }
+
+  }
+
   render() {
     const { RangePicker } = DatePicker;
     const { openModal } = this.props;
-    const { fileList } = this.state;
+    const {
+      fileList,
+      price = 0,
+      availableQuantity,
+      minQuantity,
+      maxQuantity } = this.state;
     const { productList, record } = this.props;
     const {
       productSelected = this.props.productList?.find(
@@ -182,6 +221,33 @@ class UpdateModal extends Component {
                     moment(this.props.record?.fromdate),
                     moment(this.props.record?.todate),
                   ]}
+                  rules={[
+                    {
+                      required: true,
+                      // message: 'Name is required!',
+                    },
+                    // () => ({
+                    // validator(_, value) {
+
+                    //   if (listName.includes(value)) {
+                    //     return Promise.reject(new Error('Product Name exists!'));
+                    //   }
+                    // if (value.length > 0 && value.length <= 200) {
+                    //   return Promise.resolve();
+                    // }
+
+                    // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                    //   validator(_, value) {
+
+                    //     if (Number(value) > 0) {
+                    //       return Promise.resolve();
+                    //     }
+
+                    //     return Promise.reject(new Error('Discount price is positive number!'));
+                    //   },
+                    // }),
+                  ]}
+                // tooltip="Discount price is 1000 -> product retail price!"
                 >
                   <RangePicker
                     ranges={{
@@ -195,10 +261,6 @@ class UpdateModal extends Component {
                         moment().endOf("month"),
                       ],
                     }}
-                    defaultValue={[
-                      moment(this.props.record?.fromdate),
-                      moment(this.props.record?.todate),
-                    ]}
                     format="MM/DD/YYYY"
                     onChange={this.onChange}
                     style={{ width: "60vh" }}
@@ -207,7 +269,35 @@ class UpdateModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Product">
-                <Form.Item name="productId" initialValue={record.productid}>
+                <Form.Item name="productId" initialValue={record.productid}
+                  rules={[
+                    {
+                      required: true,
+                      // message: 'Name is required!',
+                    },
+                    // () => ({
+                    // validator(_, value) {
+
+                    //   if (listName.includes(value)) {
+                    //     return Promise.reject(new Error('Product Name exists!'));
+                    //   }
+                    // if (value.length > 0 && value.length <= 200) {
+                    //   return Promise.resolve();
+                    // }
+
+                    // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                    //   validator(_, value) {
+
+                    //     if (Number(value) > 0) {
+                    //       return Promise.resolve();
+                    //     }
+
+                    //     return Promise.reject(new Error('Discount price is positive number!'));
+                    //   },
+                    // }),
+                  ]}
+                // tooltip="Discount price is 1000 -> product retail price!"
+                >
                   <Select
                     onChange={this.onSelectProduct}
                     style={{ width: "60vh" }}
@@ -224,11 +314,41 @@ class UpdateModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
-                <Form.Item name="quantity" initialValue={record.quantity}>
+                <Form.Item name="quantity" initialValue={record.quantity}
+                  rules={[
+                    // {
+                    //   required: true,
+                    //   message: 'Name is required!',
+                    // },
+                    () => ({
+                      // validator(_, value) {
+
+                      //   if (listName.includes(value)) {
+                      //     return Promise.reject(new Error('Product Name exists!'));
+                      //   }
+                      // if (value.length > 0 && value.length <= 200) {
+                      //   return Promise.resolve();
+                      // }
+
+                      // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                      validator(_, value) {
+
+                        if (Number(value) > 9) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Number of product is positive number!'));
+                      },
+                    }),
+                  ]}
+                >
                   <InputNumber
                     addonAfter=" products"
-                    defaultValue={record?.quantity}
+                    min={10}
+                    max={390}
                     style={{ width: "60vh" }}
+                    placeholder="Quantity is 10 -> maximum available quantity in stock!"
+                    onChange={(e) => this.onChangeQuantity(e, "min")}
                   />
                 </Form.Item>
               </Descriptions.Item>
@@ -237,40 +357,113 @@ class UpdateModal extends Component {
                 <Form.Item
                   name="maxQuantity"
                   initialValue={record?.maxquantity}
+                  rules={[
+                    // {
+                    //   required: true,
+                    //   message: 'Name is required!',
+                    // },
+                    ({ getFieldValue }) => ({
+                      // validator(_, value) {
+
+                      //   if (listName.includes(value)) {
+                      //     return Promise.reject(new Error('Product Name exists!'));
+                      //   }
+                      // if (value.length > 0 && value.length <= 200) {
+                      //   return Promise.resolve();
+                      // }
+
+                      // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                      validator(_, value) {
+                        if (getFieldValue('quantity') > value) {
+                          return Promise.reject(new Error('Maximum quantity can not lesser than quantity!'));
+                        }
+                        if (Number(value) > 9) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Maximum quantity is positive number!'));
+                      },
+                    }),
+                  ]}
+                // tooltip="Max quantity is 10 -> maximum available quantity in stock!"
+
                 >
                   <InputNumber
                     addonAfter=" products"
-                    defaultValue={record?.maxquantity}
+                    min={10}
+                    max={390}
                     style={{ width: "60vh" }}
+                    onChange={(e) => this.onChangeQuantity(e, "max")}
                   />
                 </Form.Item>
               </Descriptions.Item>
+
               <Descriptions.Item label="Advance Percent">
                 <Form.Item
                   name="advancePercent"
                   initialValue={record?.advancefee}
+                  rules={[
+                    {
+                      required: true,
+                    },
+                    // () => ({
+                    // validator(_, value) {
+
+                    //   if (listName.includes(value)) {
+                    //     return Promise.reject(new Error('Product Name exists!'));
+                    //   }
+                    // if (value.length > 0 && value.length <= 200) {
+                    //   return Promise.resolve();
+                    // }
+
+                    // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                    // validator(_, value) {
+
+                    //   if (Number(value) > 9) {
+                    //     return Promise.resolve();
+                    //   }
+
+                    //   return Promise.reject(new Error('Number of product is positive number!'));
+                    // },
+                    // }),
+                  ]}
                 >
                   <InputNumber
                     addonAfter="%"
-                    defaultValue={record?.advancefee}
                     min={0}
                     max={100}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>
               </Descriptions.Item>
-              <Descriptions.Item label="Share">
-                <Form.Item name="isShare" initialValue={record?.isshare}>
-                  <Switch
-                    checked={shareChecked}
-                    onClick={() => {
-                      this.setState({ shareChecked: !shareChecked });
-                    }}
-                  />
-                </Form.Item>
-              </Descriptions.Item>
 
-              <Descriptions.Item label="Wholesale percent">
+              <Descriptions.Item label="Wholesale percent"
+                rules={[
+                  {
+                    required: true,
+                  },
+                  // () => ({
+                  // validator(_, value) {
+
+                  //   if (listName.includes(value)) {
+                  //     return Promise.reject(new Error('Product Name exists!'));
+                  //   }
+                  // if (value.length > 0 && value.length <= 200) {
+                  //   return Promise.resolve();
+                  // }
+
+                  // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                  // validator(_, value) {
+
+                  //   if (Number(value) > 9) {
+                  //     return Promise.resolve();
+                  //   }
+
+                  //   return Promise.reject(new Error('Number of product is positive number!'));
+                  // },
+                  // }),
+                ]}
+              >
                 <Form.Item
                   name="wholesalePercent"
                   initialValue={
@@ -280,15 +473,21 @@ class UpdateModal extends Component {
                 >
                   <InputNumber
                     addonAfter="%"
-                    defaultValue={
-                      (this.props.record?.price /
-                        productSelected?.retailprice) *
-                      100
-                    }
                     onChange={this.onChangePrice}
                     min={0}
                     max={100}
                     style={{ width: "60vh" }}
+                  />
+                </Form.Item>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Share">
+                <Form.Item name="isShare" initialValue={record?.isshare}>
+                  <Switch
+                    checked={shareChecked}
+                    onClick={() => {
+                      this.setState({ shareChecked: !shareChecked });
+                    }}
                   />
                 </Form.Item>
               </Descriptions.Item>
@@ -305,7 +504,7 @@ class UpdateModal extends Component {
                 {productSelected?.quantity ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Quantity in campaign">
-                {productSelected?.name ?? ""}
+                {minQuantity && maxQuantity ? minQuantity + " -> " + maxQuantity : record.quantity + " -> " + record.maxquantity}
               </Descriptions.Item>
               <Descriptions.Item label="Retail price">
                 {productSelected?.retailprice ?? ""}

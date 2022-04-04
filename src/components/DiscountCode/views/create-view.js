@@ -65,7 +65,7 @@ class CreatModal extends Component {
       ),
     });
   };
-  
+
   render() {
     const { openModal } = this.props;
 
@@ -106,6 +106,11 @@ class CreatModal extends Component {
                 <Form.Item
                   name="date"
                   initialValue={[moment(), moment().add(1, "days")]}
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
                   <RangePicker
                     style={{ width: "60vh" }}
@@ -128,20 +133,92 @@ class CreatModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Code">
-                <Form.Item name="code">
-                  <Input style={{ width: "60vh" }} />
+                <Form.Item name="code"
+                  rules={[
+                    // {
+                    //   required: true,
+                    //   message: 'Name is required!',
+                    // },
+                    () => ({
+                      validator(_, value) {
+
+                        if (value.length > 0 && value.length <= 200) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                      },
+                    }),
+                  ]}
+                >
+                  <Input style={{ width: "60vh" }} placeholder="Code is required, length is 1-200 characters!" />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Discount price">
-                <Form.Item name="discountPrice" initialValue={1}>
-                  <InputNumber defaultValue={1} style={{ width: "60vh" }} />
+                <Form.Item name="discountPrice" initialValue={productSelected?.retailprice <= 999999999999 ? productSelected?.retailprice : 1000}
+                  rules={[
+                    // {
+                    //   required: true,
+                    //   message: 'Name is required!',
+                    // },
+                    () => ({
+                      // validator(_, value) {
+
+                      //   if (listName.includes(value)) {
+                      //     return Promise.reject(new Error('Product Name exists!'));
+                      //   }
+                      //   if (value.length >= 0 && value.length <= 20) {
+                      //     return Promise.resolve();
+                      //   }
+
+                      //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
+                      validator(_, value) {
+                        if (Number(value) > 0) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Discount price is positive number!'));
+                      },
+                    }),
+                  ]}
+                  help="Discount price is 1000 -> product retail price!"
+                >
+                  <InputNumber min={1000} max={productSelected?.retailprice <= 999999999999 ? productSelected?.retailprice : 999999999999} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Minimun price">
-                <Form.Item name="minimunPrice" initialValue={1}>
-                  <InputNumber defaultValue={1} style={{ width: "60vh" }} />
+                <Form.Item name="minimunPrice" initialValue={productSelected?.retailprice <= 999999999999 ? productSelected?.retailprice : 1000}
+                  rules={[
+                    // {
+                    //   required: true,
+                    //   message: 'Name is required!',
+                    // },
+                    () => ({
+                      // validator(_, value) {
+
+                      //   if (listName.includes(value)) {
+                      //     return Promise.reject(new Error('Product Name exists!'));
+                      //   }
+                      //   if (value.length >= 0 && value.length <= 20) {
+                      //     return Promise.resolve();
+                      //   }
+
+                      //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
+                      validator(_, value) {
+                        if (Number(value) > 0) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Minimum price is positive number!'));
+                      },
+                    }),
+                  ]}
+                  help="Minimum price is 1000!"
+
+                >
+                  <InputNumber style={{ width: "60vh" }} min={1000} max={999999999999} />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -158,23 +235,38 @@ class CreatModal extends Component {
                   </Select>
                 </Form.Item>
               </Descriptions.Item>
-              {/* 
-              <Descriptions.Item label="Status">
-                <Form.Item name="status" initialValue={"public"}>
-                  <Select style={{ width: "60vh" }} >
-                    <Select.Option key="public" value="public">
-                      Public
-                    </Select.Option>
-                    <Select.Option key="private" value="private">
-                      Private
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
-              </Descriptions.Item> */}
 
               <Descriptions.Item label="Quantity">
-                <Form.Item name="quantity" initialValue={1}>
-                  <InputNumber defaultValue={1} style={{ width: "60vh" }} />
+                <Form.Item name="quantity" initialValue={1}
+                  rules={[
+                    // {
+                    //   required: true,
+                    //   message: 'Name is required!',
+                    // },
+                    () => ({
+                      // validator(_, value) {
+
+                      //   if (listName.includes(value)) {
+                      //     return Promise.reject(new Error('Product Name exists!'));
+                      //   }
+                      //   if (value.length >= 0 && value.length <= 20) {
+                      //     return Promise.resolve();
+                      //   }
+
+                      //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
+                      validator(_, value) {
+                        if (Number(value) > 0) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Quantity is positive number!'));
+                      },
+                    }),
+                  ]}
+                  help="Minimum quantity is 1!"
+
+                >
+                  <InputNumber defaultValue={1} style={{ width: "60vh" }} min={1} max={999999999999} />
                 </Form.Item>
               </Descriptions.Item>
             </Descriptions>

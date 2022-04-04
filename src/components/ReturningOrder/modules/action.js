@@ -64,7 +64,7 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => {})
+          .then((response) => { })
           .catch((err) => {
             return dispatch(getFailed());
           });
@@ -78,7 +78,7 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => {})
+          .then((response) => { })
           .catch((err) => {
             return dispatch(getFailed());
           });
@@ -139,6 +139,38 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof) => {
   };
 };
 
+const confirmReceived = (orderCode, type, orderId) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  let body = {
+    orderCode: orderCode,
+    type: type,
+    orderId: orderId,
+    description: "has been returned",
+  }
+  return async (dispatch) => {
+    dispatch(getRequest());
+    try {
+      const [confirmReceivedResponse] = await Promise.all([
+        Axios({
+          url: `/order/status/supplier/returned`,
+          method: "PUT",
+          data: body,
+          withCredentials: true,
+        }),
+        
+      ]);
+      return dispatch(
+        getSuccess({
+          orders: [],
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed());
+    }
+  };
+};
+
 const storeComplainRecord = (record) => {
   console.log("storeComplainRecord action");
   console.log(record);
@@ -183,6 +215,7 @@ const action = {
   updateStatusOrder,
   rejectOrder,
   storeComplainRecord,
+  confirmReceived,
 };
 
 export default action;

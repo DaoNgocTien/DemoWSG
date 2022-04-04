@@ -17,8 +17,8 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  handleOrder: () => {},
-  updateStatusOrder: () => {},
+  handleOrder: () => { },
+  updateStatusOrder: () => { },
 };
 
 class OrderReturningUI extends Component {
@@ -35,9 +35,10 @@ class OrderReturningUI extends Component {
     viewButton: true,
     actionButton: true,
     record: {},
+    buttonTitle: "Handle Returning Request",
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     switch (openModal) {
@@ -65,16 +66,12 @@ class OrderReturningUI extends Component {
 
     this.setState({
       selectedRowKeys,
-      viewButton: selectedRowKeys.length === 1 && record.status != "returned",
+      viewButton: selectedRowKeys.length === 1 && record?.status != "returned",
       actionButton:
-        selectedRowKeys.length === 1 &&
-        record.status != "delivering" &&
-        record.status != "delivered" &&
-        record.status != "completed" &&
-        record.status != "returned" &&
-        record.status != "cancelled",
+        selectedRowKeys.length === 1,
       addNewButton: selectedRowKeys.length === 0,
       record: record,
+      buttonTitle: record?.status === "returned" ? "View Details" : "Handle Returning Request",
     });
   };
 
@@ -114,8 +111,8 @@ class OrderReturningUI extends Component {
         let campaign = object.campaign;
         return campaign.length > 0
           ? moment(campaign[0].fromdate).format("MM/DD/YYYY") +
-              " " +
-              moment(campaign[0].todate).format("MM/DD/YYYY")
+          " " +
+          moment(campaign[0].todate).format("MM/DD/YYYY")
           : "";
       },
       width: 100,
@@ -166,9 +163,24 @@ class OrderReturningUI extends Component {
     {
       title: "Action",
       render: (object) => {
-        if (object.status === "returning" && object.status === "returning") {
-          return <Button type="primary">Confirm Received</Button>;
+
+        let showButton = false;
+        if (object.status === "returning") {
+          object.orderstatushistory.filter(history => {
+
+            if (history.statushistory === "finishReturning") {
+              showButton = true;
+            }
+          })
         }
+        return showButton ?
+          <Button type="primary"
+            onClick={() => this.confirmReceivedRequest(object)}
+          >
+            Confirm Received
+          </Button>
+          : "";
+
       },
       fixed: "right",
       width: 150,
@@ -225,6 +237,15 @@ class OrderReturningUI extends Component {
     });
   };
 
+  confirmReceivedRequest = object => {
+    console.log(object);
+    this.props.confirmReceived(
+      object.ordercode,
+      object.campaignid ? "campaign" : "retail",
+      object.id
+    )
+  }
+
   render() {
     const { handleOrder, updateStatusOrder, data, storeComplainRecord } =
       this.props;
@@ -274,7 +295,7 @@ class OrderReturningUI extends Component {
                         this.state.record?.ordercode
                       }
                     >
-                      Handle Returning Request
+                      {this.state.buttonTitle}
                     </Link>
                   </Button>
                 </Col>

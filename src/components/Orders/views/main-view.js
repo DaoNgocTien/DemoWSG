@@ -50,8 +50,15 @@ class OrderUI extends Component {
     fileList: [],
     record: {},
   };
+  radioSelf = React.createRef();
+  searchSelf = React.createRef();
+  selectSelf = React.createRef();
 
-  componentDidMount() { }
+  componentDidMount() {
+    // console.log(this.radioSelf.current.defaultValue);
+    // console.log(this.searchSelf.current.defaultValue);
+    // console.log(this.selectSelf.current.defaultValue);
+  }
 
   start = (openModal) => {
     switch (openModal) {
@@ -68,9 +75,17 @@ class OrderUI extends Component {
     }
   };
 
-  changeStatus = (data, image) => {
-    // console.log(data);
-    this.props.updateStatusOrder(data, image);
+  changeStatus = (record, image) => {
+    this.props.updateStatusOrder(record, image);
+    this.setState({
+      displayData: [],
+      searchKey: "",
+      previewVisible: false,
+      previewImage: "",
+      previewTitle: "",
+      fileList: [],
+    });
+
   };
 
   closeModal = () => {
@@ -95,11 +110,11 @@ class OrderUI extends Component {
       editButton: selectedRowKeys.length === 1,
       rejectButton:
         selectedRowKeys.length === 1 &&
-        record.status != "delivering" &&
-        record.status != "delivered" &&
-        record.status != "completed" &&
-        record.status != "returned" &&
-        record.status != "cancelled",
+        record?.status != "delivering" &&
+        record?.status != "delivered" &&
+        record?.status != "completed" &&
+        record?.status != "returned" &&
+        record?.status != "cancelled",
       addNewButton: selectedRowKeys.length === 0,
     });
   };
@@ -120,21 +135,14 @@ class OrderUI extends Component {
       width: 80,
     },
     {
-      title: "First Name",
-      dataIndex: "customerfirstname",
-      key: "customerfirstname",
-      sorter: (a, b) => a.customerfirstname.length - b.customerfirstname.length,
-      fixed: "left",
-      width: 120,
+      title: "Customer Name",
+      width: 150,
+      render: (_text, object, _index) => {
+        // console.log(object);
+        return object.customerfirstname + " " + object.customerlastname;
+      },
     },
-    {
-      title: "Last Name",
-      dataIndex: "customerlastname",
-      key: "customerlastname",
-      sorter: (a, b) => a.customerlastname.length - b.customerlastname.length,
-      fixed: "left",
-      width: 120,
-    },
+
     {
       title: "Total Price",
       dataIndex: "totalprice",
@@ -207,7 +215,7 @@ class OrderUI extends Component {
       width: 150,
     },
   ];
-  
+
   onChangeHandler = (e) => {
     let { data } = this.props;
     let searchData = data.filter((item) => {
@@ -221,7 +229,7 @@ class OrderUI extends Component {
         item.totalprice.includes(e.target.value) ||
         item.discountprice.includes(e.target.value) ||
         item.createdat.includes(e.target.value) ||
-        item.status.includes(e.target.value) 
+        item.status.includes(e.target.value)
       );
     });
     this.setState({
@@ -352,6 +360,7 @@ class OrderUI extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+    // console.log(data);
     return (
       <PageHeader
         className="site-page-header-responsive"
@@ -409,20 +418,20 @@ class OrderUI extends Component {
               >
 
                 <Form.Item name="image" rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Please confirm your password!',
-                    // },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (fileList.length >= 1) {
-                          return Promise.resolve();
-                        }
+                  // {
+                  //   required: true,
+                  //   message: 'Please confirm your password!',
+                  // },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (fileList.length >= 1) {
+                        return Promise.resolve();
+                      }
 
-                        return Promise.reject(new Error('Image required!!'));
-                      },
-                    }),
-                  ]}>
+                      return Promise.reject(new Error('Image required!!'));
+                    },
+                  }),
+                ]}>
                   <>
                     <Upload
                       name="file"
@@ -504,6 +513,7 @@ class OrderUI extends Component {
 
                 <Col flex={4}>
                   <Input
+                    ref={this.searchSelf}
                     onChange={(e) => this.onChangeHandler(e)}
                     placeholder="Search data"
                   />
@@ -515,6 +525,7 @@ class OrderUI extends Component {
                     onChange={(e) => this.onRadioChange(e)}
                     onFocus={(e) => this.onRadioChange(e)}
                     defaultValue="all"
+                    ref={this.radioSelf}
                   >
                     <Radio value="all">All Orders</Radio>
                     <Radio value="retail">Retail Orders</Radio>
@@ -522,6 +533,7 @@ class OrderUI extends Component {
                   </Radio.Group>
                   Status:
                   <Select
+                    ref={this.selectSelf}
                     title="Status"
                     defaultValue="All"
                     style={{ width: 120, marginLeft: "2px" }}

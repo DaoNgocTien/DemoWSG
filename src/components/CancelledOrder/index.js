@@ -19,9 +19,6 @@ class CancelledOrder extends Component {
         getOrder={this.props.getOrder}
         data={this.props.data.orders}
         loading={this.props.loading}
-        updateStatusOrder={this.props.updateStatusOrder}
-        createCampaign={this.props.createCampaign}
-        rejectOrder={this.props.rejectOrder}
       />
     );
   }
@@ -38,15 +35,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getOrder: async () => await dispatch(action.getOrder()),
-    updateStatusOrder: async (data) => {
-      await dispatch(action.updateStatusOrder(data));
-      await dispatch(action.getOrder());
-    },
-    rejectOrder: async (orderCode, reasonForCancel, imageProof, requester) => {
-      await dispatch(
-        action.rejectOrder(orderCode, reasonForCancel, imageProof, requester)
-      );
-    },
   };
 };
 

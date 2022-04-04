@@ -39,7 +39,7 @@ class CancelledOrderUI extends Component {
     openEditModal: false,
     openRejectModal: false,
     editButton: true,
-    rejectButton: true,
+    viewButton: true,
   };
 
   componentDidMount() { }
@@ -67,7 +67,7 @@ class CancelledOrderUI extends Component {
     this.setState({
       selectedRowKeys: [],
       editButton: false,
-      rejectButton: false,
+      viewButton: false,
     });
     this.setState({
       openRejectModal: false,
@@ -83,14 +83,8 @@ class CancelledOrderUI extends Component {
     this.setState({
       selectedRowKeys,
       editButton: selectedRowKeys.length === 1,
-      rejectButton:
-        selectedRowKeys.length === 1 &&
-        record.status != "delivering" &&
-        record.status != "delivered" &&
-        record.status != "completed" &&
-        record.status != "returned" &&
-        record.status != "cancelled",
-      addNewButton: selectedRowKeys.length === 0,
+      viewButton:
+        selectedRowKeys.length === 1
     });
   };
   // handleChange = (data) => {
@@ -236,7 +230,7 @@ class CancelledOrderUI extends Component {
       openEditModal,
       editButton,
       openRejectModal,
-      rejectButton,
+      viewButton,
     } = this.state;
 
     const rowSelection = {
@@ -245,7 +239,6 @@ class CancelledOrderUI extends Component {
     };
 
     const arrayLocation = window.location.pathname.split("/");
-
     return (
       <PageHeader
         className="site-page-header-responsive"
@@ -254,16 +247,26 @@ class CancelledOrderUI extends Component {
         subTitle={`This is a cancelled order page`}
         footer={
           <div>
-
+            <EditModal
+              openModal={openEditModal}
+              closeModal={this.closeModal}
+              updateStatusOrder={updateStatusOrder}
+              record={
+                this.props.data.filter((item) => {
+                  return selectedRowKeys.includes(item.id);
+                })[0]
+              }
+              selectedRowKeys={selectedRowKeys[0]}
+            />
             <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex={3}>
 
                   <Button
-                    type="danger"
-                    onClick={() => this.start("openRejectModal")}
+                    type="primary"
+                    onClick={() => this.start("openEditModal")}
                     disabled={
-                      !rejectButton || this.state.selectedRowKeys.length === 0
+                      !viewButton || this.state.selectedRowKeys.length === 0
                         ? true
                         : false
                     }

@@ -78,7 +78,7 @@ const createCampaign = (record) => {
   return async (dispatch) => {
     dispatch(getRequest());
     try {
-      const [createResponse, campaigns, products, order] = await Promise.all([
+      const [createResponse, campaigns, products] = await Promise.all([
         Axios({
           url: `/campaigns/`,
           method: "POST",
@@ -97,40 +97,25 @@ const createCampaign = (record) => {
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
-        Axios({
-          url: `/order/supplier/campaign/${record.id}`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
       ]);
-    
+
       // console.log(order);
       return dispatch(
-      getSuccess({
-        campaigns: campaigns.data.data.map((campaign) => {
-          return {
-            key: campaign.id,
-            ...campaign,
-          };
-        }),
-        products: products.data.data,
-        order:
-          order !== {}
-            ? order.data?.data.map((item) => {
-              return {
-                key: item.id,
-                ...item,
-              };
-            })
-            : {},
-      })
-    );
-  } catch (error) {
-    // console.log(error);
-    return dispatch(getFailed());
-  }
-};
+        getSuccess({
+          campaigns: campaigns.data.data.map((campaign) => {
+            return {
+              key: campaign.id,
+              ...campaign,
+            };
+          }),
+          products: products.data.data,
+        })
+      );
+    } catch (error) {
+      // console.log(error);
+      return dispatch(getFailed());
+    }
+  };
 };
 
 const updateCampaign = (record) => {
@@ -175,52 +160,36 @@ const deleteCampaign = id => {
       products,
       order = {};
     dispatch(getRequest());
-    [deleteResponse, campaigns, products, order] = await Promise.all([
+    [deleteResponse] = await Promise.all([
       Axios({
         url: `/campaigns/${id}`,
         method: "DELETE",
         withCredentials: true,
       }),
-      Axios({
-        url: `/campaigns/All`,
-        method: "GET",
-        withCredentials: true,
-        exposedHeaders: ["set-cookie"],
-      }),
-      Axios({
-        url: `/products/All`,
-        method: "GET",
-        withCredentials: true,
-        exposedHeaders: ["set-cookie"],
-      }),
-      Axios({
-        url: `/order/supplier/campaign/${id}`,
-        method: "GET",
-        withCredentials: true,
-        exposedHeaders: ["set-cookie"],
-      }),
+      // Axios({
+      //   url: `/campaigns/All`,
+      //   method: "GET",
+      //   withCredentials: true,
+      //   exposedHeaders: ["set-cookie"],
+      // }),
+      // Axios({
+      //   url: `/products/All`,
+      //   method: "GET",
+      //   withCredentials: true,
+      //   exposedHeaders: ["set-cookie"],
+      // }),
+      // Axios({
+      //   url: `/order/supplier/campaign/${id}`,
+      //   method: "GET",
+      //   withCredentials: true,
+      //   exposedHeaders: ["set-cookie"],
+      // }),
     ]);
 
     return dispatch(
       getSuccess({
-        campaigns: campaigns.data.data.map((campaign) => {
-          return {
-            key: campaign.id,
-            ...campaign,
-          };
-        }),
-        products: products.data.data,
-        order:
-          order !== {}
-            ? order.data?.data.map((item) => {
-              return {
-                key: item.id,
-                ...item,
-              };
-            })
-            : {},
-      })
-    );
+        campaigns: [],
+      }));
     //     Axios({
     //       url: `/campaigns/${id}`,
     //       method: "DELETE",
