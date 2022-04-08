@@ -5,6 +5,7 @@ import React, { Component, memo } from "react";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
+import NumberFormat from "react-number-format";
 
 //  prototype
 const propsProTypes = {
@@ -148,6 +149,25 @@ class ProductUI extends Component {
       dataIndex: "retailprice",
       width: 120,
       key: "retailprice",
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
     {
       title: "Quantity",
@@ -195,7 +215,7 @@ class ProductUI extends Component {
       },
     },
   ];
-  
+
   onChangeHandler = (e) => {
     let { data } = this.props;
     // console.log(data);

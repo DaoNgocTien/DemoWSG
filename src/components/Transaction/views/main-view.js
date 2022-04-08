@@ -1,13 +1,17 @@
 import {
   Button,
   Col,
-  PageHeader, Popconfirm, Radio,
+  PageHeader,
+  Popconfirm,
+  Radio,
   Row,
   Space,
-  Table, Tag
+  Table,
+  Tag,
 } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
+import NumberFormat from "react-number-format";
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -43,7 +47,7 @@ class TransactionUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   onOKWithdraw = (data) => {
     console.log(data);
@@ -78,44 +82,155 @@ class TransactionUI extends Component {
     {
       title: "Amount",
       dataIndex: "amount",
-      width: 100,
+      width: 150,
       key: "amount",
       render: (data) => {
-        return data || 0;
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
       title: "Advance Value",
       dataIndex: "advancefee",
-      width: 100,
+      width: 150,
       key: "advancefee",
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
 
     {
       title: "Order Value",
       dataIndex: "ordervalue",
-      width: 100,
+      width: 150,
       key: "ordervalue",
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
     {
       title: "Payment Fee",
       dataIndex: "paymentfee",
-      width: 100,
+      width: 150,
       key: "paymenfee",
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
 
     {
       title: "Platform Fee",
       dataIndex: "platformfee",
-      width: 100,
+      width: 150,
       key: "platformfee",
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
 
     {
       title: "Penalty Fee",
       dataIndex: "penaltyfee",
-      width: 100,
+      width: 150,
       key: "penaltyfee",
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
     {
       title: "Type",
@@ -130,7 +245,7 @@ class TransactionUI extends Component {
       width: 100,
       key: "status",
       render: (data) => {
-        return <Tag>{data}</Tag>
+        return <Tag>{data}</Tag>;
       },
     },
 

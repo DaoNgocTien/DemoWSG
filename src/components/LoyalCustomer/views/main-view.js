@@ -2,8 +2,6 @@ import { Button, Col, Input, PageHeader, Row, Space, Table, Tag } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
-
-//  prototype
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
@@ -13,7 +11,6 @@ const propsProTypes = {
   disableLoyalCustomer: PropTypes.func,
 };
 
-//  default props
 const propsDefault = {
   index: 1,
   data: [],
@@ -27,11 +24,11 @@ class LoyalCustomerUI extends Component {
   static defaultProps = propsDefault;
   state = {
     loading: false,
-    selectedRowKeys: [], // Check here to configure the default column
+    selectedRowKeys: [],
     loadingActionButton: false,
     activateButton: false,
     deactivateButton: false,
-    // addNewButton: true,
+
     openCreateModal: false,
     openDeleteModal: false,
     openEditModal: false,
@@ -42,12 +39,12 @@ class LoyalCustomerUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;
-    //  Get DiscountCode record
+
     let recordToEdit = data.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
@@ -88,7 +85,7 @@ class LoyalCustomerUI extends Component {
       title: "No.",
       dataIndex: "No.",
       key: "No.",
-      render: (text, object, index) => {
+      render: (_text, _object, index) => {
         return index + 1;
       },
       width: 100,
@@ -97,8 +94,7 @@ class LoyalCustomerUI extends Component {
     {
       title: "Customer Name",
       width: 150,
-      render: (text, object, index) => {
-        // console.log(object);
+      render: (_text, object, _index) => {
         return object.customerfirstname + " " + object.customerlastname;
       },
       fixed: "left",
@@ -136,22 +132,26 @@ class LoyalCustomerUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data}</Tag>
+        return <Tag>{data}</Tag>;
       },
     },
   ];
-  
+
   onChangeHandler = (e) => {
     let { data } = this.props;
     let searchString = e.target.value;
     let searchList = data.filter((item) => {
       return (
-        item.customerfirstname.toUpperCase().includes(searchString.toUpperCase()) ||
-        item.customerlastname.toUpperCase().includes(searchString.toUpperCase()) ||
+        item.customerfirstname
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        item.customerlastname
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
         item.numoforder.includes(searchString) ||
         item.numofproduct.includes(searchString) ||
         item.discountpercent.includes(searchString) ||
-        item.status.includes(searchString) 
+        item.status.includes(searchString)
       );
     });
     this.setState({
@@ -161,8 +161,6 @@ class LoyalCustomerUI extends Component {
   };
 
   onSelectChange = (selectedRowKeys) => {
-    // console.log("selectedRowKeys changed: ", selectedRowKeys);
-    // console.log(this.props.data);
     let record = this.props.data.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
@@ -170,15 +168,16 @@ class LoyalCustomerUI extends Component {
     this.setState({
       selectedRowKeys,
       record: record,
-      activateButton: selectedRowKeys.length === 1 && record?.status === "deactive",
-      deactivateButton: selectedRowKeys.length === 1 && record?.status === "active",
-      //addNewButton: selectedRowKeys.length === 0,
+      activateButton:
+        selectedRowKeys.length === 1 && record?.status === "deactive",
+      deactivateButton:
+        selectedRowKeys.length === 1 && record?.status === "active",
     });
   };
 
   manageLoyalCustomerPosition = (position) => {
     let record = {
-      ...this.state.record ?? this.state.record,
+      ...(this.state.record ?? this.state.record),
       status: position,
     };
     console.log(record);
@@ -190,10 +189,6 @@ class LoyalCustomerUI extends Component {
       selectedRowKeys,
       deactivateButton,
       activateButton,
-      addNewButton,
-      openCreateModal,
-      openDeleteModal,
-      openEditModal,
       displayData,
       searchKey,
     } = this.state;
@@ -209,50 +204,19 @@ class LoyalCustomerUI extends Component {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-    // const hasSelected = selectedRowKeys.length > 0;
+
     const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        // title={arrayLocation[2].toUpperCase()}
         subTitle={`This is a ${arrayLocation[2]} page`}
         footer={
           <div>
-            {/* <CreateModal
-              openModal={openCreateModal}
-              closeModal={this.closeModal}
-              createLoyalCustomer={createLoyalCustomer}
-              productList={productList}
-            />
-            <DeleteModal
-              openModal={openDeleteModal}
-              closeModal={this.closeModal}
-              disableLoyalCustomer={disableLoyalCustomer}
-              record={this.state.record}
-              selectedRowKeys={selectedRowKeys[0]}
-              productList={productList}
-            /> */}
-            {/* <EditModal
-              loading={this.props.loading}
-              openModal={openEditModal}
-              closeModal={this.closeModal}
-              productList={productList}
-              updateLoyalCustomer={updateLoyalCustomer}
-              record={this.state.record}
-              selectedRowKeys={selectedRowKeys[0]}
-            /> */}
             <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex="auto">
                   <Space size={4}>
-                    {/* <Button
-                      type="primary"
-                      onClick={() => this.start("openCreateModal")}
-                      disabled={!addNewButton}
-                    >
-                      Add New
-                    </Button> */}
                     <Button
                       type="primary"
                       onClick={() => this.manageLoyalCustomerPosition("active")}
@@ -263,7 +227,9 @@ class LoyalCustomerUI extends Component {
                     </Button>
                     <Button
                       type="danger"
-                      onClick={() => this.manageLoyalCustomerPosition("deactive")}
+                      onClick={() =>
+                        this.manageLoyalCustomerPosition("deactive")
+                      }
                       disabled={!deactivateButton}
                       style={{ width: 90 }}
                     >
@@ -306,5 +272,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(LoyalCustomerUI, arePropsEqual);

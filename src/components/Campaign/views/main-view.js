@@ -1,5 +1,13 @@
 import {
-  Button, Col, Drawer, Input, PageHeader, Row, Space, Table, Tag
+  Button,
+  Col,
+  Drawer,
+  Input,
+  PageHeader,
+  Row,
+  Space,
+  Table,
+  Tag,
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -9,11 +17,11 @@ import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 import OrdersInCampaign from "./orders-in-campaign-view";
 
-
 //  prototype
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
+  productList: PropTypes.array,
   defaultCampaign: PropTypes.object,
   createCampaign: PropTypes.func,
   updateCampaign: PropTypes.func,
@@ -24,7 +32,7 @@ const propsProTypes = {
 const propsDefault = {
   index: 1,
   data: [],
-  products: [],
+  productList: [],
   defaultCampaign: {},
 };
 
@@ -49,7 +57,7 @@ class CampaignUI extends Component {
     orderListInSelectedCampaign: [],
   };
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
@@ -81,9 +89,11 @@ class CampaignUI extends Component {
         //  List orders
         let orderList = this.props.orderList;
         //  List orders in campaign
-        let orderListInSelectedCampaignInCampaign = orderList?.filter((item) => {
-          return selectedRowKeys.includes(item.campaignid);
-        });
+        let orderListInSelectedCampaignInCampaign = orderList?.filter(
+          (item) => {
+            return selectedRowKeys.includes(item.campaignid);
+          }
+        );
 
         //  Set campaign record and orders in campaign into state
         this.setState({
@@ -168,7 +178,7 @@ class CampaignUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data}</Tag>
+        return <Tag>{data}</Tag>;
       },
     },
   ];
@@ -178,16 +188,31 @@ class CampaignUI extends Component {
     let searchString = e.target.value;
     let searchList = data.filter((item) => {
       return (
-        String(item.status).toUpperCase().includes(searchString.toUpperCase()) ||
-        String(item.fromdate).toUpperCase().includes(searchString.toUpperCase()) ||
-        String(item.todate).toUpperCase().includes(searchString.toUpperCase()) ||
-        String( item.productname).toUpperCase().includes(searchString.toUpperCase()) ||
-        String(item.quantity).toUpperCase().includes(searchString.toUpperCase()) ||
-        String( item.maxquantity).toUpperCase().includes(searchString.toUpperCase()) ||
-        String( item.numorder).toUpperCase().includes(searchString.toUpperCase()) ||
-        String(item.advancefee).toUpperCase().includes(searchString.toUpperCase()) ||
+        String(item.status)
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.fromdate)
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.todate)
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.productname)
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.quantity)
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.maxquantity)
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.numorder)
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.advancefee)
+          .toUpperCase()
+          .includes(searchString.toUpperCase()) ||
         String(item.price).toUpperCase().includes(searchString.toUpperCase())
-
       );
     });
     this.setState({
@@ -213,10 +238,8 @@ class CampaignUI extends Component {
     this.setState({
       selectedRowKeys,
       record: record,
-      editButton: selectedRowKeys.length === 1 &&
-        record.status === "ready",
-      deleteButton: selectedRowKeys.length === 1 &&
-        record.status === "ready",
+      editButton: selectedRowKeys.length === 1 && record.status === "ready",
+      deleteButton: selectedRowKeys.length === 1 && record.status === "ready",
       addNewButton: selectedRowKeys.length === 0,
       orderInCampaignButton: selectedRowKeys.length === 1,
     });
@@ -225,8 +248,8 @@ class CampaignUI extends Component {
   onCloseDrawer = () => {
     this.setState({
       openDrawer: false,
-    })
-  }
+    });
+  };
   render() {
     const {
       selectedRowKeys,
@@ -239,12 +262,17 @@ class CampaignUI extends Component {
       openEditModal,
       displayData,
       searchKey,
-      orderListInSelectedCampaign
+      orderListInSelectedCampaign,
     } = this.state;
 
-    const { productList = [], createCampaign, updateCampaign, deleteCampaign, data } =
-      this.props;
-
+    const {
+      productList = [],
+      createCampaign,
+      updateCampaign,
+      deleteCampaign,
+      data,
+    } = this.props;
+    console.log(productList);
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -263,7 +291,7 @@ class CampaignUI extends Component {
               openModal={openCreateModal}
               closeModal={this.closeModal}
               createCampaign={createCampaign}
-              productList={productList.filter(product => {
+              productList={productList.filter((product) => {
                 return product.quantity - product.maxquantity >= 10;
               })}
               campaingList={data}
@@ -317,7 +345,7 @@ class CampaignUI extends Component {
                       type="primary"
                       onClick={() => this.start("openOrdersInCampaign")}
                       disabled={!orderInCampaignButton}
-                    // style={{ width: 90 }}
+                      // style={{ width: 90 }}
                     >
                       Orders in campaigns
                     </Button>
