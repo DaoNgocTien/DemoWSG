@@ -1,16 +1,15 @@
 import Axios from "axios";
+import { Redirect } from 'react-router';
 import {
   AUTH_PAGE_FAILED, AUTH_PAGE_REQUEST,
   AUTH_PAGE_SUCCESS, GOOGLE_OAUTH2,
   PROFILE,
   REGISTRATION
 } from "./constant";
-// 
-// import APISettings from "../../../redux/url/APISettings";
 
 const actLoginApi = (user, history) => {
   return async (dispatch) => {
-    dispatch(actLoginRequest());
+    dispatch(getRequest());
     Axios({
       url: `/users/login`,
       method: "POST",
@@ -23,7 +22,7 @@ const actLoginApi = (user, history) => {
       exposedHeaders: ["set-cookie"],
     })
       .then((result) => {
-        dispatch(actLoginSuccess(result.data));
+        dispatch(getSuccess(result.data));
         if (result.data.status === "success") {
           if (result.data.data.user.rolename === "Customer" || result.data.data.user.rolename === "Deliverer") {
             return history.push("/login");
@@ -34,14 +33,14 @@ const actLoginApi = (user, history) => {
         }
       })
       .catch((err) => {
-        return dispatch(actLoginFailed(err));
+        return dispatch(getFailed(err));
       });
   };
 };
 
 const googleOAuth2 = (googleResponse) => {
   return async (dispatch) => {
-    dispatch(actLoginRequest());
+    dispatch(getRequest());
     if (typeof googleResponse === "undefined") {
       googleResponse = [];
     }
@@ -65,7 +64,7 @@ const googleOAuth2 = (googleResponse) => {
         exposedHeaders: ["set-cookie"],
       })
         .then((response) => {
-          dispatch(actLoginSuccess(response.data));
+          dispatch(getSuccess(response.data));
           if (response.data.status === "success") {
             if (response.data.data.user.rolename === "Supplier") {
               localStorage.setItem("user", JSON.stringify(response.data.data.user));
@@ -76,7 +75,7 @@ const googleOAuth2 = (googleResponse) => {
           }
         })
         .catch((err) => {
-          return dispatch(actLoginFailed(err));
+          return dispatch(getFailed(err));
         });
     }
 
@@ -108,7 +107,7 @@ const phoneNumberValidation = phone => {
 const checkPhoneNumber = phone => {
   return async (dispatch) => {
     try {
-      dispatch(actLoginRequest());
+      dispatch(getRequest());
 
       const [phoneValidation] = await Promise.all([
         Axios({
@@ -148,7 +147,7 @@ const checkPhoneNumber = phone => {
       // );
     } catch (error) {
       // console.log(error);
-      return dispatch(actLoginFailed(error));
+      return dispatch(getFailed(error));
     }
   };
 };
@@ -156,7 +155,7 @@ const checkPhoneNumber = phone => {
 const registration = data => {
   return async (dispatch) => {
     try {
-      dispatch(actLoginRequest());
+      dispatch(getRequest());
 
       const [registrationResponse, login] = await Promise.all([
         Axios({
@@ -177,27 +176,82 @@ const registration = data => {
       );
     } catch (error) {
       // console.log(error);
-      return dispatch(actLoginFailed(error));
+      return dispatch(getFailed(error));
     }
   };
 };
 
+const getProfile = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(getRequest());
+      // console.log("test");
+      const [profile] = await Promise.all([
+        Axios({
+          url: `/users/profile/me`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
 
+      ]);
+      if (profile.status === 200) {
 
-const actLoginRequest = () => {
+        return dispatch(
+          getSuccess({
+            profile: profile.data.data,
+          }));
+      }
+      return dispatch(getFailed());
+
+    } catch (error) {
+      return dispatch(getFailed());
+    }
+  };
+};
+
+const updateBusinessCondition = data => {
+  return async (dispatch) => {
+    try {
+      dispatch(getRequest());
+
+      // const [response] = await Promise.all([
+      //   Axios({
+      //     url: `/users/register`,
+      //     method: "POST",
+      //     data: data,
+      //     withCredentials: true,
+      //     exposedHeaders: ["set-cookie"],
+      //   }),
+
+      // ]);
+
+      // if (response.status === 200) {
+        dispatch(getSuccess({ profile: {} }));
+        return (<Redirect to="/" />);
+      // }
+    }
+    catch (error) {
+      return dispatch(getFailed(error));
+    }
+
+  };
+}
+
+const getRequest = () => {
   return {
     type: AUTH_PAGE_REQUEST,
   };
 };
 
-const actLoginSuccess = (data) => {
+const getSuccess = (data) => {
   return {
     type: AUTH_PAGE_SUCCESS,
     payload: data,
   };
 };
 
-const actLoginFailed = (err) => {
+const getFailed = (err) => {
   return {
     type: AUTH_PAGE_FAILED,
     payload: err,
@@ -225,6 +279,8 @@ const action = {
   checkPhoneNumber,
   registration,
   phoneNumberValidation,
+  getProfile,
+  updateBusinessCondition,
 };
 
 export default action;

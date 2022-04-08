@@ -6,6 +6,7 @@ import { routesAdmin, routesAuth } from "./routes";
 import "antd/dist/antd.css";
 import AdminLayout from "./containers/AdminLayout";
 import PageNotFound from "./containers/PageNotFound";
+import BusinessConditionUI from "./containers/AuthPage/views/business-condition-view";
 
 function App() {
   const showLayoutAdmin = (routes) => {
@@ -38,16 +39,21 @@ function App() {
     }
   };
   return (
-    <BrowserRouter>
-      <div>
-        <Switch>
-          {showLayoutAdmin(routesAdmin)}
-          {showLayoutAuth(routesAuth)}
-          <Route path="/" component={PageNotFound} />
-        </Switch>
-      </div>
-    </BrowserRouter>
+    <>
+      <BusinessConditionUI />
+      <BrowserRouter>
+        <div>
+          <Switch>
+            {showLayoutAdmin(routesAdmin)}
+            {showLayoutAuth(routesAuth)}
+            <Route path="/" component={PageNotFound} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    </>
   );
 }
 
 export default App;
+
+
