@@ -1,14 +1,24 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
-  Button, Col, Form, Input, Modal, PageHeader,
-  Radio, Row, Select, Table, Tag, Upload
+  Button,
+  Col,
+  Form,
+  Input,
+  Modal,
+  PageHeader,
+  Radio,
+  Row,
+  Select,
+  Table,
+  Tag,
+  Upload,
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import EditModal from "./edit-view";
 import RejectModal from "./reject-view";
-
+import NumberFormat from "react-number-format";
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -24,9 +34,9 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => { },
-  updateStatusOrder: () => { },
-  getOrder: (status) => { },
+  rejectOrder: () => {},
+  updateStatusOrder: () => {},
+  getOrder: (status) => {},
 };
 
 class OrderUI extends Component {
@@ -85,7 +95,6 @@ class OrderUI extends Component {
       previewTitle: "",
       fileList: [],
     });
-
   };
 
   closeModal = () => {
@@ -148,19 +157,65 @@ class OrderUI extends Component {
       dataIndex: "totalprice",
       key: "totalprice",
       width: 130,
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
     {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
       width: 130,
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
     {
       title: "Final Price",
       dataIndex: "finalprice",
       key: "finalprice",
       render: (text, object) => {
-        return object.totalprice - object.discountprice;
+        return (
+          <NumberFormat
+            value={object.totalprice - object.discountprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
       width: 130,
     },
@@ -178,7 +233,7 @@ class OrderUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data}</Tag>
+        return <Tag>{data}</Tag>;
       },
       width: 130,
     },
@@ -200,16 +255,11 @@ class OrderUI extends Component {
 
         if (object.status === "processing") {
           return (
-            <Button
-              onClick={() => this.openUploadModal(object)}
-              type="primary"
-            >
+            <Button onClick={() => this.openUploadModal(object)} type="primary">
               Deliver Order
             </Button>
           );
         }
-
-
       },
       fixed: "right",
       width: 150,
@@ -267,18 +317,18 @@ class OrderUI extends Component {
     });
   };
 
-  openUploadModal = object => {
+  openUploadModal = (object) => {
     this.setState({
       openUploadModal: true,
       record: object,
     });
-  }
+  };
 
   cancelUploadImage = () => {
     this.setState({
       openUploadModal: false,
-    })
-  }
+    });
+  };
 
   getBase64(file) {
     return new Promise((resolve, reject) => {
@@ -321,12 +371,12 @@ class OrderUI extends Component {
     this.setState({ fileList });
   };
 
-  uploadImageForDelivering = data => {
+  uploadImageForDelivering = (data) => {
     this.changeStatus(this.state.record, this.state.fileList);
     this.setState({
       openUploadModal: false,
-    })
-  }
+    });
+  };
 
   render() {
     const { rejectOrder, updateStatusOrder, data } = this.props;
@@ -340,7 +390,7 @@ class OrderUI extends Component {
       openRejectModal,
       rejectButton,
       openUploadModal,
-      closeUploadModal
+      closeUploadModal,
     } = this.state;
 
     const rowSelection = {
@@ -397,7 +447,6 @@ class OrderUI extends Component {
               id="uploadImageForDeliveringForm"
               onFinish={this.uploadImageForDelivering}
               layout="vertical"
-
             >
               <Modal
                 width={window.innerWidth * 0.7}
@@ -416,22 +465,24 @@ class OrderUI extends Component {
                   </Button>,
                 ]}
               >
+                <Form.Item
+                  name="image"
+                  rules={[
+                    // {
+                    //   required: true,
+                    //   message: 'Please confirm your password!',
+                    // },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if (fileList.length >= 1) {
+                          return Promise.resolve();
+                        }
 
-                <Form.Item name="image" rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Please confirm your password!',
-                  // },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (fileList.length >= 1) {
-                        return Promise.resolve();
-                      }
-
-                      return Promise.reject(new Error('Image required!!'));
-                    },
-                  }),
-                ]}>
+                        return Promise.reject(new Error("Image required!!"));
+                      },
+                    }),
+                  ]}
+                >
                   <>
                     <Upload
                       name="file"
@@ -471,7 +522,6 @@ class OrderUI extends Component {
                     Submit
                   </Button>
                 </Form.Item> */}
-
               </Modal>
             </Form>
             <div style={{ marginBottom: 16 }}>

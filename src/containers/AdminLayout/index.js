@@ -90,14 +90,13 @@ class AdminRender extends Component {
           notification.info({
             description: snapshot.val().message,
             placement: "topRight",
-
             onClose: () => {
-              // remove(
-              //   ref(
-              //     realtime,
-              //     `notif/${JSON.parse(localStorage.getItem("user")).id}`
-              //   )
-              // );
+              remove(
+                ref(
+                  realtime,
+                  `notif/${JSON.parse(localStorage.getItem("user")).id}`
+                )
+              );
             },
           });
           // notification.close();

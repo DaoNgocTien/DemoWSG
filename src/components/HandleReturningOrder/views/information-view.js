@@ -145,7 +145,7 @@ class InformationModal extends Component {
         </Descriptions>
         <Table
           columns={this.columns}
-          dataSource={this.state.record.order.details}
+          dataSource={this.state.record.order?.details}
         />
       </>
     );

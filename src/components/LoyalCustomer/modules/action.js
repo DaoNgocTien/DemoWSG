@@ -70,9 +70,11 @@ const updateLoyalCustomer = (record, id) => {
     try {
       const [updateResponse, LoyalCustomers] = await Promise.all([
         Axios({
-          url: `/loyalCustomer/${id}`,
+          url: `/loyalCustomer/customer/${id}`,
           method: "PUT",
-          data: record,
+          data: {
+            ...record
+          },
           withCredentials: true,
         }),
         Axios({
@@ -105,8 +107,11 @@ const disableLoyalCustomer = (id) => {
     try {
       const [deleteResponse, LoyalCustomers] = await Promise.all([
         Axios({
-          url: `/loyalCustomer/${id}`,
-          method: "DELETE",
+          url: `/loyalCustomer/customer/${id}`,
+          method: "PUT",
+          data: {
+            status: "active",
+          },
           withCredentials: true,
         }),
         Axios({

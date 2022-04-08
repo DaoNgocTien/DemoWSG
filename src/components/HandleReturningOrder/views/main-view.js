@@ -37,10 +37,10 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
-  rejectOrder: () => { },
-  acceptRequest: () => { },
+  closeModal: () => {},
+  updateCampaign: () => {},
+  rejectOrder: () => {},
+  acceptRequest: () => {},
   record: {},
   openModal: false,
 };
@@ -61,7 +61,7 @@ class HandleReturningOrderUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
 
-  componentDidMount() { }
+  componentDidMount() {}
   showModal = () => {
     this.setState({ isModalVisible: true });
   };
@@ -115,7 +115,8 @@ class HandleReturningOrderUI extends Component {
       type: this.props.data.order.campaignid ? "campaign" : "retail",
       orderId: this.props.data.order.id,
       orderCode: this.props.data.order.ordercode,
-      description: "has been rejected by " + user.rolename + " for: " + data.reason,
+      description:
+        "has been rejected by " + user.rolename + " for: " + data.reason,
       image: this.state.fileList || [],
     });
     this.handleCancel();
@@ -127,8 +128,6 @@ class HandleReturningOrderUI extends Component {
     //orderCode, type, image = [], orderId
     console.log(this.props.data);
     this.props.acceptRequest(
-
-
       this.props.data.order.ordercode,
       this.props.data.order.campaignid ? "campaign" : "retail",
       [],
@@ -235,7 +234,6 @@ class HandleReturningOrderUI extends Component {
                 {/* > */}
                 Reject
                 {/* </Link> */}
-
               </Button>,
             ]}
           >
@@ -307,7 +305,6 @@ class HandleReturningOrderUI extends Component {
               style={{ marginLeft: 3 }}
               hidden={this.props.record?.status === "returned"}
             >
-
               Reject Returning Request
             </Button>,
 
@@ -317,14 +314,7 @@ class HandleReturningOrderUI extends Component {
               style={{ marginLeft: 3 }}
               hidden={this.props.record?.status === "returned"}
             >
-              <Link
-                className="LinkDecorations"
-                to={
-                  "/returning"
-                }
-              >
-                Accept Returning Request
-              </Link>
+              Accept Returning Request
             </Button>,
           ]}
           footer={
