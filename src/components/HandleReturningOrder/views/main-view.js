@@ -24,6 +24,7 @@ import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import Loader from "../../../components/Loader";
 import InformationModal from "./information-view";
+import NumberFormat from "react-number-format";
 const { Title } = Typography;
 const { TabPane } = Tabs;
 
@@ -179,7 +180,17 @@ class HandleReturningOrderUI extends Component {
       title: "Price",
       dataIndex: "price",
       key: "price",
-    },
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.price}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+      
+      },
+      },
     {
       title: "Quantity",
       dataIndex: "quantity",
@@ -189,7 +200,17 @@ class HandleReturningOrderUI extends Component {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
-    },
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+      
+      },
+      },
     {
       title: "Note",
       dataIndex: "notes",

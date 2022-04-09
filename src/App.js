@@ -40,7 +40,7 @@ function App() {
   };
   return (
     <>
-      <BusinessConditionUI />
+      {/* <BusinessConditionUI /> */}
       <BrowserRouter>
         <div>
           <Switch>

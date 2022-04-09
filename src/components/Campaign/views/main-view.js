@@ -16,6 +16,7 @@ import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 import OrdersInCampaign from "./orders-in-campaign-view";
+import NumberFormat from "react-number-format";
 
 //  prototype
 const propsProTypes = {
@@ -57,7 +58,7 @@ class CampaignUI extends Component {
     orderListInSelectedCampaign: [],
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
@@ -149,6 +150,17 @@ class CampaignUI extends Component {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (data) => {
+        return (
+          <NumberFormat
+            value={data ?? "0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
     {
       title: "Orders",
@@ -345,7 +357,7 @@ class CampaignUI extends Component {
                       type="primary"
                       onClick={() => this.start("openOrdersInCampaign")}
                       disabled={!orderInCampaignButton}
-                      // style={{ width: 90 }}
+                    // style={{ width: 90 }}
                     >
                       Orders in campaigns
                     </Button>
@@ -374,10 +386,10 @@ class CampaignUI extends Component {
             >
               <OrdersInCampaign
                 campaign={this.state.record}
-                // orderList={this.state.orderListInSelectedCampaign}
-                // loading={this.props.loading}
-                // productList={productList}
-                // rejectOrder={this.props.rejectOrder}
+              // orderList={this.state.orderListInSelectedCampaign}
+              // loading={this.props.loading}
+              // productList={productList}
+              // rejectOrder={this.props.rejectOrder}
               />
             </Drawer>
             <Table

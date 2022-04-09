@@ -5,7 +5,6 @@ import {
 } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,

@@ -26,7 +26,7 @@ import React, { Component, memo } from "react";
 import { connect } from "react-redux";
 import action from "../modules/action";
 import InformationModal from "./information-view";
-
+import NumberFormat from "react-number-format";
 const { Title } = Typography;
 const { TabPane } = Tabs;
 
@@ -38,8 +38,8 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
+  closeModal: () => { },
+  updateCampaign: () => { },
   record: {},
   openModal: false,
 };
@@ -60,7 +60,7 @@ class HandleUI extends Component {
   static defaultProps = propsDefault;
   formRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   handleRejectAndClose = (data) => {
     this.props.rejectOrder(
@@ -165,6 +165,16 @@ class HandleUI extends Component {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.price}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Quantity",
@@ -175,6 +185,16 @@ class HandleUI extends Component {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Note",

@@ -3,7 +3,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import { Link, Redirect, Route } from "react-router-dom";
-
+import NumberFormat from "react-number-format";
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
@@ -122,21 +122,48 @@ class OrderReturningUI extends Component {
       dataIndex: "totalprice",
       key: "totalprice",
       width: 100,
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
       width: 100,
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.discountprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Final Price",
       dataIndex: "finalprice",
       key: "finalprice",
-      render: (text, object) => {
-        return object.totalprice - object.discountprice;
-      },
       width: 100,
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice - object.discountprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Created At",

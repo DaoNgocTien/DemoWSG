@@ -1,7 +1,7 @@
 import { Button, Descriptions, Form, Modal, Select, Table } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-
+import NumberFormat from "react-number-format";
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -116,6 +116,16 @@ class EditModal extends Component {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.price}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Quantity",
@@ -126,6 +136,16 @@ class EditModal extends Component {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Note",
@@ -176,16 +196,31 @@ class EditModal extends Component {
                 {this.state.record?.ordercode}
               </Descriptions.Item>
               <Descriptions.Item label="Total Price">
-                {this.state.record?.totalprice}VND
+                <NumberFormat
+                  value={this.state.record?.totalprice}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
               </Descriptions.Item>
               <Descriptions.Item label="Discount Price">
-                {this.state.record?.discountprice}VND
+                <NumberFormat
+                  value= {this.state.record?.discountprice}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
               </Descriptions.Item>
               <Descriptions.Item label="Final Price">
-                {" "}
-                {this.state.record?.totalprice -
-                  this.state.record?.discountprice}
-                VND
+                <NumberFormat
+                  value={this.state.record?.totalprice - this.state.record?.discountprice}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
               </Descriptions.Item>
 
               {this.checkCancelledOrder()}

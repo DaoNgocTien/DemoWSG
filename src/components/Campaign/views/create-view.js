@@ -5,6 +5,7 @@ import {
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
+import NumberFormat from "react-number-format";
 
 const { RangePicker } = DatePicker;
 
@@ -53,7 +54,7 @@ class CreatModal extends Component {
       this.state.productSelected === {} || !this.state.productSelected
         ? this.props.productList[0]
         : this.state.productSelected;
-    console.log(data);
+    // console.log(data);
     let newCampaign = {
       productId: data.productId,
       fromDate: data.date[0],
@@ -444,10 +445,24 @@ class CreatModal extends Component {
                 {productSelected ? minQuantity + " -> " + maxQuantity : ""}
               </Descriptions.Item>
               <Descriptions.Item label="Retail price">
-                {productSelected?.retailprice ?? ""}
+                <NumberFormat
+                  value={productSelected?.retailprice ?? ""}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
+
               </Descriptions.Item>
               <Descriptions.Item label="Wholesale price">
-                {(price * productSelected?.retailprice) / 100 ?? ""}
+                <NumberFormat
+                  value={(price * productSelected?.retailprice) / 100 ?? ""}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
+
               </Descriptions.Item>
               <Descriptions.Item label="Description">
                 <Input.TextArea

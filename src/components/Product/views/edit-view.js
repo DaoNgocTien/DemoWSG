@@ -3,6 +3,7 @@ import { Button, Descriptions, Form, Input, InputNumber, Modal, Select, Upload }
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
+import NumberFormat from "react-number-format";
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,

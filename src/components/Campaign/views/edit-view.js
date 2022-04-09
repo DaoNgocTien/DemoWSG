@@ -5,6 +5,7 @@ import {
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
+import NumberFormat from "react-number-format";
 
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -506,11 +507,23 @@ class UpdateModal extends Component {
               <Descriptions.Item label="Quantity in campaign">
                 {minQuantity && maxQuantity ? minQuantity + " -> " + maxQuantity : record.quantity + " -> " + record.maxquantity}
               </Descriptions.Item>
-              <Descriptions.Item label="Retail price">
-                {productSelected?.retailprice ?? ""}
+              <Descriptions.Item label="Retail price"><NumberFormat
+                value={productSelected?.retailprice ?? ""}
+                thousandSeparator={true}
+                suffix={" VND"}
+                decimalScale={0}
+                displayType="text"
+              />
               </Descriptions.Item>
               <Descriptions.Item label="Wholesale price">
-                {(this.state.price * productSelected?.retailprice) / 100 ?? ""}
+                <NumberFormat
+                  value={(this.state.price * productSelected?.retailprice) / 100 ?? ""}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
+                
               </Descriptions.Item>
               <Descriptions.Item label="Description">
                 <Input.TextArea

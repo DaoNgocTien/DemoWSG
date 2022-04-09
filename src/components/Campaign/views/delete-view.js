@@ -5,6 +5,7 @@ import {
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
+import NumberFormat from "react-number-format";
 
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -259,13 +260,12 @@ class DeleteModal extends Component {
                     100
                   }
                 >
-                  <InputNumber
-                    disabled={true}
-                    addonAfter="%"
-                    onChange={this.onChangePrice}
-                    min={0}
-                    max={100}
-                    style={{ width: "60vh" }}
+                  <NumberFormat
+                    value={(this.props.record?.price / productSelected?.retailprice) *100}
+                    thousandSeparator={true}
+                    suffix={" VND"}
+                    decimalScale={0}
+                    displayType="text"
                   />
                 </Form.Item>
               </Descriptions.Item>
@@ -285,10 +285,24 @@ class DeleteModal extends Component {
                 {productSelected?.name ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Retail price">
-                {productSelected?.retailprice ?? ""}
+              <NumberFormat
+                    value=
+                    {productSelected?.retailprice ?? ""}
+                    thousandSeparator={true}
+                    suffix={" VND"}
+                    decimalScale={0}
+                    displayType="text"
+                  />
               </Descriptions.Item>
               <Descriptions.Item label="Wholesale price">
-                {(this.state.price * productSelected?.retailprice) / 100 ?? ""}
+              <NumberFormat
+                    value=
+                    {(this.state.price * productSelected?.retailprice) / 100 ?? ""}
+                    thousandSeparator={true}
+                    suffix={" VND"}
+                    decimalScale={0}
+                    displayType="text"
+                  />
               </Descriptions.Item>
               <Descriptions.Item label="Description">
                 <Input.TextArea

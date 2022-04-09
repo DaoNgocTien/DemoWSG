@@ -4,6 +4,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
+import NumberFormat from "react-number-format";
 
 const { TabPane } = Tabs;
 const {Title} = Typography;
@@ -150,6 +151,16 @@ class RejectModal extends Component {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice }
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Quantity",
@@ -160,6 +171,16 @@ class RejectModal extends Component {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice }
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Note",
