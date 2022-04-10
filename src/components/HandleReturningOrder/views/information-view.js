@@ -1,7 +1,7 @@
 import { Descriptions, Table } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-
+import NumberFormat from "react-number-format";
 const propsProTypes = {
   closeModal: PropTypes.func,
   updateCampaign: PropTypes.func,
@@ -10,8 +10,8 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
+  closeModal: () => { },
+  updateCampaign: () => { },
   record: {},
   openModal: false,
 };
@@ -27,7 +27,7 @@ class InformationModal extends Component {
   static defaultProps = propsDefault;
   formRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   checkCancelledOrder = () => {
     const record = this.props.record;
@@ -39,7 +39,7 @@ class InformationModal extends Component {
           </Descriptions.Item>
           <Descriptions.Item label="Image Proof">
             {JSON.parse(record.imageproof ? record.imageproof : "[]").length ===
-            0 ? (
+              0 ? (
               ""
             ) : (
               <img
@@ -91,6 +91,16 @@ class InformationModal extends Component {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice - object.discountprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Quantity",
@@ -101,6 +111,16 @@ class InformationModal extends Component {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice - object.discountprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Note",
@@ -125,16 +145,33 @@ class InformationModal extends Component {
             {this.state.record.order?.ordercode}
           </Descriptions.Item>
           <Descriptions.Item label="Total Price">
-            {this.state.record.order?.totalprice}VND
+            <NumberFormat
+              value={this.state.record.order?.totalprice}
+              thousandSeparator={true}
+              suffix={" VND"}
+              decimalScale={0}
+              displayType="text"
+            />
           </Descriptions.Item>
           <Descriptions.Item label="Discount Price">
-            {this.state.record.order?.discountprice}VND
+            <NumberFormat
+              value={this.state.record.order?.discountprice}
+              thousandSeparator={true}
+              suffix={" VND"}
+              decimalScale={0}
+              displayType="text"
+            />
+
+
           </Descriptions.Item>
           <Descriptions.Item label="Final Price">
-            {" "}
-            {this.state.record.order?.totalprice -
-              this.state.record.order?.discountprice}
-            VND
+            <NumberFormat
+              value={this.state.record.order?.totalprice - this.state.record.order?.discountprice}
+              thousandSeparator={true}
+              suffix={" VND"}
+              decimalScale={0}
+              displayType="text"
+            />
           </Descriptions.Item>
 
           {this.checkCancelledOrder()}

@@ -46,7 +46,7 @@ const getCampaign = (campaignId) => {
           }),
         ]);
       }
-      // console.log(order);
+      order.data?.data.filter(order => order.status !== "notAdvanced");
       return dispatch(
         getSuccess({
           campaigns: campaigns.data.data.map((campaign) => {

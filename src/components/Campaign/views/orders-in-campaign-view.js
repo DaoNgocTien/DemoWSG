@@ -7,6 +7,7 @@ import action from "../../Orders/modules/action";
 import { connect } from "react-redux";
 import React, { memo } from "react";
 import RejectModal from "../../Orders/views/reject-view";
+import NumberFormat from "react-number-format";
 
 class OrdersInCampaign extends React.Component {
   state = {
@@ -20,14 +21,14 @@ class OrdersInCampaign extends React.Component {
   };
 
   componentDidMount() {
-    console.log("did mount");
-    console.log(this.props);
+    // console.log("did mount");
+    // console.log(this.props);
     this.props.getOrder(this.props.campaign.id);
   }
 
   componentDidUpdate() {
-    console.log("did update");
-    console.log(this.props);
+    // console.log("did update");
+    // console.log(this.props);
     // this.props.getOrder();
   }
 
@@ -41,7 +42,7 @@ class OrdersInCampaign extends React.Component {
     this.setState({
       selectedRowKeys,
       record: record,
-      rejectButton: selectedRowKeys.length === 1 ,
+      rejectButton: selectedRowKeys.length === 1,
     });
   };
 
@@ -118,12 +119,32 @@ class OrdersInCampaign extends React.Component {
       dataIndex: "totalprice",
       key: "totalprice",
       width: 100,
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
       width: 150,
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.discountprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Final Price",
@@ -131,7 +152,14 @@ class OrdersInCampaign extends React.Component {
       key: "finalprice",
       width: 100,
       render: (_text, object) => {
-        return object.totalprice - object.discountprice;
+        return <NumberFormat
+          value={object.totalprice - object.discountprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
       },
     },
     {

@@ -4,6 +4,7 @@ import { Button, Descriptions, Form, Input, InputNumber, Modal, Select, Upload }
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
+import NumberFormat from "react-number-format";
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -15,8 +16,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => {},
-  deleteProduct: () => {},
+  closeModal: () => { },
+  deleteProduct: () => { },
   defaultProduct: {
     key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
     id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
@@ -122,7 +123,7 @@ class DeleteModal extends Component {
     const { openModal, record } = this.props;
 
     const { data, categoryList } = this.props;
-    const { load, imageUrl,fileList } = this.state;
+    const { load, imageUrl, fileList } = this.state;
     // this.state.fileList =
     //   this.props.record && this.state.fileList !== 0
     //     ? JSON.parse(this.props.record?.image)
@@ -220,11 +221,12 @@ class DeleteModal extends Component {
                   name="retailPrice"
                   initialValue={record?.retailprice}
                 >
-                  <InputNumber
-                    min={0}
-                    defaultValue={record?.retailprice}
-                    style={{ width: "60vh" }}
-                    disabled={true}
+                  <NumberFormat
+                    value={record?.retailprice}
+                    thousandSeparator={true}
+                    suffix={" VND"}
+                    decimalScale={0}
+                    displayType="text"
                   />
                 </Form.Item>
               </Descriptions.Item>

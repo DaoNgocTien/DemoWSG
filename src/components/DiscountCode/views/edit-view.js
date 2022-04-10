@@ -6,6 +6,7 @@ import Axios from "axios";
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
+import NumberFormat from "react-number-format";
 
 //  prototype
 const propsProTypes = {
@@ -302,12 +303,19 @@ class UpdateModal extends Component {
                   ]}
                   help="Discount price is 1000 -> product retail price!"
                 >
-                  <InputNumber
+                  <NumberFormat
+                    value={productSelected == null ? maxPrice : productSelected.retailprice}
+                    thousandSeparator={true}
+                    suffix={" VND"}
+                    decimalScale={0}
+                    displayType="text"
+                  />
+                  {/* <InputNumber
                     defaultValue={this.props.record?.discountprice}
                     style={{ width: "60vh" }}
                     min={1000}
                     max={productSelected == null ? maxPrice : productSelected.retailprice}
-                  />
+                  /> */}
                 </Form.Item>
               </Descriptions.Item>
 
@@ -342,11 +350,18 @@ class UpdateModal extends Component {
                   ]}
                   help="Minimum price is 1000!"
                 >
-                  <InputNumber
+                  <NumberFormat
+                    value={productSelected == null ? maxPrice : productSelected.retailprice}
+                    thousandSeparator={true}
+                    suffix={" VND"}
+                    decimalScale={0}
+                    displayType="text"
+                  />
+                  {/* <InputNumber
                     style={{ width: "60vh" }}
                     min={1000}
                     max={999999999999}
-                  />
+                  /> */}
                 </Form.Item>
               </Descriptions.Item>
 

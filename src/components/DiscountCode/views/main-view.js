@@ -7,6 +7,7 @@ import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 
 
+import NumberFormat from "react-number-format";
 //  prototype
 const propsProTypes = {
   index: PropTypes.number,
@@ -113,11 +114,32 @@ class DiscountCodeUI extends Component {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
+      
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.discountprice }
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Minimun Price",
       dataIndex: "minimunpricecondition",
       key: "minimunpricecondition",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.minimunpricecondition }
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Start Date",

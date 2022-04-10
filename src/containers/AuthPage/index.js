@@ -5,8 +5,13 @@ import { GoogleLogin } from "react-google-login";
 import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
 import action from "./modules/action";
+import ForgotPassword from "./views/forgot-password";
 
 class AuthPage extends Component {
+  state = {
+    openForgotPasswordModal: false,
+
+  }
   openMessage = () => {
     const key = "updatable";
     message.error({ content: "Can't Access !", key, duration: 2 });
@@ -26,8 +31,19 @@ class AuthPage extends Component {
       return <div className="alert alert-danger">{error.response.data}</div>;
     }
   };
-
+  closeModal = () => {
+    this.setState({
+      openForgotPasswordModal: false,
+    });
+  };
+  openModal = () => {
+    this.setState({
+      openForgotPasswordModal: true,
+    });
+  };
   render() {
+    const { openForgotPasswordModal } = this.state;
+
     const { loading } = this.props;
     if (loading) return <Loader />;
     if (!localStorage.getItem("user")) {
@@ -36,6 +52,10 @@ class AuthPage extends Component {
           <div className="form__wrapper">
             <div className="form__container">
               <h2 style={{ textAlign: "center" }}>LOGIN</h2>
+              <ForgotPassword
+                openModal={openForgotPasswordModal}
+                closeModal={this.closeModal}
+              />
               <Form
                 name="normal_login"
                 className="login-form"

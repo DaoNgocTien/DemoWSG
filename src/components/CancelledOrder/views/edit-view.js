@@ -2,6 +2,8 @@ import { Button, Descriptions, Form, Modal, Table } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
+import NumberFormat from "react-number-format";
+
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -176,15 +178,33 @@ class EditModal extends Component {
                 {this.state.record?.ordercode}
               </Descriptions.Item>
               <Descriptions.Item label="Total Price">
-                {this.state.record?.totalprice}VND
+                <NumberFormat
+                  value=  {this.state.record?.totalprice}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
               </Descriptions.Item>
               <Descriptions.Item label="Discount Price">
-                {this.state.record?.discountprice}VND
+                <NumberFormat
+                  value={this.state.record?.discountprice}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
               </Descriptions.Item>
               <Descriptions.Item label="Final Price">
+                <NumberFormat
+                  value={this.state.record?.totalprice - this.state.record?.discountprice}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
                 {" "}
-                {this.state.record?.totalprice -
-                  this.state.record?.discountprice}
+
                 VND
               </Descriptions.Item>
 

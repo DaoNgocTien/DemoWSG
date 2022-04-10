@@ -24,6 +24,7 @@ import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import Loader from "../../../components/Loader";
 import InformationModal from "./information-view";
+import NumberFormat from "react-number-format";
 const { Title } = Typography;
 const { TabPane } = Tabs;
 
@@ -37,10 +38,10 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
-  rejectOrder: () => {},
-  acceptRequest: () => {},
+  closeModal: () => { },
+  updateCampaign: () => { },
+  rejectOrder: () => { },
+  acceptRequest: () => { },
   record: {},
   openModal: false,
 };
@@ -61,7 +62,7 @@ class HandleReturningOrderUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
 
-  componentDidMount() {}
+  componentDidMount() { }
   showModal = () => {
     this.setState({ isModalVisible: true });
   };
@@ -179,6 +180,16 @@ class HandleReturningOrderUI extends Component {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.price}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Quantity",
@@ -189,6 +200,16 @@ class HandleReturningOrderUI extends Component {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
+      render: (_text, object) => {
+        return <NumberFormat
+          value={object.totalprice}
+          thousandSeparator={true}
+          suffix={" VND"}
+          decimalScale={0}
+          displayType="text"
+        />
+
+      },
     },
     {
       title: "Note",
@@ -198,7 +219,7 @@ class HandleReturningOrderUI extends Component {
   ];
 
   render() {
-    const { loading, acceptRequest, rejectRequest } = this.props;
+    const { loading, acceptRequest, rejectRequest, record } = this.props;
     if (loading) return <Loader />;
     this.state.record = this.props.record;
     const { data } = this.props;
@@ -210,6 +231,13 @@ class HandleReturningOrderUI extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+    console.log(this.props.record);
+    let handledBySupplier = 0;
+    record?.complainRecord?.orderstatushistory?.map(item => {
+      if (item.statushistory === "returning") {
+        handledBySupplier++;
+      }
+    })
     return (
       <>
         <Form id="rejectOrderForm" onFinish={this.handleRejectAndClose}>
@@ -303,7 +331,7 @@ class HandleReturningOrderUI extends Component {
               type="danger"
               onClick={this.showModal}
               style={{ marginLeft: 3 }}
-              hidden={this.props.record?.status === "returned"}
+              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 0}
             >
               Reject Returning Request
             </Button>,
@@ -312,9 +340,17 @@ class HandleReturningOrderUI extends Component {
               type="primary"
               onClick={this.handleAcceptAndClose}
               style={{ marginLeft: 3 }}
-              hidden={this.props.record?.status === "returned"}
+              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 0}
             >
               Accept Returning Request
+            </Button>,
+            <Button
+              type="primary"
+              onClick={() => window.history.back()}
+              style={{ marginLeft: 3 }}
+              hidden={!(this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 0)}
+            >
+              Back
             </Button>,
           ]}
           footer={

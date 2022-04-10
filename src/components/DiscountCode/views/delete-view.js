@@ -7,6 +7,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
+import NumberFormat from "react-number-format";
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -193,11 +194,19 @@ class DeleteModal extends Component {
                   name="discountPrice"
                   initialValue={this.props.record?.discountprice}
                 >
-                  <InputNumber
+
+                  <NumberFormat
+                    value={this.props.record?.discountprice}
+                    thousandSeparator={true}
+                    suffix={" VND"}
+                    decimalScale={0}
+                    displayType="text"
+                  />
+                  {/* <InputNumber
                     disabled={true}
                     defaultValue={this.props.record?.discountprice}
                     style={{ width: "60vh" }}
-                  />
+                  /> */}
                 </Form.Item>
               </Descriptions.Item>
 
@@ -206,10 +215,12 @@ class DeleteModal extends Component {
                   name="minimunPrice"
                   initialValue={this.props.record?.minimunpricecondition}
                 >
-                  <InputNumber
-                    disabled={true}
-                    defaultValue={this.props.record?.minimunpricecondition}
-                    style={{ width: "60vh" }}
+                  <NumberFormat
+                    value={this.props.record?.minimunpricecondition}
+                    thousandSeparator={true}
+                    suffix={" VND"}
+                    decimalScale={0}
+                    displayType="text"
                   />
                 </Form.Item>
               </Descriptions.Item>
