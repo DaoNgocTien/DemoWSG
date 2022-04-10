@@ -42,13 +42,13 @@ class RejectModal extends Component {
   handleRejectAndClose = (data) => {
     // console.log(this.props.record);
     //  this.props.campaignId != null => request from orders-in-campaign component
-    this.props.campaignId != null ?
+    this.props.campaignid != null ?
 
       this.props.rejectOrder(
         this.props.record.ordercode,
         "campaign",
         data.reason,
-        JSON.stringify(this.state.fileList),
+        this.state.fileList,
         this.props.record.id,
         this.props.campaignId)
       :
@@ -56,7 +56,7 @@ class RejectModal extends Component {
         this.props.record.ordercode,
         "retail",
         data.reason,
-        JSON.stringify(this.state.fileList),
+        this.state.fileList,
         this.props.record.id);
     // this.formRef.current.resetFields();
     this.props.closeModal();
@@ -193,7 +193,7 @@ class RejectModal extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    // console.log(record);
+    console.log(record);
     return (
       <>
         <Form

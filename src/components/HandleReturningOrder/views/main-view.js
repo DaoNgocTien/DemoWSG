@@ -38,10 +38,10 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
-  rejectOrder: () => {},
-  acceptRequest: () => {},
+  closeModal: () => { },
+  updateCampaign: () => { },
+  rejectOrder: () => { },
+  acceptRequest: () => { },
   record: {},
   openModal: false,
 };
@@ -62,7 +62,7 @@ class HandleReturningOrderUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
 
-  componentDidMount() {}
+  componentDidMount() { }
   showModal = () => {
     this.setState({ isModalVisible: true });
   };
@@ -188,9 +188,9 @@ class HandleReturningOrderUI extends Component {
           decimalScale={0}
           displayType="text"
         />
-      
+
       },
-      },
+    },
     {
       title: "Quantity",
       dataIndex: "quantity",
@@ -208,9 +208,9 @@ class HandleReturningOrderUI extends Component {
           decimalScale={0}
           displayType="text"
         />
-      
+
       },
-      },
+    },
     {
       title: "Note",
       dataIndex: "notes",
@@ -219,7 +219,7 @@ class HandleReturningOrderUI extends Component {
   ];
 
   render() {
-    const { loading, acceptRequest, rejectRequest } = this.props;
+    const { loading, acceptRequest, rejectRequest, record } = this.props;
     if (loading) return <Loader />;
     this.state.record = this.props.record;
     const { data } = this.props;
@@ -231,6 +231,13 @@ class HandleReturningOrderUI extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+    console.log(this.props.record);
+    let handledBySupplier = 0;
+    record?.complainRecord?.orderstatushistory?.map(item => {
+      if (item.statushistory === "returning") {
+        handledBySupplier++;
+      }
+    })
     return (
       <>
         <Form id="rejectOrderForm" onFinish={this.handleRejectAndClose}>
@@ -324,7 +331,7 @@ class HandleReturningOrderUI extends Component {
               type="danger"
               onClick={this.showModal}
               style={{ marginLeft: 3 }}
-              hidden={this.props.record?.status === "returned"}
+              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 0}
             >
               Reject Returning Request
             </Button>,
@@ -333,9 +340,17 @@ class HandleReturningOrderUI extends Component {
               type="primary"
               onClick={this.handleAcceptAndClose}
               style={{ marginLeft: 3 }}
-              hidden={this.props.record?.status === "returned"}
+              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 0}
             >
               Accept Returning Request
+            </Button>,
+            <Button
+              type="primary"
+              onClick={() => window.history.back()}
+              style={{ marginLeft: 3 }}
+              hidden={!(this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 0)}
+            >
+              Back
             </Button>,
           ]}
           footer={

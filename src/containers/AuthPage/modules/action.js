@@ -6,6 +6,7 @@ import {
   PROFILE,
   REGISTRATION
 } from "./constant";
+import { GET_DATA_SUCCESS } from "../../../components/Profile/modules/constant"
 
 const actLoginApi = (user, history) => {
   return async (dispatch) => {
@@ -152,6 +153,55 @@ const checkPhoneNumber = phone => {
   };
 };
 
+const checkPhoneNumberForgotPassword = phone => {
+  return async (dispatch) => {
+    try {
+      dispatch(getRequest());
+
+      const [phoneValidation] = await Promise.all([
+        Axios({
+          url: `/users/${phone}`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+
+      ]);
+
+      console.log(phoneValidation.data.data[0]);
+      const exist = phoneValidation.data.data[0] ? true : false;
+      if (exist) {
+        return dispatch(
+          storeCheckingResult({
+            profile: phoneValidation.data.data[0],
+            phone: phone,
+            OTP: "12345",
+            message: null,
+          })
+        );
+      }
+      else {
+        //  Send OTP to phone number through Firebase
+        return dispatch(
+          storeCheckingResult({
+            phone: null,
+            OTP: null,
+            message: "Phone number not exist!",
+          })
+        );
+      }
+      // return dispatch(
+      //   storeProfile({
+      //     profile: phoneValidation.data.data.length !== 0 ? phoneValidation.data.data[0] : null,
+      //   })
+      // );
+    } catch (error) {
+      // console.log(error);
+      return dispatch(getFailed(error));
+    }
+  };
+};
+
 const registration = data => {
   return async (dispatch) => {
     try {
@@ -210,6 +260,23 @@ const getProfile = () => {
   };
 };
 
+const resetFields = () => {
+  return async (dispatch) => {
+    dispatch(
+      changePasswordMessage({
+        changePasswordMessage: null,
+
+      }));
+    return dispatch(
+      storeCheckingResult({
+        phone: null,
+        OTP: null,
+        message: null,
+      })
+    );
+  };
+};
+
 const updateBusinessCondition = data => {
   return async (dispatch) => {
     try {
@@ -227,8 +294,8 @@ const updateBusinessCondition = data => {
       // ]);
 
       // if (response.status === 200) {
-        dispatch(getSuccess({ profile: {} }));
-        return (<Redirect to="/" />);
+      dispatch(getSuccess({ profile: {} }));
+      return (<Redirect to="/" />);
       // }
     }
     catch (error) {
@@ -265,13 +332,20 @@ const storeCheckingResult = data => {
   };
 }
 
-
 const storeProfile = data => {
   return {
     type: REGISTRATION,
     payload: data,
   };
 }
+
+const changePasswordMessage = (data) => {
+  // console.log(data);
+  return {
+    type: GET_DATA_SUCCESS,
+    payload: data,
+  };
+};
 
 const action = {
   googleOAuth2,
@@ -281,6 +355,8 @@ const action = {
   phoneNumberValidation,
   getProfile,
   updateBusinessCondition,
+  resetFields,
+  checkPhoneNumberForgotPassword,
 };
 
 export default action;

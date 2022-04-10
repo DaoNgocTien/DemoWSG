@@ -27,6 +27,7 @@ const getOrder = (status) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      orders.data?.data.filter (order => order.status !== "notAdvanced");
 
       return dispatch(
         getSuccess({
@@ -160,6 +161,7 @@ const getOrderByCampaignId = (id) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      orders.data?.data.filter (order => order.status !== "notAdvanced");
       const orderInCampaign = orders.data.data.filter(order => {
         return id === order.campaignid;
       });

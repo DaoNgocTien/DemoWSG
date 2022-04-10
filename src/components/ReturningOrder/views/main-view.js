@@ -63,15 +63,20 @@ class OrderReturningUI extends Component {
     let record = this.props.data.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
-
+    console.log(record);
+    let handledBySupplier = 0;
+    record?.orderstatushistory?.map(item => {
+      if (item.statushistory === "returning") {
+        handledBySupplier++;
+      }
+    })
     this.setState({
       selectedRowKeys,
       viewButton: selectedRowKeys.length === 1 && record?.status != "returned",
-      actionButton:
-        selectedRowKeys.length === 1,
+      actionButton: selectedRowKeys.length === 1,
       addNewButton: selectedRowKeys.length === 0,
       record: record,
-      buttonTitle: record?.status === "returned" ? "View Details" : "Handle Returning Request",
+      buttonTitle: (record?.status === "returned" || handledBySupplier > 0) ? "View Details" : "Handle Returning Request",
     });
   };
 
@@ -293,7 +298,6 @@ class OrderReturningUI extends Component {
     };
 
     const arrayLocation = window.location.pathname.split("/");
-
     return (
       <PageHeader
         className="site-page-header-responsive"
