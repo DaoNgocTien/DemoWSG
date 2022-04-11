@@ -141,7 +141,7 @@ class DiscountCodeUI extends Component {
   onSelectChange = (selectedRowKeys) => {
     // console.log("selectedRowKeys changed: ", selectedRowKeys);
     // console.log(this.props.data);
-    let record = this.props.data.filter((item) => {
+    let record = this.props.data?.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
 

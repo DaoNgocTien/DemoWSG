@@ -156,6 +156,39 @@ class DeleteModal extends Component {
             ]}
           >
             <Descriptions layout="vertical" column={2}>
+              <Descriptions.Item label="Name">
+                <Form.Item name="description" initialValue={record.description}
+                  rules={[
+                    // {
+                    //   required: true,
+                    // },
+                    () => ({
+                      validator(_, value) {
+
+                        // if (listName.includes(value)) {
+                        //   return Promise.reject(new Error('Product Name exists!'));
+                        // }
+                        if (value.length > 0 && value.length <= 50) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Name is required, length is 1-50 characters!'));
+
+                        // validator(_, value) {
+
+                        //   if (Number(value) > 9) {
+                        //     return Promise.resolve();
+                        //   }
+
+                        //   return Promise.reject(new Error('Number of product is positive number!'));
+                        // },
+                      }
+                    }),
+                  ]}
+                >
+                  <Input disabled={true} style={{ width: "60vh" }} placeholder="Name is required, length is 1-50 characters" />
+                </Form.Item>
+              </Descriptions.Item>
               <Descriptions.Item label="Campaign duration">
                 <Form.Item
                   name="date"
@@ -261,7 +294,7 @@ class DeleteModal extends Component {
                   }
                 >
                   <NumberFormat
-                    value={(this.props.record?.price / productSelected?.retailprice) *100}
+                    value={(this.props.record?.price / productSelected?.retailprice) * 100}
                     thousandSeparator={true}
                     suffix={" VND"}
                     decimalScale={0}
@@ -285,24 +318,24 @@ class DeleteModal extends Component {
                 {productSelected?.name ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Retail price">
-              <NumberFormat
-                    value=
-                    {productSelected?.retailprice ?? ""}
-                    thousandSeparator={true}
-                    suffix={" VND"}
-                    decimalScale={0}
-                    displayType="text"
-                  />
+                <NumberFormat
+                  value=
+                  {productSelected?.retailprice ?? ""}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
               </Descriptions.Item>
               <Descriptions.Item label="Wholesale price">
-              <NumberFormat
-                    value=
-                    {(this.state.price * productSelected?.retailprice) / 100 ?? ""}
-                    thousandSeparator={true}
-                    suffix={" VND"}
-                    decimalScale={0}
-                    displayType="text"
-                  />
+                <NumberFormat
+                  value=
+                  {(this.state.price * productSelected?.retailprice) / 100 ?? ""}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
               </Descriptions.Item>
               <Descriptions.Item label="Description">
                 <Input.TextArea

@@ -66,5 +66,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://daca-58-186-26-169.ngrok.io/api"
+  "proxy": "http://13.215.133.39:3000/api"
 }

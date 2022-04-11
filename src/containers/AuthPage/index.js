@@ -1,12 +1,12 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Typography } from "antd";
 import React, { Component } from "react";
 import { GoogleLogin } from "react-google-login";
 import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
 import action from "./modules/action";
 import ForgotPassword from "./views/forgot-password";
-
+const { Title } = Typography;
 class AuthPage extends Component {
   state = {
     openForgotPasswordModal: false,
@@ -52,6 +52,8 @@ class AuthPage extends Component {
           <div className="form__wrapper">
             <div className="form__container">
               <h2 style={{ textAlign: "center" }}>LOGIN</h2>
+              <Title type="danger" style={{ textAlign: "center", }} level={3}> {this.props.error}</Title>
+
               <ForgotPassword
                 openModal={openForgotPasswordModal}
                 closeModal={this.closeModal}
@@ -65,24 +67,68 @@ class AuthPage extends Component {
                 <Form.Item
                   name="username"
                   rules={[
-                    { required: true, message: "Please input your Username!" },
+                    // {
+                    //   required: true,
+                    //   message: 'Please enter your new phone',
+                    // },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if ((value + "").length > 50 || (value + "").length < 1) {
+                          return Promise.reject(new Error(`Username is between 1-50 characters!`));
+                        }
+                        if (this.props.error) {
+                          return Promise.reject(new Error(`Username or password is not correct!`));
+                        }
+                        // if (!value || !checkPhoneMessage) {
+                        return Promise.resolve();
+                        // }
+
+                        // return Promise.reject(new Error(`${checkPhoneMessage}`));
+                      },
+                    }),
+                    // {
+                    //   pattern: /[0-9]{10,11}/,
+                    //   message: 'Phone number is between 10-12 characters',
+                    // }
                   ]}
                 >
                   <Input
                     prefix={<UserOutlined className="site-form-item-icon" />}
-                    placeholder="Username"
+                    placeholder="Username is between 1-50 characters"
                   />
                 </Form.Item>
                 <Form.Item
                   name="password"
                   rules={[
-                    { required: true, message: "Please input your Password!" },
+                    // {
+                    //   required: true,
+                    //   message: 'Please enter your new phone',
+                    // },
+                    ({ getFieldValue }) => ({
+                      validator(_, value) {
+                        if ((value + "").length > 50 || (value + "").length < 1) {
+                          return Promise.reject(new Error(`Password is between 1-50 characters!`));
+                        }
+                        if (this.props.error) {
+                          return Promise.reject(new Error(`Username or password is not correct!`));
+                        }
+                        // if (!value || !checkPhoneMessage) {
+                        return Promise.resolve();
+                        // }
+
+                        // return Promise.reject(new Error(`${checkPhoneMessage}`));
+                      },
+                    }),
+                    // {
+                    //   pattern: /[0-9]{10,11}/,
+                    //   message: 'Phone number is between 10-12 characters',
+                    // }
                   ]}
                 >
                   <Input
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
-                    placeholder="Password"
+                    placeholder="Password is between 1-50 characters!"
                   />
                 </Form.Item>
                 <Form.Item>

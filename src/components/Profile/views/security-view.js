@@ -58,7 +58,7 @@ class PasswordTab extends Component {
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
-  
+
   changePassword = (values) => {
     let password = values.password;
     let user = JSON.parse(localStorage.getItem("user"));
@@ -233,31 +233,33 @@ class PasswordTab extends Component {
                   hasFeedback
                   tooltip={"We make sure phone number is available!"}
                   rules={[
-                    {
-                      required: true,
-                      message: 'Please enter your new phone',
-                    },
+                    // {
+                    //   required: true,
+                    //   message: 'Please enter your new phone',
+                    // },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
+                        if ((value + "").length > 11 || (value + "").length < 10) {
+                          return Promise.reject(new Error(`Phone number is between 10-11 characters`));
+                        }
                         if (!value || !checkPhoneMessage) {
                           return Promise.resolve();
                         }
-                        if (value.length > 11 || value.length < 10) {
-                          return Promise.reject(new Error(`Phone number is between 10-11 characters`));
-                        }
+
                         return Promise.reject(new Error(`${checkPhoneMessage}`));
                       },
                     }),
                     {
                       pattern: /[0-9]{10,11}/,
-                      message: 'Phone number is between 10-11 characters',
+                      message: 'Phone number is between 10-12 characters',
                     }
                   ]}
                 // initialValue={phone}
                 // validateStatus={message === null ? "success" : "error"}
                 // help={message === null ? "We make sure phone number is available!" : message}
                 >
-                  <InputNumber
+                  <Input
+                    type="number"
                     // disabled={data.phoneOTP?? "false"}
                     // onChange={this.onChangePhoneNumber}
                     ref={this.phoneRef}

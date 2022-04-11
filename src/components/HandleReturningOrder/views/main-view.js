@@ -331,7 +331,7 @@ class HandleReturningOrderUI extends Component {
               type="danger"
               onClick={this.showModal}
               style={{ marginLeft: 3 }}
-              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 0}
+              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1}
             >
               Reject Returning Request
             </Button>,
@@ -340,7 +340,7 @@ class HandleReturningOrderUI extends Component {
               type="primary"
               onClick={this.handleAcceptAndClose}
               style={{ marginLeft: 3 }}
-              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 0}
+              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1}
             >
               Accept Returning Request
             </Button>,
@@ -348,7 +348,7 @@ class HandleReturningOrderUI extends Component {
               type="primary"
               onClick={() => window.history.back()}
               style={{ marginLeft: 3 }}
-              hidden={!(this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 0)}
+              hidden={!(this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1)}
             >
               Back
             </Button>,

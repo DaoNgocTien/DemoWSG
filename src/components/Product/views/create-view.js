@@ -90,7 +90,8 @@ class CreatModal extends Component {
   };
 
   handleChange = ({ fileList, file, event }) => {
-    fileList = fileList.slice(-2);
+    console.log(fileList);
+    // fileList = fileList.slice(-2);
 
     // 2. Read from response and show file link
     fileList = fileList.map((file) => {

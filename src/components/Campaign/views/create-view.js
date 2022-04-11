@@ -63,7 +63,8 @@ class CreatModal extends Component {
       price: (data.wholesalePercent * productSelected.retailprice) / 100,
       isShare: data.isShare ? true : false,
       maxQuantity: data.maxQuantity,
-      advanceFee: data.advancePercent
+      advanceFee: data.advancePercent,
+      description: data.description,
     };
     // console.log(newCampaign);
     this.props.createCampaign(newCampaign);
@@ -124,7 +125,10 @@ class CreatModal extends Component {
     }
 
   }
-
+  disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < moment().endOf('day');
+  }
   render() {
     const { openModal } = this.props;
 
@@ -165,7 +169,41 @@ class CreatModal extends Component {
               </Button>,
             ]}
           >
+
             <Descriptions layout="vertical" column={2}>
+              <Descriptions.Item label="Name">
+                <Form.Item name="description"
+                  rules={[
+                    // {
+                    //   required: true,
+                    // },
+                    () => ({
+                      validator(_, value) {
+
+                        // if (listName.includes(value)) {
+                        //   return Promise.reject(new Error('Product Name exists!'));
+                        // }
+                        if (value.length > 0 && value.length <= 50) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Name is required, length is 1-50 characters!'));
+
+                        // validator(_, value) {
+
+                        //   if (Number(value) > 9) {
+                        //     return Promise.resolve();
+                        //   }
+
+                        //   return Promise.reject(new Error('Number of product is positive number!'));
+                        // },
+                      }
+                    }),
+                  ]}
+                >
+                  <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-50 characters" />
+                </Form.Item>
+              </Descriptions.Item>
               <Descriptions.Item label="Campaign duration">
                 <Form.Item
                   name="date"
@@ -214,13 +252,14 @@ class CreatModal extends Component {
                     format="MM/DD/YYYY"
                     onChange={this.onChange}
                     style={{ width: "60vh" }}
+                    disabledDate={this.disabledDate}
                   />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Product">
                 <Form.Item name="productId"
-                  // initialValue={productList[0]?.id}
+                  initialValue={productList[0]?.id}
                   rules={[
                     {
                       required: true,
@@ -271,7 +310,7 @@ class CreatModal extends Component {
                     //   required: true,
                     //   message: 'Name is required!',
                     // },
-                    () => ({
+                    ({ getFieldValue }) => ({
                       // validator(_, value) {
 
                       //   if (listName.includes(value)) {
@@ -283,7 +322,9 @@ class CreatModal extends Component {
 
                       // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
                       validator(_, value) {
-
+                        if (getFieldValue('maxQuantity') < value) {
+                          return Promise.reject(new Error('Quantity can not bigger than max quantity!'));
+                        }
                         if (Number(value) > 9) {
                           return Promise.resolve();
                         }
@@ -378,8 +419,8 @@ class CreatModal extends Component {
                   <InputNumber
                     addonAfter="%"
                     // defaultValue={0}
-                    min={0}
-                    max={100}
+                    min={1}
+                    max={99}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>
@@ -423,14 +464,14 @@ class CreatModal extends Component {
                   />
                 </Form.Item>
               </Descriptions.Item>
+
+
+              <Descriptions.Item label="Share">
+                <Form.Item name="isShare">
+                  <Switch />
+                </Form.Item>
+              </Descriptions.Item>
             </Descriptions>
-
-            <Descriptions.Item label="Share">
-              <Form.Item name="isShare">
-                <Switch />
-              </Form.Item>
-            </Descriptions.Item>
-
             <Descriptions bordered title="Product in campaign" column={2}>
               <Descriptions.Item label="Name">
                 {productSelected?.name ?? ""}
