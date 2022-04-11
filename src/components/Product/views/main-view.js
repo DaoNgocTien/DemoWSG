@@ -1,4 +1,4 @@
-import { Button, Col, Input, PageHeader, Row, Space, Table } from "antd";
+import { Button, Col, Input, PageHeader, Row, Space, Table, Tag } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
@@ -198,20 +198,16 @@ class ProductUI extends Component {
         let status = "";
         switch (data) {
           case "incampaign": {
-            status = "In Campaign";
-            break;
+            return <Tag color="green">In Campaign</Tag>;
           }
           case "active": {
-            status = "Active";
-            break;
+            return <Tag color="blue">Active</Tag>;
           }
           default: {
-            status = "Deactivate";
-            break;
+            return <Tag color="red">Deactive</Tag>;
           }
         }
 
-        return status;
       },
     },
   ];

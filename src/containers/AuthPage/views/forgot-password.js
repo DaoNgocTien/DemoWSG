@@ -309,8 +309,10 @@ class ForgotPassword extends Component {
                                         initialValue={phone}
                                         validateStatus={message === null ? "success" : "error"}
                                         help={message === null ? "We make sure phone number is available!" : message}
+
                                     >
-                                        <InputNumber
+                                        <Input
+                                            type="number"
                                             disabled={phone}
                                             onChange={this.changePhoneNumber}
                                             ref={this.phoneRef}

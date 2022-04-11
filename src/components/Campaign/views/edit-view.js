@@ -159,7 +159,10 @@ class UpdateModal extends Component {
     }
 
   }
-
+  disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < moment().endOf('day');
+  }
   render() {
     const { RangePicker } = DatePicker;
     const { openModal } = this.props;
@@ -285,6 +288,7 @@ class UpdateModal extends Component {
                 // tooltip="Discount price is 1000 -> product retail price!"
                 >
                   <RangePicker
+                    disabledDate={this.disabledDate}
                     ranges={{
                       Today: [moment(), moment()],
                       "This Week": [
@@ -355,7 +359,7 @@ class UpdateModal extends Component {
                     //   required: true,
                     //   message: 'Name is required!',
                     // },
-                    () => ({
+                    ({ getFieldValue }) => ({
                       // validator(_, value) {
 
                       //   if (listName.includes(value)) {
@@ -367,7 +371,9 @@ class UpdateModal extends Component {
 
                       // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
                       validator(_, value) {
-
+                        if (getFieldValue('maxQuantity') < value) {
+                          return Promise.reject(new Error('Quantity can not bigger than max quantity!'));
+                        }
                         if (Number(value) > 9) {
                           return Promise.resolve();
                         }
@@ -465,8 +471,8 @@ class UpdateModal extends Component {
                 >
                   <InputNumber
                     addonAfter="%"
-                    min={0}
-                    max={100}
+                    min={1}
+                    max={99}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>

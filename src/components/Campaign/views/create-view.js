@@ -125,7 +125,10 @@ class CreatModal extends Component {
     }
 
   }
-
+  disabledDate = (current) => {
+    // Can not select days before today and today
+    return current && current < moment().endOf('day');
+  }
   render() {
     const { openModal } = this.props;
 
@@ -249,13 +252,14 @@ class CreatModal extends Component {
                     format="MM/DD/YYYY"
                     onChange={this.onChange}
                     style={{ width: "60vh" }}
+                    disabledDate={this.disabledDate}
                   />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Product">
                 <Form.Item name="productId"
-                  // initialValue={productList[0]?.id}
+                  initialValue={productList[0]?.id}
                   rules={[
                     {
                       required: true,
@@ -306,7 +310,7 @@ class CreatModal extends Component {
                     //   required: true,
                     //   message: 'Name is required!',
                     // },
-                    () => ({
+                    ({ getFieldValue }) => ({
                       // validator(_, value) {
 
                       //   if (listName.includes(value)) {
@@ -318,7 +322,9 @@ class CreatModal extends Component {
 
                       // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
                       validator(_, value) {
-
+                        if (getFieldValue('maxQuantity') < value) {
+                          return Promise.reject(new Error('Quantity can not bigger than max quantity!'));
+                        }
                         if (Number(value) > 9) {
                           return Promise.resolve();
                         }
@@ -413,8 +419,8 @@ class CreatModal extends Component {
                   <InputNumber
                     addonAfter="%"
                     // defaultValue={0}
-                    min={0}
-                    max={100}
+                    min={1}
+                    max={99}
                     style={{ width: "60vh" }}
                   />
                 </Form.Item>

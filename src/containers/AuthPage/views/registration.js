@@ -1,6 +1,7 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {
-    Button, Col, DatePicker, Form, Input, InputNumber, Layout, Row, Select, Space, Tag, Tooltip, Typography} from "antd";
+    Button, Col, DatePicker, Form, Input, InputNumber, Layout, Row, Select, Space, Tag, Tooltip, Typography
+} from "antd";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -262,7 +263,8 @@ class Registration extends Component {
                                                 validateStatus={message === null ? "success" : "error"}
                                                 help={message === null ? "We make sure phone number is available!" : message}
                                             >
-                                                <InputNumber
+                                                <Input
+                                                    type="number"
                                                     disabled={phoneAvailable}
                                                     onChange={this.changePhoneNumber}
                                                     ref={this.phoneRef}
@@ -475,7 +477,7 @@ const mapDispatchToProps = (dispatch) => {
 
         registration: async (data, history) => {
             await dispatch(action.registration(data));
-            await dispatch(action.actLoginApi({username: data.username, password: data.password}, history));
+            await dispatch(action.actLoginApi({ username: data.username, password: data.password }, history));
         }
     };
 };

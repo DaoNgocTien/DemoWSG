@@ -60,7 +60,7 @@ class OrderReturningUI extends Component {
   };
 
   onSelectChange = (selectedRowKeys) => {
-    let record = this.props.data.filter((item) => {
+    let record = this.props.data?.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
     console.log(record);

@@ -66,5 +66,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://5e7b-123-21-128-188.ngrok.io/api"
+  "proxy": "http://13.215.133.39:3000/api"
 }
