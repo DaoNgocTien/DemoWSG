@@ -240,6 +240,9 @@ class OrdersInCampaign extends React.Component {
         {" "}
         <Form>
           <Descriptions bordered title="Campaign information" column={2}>
+          <Descriptions.Item label="Name">
+              {campaign?.description}
+            </Descriptions.Item>
             <Descriptions.Item label="Campaign duration">
               {moment(campaign?.fromdate).format("MM/DD/YYYY") +
                 ` - ` +

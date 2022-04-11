@@ -62,6 +62,7 @@ class UpdateModal extends Component {
           maxQuantity: data.maxQuantity,
           isShare: data.isShare,
           advanceFee: data.advancePercent,
+          description: data.description,
         };
 
         this.props.updateCampaign(newCampaign);
@@ -215,6 +216,39 @@ class UpdateModal extends Component {
             ]}
           >
             <Descriptions layout="vertical" column={2}>
+              <Descriptions.Item label="Name">
+                <Form.Item name="description" initialValue={record.description}
+                  rules={[
+                    // {
+                    //   required: true,
+                    // },
+                    () => ({
+                      validator(_, value) {
+
+                        // if (listName.includes(value)) {
+                        //   return Promise.reject(new Error('Product Name exists!'));
+                        // }
+                        if (value.length > 0 && value.length <= 50) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Name is required, length is 1-50 characters!'));
+
+                        // validator(_, value) {
+
+                        //   if (Number(value) > 9) {
+                        //     return Promise.resolve();
+                        //   }
+
+                        //   return Promise.reject(new Error('Number of product is positive number!'));
+                        // },
+                      }
+                    }),
+                  ]}
+                >
+                  <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-50 characters" />
+                </Form.Item>
+              </Descriptions.Item>
               <Descriptions.Item label="Campaign duration">
                 <Form.Item
                   name="date"
@@ -523,7 +557,7 @@ class UpdateModal extends Component {
                   decimalScale={0}
                   displayType="text"
                 />
-                
+
               </Descriptions.Item>
               <Descriptions.Item label="Description">
                 <Input.TextArea

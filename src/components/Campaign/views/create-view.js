@@ -63,7 +63,8 @@ class CreatModal extends Component {
       price: (data.wholesalePercent * productSelected.retailprice) / 100,
       isShare: data.isShare ? true : false,
       maxQuantity: data.maxQuantity,
-      advanceFee: data.advancePercent
+      advanceFee: data.advancePercent,
+      description: data.description,
     };
     // console.log(newCampaign);
     this.props.createCampaign(newCampaign);
@@ -165,7 +166,41 @@ class CreatModal extends Component {
               </Button>,
             ]}
           >
+
             <Descriptions layout="vertical" column={2}>
+              <Descriptions.Item label="Name">
+                <Form.Item name="description"
+                  rules={[
+                    // {
+                    //   required: true,
+                    // },
+                    () => ({
+                      validator(_, value) {
+
+                        // if (listName.includes(value)) {
+                        //   return Promise.reject(new Error('Product Name exists!'));
+                        // }
+                        if (value.length > 0 && value.length <= 50) {
+                          return Promise.resolve();
+                        }
+
+                        return Promise.reject(new Error('Name is required, length is 1-50 characters!'));
+
+                        // validator(_, value) {
+
+                        //   if (Number(value) > 9) {
+                        //     return Promise.resolve();
+                        //   }
+
+                        //   return Promise.reject(new Error('Number of product is positive number!'));
+                        // },
+                      }
+                    }),
+                  ]}
+                >
+                  <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-50 characters" />
+                </Form.Item>
+              </Descriptions.Item>
               <Descriptions.Item label="Campaign duration">
                 <Form.Item
                   name="date"
@@ -423,14 +458,14 @@ class CreatModal extends Component {
                   />
                 </Form.Item>
               </Descriptions.Item>
+
+
+              <Descriptions.Item label="Share">
+                <Form.Item name="isShare">
+                  <Switch />
+                </Form.Item>
+              </Descriptions.Item>
             </Descriptions>
-
-            <Descriptions.Item label="Share">
-              <Form.Item name="isShare">
-                <Switch />
-              </Form.Item>
-            </Descriptions.Item>
-
             <Descriptions bordered title="Product in campaign" column={2}>
               <Descriptions.Item label="Name">
                 {productSelected?.name ?? ""}
