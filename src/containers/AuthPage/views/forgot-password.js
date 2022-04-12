@@ -188,9 +188,9 @@ class ForgotPassword extends Component {
             OTPValue: e.target.value,
         })
         const value = e.target.value;
-        console.log(this.props.phone);
-        console.log(this.phoneRef.current.value);
-        console.log(this.props.OTP);
+      //  console.log(this.props.phone);
+      //  console.log(this.phoneRef.current.value);
+      //  console.log(this.props.OTP);
 
         if (value === this.props.OTP && this.phoneRef.current.value === this.props.phone) {
             this.setState({
@@ -251,7 +251,7 @@ class ForgotPassword extends Component {
             </div>
         );
         const { loading, profile, phone, OTP, message, openModal, changePasswordMessage } = this.props;
-        console.log(this.props);
+      //  console.log(this.props);
         // if (loading) return <Loader />;
         return (
             <>

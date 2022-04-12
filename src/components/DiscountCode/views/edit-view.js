@@ -143,7 +143,7 @@ class UpdateModal extends Component {
     const currentProductWhenPopup = this.props.productList?.find(
       (element) => element.id === this.props.record?.productid
     );
-    console.log(currentProductWhenPopup);
+  //  console.log(currentProductWhenPopup);
     let maxPrice = 0;
     if (productSelected == null) {
       if (currentProductWhenPopup) {
@@ -154,7 +154,7 @@ class UpdateModal extends Component {
       maxPrice = productSelected.retailprice;
     }
 
-    console.log(maxPrice);
+  //  console.log(maxPrice);
     return (
       <>
         <Form

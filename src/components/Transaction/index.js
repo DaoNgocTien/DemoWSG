@@ -14,7 +14,7 @@ class Transaction extends Component {
   }
 
   render() {
-    console.log(this.props.data);
+  //  console.log(this.props.data);
     return (
       <TransactionUI
         data={this.props.data.transactions}

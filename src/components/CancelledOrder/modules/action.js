@@ -85,7 +85,7 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof, requester) => {
     imageProof: imageProof,
     cancellingRequester: requester,
   }
-  console.log(reject);
+//  console.log(reject);
   return async (dispatch) => {
     dispatch(getRequest());
     try {

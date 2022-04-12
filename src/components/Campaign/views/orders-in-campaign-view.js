@@ -228,7 +228,7 @@ class OrdersInCampaign extends React.Component {
     const { campaign, loading, rejectOrder, orderList = [] } = this.props;
     // console.log(ordersInCampaign);
 
-    console.log(this.props);
+  //  console.log(this.props);
 
     const rowSelection = {
       selectedRowKeys,
@@ -338,7 +338,7 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.getOrderByCampaignId(id))
     },
     rejectOrder: async (orderCode, type, description, image, orderId, campaignId = null) => {
-      console.log("Campaign");
+    //  console.log("Campaign");
 
       await dispatch(
         action.rejectOrder(orderCode, type, description, image, orderId)

@@ -65,7 +65,7 @@ class AdminRender extends Component {
       });
       onValue(ref(realtime, `message/${user.id}`), (snapshot) => {
         if (snapshot.val()) {
-          console.log(snapshot.val());
+        //  console.log(snapshot.val());
           this.setState({
             userMessages: Object.keys(snapshot.val()),
             messages: snapshot.val(),
@@ -139,7 +139,7 @@ class AdminRender extends Component {
     });
   };
   setMessageInputValue = (data) => {
-    console.log(this.state);
+  //  console.log(this.state);
     set(ref(realtime, "chat-message"), {
       to: this.state.to,
       from: this.state.from,
@@ -148,7 +148,7 @@ class AdminRender extends Component {
   };
   onSendFile = (info) => {
     if (info.file.status === "done") {
-      console.log(this.state);
+    //  console.log(this.state);
 
       if (this.state.from && this.state.to) {
         set(ref(realtime, "chat-message"), {
@@ -174,7 +174,7 @@ class AdminRender extends Component {
 
   render() {
     const { collapsed, messages } = this.state;
-    console.log(this.state);
+  //  console.log(this.state);
     return (
       <Layout>
         <Header

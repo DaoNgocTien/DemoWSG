@@ -180,7 +180,7 @@ class LoyalCustomerUI extends Component {
       ...(this.state.record ?? this.state.record),
       status: position,
     };
-    console.log(record);
+  //  console.log(record);
     this.props.updateLoyalCustomer(record, this.state.record?.id);
   };
 

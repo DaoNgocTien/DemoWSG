@@ -17,18 +17,21 @@ let initialState = {
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
+      // console.log("GET_DATA_REQUEST");
       state.loading = true;
       state.data = [];
       state.err = null;
       return { ...state };
 
     case GET_DATA_SUCCESS:
+      // console.log("GET_DATA_SUCCESS");
       state.loading = false;
       state.data = action.payload;
       state.err = null;
       return { ...state };
 
     case GET_PHONE_VALIDATION:
+      // console.log("GET_PHONE_VALIDATION");
       state.loading = false;
       state.phoneValidation = {
         ...action.payload,
@@ -37,6 +40,7 @@ const profileReducer = (state = initialState, action) => {
       return { ...state };
 
     case GET_IDENFICATION_VALIDATION:
+      // console.log("GET_IDENFICATION_VALIDATION");
       state.loading = false;
       state.identificationValidation = {
         ...action.payload,
@@ -46,6 +50,7 @@ const profileReducer = (state = initialState, action) => {
 
 
     case GET_EWALLET_VALIDATION:
+      // console.log("GET_EWALLET_VALIDATION");
       state.loading = false;
       state.eWalletValidation = {
         ...action.payload,
@@ -54,6 +59,7 @@ const profileReducer = (state = initialState, action) => {
       return { ...state };
 
     case GET_DATA_FAIL:
+      // console.log("GET_DATA_FAIL");
       state.loading = false;
       state.data = [];
       // state.err = action.payload;

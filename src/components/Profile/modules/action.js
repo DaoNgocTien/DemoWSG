@@ -16,7 +16,12 @@ const getProfile = () => {
 
       ]);
       if (profile.status === 200) {
+        let user = {
+          ...profile.data.data.account,
+          ...profile.data.data.profile,
 
+        }
+        localStorage.setItem("user", JSON.stringify(user));
         return dispatch(
           getSuccess(profile.data.data));
       }
@@ -46,9 +51,9 @@ const changePassword = (id, password) => {
       // changePasswordResponse.data
       // changePasswordResponse.message
       // console.log(changePasswordResponse);
-      console.log(changePasswordResponse);
+      //  console.log(changePasswordResponse);
       if (changePasswordResponse.status === 200) {
-        console.log(changePasswordResponse);
+        //  console.log(changePasswordResponse);
 
         return dispatch(
           getSuccess({
@@ -81,7 +86,7 @@ const checkPhoneNumber = phone => {
       const exist = phoneValidation.data.data[0] ? true : false;
       // console.log(phoneValidation);
       if (exist) {
-        console.log(phoneValidation);
+        //  console.log(phoneValidation);
         return dispatch(
           getPhoneValidation({
             checkPhoneMessage: "Phone number exists",
@@ -93,7 +98,7 @@ const checkPhoneNumber = phone => {
         //  Send OTP to phone number through Firebase
         return dispatch(
           getPhoneValidation({
-            checkPhoneMessage: "",
+            checkPhoneMessage: null,
             phone: phone,
             phoneOTP: "12345",
 
@@ -112,11 +117,30 @@ const checkPhoneNumber = phone => {
   };
 };
 
+const checkingPhoneNumber = (message) => {
+  return async (dispatch) => {
+    try {
+      dispatch(getRequest());
+      //  console.log("checkingPhoneNumber");
+      return dispatch(
+        getPhoneValidation({
+          checkPhoneMessage: message,
+          phone: null,
+          phoneOTP: null,
+        }))
+
+    } catch (error) {
+      // console.log(error);
+      return dispatch(getFailed(error));
+    }
+  };
+};
+
 const updateProfile = user => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      console.log(user);
+      //  console.log(user);
       const [updateResponse] = await Promise.all([
         Axios({
           url: `/supplier/profile`,
@@ -133,7 +157,7 @@ const updateProfile = user => {
         // }),
 
       ]);
-      console.log(updateResponse);
+      //  console.log(updateResponse);
       if (updateResponse.status === 200) {
         dispatch(
           getPhoneValidation({
@@ -172,7 +196,7 @@ const updateIdentifcation = (card) => {
         }),
 
       ]);
-      console.log(identificationResponse);
+      //  console.log(identificationResponse);
       return dispatch(
         getIdenficationCard({
           identificationChangeMessage: "Identification validated successfully!",
@@ -199,7 +223,7 @@ const updateEWallet = (ewallet) => {
         }),
 
       ]);
-      console.log(ewalletResponse);
+      //  console.log(ewalletResponse);
       return dispatch(
         getEWalletCard({
           eWalletChangeMessage: "E-Wallet changed successfully!",
@@ -256,6 +280,7 @@ const getEWalletCard = data => {
 const action = {
   changePassword,
   checkPhoneNumber,
+  checkingPhoneNumber,
   updateProfile,
   getProfile,
   updateIdentifcation,

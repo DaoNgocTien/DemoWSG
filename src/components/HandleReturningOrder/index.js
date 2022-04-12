@@ -11,7 +11,7 @@ class HandleReturningOrder extends Component {
 
   componentDidMount() {
     const orderCode = this.props.match.params.orderCode;
-    console.log(this.props);
+  //  console.log(this.props);
     this.props.getReturningOrder(orderCode);
   }
 
