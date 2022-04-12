@@ -245,7 +245,7 @@ class TransactionUI extends Component {
       width: 100,
       key: "status",
       render: (data) => {
-        return <Tag>{data}</Tag>;
+        return <Tag>{data.toUpperCase()}</Tag>;
       },
     },
 

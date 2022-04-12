@@ -179,7 +179,7 @@ class SettlePaymentUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data}</Tag>
+        return <Tag>{data.toUpperCase()}</Tag>
       },
       sorter: (a, b) => a.status.length - b.status.length,
     },

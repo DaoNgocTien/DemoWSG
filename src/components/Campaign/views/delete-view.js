@@ -285,7 +285,7 @@ class DeleteModal extends Component {
                 </Form.Item>
               </Descriptions.Item>
 
-              <Descriptions.Item label="Wholesale percent">
+              <Descriptions.Item label="Wholesale discount percent">
                 <Form.Item
                   name="wholesalePercent"
                   initialValue={

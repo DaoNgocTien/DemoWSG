@@ -259,7 +259,7 @@ class CreatModal extends Component {
 
               <Descriptions.Item label="Product">
                 <Form.Item name="productId"
-                  initialValue={productList[0]?.id}
+                  // initialValue={productList[0]?.id}
                   rules={[
                     {
                       required: true,
@@ -322,9 +322,9 @@ class CreatModal extends Component {
 
                       // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
                       validator(_, value) {
-                        if (getFieldValue('maxQuantity') < value) {
-                          return Promise.reject(new Error('Quantity can not bigger than max quantity!'));
-                        }
+                        // if (getFieldValue('maxQuantity') < value) {
+                        //   return Promise.reject(new Error('Quantity can not bigger than max quantity!'));
+                        // }
                         if (Number(value) > 9) {
                           return Promise.resolve();
                         }
@@ -426,7 +426,7 @@ class CreatModal extends Component {
                 </Form.Item>
               </Descriptions.Item>
 
-              <Descriptions.Item label="Wholesale percent">
+              <Descriptions.Item label="Wholesale discount percent">
                 <Form.Item name="wholesalePercent" initialValue={0}
                   rules={[
                     {

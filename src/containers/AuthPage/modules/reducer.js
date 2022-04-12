@@ -36,7 +36,7 @@ const authReducer = (state = initialState, action) => {
     case AUTH_PAGE_FAILED:
       state.loading = false;
       state.data = null;
-      // state.err = action.payload;
+      state.err = action.payload;
       return { ...state };
 
     case GOOGLE_OAUTH2:

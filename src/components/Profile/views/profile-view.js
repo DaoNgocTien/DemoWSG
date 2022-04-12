@@ -178,7 +178,7 @@ class ProfileTab extends Component {
             tooltip="Username can not be channged!"
 
           >
-            <Tag color="green">{storedUser.username ?? storedUser.username}</Tag>
+            <Tag color="green">{storedUser.username ?? ""}</Tag>
           </Form.Item>
 
           <Form.Item
@@ -187,7 +187,7 @@ class ProfileTab extends Component {
             tooltip="User's role in WSG System"
           >
             <Tooltip placement="topLeft" title="Suppliers are those who use the WSG System and website to process their business. Their main role is to cooperate with the WSG system to do business">
-              <Tag color="blue">{storedUser.rolename ?? storedUser.rolename}</Tag>
+              <Tag color="blue">{storedUser.rolename ?? ""}</Tag>
             </Tooltip>
 
           </Form.Item>

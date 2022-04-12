@@ -117,6 +117,7 @@ class EditModal extends Component {
     {
       title: "Price",
       dataIndex: "price",
+       width: 200,
       key: "price",
     },
     {
@@ -133,6 +134,7 @@ class EditModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
+      fix:"right"
     }
   ];
 
@@ -217,6 +219,8 @@ class EditModal extends Component {
             <Table
               columns={this.columns}
               dataSource={this.state.record.details}
+              scroll={{ y: 350, x: 1000 }}
+
             />
           </Modal>
         </Form>

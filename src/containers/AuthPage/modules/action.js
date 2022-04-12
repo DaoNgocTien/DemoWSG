@@ -7,7 +7,12 @@ import {
   REGISTRATION
 } from "./constant";
 import { GET_DATA_SUCCESS } from "../../../components/Profile/modules/constant"
+const onLogin = () => {
+  return async (dispatch) => {
+    dispatch(getFailed(null));
 
+  };
+}
 const actLoginApi = (user, history) => {
   return async (dispatch) => {
     dispatch(getRequest());
@@ -34,7 +39,8 @@ const actLoginApi = (user, history) => {
         }
       })
       .catch((err) => {
-        return dispatch(getFailed(err));
+        console.log(err);
+        return dispatch(getFailed("Invalid username or password!"));
       });
   };
 };
@@ -85,8 +91,9 @@ const googleOAuth2 = (googleResponse) => {
 };
 
 const phoneNumberValidation = phone => {
+  console.log((phone));
   return async (dispatch) => {
-    if (phone.length > 11 || phone.length < 10) {
+    if ((phone + "").length > 11 || (phone + "").length < 10) {
       return dispatch(
         storeCheckingResult({
           phone: null,
@@ -357,6 +364,7 @@ const action = {
   updateBusinessCondition,
   resetFields,
   checkPhoneNumberForgotPassword,
+  onLogin
 };
 
 export default action;

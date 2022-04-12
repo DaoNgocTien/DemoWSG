@@ -164,6 +164,7 @@ class HandleUI extends Component {
     {
       title: "Price",
       dataIndex: "price",
+       width: 200,
       key: "price",
       render: (_text, object) => {
         return <NumberFormat
@@ -200,6 +201,7 @@ class HandleUI extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
+      fix:"right"
     },
   ];
 

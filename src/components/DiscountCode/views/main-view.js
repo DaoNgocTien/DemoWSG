@@ -158,7 +158,7 @@ class DiscountCodeUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data}</Tag>
+        return <Tag>{data.toUpperCase()}</Tag>
       },
     },
   ];
