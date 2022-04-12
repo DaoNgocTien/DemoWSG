@@ -364,7 +364,7 @@ const action = {
   updateBusinessCondition,
   resetFields,
   checkPhoneNumberForgotPassword,
-  onLogin,
+  onLogin
 };
 
 export default action;

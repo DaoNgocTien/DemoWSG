@@ -134,6 +134,7 @@ class CampaignUI extends Component {
       dataIndex: "productname",
       key: "productname",
       sorter: (a, b) => a.productname.length - b.productname.length,
+      width: 200,
       fix: "left",
     },
     {
@@ -195,7 +196,39 @@ class CampaignUI extends Component {
       },
       fix: "right"
     },
+    {
+      title: "Action",
+      render: (object) => {
+        // let disabled = object.status === "created" ? "false" : "true";
+        // console.log(disabled);
+        if (object.status === "ready") {
+          return (
+            <Button
+              onClick={() => this.startCampaignBeforeHand(object)}
+              type="primary"
+            >
+              Start Campaign
+            </Button>
+          );
+        }
+
+        // if (object.status === "processing") {
+        //   return (
+        //     <Button onClick={() => this.openUploadModal(object)} type="primary">
+        //       Deliver Order
+        //     </Button>
+        //   );
+        // }
+      },
+      fixed: "right",
+      width: 150,
+    },
   ];
+
+
+  startCampaignBeforeHand = object => {
+    this.props.startCampaignBeforeHand(object.id);
+  }
 
   onChangeHandler = (e) => {
     let { data } = this.props;
@@ -403,7 +436,7 @@ class CampaignUI extends Component {
                   ? this.props.data
                   : displayData
               }
-              scroll={{ y: 350, x: 1000 }}
+              scroll={{ y: 350, x: 1700 }}
             />
           </div>
         }

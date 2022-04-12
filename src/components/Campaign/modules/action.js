@@ -1,5 +1,6 @@
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
+import { Link, Redirect, Route } from "react-router-dom";
 
 const getCampaign = (campaignId) => {
   return async (dispatch) => {
@@ -100,7 +101,8 @@ const createCampaign = (record) => {
       ]);
 
       // console.log(order);
-      return dispatch(
+
+      dispatch(
         getSuccess({
           campaigns: campaigns.data.data.map((campaign) => {
             return {
@@ -111,6 +113,7 @@ const createCampaign = (record) => {
           products: products.data.data,
         })
       );
+      return (<Redirect to="/discount/campaigns" />);
     } catch (error) {
       // console.log(error);
       return dispatch(getFailed());
@@ -143,9 +146,12 @@ const updateCampaign = (record) => {
               key: category.id,
               ...category,
             };
-          });
-          return true
+          })
+          return (<Redirect to="/discount/campaigns" />);
+
         }
+        return (<Redirect to="/discount/campaigns" />);
+
       })
       .catch((err) => {
         // return dispatch(getFailed(err));
@@ -186,10 +192,12 @@ const deleteCampaign = id => {
       // }),
     ]);
 
-    return dispatch(
+    dispatch(
       getSuccess({
         campaigns: [],
       }));
+    return (<Redirect to="/discount/campaigns" />);
+
     //     Axios({
     //       url: `/campaigns/${id}`,
     //       method: "DELETE",
@@ -206,6 +214,31 @@ const deleteCampaign = id => {
     //     });
   };
 }
+
+const startCampaignBeforeHand = id => {
+  return async (dispatch) => {
+    console.log(id);
+    // dispatch(getRequest());
+    // try {
+    //   const [response] = await Promise.all([
+    //     Axios({
+    //       url: `/campaigns/${id}`,
+    //       method: "DELETE",
+    //       withCredentials: true,
+    //     }),
+
+    //   ]);
+
+    //   dispatch(
+    //     getSuccess({
+    //       campaigns: [],
+    //     }));
+      return (<Redirect to="/discount/campaigns" />);
+    // } catch (error) {
+    //   return dispatch(getFailed());
+    // }
+  };
+};
 
 const getRequest = () => {
   return {
@@ -233,6 +266,7 @@ const action = {
   createCampaign,
   updateCampaign,
   deleteCampaign,
+  startCampaignBeforeHand,
 };
 
 export default action;

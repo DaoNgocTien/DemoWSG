@@ -219,7 +219,7 @@ class UpdateModal extends Component {
             ]}
           >
             <Descriptions layout="vertical" column={2}>
-              {/* <Descriptions.Item label="Name">
+              <Descriptions.Item label="Name">
                 <Form.Item name="description" initialValue={record.description}
                   rules={[
                     // {
@@ -251,7 +251,7 @@ class UpdateModal extends Component {
                 >
                   <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-50 characters" />
                 </Form.Item>
-              </Descriptions.Item> */}
+              </Descriptions.Item>
               <Descriptions.Item label="Campaign duration">
                 <Form.Item
                   name="date"
@@ -478,7 +478,7 @@ class UpdateModal extends Component {
                 </Form.Item>
               </Descriptions.Item>
 
-              <Descriptions.Item label="Wholesale percent"
+              <Descriptions.Item label="Wholesale discount percent"
                 rules={[
                   {
                     required: true,

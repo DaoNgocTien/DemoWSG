@@ -157,7 +157,7 @@ class RejectModal extends Component {
     {
       title: "Price",
       dataIndex: "price",
-       width: 200,
+      width: 200,
       key: "price",
     },
     {
@@ -174,17 +174,15 @@ class RejectModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-      fix:"right"
-    }
-  ];
-
+      fix: "right"
+    },
+  ]
   getRequester = checked => {
     console.log(checked)
     this.setState({
       requester: checked ? "Customer" : "Supplier"
     })
   }
-
   render() {
     this.state.record = this.props.record;
     const { openModal, record } = this.props;
