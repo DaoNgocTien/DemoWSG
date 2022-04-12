@@ -150,6 +150,7 @@ class RejectModal extends Component {
     {
       title: "Price",
       dataIndex: "price",
+       width: 200,
       key: "price",
       render: (_text, object) => {
         return <NumberFormat
@@ -186,6 +187,7 @@ class RejectModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
+      fix:"right"
     }
   ];
 
@@ -450,6 +452,8 @@ class RejectModal extends Component {
             <Table
               columns={this.columns}
               dataSource={this.state.record.details}
+              scroll={{ y: 350, x: 1000 }}
+
             />
 
 

@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
 import action from "./modules/action";
 import ForgotPassword from "./views/forgot-password";
-const { Title } = Typography;
+const { Text } = Typography;
 class AuthPage extends Component {
   state = {
     openForgotPasswordModal: false,
@@ -44,15 +44,17 @@ class AuthPage extends Component {
   render() {
     const { openForgotPasswordModal } = this.state;
 
-    const { loading } = this.props;
+    const { loading, error } = this.props;
     if (loading) return <Loader />;
+    console.log(this.props);
     if (!localStorage.getItem("user")) {
       return (
         <div className="main_form_body">
           <div className="form__wrapper">
             <div className="form__container">
               <h2 style={{ textAlign: "center" }}>LOGIN</h2>
-              <Title type="danger" style={{ textAlign: "center", }} level={3}> {this.props.error}</Title>
+                <Text type="danger" style={{ textAlign: "center", }} > {error}</Text>
+
 
               <ForgotPassword
                 openModal={openForgotPasswordModal}
@@ -63,6 +65,8 @@ class AuthPage extends Component {
                 className="login-form"
                 initialValues={{ remember: true }}
                 onFinish={this.onFinish}
+                // validateStatus={error === null ? "success" : "error"}
+                // help={error ?? ""}
               >
                 <Form.Item
                   name="username"
@@ -76,9 +80,9 @@ class AuthPage extends Component {
                         if ((value + "").length > 50 || (value + "").length < 1) {
                           return Promise.reject(new Error(`Username is between 1-50 characters!`));
                         }
-                        if (this.props.error) {
-                          return Promise.reject(new Error(`Username or password is not correct!`));
-                        }
+                        // if (error) {
+                        //   return Promise.reject(new Error(`Username or password is not correct!`));
+                        // }
                         // if (!value || !checkPhoneMessage) {
                         return Promise.resolve();
                         // }
@@ -95,6 +99,7 @@ class AuthPage extends Component {
                   <Input
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     placeholder="Username is between 1-50 characters"
+                  // onChange={this.props.onLogin}
                   />
                 </Form.Item>
                 <Form.Item
@@ -109,9 +114,9 @@ class AuthPage extends Component {
                         if ((value + "").length > 50 || (value + "").length < 1) {
                           return Promise.reject(new Error(`Password is between 1-50 characters!`));
                         }
-                        if (this.props.error) {
-                          return Promise.reject(new Error(`Username or password is not correct!`));
-                        }
+                        // if (error) {
+                        //   return Promise.reject(new Error(`Username or password is not correct!`));
+                        // }
                         // if (!value || !checkPhoneMessage) {
                         return Promise.resolve();
                         // }
@@ -129,6 +134,7 @@ class AuthPage extends Component {
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
                     placeholder="Password is between 1-50 characters!"
+                  // onChange={this.props.onLogin}
                   />
                 </Form.Item>
                 <Form.Item>
@@ -185,6 +191,9 @@ const mapDispatchToProps = (dispatch) => {
     googleOAuth2: (googleResponse) => {
       dispatch(action.googleOAuth2(googleResponse));
     },
+    onLogin: () => {
+      dispatch(action.onLogin());
+    }
   };
 };
 

@@ -149,6 +149,7 @@ class CampaignUI extends Component {
     {
       title: "Price",
       dataIndex: "price",
+      width: 200,
       key: "price",
       render: (data) => {
         return (
@@ -190,8 +191,9 @@ class CampaignUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data}</Tag>;
+        return <Tag color={data === "ready" ? "blue" : data === "active" ? "red" : data === "done" ? "green" : "grey"}>{data.toUpperCase()}</Tag>;
       },
+      fix: "right"
     },
   ];
 
@@ -401,7 +403,7 @@ class CampaignUI extends Component {
                   ? this.props.data
                   : displayData
               }
-              scroll={{ y: 350 }}
+              scroll={{ y: 350, x: 1000 }}
             />
           </div>
         }

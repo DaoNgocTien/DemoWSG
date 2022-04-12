@@ -82,8 +82,8 @@ class ProfileUI extends Component {
         title={arrayLocation[1].toUpperCase()}
         tags={
           <>
-            <Tag color="blue">{this.props.data.rolename}</Tag>
-            <Tag color="red">{user.loginMethod}</Tag>
+            <Tag color="blue">{this.props.data.rolename.toUpperCase()}</Tag>
+            <Tag color="red">{user.loginMethod.toUpperCase()}</Tag>
           </>
         }
         footer={

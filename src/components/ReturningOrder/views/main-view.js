@@ -185,9 +185,9 @@ class OrderReturningUI extends Component {
       key: "status",
       render: (data) => {
         return data === "returned" ? (
-          <Tag color="blue">{data}</Tag>
+          <Tag color="blue">{data.toUpperCase()}</Tag>
         ) : (
-          <Tag color="red">{data}</Tag>
+          <Tag color="red">{data.toUpperCase()}</Tag>
         );
       },
       width: 100,

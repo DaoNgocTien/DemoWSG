@@ -126,6 +126,7 @@ class Registration extends Component {
 
     onCheckPhoneNumber = () => {
         const value = this.phoneRef.current.value;
+        console.log(value);
         this.props.checkPhoneNumber(this.phoneRef.current.value);
         let profile = this.props.profile;
         return this.setState({
@@ -194,11 +195,13 @@ class Registration extends Component {
         }
     }
 
-    changePhoneNumber = () => {
+    changePhoneNumber = (e) => {
         const value = this.phoneRef.current.value;
-        this.props.phoneNumberValidation(this.phoneRef.current.value);
+        console.log(value);
+        // console.log(this.OTPRef.current.value);
+        this.props.phoneNumberValidation(value);
 
-        if (this.OTPRef.current.value === this.props.OTP && this.phoneRef.current.value === this.props.phone) {
+        if (this.OTPRef.current.value === this.props.OTP && value === this.props.phone) {
             this.setState({
                 phoneAvailable: true,
                 OTPMessage: null,
@@ -263,10 +266,11 @@ class Registration extends Component {
                                                 validateStatus={message === null ? "success" : "error"}
                                                 help={message === null ? "We make sure phone number is available!" : message}
                                             >
-                                                <Input
-                                                    type="number"
+                                                <InputNumber
+                                                    // type="number"
+                                                    addonBefore="+84"
                                                     disabled={phoneAvailable}
-                                                    onChange={this.changePhoneNumber}
+                                                    onChange={(e) => this.changePhoneNumber(e)}
                                                     ref={this.phoneRef}
                                                     style={{ width: "60vh" }}
                                                     placeholder="10-11 characters"

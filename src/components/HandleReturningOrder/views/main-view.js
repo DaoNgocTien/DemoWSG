@@ -179,6 +179,7 @@ class HandleReturningOrderUI extends Component {
     {
       title: "Price",
       dataIndex: "price",
+       width: 200,
       key: "price",
       render: (_text, object) => {
         return <NumberFormat
@@ -215,6 +216,7 @@ class HandleReturningOrderUI extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
+      fix:"right"
     },
   ];
 

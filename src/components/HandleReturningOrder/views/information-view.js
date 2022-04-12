@@ -90,6 +90,7 @@ class InformationModal extends Component {
     {
       title: "Price",
       dataIndex: "price",
+      width: 200,
       key: "price",
       render: (_text, object) => {
         return <NumberFormat
@@ -126,6 +127,7 @@ class InformationModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
+      fix:"right"
     },
   ];
 
@@ -183,6 +185,8 @@ class InformationModal extends Component {
         <Table
           columns={this.columns}
           dataSource={this.state.record.order?.details}
+          scroll={{ y: 350, x: 1000 }}
+
         />
       </>
     );

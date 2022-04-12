@@ -198,13 +198,13 @@ class ProductUI extends Component {
         let status = "";
         switch (data) {
           case "incampaign": {
-            return <Tag color="green">In Campaign</Tag>;
+            return <Tag color="green">IN CAMPAIGN</Tag>;
           }
           case "active": {
-            return <Tag color="blue">Active</Tag>;
+            return <Tag color="blue">ACTIVE</Tag>;
           }
           default: {
-            return <Tag color="red">Deactive</Tag>;
+            return <Tag color="red">DEACTIVE</Tag>;
           }
         }
 
