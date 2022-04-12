@@ -58,7 +58,7 @@ class BusinessConditionUI extends Component {
   }
 
   onFinish = (data) => {
-    console.log(data);
+  //  console.log(data);
     this.props.updateBusinessCondition({
       email: data.email,
       ewalletcode: data.ewalletcode,
@@ -78,11 +78,11 @@ class BusinessConditionUI extends Component {
     //   this.setState({ loading: false, visible: false });
     // }, 3000);
 
-    console.log("handleOk");
+  //  console.log("handleOk");
   };
 
   handleCancel = () => {
-    console.log("handleCancel");
+  //  console.log("handleCancel");
     // this.setState({ visible: false });
   };
 

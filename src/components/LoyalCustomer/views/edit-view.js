@@ -63,7 +63,7 @@ class EditModal extends Component {
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    console.log(this.props);
+  //  console.log(this.props);
     if (this.props.loading || !this.props.record) {
       return <></>;
     }

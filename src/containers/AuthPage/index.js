@@ -46,7 +46,7 @@ class AuthPage extends Component {
 
     const { loading, error } = this.props;
     if (loading) return <Loader />;
-    console.log(this.props);
+  //  console.log(this.props);
     if (!localStorage.getItem("user")) {
       return (
         <div className="main_form_body">

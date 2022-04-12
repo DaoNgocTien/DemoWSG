@@ -44,6 +44,8 @@ class PasswordTab extends Component {
     productSelected: {},
     phoneAvailable: true,
     OTPMessage: null,
+    phone: 0,
+    phoneMessage: "",
   };
   formRef = React.createRef();
   phoneRef = React.createRef();
@@ -65,30 +67,63 @@ class PasswordTab extends Component {
     this.props.changePassword(user.id, password);
   }
 
+  onChangePhoneNumber = e => {
+    const phone = e.target.value;
+    // const checkPhoneMessage = this.props.phoneValidation.checkPhoneMessage;
+    // // console.log(phone);
+    // // console.log(this.props.phoneValidation.checkPhoneMessage);
+
+    // if (phone.length > 11 || phone.length < 10) {
+    //   return this.setState({
+    //     phoneMessage: "Phone is required, 10-11 numbers!!",
+    //   })
+    // }
+    // if (checkPhoneMessage?.length > 0) {
+    //   return this.setState({
+    //     phoneMessage: checkPhoneMessage,
+    //   })
+    // }
+    if (phone.length > 11 || phone.length < 10) {
+      return this.props.checkingPhoneNumber("Phone is required, 10-11 numbers!!");
+    }
+    this.setState({
+      phone: e.target.value,
+      phoneMessage: "",
+    })
+    this.props.checkingPhoneNumber(null);
+  }
+
   updatePhone = (values) => {
-    console.log(values);
-    let phone = this.phoneRef.current.value;
+    // console.log(values.target.value);
+    let phone = this.state.phone;
+    // console.log(phone);
     this.props.checkPhoneNumber(phone);
   }
 
   checkOTP = e => {
     const value = e.target.value;
-
-    if (value === this.props.phoneValidation.phoneOTP && this.phoneRef.current.value === this.props.phoneValidation.phone) {
+    //  console.log(JSON.parse(localStorage.getItem("user")));
+    if (value === this.props.phoneValidation.phoneOTP && this.state.phone === this.props.phoneValidation.phone) {
       this.setState({
         phoneAvailable: true,
         OTPMessage: null,
       });
       let data = this.props.data;
+      // console.log(this.props.data);
       const user = {
-        phone: this.phoneRef.current.value,
-        avatar: data.avt,
+        phone: this.state.phone,
+        avatar: JSON.parse(data.avt),
         name: data.name,
         email: data.email,
         address: data.address,
 
       }
       this.props.updateProfile(user);
+      data = {
+        phone: this.state.phone,
+        ...data
+      }
+      localStorage.setItem("user", JSON.stringify(data));
     }
     else {
       this.setState({
@@ -99,7 +134,7 @@ class PasswordTab extends Component {
   }
 
   updateIdentifcation = (values) => {
-    console.log(values);
+    // console.log(values);
 
     values.identificationimage =
       this.state.fileList.length === 0 && this.props.record
@@ -109,10 +144,10 @@ class PasswordTab extends Component {
   }
 
   render() {
-    const { load, imageUrl, phoneAvailable, OTPMessage, fileList } = this.state;
+    const { load, imageUrl, phoneAvailable, OTPMessage, fileList, phoneMessage } = this.state;
     const { data, phoneValidation, identificationValidation } = this.props;
     const {
-      checkPhoneMessage,
+      checkPhoneMessage = "",
       phone,
       phoneOTP,
       changePhoneMessage,
@@ -129,7 +164,7 @@ class PasswordTab extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    console.log(data);
+    // console.log(checkPhoneMessage);
     return (
       <>
         <Title style={{ textAlign: "center", marginTop: "30px" }} level={3}>MANAGE PASSWORD</Title>
@@ -227,41 +262,47 @@ class PasswordTab extends Component {
           <Form.Item label="Phone Number">
             <Row >
               <Col flex={4}>
+
                 <Form.Item
                   name="phone"
                   // label="Phone Number"
                   hasFeedback
                   tooltip={"We make sure phone number is available!"}
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Please enter your new phone',
-                    // },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if ((value + "").length > 11 || (value + "").length < 10) {
-                          return Promise.reject(new Error(`Phone number is between 10-11 characters`));
-                        }
-                        if (!value || !checkPhoneMessage) {
-                          return Promise.resolve();
-                        }
+                  // rules={[
+                  //   // {
+                  //   //   required: true,
+                  //   //   message: 'Please enter your new phone',
+                  //   // },
+                  //   ({ getFieldValue }) => ({
+                  //     validator(_, value) {
+                  //       if ((value + "").length > 11 || (value + "").length < 10) {
+                  //         return Promise.reject(new Error(`Phone number is between 10-11 characters`));
+                  //       }
+                  //       // if (getFieldValue("phoneMessage").length > 0) {
+                  //       //   return Promise.reject(new Error(`${getFieldValue("phoneMessage")}`));
+                  //       // }
+                  //       // console.log(phoneValidation);
+                  //       if (value && !checkPhoneMessage) {
+                  //         return Promise.resolve();
+                  //       }
+                  //       return Promise.reject(new Error(`${checkPhoneMessage}`));
 
-                        return Promise.reject(new Error(`${checkPhoneMessage}`));
-                      },
-                    }),
-                    {
-                      pattern: /[0-9]{10,11}/,
-                      message: 'Phone number is between 10-12 characters',
-                    }
-                  ]}
-                // initialValue={phone}
-                // validateStatus={message === null ? "success" : "error"}
-                // help={message === null ? "We make sure phone number is available!" : message}
+                  //     },
+                  //   }),
+                  //   // {
+                  //   //   pattern: /[0-9]{10,11}/,
+                  //   //   message: 'Phone number is between 10-12 characters',
+                  //   // }
+                  // ]}
+
+                  initialValue={phone}
+                  validateStatus={checkPhoneMessage == null ? "success" : "error"}
+                  help={checkPhoneMessage == null ? "We make sure phone number is available!" : checkPhoneMessage}
                 >
                   <Input
                     type="number"
                     // disabled={data.phoneOTP?? "false"}
-                    // onChange={this.onChangePhoneNumber}
+                    onChange={(e) => this.onChangePhoneNumber(e)}
                     ref={this.phoneRef}
                     // addonBefore={this.prefixSelector}
                     style={{ width: "100%" }}
@@ -408,6 +449,7 @@ const mapDispatchToProps = (dispatch) => {
 
     checkPhoneNumber: async phone => {
       await dispatch(action.checkPhoneNumber(phone));
+      await dispatch(action.getProfile());
     },
 
     updateProfile: async profile => {
@@ -423,7 +465,12 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     getProfile: async () => {
-      // console.log("get campaign");
+      // // console.log("get campaign");
+      await dispatch(action.getProfile());
+    },
+    checkingPhoneNumber: async (message) => {
+      // // console.log("get campaign");
+      await dispatch(action.checkingPhoneNumber(message));
       await dispatch(action.getProfile());
     },
   };

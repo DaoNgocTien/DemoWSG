@@ -26,7 +26,7 @@ const transactionReducer = (state = initialState, action) => {
 
     case STORE_SETTLING_PAYMENT:
       
-      console.log(action);
+    //  console.log(action);
       state.loading = false;
       state.settlingPaymentList = { ...action.payload };
       state.err = null;

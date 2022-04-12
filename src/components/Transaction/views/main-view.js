@@ -50,7 +50,7 @@ class TransactionUI extends Component {
   componentDidMount() {}
 
   onOKWithdraw = (data) => {
-    console.log(data);
+  //  console.log(data);
     const newData = {
       amount: parseInt(data.amount),
       ordercode: data.ordercode,
@@ -258,7 +258,7 @@ class TransactionUI extends Component {
     {
       title: "Action",
       render: (object) => {
-        console.log(object.iswithdrawable);
+      //  console.log(object.iswithdrawable);
         if (object.type === "income" && object.iswithdrawable) {
           return (
             <Popconfirm
@@ -296,7 +296,7 @@ class TransactionUI extends Component {
         searchValue = "";
         break;
     }
-    console.log(searchData);
+  //  console.log(searchData);
 
     this.setState({
       displayData: searchData,

@@ -194,6 +194,7 @@ class CampaignUI extends Component {
       render: (data) => {
         return <Tag color={data === "ready" ? "blue" : data === "active" ? "red" : data === "done" ? "green" : "grey"}>{data.toUpperCase()}</Tag>;
       },
+      width: 100,
       fix: "right"
     },
     {
@@ -319,7 +320,7 @@ class CampaignUI extends Component {
       deleteCampaign,
       data,
     } = this.props;
-    console.log(productList);
+  //  console.log(productList);
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,

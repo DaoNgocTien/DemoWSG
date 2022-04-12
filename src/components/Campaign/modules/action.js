@@ -217,26 +217,29 @@ const deleteCampaign = id => {
 
 const startCampaignBeforeHand = id => {
   return async (dispatch) => {
-    console.log(id);
-    // dispatch(getRequest());
-    // try {
-    //   const [response] = await Promise.all([
-    //     Axios({
-    //       url: `/campaigns/${id}`,
-    //       method: "DELETE",
-    //       withCredentials: true,
-    //     }),
+  //  console.log(id);
+    dispatch(getRequest());
+    try {
+      const [response] = await Promise.all([
+        Axios({
+          url: `/campaigns/update/active`,
+          method: "PUT",
+          data: {
+            campaignId: id,
+          },
+          withCredentials: true,
+        }),
 
-    //   ]);
+      ]);
 
-    //   dispatch(
-    //     getSuccess({
-    //       campaigns: [],
-    //     }));
+      dispatch(
+        getSuccess({
+          campaigns: [],
+        }));
       return (<Redirect to="/discount/campaigns" />);
-    // } catch (error) {
-    //   return dispatch(getFailed());
-    // }
+    } catch (error) {
+      return dispatch(getFailed());
+    }
   };
 };
 

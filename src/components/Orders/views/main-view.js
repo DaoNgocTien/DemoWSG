@@ -289,7 +289,7 @@ class OrderUI extends Component {
   };
 
   onRadioChange = (e) => {
-    console.log(e);
+  //  console.log(e);
     let { data } = this.props;
     let searchValue = e.target.value || e;
     let searchData = [];

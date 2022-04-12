@@ -111,7 +111,7 @@ class Registration extends Component {
     }
 
     onFinish = (values) => {
-        console.log('Received values of form: ', values);
+      //  console.log('Received values of form: ', values);
         let record = {
             username: values.username,
             password: values.password,
@@ -126,7 +126,7 @@ class Registration extends Component {
 
     onCheckPhoneNumber = () => {
         const value = this.phoneRef.current.value;
-        console.log(value);
+      //  console.log(value);
         this.props.checkPhoneNumber(this.phoneRef.current.value);
         let profile = this.props.profile;
         return this.setState({
@@ -197,7 +197,7 @@ class Registration extends Component {
 
     changePhoneNumber = (e) => {
         const value = this.phoneRef.current.value;
-        console.log(value);
+      //  console.log(value);
         // console.log(this.OTPRef.current.value);
         this.props.phoneNumberValidation(value);
 
@@ -224,7 +224,7 @@ class Registration extends Component {
             </div>
         );
         const { loading, profile, phone, OTP, message } = this.props;
-        console.log(this.props);
+      //  console.log(this.props);
         // if (loading) return <Loader />;
         return (
             <>

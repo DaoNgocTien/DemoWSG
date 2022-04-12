@@ -43,7 +43,7 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.getOrder());
     },
     rejectOrder: async (orderCode, type, description, image, orderId) => {
-      console.log("Order");
+    //  console.log("Order");
       await dispatch(
         action.rejectOrder(orderCode, type, description, image, orderId)
       );

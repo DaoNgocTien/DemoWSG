@@ -214,7 +214,7 @@ class SettlePaymentUI extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    console.log(this.props.record);
+  //  console.log(this.props.record);
     return (
       <>
         <PageHeader
@@ -543,8 +543,8 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     storeComplainRecord: async (record) => {
-      console.log("storeComplainRecord");
-      console.log(record);
+    //  console.log("storeComplainRecord");
+    //  console.log(record);
       await dispatch(action.storeComplainRecord(record));
     }
   };

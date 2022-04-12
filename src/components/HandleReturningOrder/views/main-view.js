@@ -127,7 +127,7 @@ class HandleReturningOrderUI extends Component {
   handleAcceptAndClose = () => {
     // data.image = this.state.fileList;
     //orderCode, type, image = [], orderId
-    console.log(this.props.data);
+  //  console.log(this.props.data);
     this.props.acceptRequest(
       this.props.data.order.ordercode,
       this.props.data.order.campaignid ? "campaign" : "retail",
@@ -233,7 +233,7 @@ class HandleReturningOrderUI extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    console.log(this.props.record);
+  //  console.log(this.props.record);
     let handledBySupplier = 0;
     record?.complainRecord?.orderstatushistory?.map(item => {
       if (item.statushistory === "returning") {

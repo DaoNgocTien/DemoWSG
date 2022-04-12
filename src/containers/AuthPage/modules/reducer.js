@@ -57,7 +57,7 @@ const authReducer = (state = initialState, action) => {
       return { ...state };
 
     case REGISTRATION:
-      console.log(action.payload);
+    //  console.log(action.payload);
       state.loading = false;
       state.profile = action.payload.profile;
       return { ...state };

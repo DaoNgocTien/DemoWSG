@@ -161,7 +161,7 @@ class ProfileTab extends Component {
     );
     const { data } = this.props;
     let storedUser = data
-    console.log(data);
+  //  console.log(data);
     return (
       <>
         <Title style={{ textAlign: "center", padding: "30px" }} level={3}>USER PROFILE</Title>
@@ -178,7 +178,7 @@ class ProfileTab extends Component {
             tooltip="Username can not be channged!"
 
           >
-            <Tag color="green">{storedUser.username ?? ""}</Tag>
+            <Tag color="green">{storedUser.username ?? "Unavailable"}</Tag>
           </Form.Item>
 
           <Form.Item

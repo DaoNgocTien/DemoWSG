@@ -2,7 +2,7 @@ import Axios from "axios";
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 
 const getOrder = (status) => {
-  console.log(status)
+//  console.log(status)
   return async (dispatch) => {
     try {
       dispatch(getRequest());
@@ -49,8 +49,8 @@ const getOrder = (status) => {
 };
 
 const updateStatusOrder = (data, image) => {
-  console.log(data);
-  console.log(image);
+//  console.log(data);
+//  console.log(image);
   return async (dispatch) => {
     dispatch(getRequest());
     switch (data.status) {
@@ -165,7 +165,7 @@ const getOrderByCampaignId = (id) => {
       const orderInCampaign = orders.data.data.filter(order => {
         return id === order.campaignid;
       });
-      console.log(orderInCampaign);
+    //  console.log(orderInCampaign);
       return dispatch(
         getSuccess({
           orders: orderInCampaign.map((order) => {

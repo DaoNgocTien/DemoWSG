@@ -192,7 +192,7 @@ class RejectModal extends Component {
   ];
 
   getRequester = checked => {
-    console.log(checked)
+  //  console.log(checked)
     this.setState({
       requester: checked ? "Customer" : "Supplier"
     })
@@ -208,7 +208,7 @@ class RejectModal extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    console.log(record);
+  //  console.log(record);
     return (
       <>
         <Form

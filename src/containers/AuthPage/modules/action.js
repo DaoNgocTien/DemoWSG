@@ -30,16 +30,21 @@ const actLoginApi = (user, history) => {
       .then((result) => {
         dispatch(getSuccess(result.data));
         if (result.data.status === "success") {
-          if (result.data.data.user.rolename === "Customer" || result.data.data.user.rolename === "Deliverer") {
+          if (result.data.data.user.rolename !== "Supplier") {
             return history.push("/login");
           } else {
-            localStorage.setItem("user", JSON.stringify(result.data.data.user));
+            let user = {
+              ...result.data.data.user,
+              ...result.data.data.info,
+
+            }
+            localStorage.setItem("user", JSON.stringify(user));
             return history.push("/");
           }
         }
       })
       .catch((err) => {
-        console.log(err);
+      //  console.log(err);
         return dispatch(getFailed("Invalid username or password!"));
       });
   };
@@ -91,7 +96,7 @@ const googleOAuth2 = (googleResponse) => {
 };
 
 const phoneNumberValidation = phone => {
-  console.log((phone));
+//  console.log((phone));
   return async (dispatch) => {
     if ((phone + "").length > 11 || (phone + "").length < 10) {
       return dispatch(
@@ -127,7 +132,7 @@ const checkPhoneNumber = phone => {
 
       ]);
 
-      console.log(phoneValidation.data.data[0]);
+    //  console.log(phoneValidation.data.data[0]);
       const exist = phoneValidation.data.data[0] ? true : false;
       if (exist) {
         return dispatch(
@@ -175,7 +180,7 @@ const checkPhoneNumberForgotPassword = phone => {
 
       ]);
 
-      console.log(phoneValidation.data.data[0]);
+    //  console.log(phoneValidation.data.data[0]);
       const exist = phoneValidation.data.data[0] ? true : false;
       if (exist) {
         return dispatch(
@@ -225,7 +230,7 @@ const registration = data => {
 
       ]);
 
-      console.log(registrationResponse);
+    //  console.log(registrationResponse);
       dispatch(
         storeProfile({
           profile: registrationResponse.data.data,
