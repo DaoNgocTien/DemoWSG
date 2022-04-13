@@ -1,6 +1,15 @@
-
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Descriptions, Form, Input, InputNumber, Modal, Select, Upload } from "antd";
+import {
+  Button,
+  Descriptions,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Upload,
+  Image,
+} from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
@@ -16,8 +25,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  deleteProduct: () => { },
+  closeModal: () => {},
+  deleteProduct: () => {},
   defaultProduct: {
     key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
     id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
@@ -45,7 +54,7 @@ class DeleteModal extends Component {
     previewVisible: false,
     previewImage: "",
     previewTitle: "",
-    fileList: [],
+    fileList: undefined,
   };
   formRef = React.createRef();
 
@@ -71,6 +80,7 @@ class DeleteModal extends Component {
   handleDelete = (data) => {
     this.props.deleteProduct(this.props.record?.id);
     this.formRef.current.resetFields();
+    this.props.closeModal();
   };
 
   handleCancel = () => {
@@ -123,7 +133,11 @@ class DeleteModal extends Component {
     const { openModal, record } = this.props;
 
     const { data, categoryList } = this.props;
-    const { load, imageUrl, fileList } = this.state;
+    const {
+      load,
+      imageUrl,
+      fileList = JSON.parse(record?.image || "[]"),
+    } = this.state;
     // this.state.fileList =
     //   this.props.record && this.state.fileList !== 0
     //     ? JSON.parse(this.props.record?.image)
@@ -248,7 +262,19 @@ class DeleteModal extends Component {
               <Descriptions.Item label="Image">
                 <Form.Item name="image">
                   <>
-                    <Upload
+                    {fileList.map((item) => {
+                      return (
+                        <Image
+                          src={item.url}
+                          preview={{
+                            src: item.url,
+                          }}
+                          width={150}
+                          height={150}
+                        />
+                      );
+                    })}
+                    {/* <Upload
                       disabled={true}
                       name="file"
                       action="/files/upload"
@@ -271,7 +297,7 @@ class DeleteModal extends Component {
                         style={{ width: "100%" }}
                         src={this.state.previewImage}
                       />
-                    </Modal>
+                    </Modal> */}
                   </>
                 </Form.Item>
               </Descriptions.Item>

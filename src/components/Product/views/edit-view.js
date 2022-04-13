@@ -1,5 +1,14 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Descriptions, Form, Input, InputNumber, Modal, Select, Upload } from "antd";
+import {
+  Button,
+  Descriptions,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Upload,
+} from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
@@ -15,8 +24,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  updateProduct: () => { },
+  closeModal: () => {},
+  updateProduct: () => {},
   defaultProduct: {
     key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
     id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
@@ -44,7 +53,7 @@ class UpdateModal extends Component {
     previewVisible: false,
     previewImage: "",
     previewTitle: "",
-    fileList: [],
+    fileList: undefined ,
   };
   formRef = React.createRef();
 
@@ -140,10 +149,9 @@ class UpdateModal extends Component {
       </div>
     );
     let listName = [];
-    data.map(item => {
-      if (item.name !== record?.name)
-        listName.push(item.name);
-    })
+    data.map((item) => {
+      if (item.name !== record?.name) listName.push(item.name);
+    });
     return (
       <>
         <Form
@@ -173,7 +181,6 @@ class UpdateModal extends Component {
               </Button>,
             ]}
           >
-
             <Form.Item
               label="Product ID"
               name="id"
@@ -190,7 +197,8 @@ class UpdateModal extends Component {
 
             <Descriptions layout="vertical" column={2}>
               <Descriptions.Item label="Name">
-                <Form.Item name="name"
+                <Form.Item
+                  name="name"
                   initialValue={record?.name}
                   rules={[
                     // {
@@ -199,30 +207,40 @@ class UpdateModal extends Component {
                     // },
                     () => ({
                       validator(_, value) {
-
                         if (listName.includes(value)) {
-                          return Promise.reject(new Error('Product Name exists!'));
+                          return Promise.reject(
+                            new Error("Product Name exists!")
+                          );
                         }
                         if (value.length >= 0 && value.length <= 20) {
                           return Promise.resolve();
                         }
 
-                        return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
+                        return Promise.reject(
+                          new Error(
+                            "Product Name is required, length is 1-20 characters!"
+                          )
+                        );
                       },
                     }),
                   ]}
                 >
-                  <Input style={{ width: "60vh" }} defaultValue={record?.name} placeholder="Name is required, length is 1-20 characters"/>
+                  <Input
+                    style={{ width: "60vh" }}
+                    defaultValue={record?.name}
+                    placeholder="Name is required, length is 1-20 characters"
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Category">
-                <Form.Item name="categoryId"
+                <Form.Item
+                  name="categoryId"
                   initialValue={record?.categoryid}
                   rules={[
                     {
                       required: true,
-                      message: 'Category is required!',
+                      message: "Category is required!",
                     },
                     // ({ getFieldValue }) => ({
                     //   validator(_, value) {
@@ -235,7 +253,10 @@ class UpdateModal extends Component {
                     // }),
                   ]}
                 >
-                  <Select style={{ width: "60vh" }} defaultValue={record?.categoryid}>
+                  <Select
+                    style={{ width: "60vh" }}
+                    defaultValue={record?.categoryid}
+                  >
                     {categoryList.map((item) => (
                       <Select.Option key={item.key} value={item.id}>
                         {item.categoryname}
@@ -246,7 +267,9 @@ class UpdateModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
-                <Form.Item name="quantity" initialValue={record?.quantity}
+                <Form.Item
+                  name="quantity"
+                  initialValue={record?.quantity}
                   rules={[
                     // {
                     //   required: true,
@@ -258,16 +281,23 @@ class UpdateModal extends Component {
                           return Promise.resolve();
                         }
 
-                        return Promise.reject(new Error('Quantity is positive number!'));
+                        return Promise.reject(
+                          new Error("Quantity is positive number!")
+                        );
                       },
                     }),
                   ]}
                 >
-                  <InputNumber min={0} max={999999999999} style={{ width: "60vh" }} defaultValue={record?.quantity} />
+                  <InputNumber
+                    min={0}
+                    max={999999999999}
+                    style={{ width: "60vh" }}
+                    defaultValue={record?.quantity}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
-              <Descriptions.Item label="Retail Price" >
+              <Descriptions.Item label="Retail Price">
                 <Form.Item
                   name="retailPrice"
                   initialValue={record?.retailprice}
@@ -282,42 +312,58 @@ class UpdateModal extends Component {
                           return Promise.resolve();
                         }
 
-                        return Promise.reject(new Error('Price is positive number!'));
+                        return Promise.reject(
+                          new Error("Price is positive number!")
+                        );
                       },
                     }),
                   ]}
                 >
-                  <InputNumber min={0} max={999999999999} defaultValue={record?.retailprice} style={{ width: "60vh" }} />
+                  <InputNumber
+                    min={0}
+                    max={999999999999}
+                    defaultValue={record?.retailprice}
+                    style={{ width: "60vh" }}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
-              <Descriptions.Item label="Description" >
-                <Form.Item name="description"
+              <Descriptions.Item label="Description">
+                <Form.Item
+                  name="description"
                   initialValue={record?.description}
                   rules={[
                     {
                       required: true,
-                      message: 'Description is required!',
+                      message: "Description is required!",
                     },
-
                   ]}
                 >
-                  <Input.TextArea placeholder="Description is required!" autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} defaultValue={record?.description} />
+                  <Input.TextArea
+                    placeholder="Description is required!"
+                    autoSize={{ minRows: 3, maxRows: 5 }}
+                    style={{ width: "60vh" }}
+                    defaultValue={record?.description}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Image">
-                <Form.Item name="image" rules={[
-                  () => ({
-                    validator(_) {
-                      if (fileList.length >= 1) {
-                        return Promise.resolve();
-                      }
+                <Form.Item
+                  name="image"
+                  rules={[
+                    () => ({
+                      validator(_) {
+                        if (fileList.length >= 1) {
+                          return Promise.resolve();
+                        }
 
-                      return Promise.reject(new Error('Product Image is required!!'));
-                    },
-                  }),
-                ]}
+                        return Promise.reject(
+                          new Error("Product Image is required!!")
+                        );
+                      },
+                    }),
+                  ]}
                 >
                   <>
                     <Upload
