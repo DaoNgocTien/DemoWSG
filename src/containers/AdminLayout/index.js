@@ -334,15 +334,15 @@ class AdminRender extends Component {
                         return (
                           <Conversation
                             name={
-                              messages[element].userinfo.firstname +
+                              messages[element].userinfo?.firstname +
                               " " +
-                              messages[element].userinfo.lastname
+                              messages[element].userinfo?.lastname
                             }
                             onClick={() =>
                               this.setMessagesDetail(messages[element])
                             }
                           >
-                            <Avatar src={messages[element].userinfo.avt} />
+                            <Avatar src={messages[element].userinfo?.avt} />
                           </Conversation>
                         );
                       })}
@@ -375,7 +375,7 @@ class AdminRender extends Component {
                             return (
                               <Message
                                 model={{
-                                  message: `${message.message}`,
+                                  message: `${message?.message}`,
                                   direction: "outgoing",
                                   position: "normal",
                                   sender: "Me",
