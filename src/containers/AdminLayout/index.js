@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import { Layout, Menu, Drawer, notification, Upload, Image } from "antd";
+import { Layout, Menu, Drawer, notification, Upload, Image, List } from "antd";
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
   ReconciliationTwoTone,
@@ -26,6 +26,7 @@ import {
   AttachmentButton,
   InputToolbox,
 } from "@chatscope/chat-ui-kit-react";
+import axios from "axios";
 
 import NavbarAdmin from "../../components/NavbarAdmin";
 import Notification from "../../components/Notification";
@@ -47,6 +48,7 @@ class AdminRender extends Component {
     messageDetails: {},
     from: null,
     to: null,
+    notif: [],
   };
 
   toggleCollapsed = () => {
@@ -65,7 +67,7 @@ class AdminRender extends Component {
       });
       onValue(ref(realtime, `message/${user.id}`), (snapshot) => {
         if (snapshot.val()) {
-        //  console.log(snapshot.val());
+          //  console.log(snapshot.val());
           this.setState({
             userMessages: Object.keys(snapshot.val()),
             messages: snapshot.val(),
@@ -78,6 +80,10 @@ class AdminRender extends Component {
         }
       });
       this.getNotif();
+      axios.get(`/notif/getNotiForLoginUser`).then((res) => {
+        const notif = res.data.data;
+        this.setState({ notif });
+      });
     }
   };
 
@@ -139,7 +145,7 @@ class AdminRender extends Component {
     });
   };
   setMessageInputValue = (data) => {
-  //  console.log(this.state);
+    //  console.log(this.state);
     set(ref(realtime, "chat-message"), {
       to: this.state.to,
       from: this.state.from,
@@ -148,7 +154,7 @@ class AdminRender extends Component {
   };
   onSendFile = (info) => {
     if (info.file.status === "done") {
-    //  console.log(this.state);
+      //  console.log(this.state);
 
       if (this.state.from && this.state.to) {
         set(ref(realtime, "chat-message"), {
@@ -174,7 +180,7 @@ class AdminRender extends Component {
 
   render() {
     const { collapsed, messages } = this.state;
-  //  console.log(this.state);
+    console.log(this.state.notif);
     return (
       <Layout>
         <Header
@@ -316,6 +322,29 @@ class AdminRender extends Component {
                 visible={this.state.visible}
               >
                 {/* {this.getDrawerContent()} */}
+                <List
+                  className="demo-loadmore-list"
+                  // loading={initLoading}
+                  itemLayout="horizontal"
+                  // loadMore={loadMore}
+                  dataSource={this.state.notif}
+                  renderItem={(item) => (
+                    <List.Item>
+                      {/* <Skeleton
+                        avatar
+                        title={false}
+                        loading={item.loading}
+                        active
+                      > */}
+                      <List.Item.Meta
+                        // avatar={<Avatar src={item.picture.large} />}
+                        title={<Link to="/orders/all-order">{item.link}</Link>}
+                        description={item.message}
+                      />
+                      {/* </Skeleton> */}
+                    </List.Item>
+                  )}
+                />
               </Drawer>
 
               <Drawer
@@ -375,7 +404,7 @@ class AdminRender extends Component {
                             return (
                               <Message
                                 model={{
-                                  message: `${message?.message}`,
+                                  message: `${message.message}`,
                                   direction: "outgoing",
                                   position: "normal",
                                   sender: "Me",

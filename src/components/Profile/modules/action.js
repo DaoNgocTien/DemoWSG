@@ -1,11 +1,18 @@
 import Axios from "axios";
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, GET_EWALLET_VALIDATION, GET_IDENFICATION_VALIDATION, GET_PHONE_VALIDATION } from "./constant";
+import {
+  GET_DATA_FAIL,
+  GET_DATA_REQUEST,
+  GET_DATA_SUCCESS,
+  GET_EWALLET_VALIDATION,
+  GET_IDENFICATION_VALIDATION,
+  GET_PHONE_VALIDATION,
+} from "./constant";
 
 const getProfile = () => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      // console.log("test");
+
       const [profile] = await Promise.all([
         Axios({
           url: `/users/profile/me`,
@@ -13,20 +20,16 @@ const getProfile = () => {
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
-
       ]);
       if (profile.status === 200) {
         let user = {
           ...profile.data.data.account,
           ...profile.data.data.profile,
-
-        }
+        };
         localStorage.setItem("user", JSON.stringify(user));
-        return dispatch(
-          getSuccess(profile.data.data));
+        return dispatch(getSuccess(profile.data.data));
       }
       return dispatch(getFailed());
-
     } catch (error) {
       return dispatch(getFailed());
     }
@@ -37,7 +40,7 @@ const changePassword = (id, password) => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      // console.log("test");
+
       const [changePasswordResponse] = await Promise.all([
         Axios({
           url: `/users/user/resetPassword`,
@@ -46,30 +49,23 @@ const changePassword = (id, password) => {
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
-
       ]);
-      // changePasswordResponse.data
-      // changePasswordResponse.message
-      // console.log(changePasswordResponse);
-      //  console.log(changePasswordResponse);
-      if (changePasswordResponse.status === 200) {
-        //  console.log(changePasswordResponse);
 
+      if (changePasswordResponse.status === 200) {
         return dispatch(
           getSuccess({
             changePasswordMessage: "Change password successfully!",
-
-          }))
+          })
+        );
       }
       return dispatch(getFailed());
-
     } catch (error) {
       return dispatch(getFailed());
     }
   };
 };
 
-const checkPhoneNumber = phone => {
+const checkPhoneNumber = (phone) => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
@@ -81,37 +77,27 @@ const checkPhoneNumber = phone => {
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
-
       ]);
       const exist = phoneValidation.data.data[0] ? true : false;
-      // console.log(phoneValidation);
+
       if (exist) {
-        //  console.log(phoneValidation);
         return dispatch(
           getPhoneValidation({
             checkPhoneMessage: "Phone number exists",
             phone: null,
             phoneOTP: null,
-          }))
-      }
-      else {
-        //  Send OTP to phone number through Firebase
+          })
+        );
+      } else {
         return dispatch(
           getPhoneValidation({
             checkPhoneMessage: null,
             phone: phone,
             phoneOTP: "12345",
-
           })
         );
       }
-      // return dispatch(
-      //   storeProfile({
-      //     profile: phoneValidation.data.data.length !== 0 ? phoneValidation.data.data[0] : null,
-      //   })
-      // );
     } catch (error) {
-      // console.log(error);
       return dispatch(getFailed(error));
     }
   };
@@ -121,26 +107,25 @@ const checkingPhoneNumber = (message) => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      //  console.log("checkingPhoneNumber");
+
       return dispatch(
         getPhoneValidation({
           checkPhoneMessage: message,
           phone: null,
           phoneOTP: null,
-        }))
-
+        })
+      );
     } catch (error) {
-      // console.log(error);
       return dispatch(getFailed(error));
     }
   };
 };
 
-const updateProfile = user => {
+const updateProfile = (user) => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      //  console.log(user);
+
       const [updateResponse] = await Promise.all([
         Axios({
           url: `/supplier/profile`,
@@ -149,15 +134,8 @@ const updateProfile = user => {
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
-        // Axios({
-        //   url: `/users/profile/me`,
-        //   method: "GET",
-        //   withCredentials: true,
-        //   exposedHeaders: ["set-cookie"],
-        // }),
-
       ]);
-      //  console.log(updateResponse);
+
       if (updateResponse.status === 200) {
         dispatch(
           getPhoneValidation({
@@ -171,10 +149,10 @@ const updateProfile = user => {
             googleid: updateResponse.data.data.account.googleid,
             phone: updateResponse.data.data.account.phone,
             ...updateResponse.data.data.profile,
-          }));
+          })
+        );
       }
       return dispatch(getFailed());
-
     } catch (error) {
       return dispatch(getFailed());
     }
@@ -194,15 +172,14 @@ const updateIdentifcation = (card) => {
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
-
       ]);
-      //  console.log(identificationResponse);
+
       return dispatch(
         getIdenficationCard({
           identificationChangeMessage: "Identification validated successfully!",
-        }));
+        })
+      );
     } catch (error) {
-      // console.log(error);
       return dispatch(getFailed(error));
     }
   };
@@ -221,15 +198,14 @@ const updateEWallet = (ewallet) => {
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
-
       ]);
-      //  console.log(ewalletResponse);
+
       return dispatch(
         getEWalletCard({
           eWalletChangeMessage: "E-Wallet changed successfully!",
-        }));
+        })
+      );
     } catch (error) {
-      // console.log(error);
       return dispatch(getFailed(error));
     }
   };
@@ -242,7 +218,6 @@ const getRequest = () => {
 };
 
 const getSuccess = (data) => {
-  // console.log(data);
   return {
     type: GET_DATA_SUCCESS,
     payload: data,
@@ -256,26 +231,26 @@ const getFailed = (err) => {
   };
 };
 
-const getPhoneValidation = data => {
+const getPhoneValidation = (data) => {
   return {
     type: GET_PHONE_VALIDATION,
     payload: data,
   };
-}
+};
 
-const getIdenficationCard = data => {
+const getIdenficationCard = (data) => {
   return {
     type: GET_IDENFICATION_VALIDATION,
     payload: data,
   };
-}
+};
 
-const getEWalletCard = data => {
+const getEWalletCard = (data) => {
   return {
     type: GET_EWALLET_VALIDATION,
     payload: data,
   };
-}
+};
 
 const action = {
   changePassword,

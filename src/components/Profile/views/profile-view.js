@@ -1,14 +1,21 @@
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
-  Button, DatePicker, Form, Input, Modal, Select, Tag, Tooltip, Typography, Upload
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Tag,
+  Tooltip,
+  Typography,
+  Upload,
 } from "antd";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Loader from "./../../../components/Loader";
 import action from "./../modules/action";
-
-
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -35,7 +42,6 @@ const tailFormItemLayout = {
   },
 };
 
-//  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
   createCampaign: PropTypes.func,
@@ -43,10 +49,9 @@ const propsProTypes = {
   productList: PropTypes.array,
 };
 
-//  default props
 const propsDefault = {
-  closeModal: () => { },
-  createCampaign: () => { },
+  closeModal: () => {},
+  createCampaign: () => {},
   openModal: false,
   productList: [],
 };
@@ -65,7 +70,7 @@ class ProfileTab extends Component {
     previewVisible: false,
     previewImage: "",
     previewTitle: "",
-    fileList: [],
+    fileList: undefined,
     price: 0,
     autoCompleteResult: [],
   };
@@ -80,8 +85,8 @@ class ProfileTab extends Component {
         googleId: storedUser.googleid,
         loginMethod: storedUser.googleid ? "BY GOOGLE MAIL" : "BY USERNAME",
         phone: storedUser.phone,
-        ...this.props.data
-      }
+        ...this.props.data,
+      },
     });
   }
 
@@ -93,16 +98,16 @@ class ProfileTab extends Component {
   onFinish = (values) => {
     values.avatar =
       this.state.fileList.length === 0 && this.props.record
-        ? JSON.parse(this.props.record?.image)
+        ? JSON.parse(this.props.record?.avt)
         : this.state.fileList;
     this.setState({
       user: {
-        phone: "035497658",
+        // phone: "035497658",
         avatar: values.avatar,
         name: values.name,
         email: values.email,
         address: values.address,
-      }
+      },
     });
     this.props.updateProfile(this.state.user);
   };
@@ -132,12 +137,11 @@ class ProfileTab extends Component {
   };
 
   handleChange = ({ fileList }) => {
-    // fileList = fileList.slice(-2);
-    // console.log(fileList);
-    // 2. Read from response and show file link
+    console.log(fileList);
+
+    console.log(fileList);
     fileList = fileList.map((file) => {
       if (file.response) {
-        // Component will show file.url as link
         file.url = file.response[0].url;
         file.name = file.response[0].name;
         file.thumbUrl = null;
@@ -152,22 +156,23 @@ class ProfileTab extends Component {
     const { loading } = this.props;
     if (loading) return <Loader />;
 
-    const { load, fileList } = this.state;
+    const { data } = this.props;
+    const { load, fileList = JSON.parse(data?.avt || "[]") } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    const { data } = this.props;
-    let storedUser = data
-  //  console.log(data);
+    let storedUser = data;
+
     return (
       <>
-        <Title style={{ textAlign: "center", padding: "30px" }} level={3}>USER PROFILE</Title>
+        <Title style={{ textAlign: "center", padding: "30px" }} level={3}>
+          USER PROFILE
+        </Title>
         <Form
           {...formItemLayout}
-          // form={form}
           name="register"
           onFinish={this.onFinish}
           scrollToFirstError
@@ -176,7 +181,6 @@ class ProfileTab extends Component {
             name="username"
             label="Username"
             tooltip="Username can not be channged!"
-
           >
             <Tag color="green">{storedUser.username ?? "Unavailable"}</Tag>
           </Form.Item>
@@ -186,10 +190,12 @@ class ProfileTab extends Component {
             label="Role name"
             tooltip="User's role in WSG System"
           >
-            <Tooltip placement="topLeft" title="Suppliers are those who use the WSG System and website to process their business. Their main role is to cooperate with the WSG system to do business">
+            <Tooltip
+              placement="topLeft"
+              title="Suppliers are those who use the WSG System and website to process their business. Their main role is to cooperate with the WSG system to do business"
+            >
               <Tag color="blue">{storedUser.rolename ?? ""}</Tag>
             </Tooltip>
-
           </Form.Item>
 
           <Form.Item
@@ -197,17 +203,27 @@ class ProfileTab extends Component {
             label="Logging Method"
             tooltip="User's logging method in WSG System"
           >
-            <Tooltip placement="topLeft" title="Logging by username / Logging by Google Mail">
-              <Tag color="red">{storedUser.username ? "BY USERNAME" : "BY EMAIL"}</Tag>
+            <Tooltip
+              placement="topLeft"
+              title="Logging by username / Logging by Google Mail"
+            >
+              <Tag color="red">
+                {storedUser.username ? "BY USERNAME" : "BY EMAIL"}
+              </Tag>
             </Tooltip>
-
           </Form.Item>
 
           <Form.Item
             name="name"
             label="Fullname"
             tooltip="What is your fullname?"
-            rules={[{ required: true, message: 'Please input your fullname!', whitespace: true }]}
+            rules={[
+              {
+                required: true,
+                message: "Please input your fullname!",
+                whitespace: true,
+              },
+            ]}
             initialValue={data.name}
           >
             <Input />
@@ -219,12 +235,12 @@ class ProfileTab extends Component {
                 name="file"
                 action="/files/upload"
                 listType="picture-card"
-                fileList={this.props.record ? fileList : []}
+                fileList={fileList}
                 onPreview={this.handlePreview}
                 onChange={this.handleChange}
                 style={{ width: "60vh" }}
               >
-                {this.state.fileList.length >= 8 ? null : uploadButton}
+                {fileList.length >= 1 ? null : uploadButton}
               </Upload>
               <Modal
                 visible={this.state.previewVisible}
@@ -246,12 +262,12 @@ class ProfileTab extends Component {
             label="E-mail"
             rules={[
               {
-                type: 'email',
-                message: 'The input is not valid E-mail!',
+                type: "email",
+                message: "The input is not valid E-mail!",
               },
               {
                 required: true,
-                message: 'Please input your E-mail!',
+                message: "Please input your E-mail!",
               },
             ]}
             initialValue={data.email}
@@ -259,12 +275,7 @@ class ProfileTab extends Component {
             <Input />
           </Form.Item>
 
-          <Form.Item
-            name="address"
-            label="Address"
-            initialValue={data.address}
-          // rules={[{ required: true, message: 'Please input Intro' }]}
-          >
+          <Form.Item name="address" label="Address" initialValue={data.address}>
             <Input.TextArea showCount maxLength={100} />
           </Form.Item>
 
@@ -279,34 +290,29 @@ class ProfileTab extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   return {
     loading: state.profileReducer.loading,
     data: state.profileReducer.data,
     error: state.profileReducer.err,
-    // productList: state.productReducer.data,
-    // orderList: [],
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getProfile: async () => {
-      // console.log("get campaign");
       await dispatch(action.getProfile());
     },
 
-    checkPhoneNumber: async phone => {
+    checkPhoneNumber: async (phone) => {
       await dispatch(action.checkPhoneNumber(phone));
     },
 
-    updateProfile: async profile => {
+    updateProfile: async (profile) => {
       await dispatch(action.updateProfile(profile));
-      // await dispatch(action.getProfile());
-    }
+      await dispatch(action.getProfile());
+    },
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileTab);
-
