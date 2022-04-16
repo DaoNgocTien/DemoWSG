@@ -36,7 +36,7 @@ class OrdersInCampaign extends React.Component {
   onSelectChange = (selectedRowKeys) => {
     // console.log("selectedRowKeys changed: ", selectedRowKeys);
     let record = this.props.orderList?.filter((item) => {
-      return selectedRowKeys.includes(item.id);
+      return selectedRowKeys.includes(item?.id);
     })[0];
     // console.log(record);
     this.setState({
@@ -270,12 +270,9 @@ class OrdersInCampaign extends React.Component {
                 openModal={openRejectModal}
                 closeModal={this.closeModal}
                 rejectOrder={rejectOrder}
-                record={
-                  orderList.find((item) => {
-                    return selectedRowKeys[0] === item.id;
-                  })
+                record={this.state.record
                 }
-                campaignId={campaign.id}
+                campaignId={campaign?.id}
               />
               <div style={{ marginBottom: 16 }}>
                 <Row>
