@@ -109,6 +109,7 @@ class CategoryUI extends Component {
       openCreateModal: false,
       openDeleteModal: false,
       openEditModal: false,
+      record:{}
     });
   };
 

@@ -68,10 +68,12 @@ class CancelledOrderUI extends Component {
       selectedRowKeys: [],
       editButton: false,
       viewButton: false,
+      record:{}
     });
     this.setState({
       openRejectModal: false,
       openEditModal: false,
+      
     });
   };
 
