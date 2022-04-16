@@ -323,6 +323,7 @@ class CampaignUI extends Component {
     } = this.props;
   //  console.log(productList);
     const rowSelection = {
+      type: "radio",
       selectedRowKeys,
       onChange: this.onSelectChange,
     };

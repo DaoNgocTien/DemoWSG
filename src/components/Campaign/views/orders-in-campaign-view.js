@@ -231,6 +231,7 @@ class OrdersInCampaign extends React.Component {
   //  console.log(this.props);
 
     const rowSelection = {
+      type: "radio",
       selectedRowKeys,
       onChange: this.onSelectChange,
     };

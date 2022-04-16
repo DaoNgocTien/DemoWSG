@@ -201,6 +201,7 @@ class LoyalCustomerUI extends Component {
     } = this.props;
 
     const rowSelection = {
+      type: "radio",
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
