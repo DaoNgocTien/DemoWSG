@@ -115,6 +115,7 @@ class CampaignUI extends Component {
       openCreateModal: false,
       openDeleteModal: false,
       openEditModal: false,
+      record:{}
     });
   };
 
