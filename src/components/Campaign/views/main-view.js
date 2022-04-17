@@ -137,14 +137,27 @@ class CampaignUI extends Component {
     },
     {
       title: "Quantity",
-      render: (object) => {
-        return (
-          <Tag color={!object.isshare ? "blue" : "green"}>
-            {!object.isshare ? "SINGLE" : "SHARED"}
-          </Tag>
-        );
-      },
+      dataIndex: "quantity",
       key: "quantity",
+      sorter: (a, b) => a.quantity - b.quantity,
+      width: 120,
+      fix: "left",
+      // title: "Quantity",
+      // render: (object) => {
+      //   // let disabled = object.status === "created" ? "false" : "true";
+      //   // console.log(object);
+      //   return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
+
+
+      //   // if (object.status === "processing") {
+      //   //   return (
+      //   //     <Button onClick={() => this.openUploadModal(object)} type="primary">
+      //   //       Deliver Order
+      //   //     </Button>
+      //   //   );
+      //   // }
+      // },
+      // key: "quantity",
     },
     {
       title: "Max Quantity",
@@ -170,21 +183,7 @@ class CampaignUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return (
-          <Tag
-            color={
-              data === "ready"
-                ? "blue"
-                : data === "active"
-                ? "red"
-                : data === "done"
-                ? "green"
-                : "grey"
-            }
-          >
-            {data.toUpperCase()}
-          </Tag>
-        );
+        return <Tag color={data === "ready" ? "blue" : data === "active" ? "red" : data === "done" ? "green" : "grey"}>{data.toUpperCase() === "DEACTIVATED" ? "STOP" : data.toUpperCase()}</Tag>;
       },
       width: 100,
       fix: "right",
@@ -321,8 +320,7 @@ class CampaignUI extends Component {
               closeModal={this.closeModal}
               createCampaign={createCampaign}
               productList={productList.filter((product) => {
-                const availableQuantity =
-                  product.quantity - product.maxquantity;
+                const availableQuantity = product.quantity - product.maxquantity;
                 return availableQuantity >= 10;
               })}
               campaingList={data}
@@ -403,7 +401,7 @@ class CampaignUI extends Component {
                 </Col>
               </Row>
             </div>
-            <Drawer
+            {/* <Drawer
               width={window.innerWidth * 0.7}
               placement="right"
               size={"736px"}
@@ -412,7 +410,7 @@ class CampaignUI extends Component {
               visible={this.state.openDrawer}
             >
               <OrdersInCampaign campaign={this.state.record} />
-            </Drawer>
+            </Drawer> */}
             <Table
               loading={this.props.loading}
               rowSelection={rowSelection}

@@ -72,12 +72,19 @@ class CategoryUI extends Component {
 
   onSelectChange = (record) => {
     // const selectedRowKeys = [];
+    console.log(record);
+    let isExisted = false;
+    this.props.productList.map(p => {
+      if(p.categoryid === record.id){
+        isExisted = true;        
+      }
+    })
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({
         selectedRowKeys: [record.key],
         record: record,
         editButton: true,
-        deleteButton: true,
+        deleteButton: !isExisted,
         addNewButton: false,
       });
     } else {
@@ -141,9 +148,9 @@ class CategoryUI extends Component {
     let { data } = this.props;
     let searchList = data.filter((item) => {
       return (
-        item.categoryname.includes(e.target.value) ||
-        item.createdat.includes(e.target.value) ||
-        item.updatedat.includes(e.target.value)
+        item?.categoryname?.toUpperCase().includes(e.target.value.toUpperCase()) ||
+        item?.createdat?.toUpperCase().includes(e.target.value.toUpperCase()) ||
+        item?.updatedat?.toUpperCase().includes(e.target.value.toUpperCase())
       );
     });
     this.setState({
@@ -232,11 +239,11 @@ class CategoryUI extends Component {
                     >
                       Delete
                     </Button>
-                    <span style={{ marginLeft: 8 }}>
+                    {/* <span style={{ marginLeft: 8 }}>
                       {selectedRowKeys.length > 0
                         ? `Selected ${selectedRowKeys.length} items`
                         : ""}
-                    </span>
+                    </span> */}
                   </Space>
                 </Col>
                 <Col flex="300px">

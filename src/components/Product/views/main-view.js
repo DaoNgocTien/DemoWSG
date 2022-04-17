@@ -37,9 +37,9 @@ const propsDefault = {
     updatedat: "2022-01-13T16:34:09.908Z",
     categoryname: null,
   },
-  createCategory: () => {},
-  updateCategory: () => {},
-  deleteProduct: () => {},
+  createCategory: () => { },
+  updateCategory: () => { },
+  deleteProduct: () => { },
 };
 
 class ProductUI extends Component {
@@ -87,12 +87,13 @@ class ProductUI extends Component {
 
   onSelectChange = (record) => {
     // console.log('selectedRowKeys changed: ', selectedRowKeys);
+    let campaignList=this.props.campaignList?.length ? this.props.campaignList.filter(c => c.productid === record.id) : [];
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({
         selectedRowKeys: [record.key],
         record: record,
         editButton: true,
-        deleteButton: true,
+        deleteButton: campaignList.length === 0,
         addNewButton: false,
       });
     } else {
@@ -147,14 +148,16 @@ class ProductUI extends Component {
       dataIndex: "name",
       width: 100,
       key: "name",
+      sorter: (a, b) => a.name.length - b.name.length,
+
       fixed: "left",
     },
-    {
-      title: "Category",
-      dataIndex: "categoryname",
-      width: 100,
-      key: "categoryname",
-    },
+    // {
+    //   title: "Category",
+    //   dataIndex: "categoryname",
+    //   width: 100,
+    //   key: "categoryname",
+    // },
     {
       title: "Retail Price",
       dataIndex: "retailprice",
@@ -191,19 +194,21 @@ class ProductUI extends Component {
       dataIndex: "createdat",
       key: "createdat",
       width: 150,
+      sorter: (a, b) => a.createdat.localeCompare(b.createdat),
       render: (data) => moment(data).format("DD-MM-YYYY"),
     },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-      width: 1000,
-    },
+    // {
+    //   title: "Description",
+    //   dataIndex: "description",
+    //   key: "description",
+    //   width: 1000,
+    // },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
       width: 120,
+      sorter: (a, b) => a.status.length - b.status.length,
       fixed: "right",
       render: (data) => {
         let status = "";
@@ -225,17 +230,17 @@ class ProductUI extends Component {
   onChangeHandler = (e) => {
     let { data } = this.props;
     // console.log(data);
-    let searchString = e.target.value;
+    let searchString = e.target.value.toUpperCase();
     let searchList = data.filter((item) => {
       // console.log(item);
       return (
-        item.name.includes(searchString) ||
-        item.categoryname.includes(searchString) ||
-        item.retailprice.includes(searchString) ||
-        item.quantity.includes(searchString) ||
-        item.createdat.includes(searchString) ||
-        item.description.includes(searchString) ||
-        item.status.includes(searchString)
+        item?.name?.toUpperCase().includes(searchString) ||
+        // item?.categoryname?.toUpperCase().includes(searchString) ||
+        item?.retailprice?.toString().toUpperCase().includes(searchString) ||
+        item?.quantity?.toString().toUpperCase().includes(searchString) ||
+        item?.createdat?.toUpperCase().includes(searchString) ||
+        // item?.description?.toUpperCase().includes(searchString) ||
+        item?.status?.toUpperCase().includes(searchString)
       );
     });
     this.setState({
@@ -257,7 +262,7 @@ class ProductUI extends Component {
       searchKey,
     } = this.state;
 
-    const { categoryList, createProduct, updateProduct, deleteProduct } =
+    const { categoryList = [], createProduct, updateProduct, deleteProduct, campaignList = [] } =
       this.props;
 
     const rowSelection = {
@@ -284,27 +289,30 @@ class ProductUI extends Component {
               data={this.props.data}
             />
             <DeleteModal
+             loading={this.props.loading}
               openModal={openDeleteModal}
               closeModal={this.closeModal}
               categoryList={categoryList}
               deleteProduct={deleteProduct}
               record={
-                this.props.data.filter((item) => {
-                  return selectedRowKeys.includes(item.id);
-                })[0]
+                this.state.record
               }
+              campaignList={this.state.record ? campaignList.filter(c => c.productid === this.state.record.id) : []}
+              availableQuantity={this.state.record?.quantity - this.state.record?.maxquantity ?? 0}
               selectedRowKeys={selectedRowKeys[0]}
+              data={this.props.data}
             />
             <EditModal
+              loading={this.props.loading}
               openModal={openEditModal}
               closeModal={this.closeModal}
               categoryList={categoryList}
               updateProduct={updateProduct}
               record={
-                this.props.data.filter((item) => {
-                  return selectedRowKeys.includes(item.id);
-                })[0]
+                this.state.record
               }
+              campaignList={this.state.record ? campaignList.filter(c => c.productid === this.state.record.id) : []}
+              availableQuantity={this.state.record?.quantity - this.state.record?.maxquantity ?? 0}
               selectedRowKeys={selectedRowKeys[0]}
               data={this.props.data}
             />
