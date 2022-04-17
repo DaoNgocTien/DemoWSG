@@ -61,7 +61,7 @@ class OrdersInCampaign extends React.Component {
       render: (_text, _object, index) => {
         return index + 1;
       },
-      width: 100,
+      width:70,
       fixed: "left",
     },
     {
@@ -74,30 +74,40 @@ class OrdersInCampaign extends React.Component {
       fixed: "left",
     },
     {
-      title: "Product Name",
-      width: 200,
-      render: (_text, object, _index) => {
-        // console.log(object);
-        return object.details[0].productname;
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (data) => {
+        return <Tag>{data.toUpperCase()}</Tag>
       },
+      width: 100,
+       fixed: "left",
     },
-    {
-      title: "Product Image",
-      width: 150,
-      render: (_text, object, _index) => {
-        // console.log(object);
-        return object.details[0].image === "" ? (
-          ""
-        ) : (
-          <img
-            width="100"
-            alt="show illustrative representation"
-            height="100"
-            src={JSON.parse(object.details[0]?.image)[0].url}
-          />
-        );
-      },
-    },
+    // {
+    //   title: "Product Name",
+    //   width: 200,
+    //   render: (_text, object, _index) => {
+    //     // console.log(object);
+    //     return object.details[0].productname;
+    //   },
+    // },
+    // {
+    //   title: "Product Image",
+    //   width: 150,
+    //   render: (_text, object, _index) => {
+    //     // console.log(object);
+    //     return object.details[0].image === "" ? (
+    //       ""
+    //     ) : (
+    //       <img
+    //         width="100"
+    //         alt="show illustrative representation"
+    //         height="100"
+    //         src={JSON.parse(object.details[0]?.image)[0].url}
+    //       />
+    //     );
+    //   },
+    // },
     {
       title: "Quantity",
       width: 100,
@@ -171,15 +181,7 @@ class OrdersInCampaign extends React.Component {
         return moment(data).format("MM/DD/YYYY");
       },
     },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (data) => {
-        return <Tag>{data.toUpperCase()}</Tag>
-      },
-      width: 100,
-    },
+   
   ];
 
   onChangeHandler = (e) => {
@@ -317,7 +319,7 @@ class OrdersInCampaign extends React.Component {
           }
         >
           <Form>
-            <Descriptions bordered title="Campaign information" column={2}>
+            <Descriptions bordered column={2} size="small">
               <Descriptions.Item label="Name">
                 {record?.description}
               </Descriptions.Item>
@@ -327,17 +329,51 @@ class OrdersInCampaign extends React.Component {
                   moment(record?.todate).format("MM/DD/YYYY")}
               </Descriptions.Item>
 
+              <Descriptions.Item label="Campaign Type">
+                <Tag color={!record?.isshare ? "blue" : "green"}>{!record?.isshare ? "SINGLE" : "SHARED"}</Tag>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Campaign Status">
+                <Tag color={record?.status === "ready" ? "blue" : record?.status === "active" ? "red" : record?.status === "done" ? "green" : "grey"}>{record?.status.toUpperCase()}</Tag>
+              </Descriptions.Item>
+
               <Descriptions.Item label="Product">
                 {record?.productname}
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Wholesale price">
+                {record?.price}
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
                 {record?.quantity}
               </Descriptions.Item>
 
-              <Descriptions.Item label="Wholesale percent">
-                {(record?.price / record?.productretailprice) * 100 + " %"}
+              <Descriptions.Item label="Max quantity">
+                {record?.maxquantity}
               </Descriptions.Item>
+
+              <Descriptions.Item label="Campaign Code">
+                {record?.code}
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Number of order">
+                {record?.numorder}
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Product Image" span={2}>
+                <img
+                  width="100"
+                  alt="show illustrative representation"
+                  height="100"
+                  src={JSON.parse(record?.productimage)[0].url}
+                />
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Description" span={2}>
+                {record?.description}
+              </Descriptions.Item>
+
             </Descriptions>
           </Form>
           <PageHeader

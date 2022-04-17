@@ -54,7 +54,7 @@ class CreatModal extends Component {
   };
   formRef = React.createRef();
   switchmRef = React.createRef();
-
+  quantityRef = React.createRef();
 
   componentDidMount() {
     this.setState({
@@ -76,53 +76,74 @@ class CreatModal extends Component {
       //  Remove duplicate step
       data.quantities = data.quantities.filter((value, index, self) =>
         index === self.findIndex((t) => (
-          t.quantity === value.quantity && t.price <= value.price
+          t.quantity === value.quantity && t.price >= value.price
         ))
       )
       //  Sort list step decrease
       data.quantities.sort(function (a, b) { return b.quantity - a.quantity });
-      console.log(data.quantities);
+
+      //  Find the invalid item and push to error array
       let errArr = [];
-      let compareArr = [];
+      // let compareArr = [];
       data.quantities.map(item => {
         data.quantities.map(item2 => {
           if (item.quantity != item2.quantity) {
             if (item.quantity > item2.quantity && item.price > item2.price) {
               errArr.push(item);
-              compareArr.push(item2);
+              // compareArr.push(item2);
             }
           }
         })
 
       })
-      if (errArr.length === 0) {
-        data.quantities.map(item => {
-          return item.price = item.price * data.wholesalePrice / 100;
-        })
-        newCampaign = {
-          productId: data.productId,
-          fromDate: data.date[0],
-          toDate: data.date[1],
-          quantity: 0,
-          price: data.wholesalePrice,
-          maxQuantity: data.maxQuantity,
-          description: data.description,
-          advanceFee: data.advancePercent,
-          isShare: this.state.switchState ? true : false,
-          range: [...data.quantities]
 
-        }
-        this.props.createCampaign(newCampaign);
-        this.props.closeModal();
+      //  Remove item to make valid final array
+      let datas = data.quantities.filter(item => {
+        console.log(!errArr.includes(item));
+        return !errArr.includes(item);
+      })
+
+      //  Change % price to numeric price
+      datas.map(item => {
+        return item.price = item.price * data.wholesalePrice / 100;
+      })
+
+      //  Set new record
+      newCampaign = {
+        productId: data.productId,
+        fromDate: data.date[0],
+        toDate: data.date[1],
+        quantity: 1,
+        price: data.wholesalePrice,
+        maxQuantity: data.maxQuantity,
+        description: data.description,
+        advanceFee: data.advancePercent,
+        isShare: this.state.switchState ? true : false,
+        range: [...datas]
+
       }
-      else {
-        this.setState({
-          errStepArr: {
-            errArr: errArr,
-            compareArr: compareArr
-          }
-        })
-      }
+
+      //  Insert into database
+      this.props.createCampaign(newCampaign);
+
+      //  Close modal
+      this.props.closeModal();
+      // data.quantities.filter(item => {
+      //   console.log(!errArr.includes(item));
+      //   return !errArr.includes(item);
+      //   // else {
+      //   //   return item;
+      //   // }
+      // })
+      // console.log(errArr);
+      // console.log(datas);
+      // this.setState({
+      //   errStepArr: {
+      //     errArr: errArr,
+      //     compareArr: compareArr
+      //   }
+      // })
+
 
     }
     else {
@@ -220,7 +241,7 @@ class CreatModal extends Component {
     this.setState({
       switchState: !this.state.switchState,
     })
-    this.state.switchState ?? this.formRef.setFieldsValue({ sights: [] });
+    this.quantityRef.current.value = 1;
 
   };
   showStepErr = () => {
@@ -237,11 +258,11 @@ class CreatModal extends Component {
     return <Text type="danger">{errMes}</Text>
 
   }
-  // clearStepErr = () => {
-  //   this.setState({
-  //     errMes: "",
-  //   })
-  // }
+  clearStepErr = () => {
+    this.setState({
+      errMes: "",
+    })
+  }
   render() {
     const { openModal } = this.props;
 
@@ -397,27 +418,13 @@ class CreatModal extends Component {
                   },
                   () => ({
                     validator(_, value) {
-                      // console.log(typeof(productSelected?.retailprice));
-                      // console.log(typeof(availableQuantity));
-                      // console.log(Number(productSelected.retailprice) * Number(availableQuantity));
                       if (Number(productSelected?.retailprice) * Number(availableQuantity) < 5000) {
                         return Promise.reject(new Error('Unable to use product'));
                       }
                       return Promise.resolve();
                     }
                   }),
-                  //   if (listName.includes(value)) {
-                  //     return Promise.reject(new Error('Product Name exists!'));
-                  //   }
-                  // if (value.length > 0 && value.length <= 200) {
-                  //   return Promise.resolve();
-                  // }
-
-                  // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
-
-                  // }),
                 ]}
-              // help="Discount price is 1000 -> product retail price!"
               >
                 <Select
                   onChange={this.onSelectProduct}
@@ -483,34 +490,23 @@ class CreatModal extends Component {
 
             <Space size={30}>
               <Form.Item
+
                 name="quantity"
-                initialValue={10}
+                initialValue={switchState ? 1 : minQuantity}
                 label="Quantity"
                 tooltip="In single campaign, quantity is the minimum amount of products customer has to buy to end campaign successfully.
-                In shared campaign, quantity is the minimum product customer has to order to join the campaign!!"
+                In shared campaign, quantity is the minimum product customer has to order to join the campaign, default 1"
                 rules={[
                   // {
                   //   required: true,
                   //   message: 'Name is required!',
                   // },
                   ({ getFieldValue }) => ({
-                    // validator(_, value) {
-
-                    //   if (listName.includes(value)) {
-                    //     return Promise.reject(new Error('Product Name exists!'));
-                    //   }
-                    // if (value.length > 0 && value.length <= 200) {
-                    //   return Promise.resolve();
-                    // }
-
-                    // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
                     validator(_, value) {
                       const min = switchState ? 0 : 9;
                       const maxQuantity = getFieldValue('maxQuantity');
                       const wholesalePrice = getFieldValue('wholesalePrice');
                       const advancePercent = getFieldValue('advancePercent');
-                      // console.log(advancePercent); 
-                      // const maxQuantity = getFieldValue('maxQuantity');
                       if (maxQuantity < value) {
                         return Promise.reject(new Error('Quantity can not bigger than max quantity!'));
                       }
@@ -528,6 +524,8 @@ class CreatModal extends Component {
                 ]}
               >
                 <InputNumber
+                  ref={this.quantityRef}
+                  disabled={switchState ? true : false}
                   addonAfter=" products"
                   min={this.state.switchState ? "1" : "10"}
                   max={availableQuantity}
@@ -544,16 +542,6 @@ class CreatModal extends Component {
                   //   message: 'Name is required!',
                   // },
                   ({ getFieldValue }) => ({
-                    // validator(_, value) {
-
-                    //   if (listName.includes(value)) {
-                    //     return Promise.reject(new Error('Product Name exists!'));
-                    //   }
-                    // if (value.length > 0 && value.length <= 200) {
-                    //   return Promise.resolve();
-                    // }
-
-                    // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
                     validator(_, value) {
                       if (getFieldValue('quantity') > value) {
                         return Promise.reject(new Error('Maximum quantity can not lesser than quantity!'));
@@ -566,11 +554,10 @@ class CreatModal extends Component {
                     },
                   }),
                 ]}
-              // tooltip="Max quantity is 10 -> maximum available quantity in stock!"
               >
                 <InputNumber
                   addonAfter=" products"
-                  min={minQuantity}
+                  min={switchState ? 1 : minQuantity}
                   max={availableQuantity}
                   style={{ width: "60vh" }}
                   onChange={(e) => this.onChangeQuantity(e, "max")}
@@ -588,10 +575,6 @@ class CreatModal extends Component {
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-
-                      // if (listName.includes(value)) {
-                      //   return Promise.reject(new Error('Product Name exists!'));
-                      // }
                       const range = Number(productSelected?.retailprice) ?? 999999999999;
                       const quantity = getFieldValue('quantity');
                       const wholesalePrice = getFieldValue('wholesalePrice');
@@ -599,11 +582,7 @@ class CreatModal extends Component {
                       if (wholesalePrice * quantity * value <= 500000) {
                         return Promise.reject(new Error('Advance percent to be > 5000, at least ' + (500000 / (minWholesalePrice * maxQuantity) + 1).toFixed() + " %"));
                       }
-                      // if (value >= 0 && value <= range) {
                       return Promise.resolve();
-                      // }
-
-                      // return Promise.reject(new Error('Wholesale maximum price is product retail price!'));
 
                     }
                   })
@@ -670,11 +649,6 @@ class CreatModal extends Component {
             {!switchState ? "" :
               //  Shared
               <>
-                <Title type="error" style={{ textAlign: "center", }} level={3}>
-                  {this.showStepErr()}
-
-
-                </Title>
 
                 <Form.List
                   name="quantities"
@@ -696,49 +670,12 @@ class CreatModal extends Component {
                                 label="Quantity Up To"
                                 name={[field.name, 'quantity']}
                                 initialValue={maxQuantity}
-                              // rules={[
-                              //   // {
-                              //   //   required: true,
-                              //   //   message: 'Name is required!',
-                              //   // },
-                              //   ({ getFieldValue }) => ({
-                              //     // validator(_, value) {
-
-                              //     //   if (listName.includes(value)) {
-                              //     //     return Promise.reject(new Error('Product Name exists!'));
-                              //     //   }
-                              //     // if (value.length > 0 && value.length <= 200) {
-                              //     //   return Promise.resolve();
-                              //     // }
-
-                              //     // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
-                              //     validator(_, value) {
-                              //       // if (getFieldValue('quantity') > value) {
-                              //       //   return Promise.reject(new Error('Maximum quantity can not lesser than quantity!'));
-                              //       // }
-                              //       console.log(minSharedAdvancedPercent);
-                              //       console.log(Number(value));
-
-                              //       console.log(console.log(minSharedQuantityStep));
-                              //       console.log(minSharedAdvancedPercent * minSharedQuantityStep * Number(value));
-                              //       if (minSharedAdvancedPercent * minSharedQuantityStep * Number(value) <= 5000) {
-                              //         return Promise.reject(new Error('Advance fee have to be > 5000'));
-                              //       }
-                              //       // if (Number(value) > 9) {
-                              //       return Promise.resolve();
-                              //       // }
-
-                              //       // return Promise.reject(new Error('Maximum quantity is positive number!'));
-                              //     },
-                              //   }),
-                              // ]}
                               >
                                 <InputNumber
                                   addonAfter=" products"
                                   max={maxQuantity}
-                                  onChange={this.clearStepErr()}
 
-                                  min={minQuantity}
+                                  min={switchState ? 1 : minQuantity}
                                   style={{ width: "60vh" }}
                                 />
                               </Form.Item>
@@ -748,7 +685,6 @@ class CreatModal extends Component {
                             {...field}
                             label="Price"
                             name={[field.name, 'price']}
-                            // dependencies={[field.name, "quantity"]}
                             rules={[
                               {
                                 required: true,
@@ -779,7 +715,6 @@ class CreatModal extends Component {
                               min={1}
                               max={99}
                               style={{ width: "60vh" }}
-                              onChange={this.clearStepErr()}
                             />
                           </Form.Item>
 
@@ -791,6 +726,20 @@ class CreatModal extends Component {
                         <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                           Add Campaign Discount Step
                         </Button>
+                      </Form.Item>
+                      <Form.Item>
+                        <Input.TextArea disabled="true" block icon={<PlusOutlined />} rows={5}
+                          value="Share campaign tutorial step by step:
+                          - The higher products customers buy, the better discount price they will get.
+                          - Quantity step - % price conflict: the higher quantity will be counted
+                          For eq:
+                            + Quantity 15, % price 80
+                            + Quantity 25, % price 70
+                            + Quantity 45, % price 95
+                            + Quantity 55, % price 90
+                            -> Quantity valid: 15-25
+                            -> Quantity invalid: 45-55">
+                        </Input.TextArea>
                       </Form.Item>
                     </>
                   )}
@@ -811,7 +760,7 @@ class CreatModal extends Component {
                 {productSelected?.quantity ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Quantity in campaign">
-                {productSelected ? minQuantity + " -> " + maxQuantity : ""}
+                {productSelected ? switchState ? 1 : minQuantity + " -> " + maxQuantity : ""}
               </Descriptions.Item>
               <Descriptions.Item label="Retail price">
                 <NumberFormat
@@ -850,10 +799,7 @@ class CreatModal extends Component {
                       ? JSON.parse(productSelected?.image)
                       : []
                   }
-                // onPreview={this.handlePreview}
-                // onChange={this.handleChange}
                 >
-                  {/* {this.state.fileList.length >= 8 ? null : uploadButton}  */}
                 </Upload>
               </Descriptions.Item>
             </Descriptions>
