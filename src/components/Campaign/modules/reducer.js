@@ -1,9 +1,10 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_CAMPAIGN } from "./constant";
 
 let initialState = {
   loading: true,
   data: [],
   err: null,
+  record: {}
 };
 
 const campaignReducer = (state = initialState, action) => {
@@ -11,6 +12,13 @@ const campaignReducer = (state = initialState, action) => {
     case GET_DATA_REQUEST:
       state.loading = true;
       state.data = [];
+      state.err = null;
+      return { ...state };
+
+    case STORE_CAMPAIGN:
+      console.log(action);
+      state.loading = false;
+      state.record = action.payload.record;
       state.err = null;
       return { ...state };
 

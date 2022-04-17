@@ -212,13 +212,13 @@ class UpdateModal extends Component {
                             new Error("Product Name exists!")
                           );
                         }
-                        if (value.length >= 0 && value.length <= 20) {
+                        if (value.length >= 0 && value.length <= 50) {
                           return Promise.resolve();
                         }
 
                         return Promise.reject(
                           new Error(
-                            "Product Name is required, length is 1-20 characters!"
+                            "Product Name is required, length is 1-50 characters!"
                           )
                         );
                       },
@@ -244,7 +244,7 @@ class UpdateModal extends Component {
                     },
                     // ({ getFieldValue }) => ({
                     //   validator(_, value) {
-                    //     if (value.length >= 0 && value.length <= 20) {
+                    //     if (value.length >= 0 && value.length <= 50) {
                     //       return Promise.resolve();
                     //     }
 
