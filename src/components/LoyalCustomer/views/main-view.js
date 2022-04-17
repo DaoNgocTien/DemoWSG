@@ -160,19 +160,24 @@ class LoyalCustomerUI extends Component {
     });
   };
 
-  onSelectChange = (selectedRowKeys) => {
-    let record = this.props.data?.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-
-    this.setState({
-      selectedRowKeys,
-      record: record,
-      activateButton:
-        selectedRowKeys.length === 1 && record?.status === "deactive",
-      deactivateButton:
-        selectedRowKeys.length === 1 && record?.status === "active",
-    });
+  onSelectChange = (record) => {
+    if (this.state.selectedRowKeys[0] !== record.key) {
+      this.setState({
+        selectedRowKeys: [record.key],
+        record: record,
+        activateButton: true && record?.status === "deactive",
+        deactivateButton: true && record?.status === "active",
+        addNewButton: false,
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        record: {},
+        activateButton: false,
+        deactivateButton: false,
+        addNewButton: true,
+      });
+    }
   };
 
   manageLoyalCustomerPosition = (position) => {
@@ -180,7 +185,7 @@ class LoyalCustomerUI extends Component {
       ...(this.state.record ?? this.state.record),
       status: position,
     };
-  //  console.log(record);
+    //  console.log(record);
     this.props.updateLoyalCustomer(record, this.state.record?.id);
   };
 

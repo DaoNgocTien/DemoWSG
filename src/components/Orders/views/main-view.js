@@ -109,23 +109,30 @@ class OrderUI extends Component {
     });
   };
 
-  onSelectChange = (selectedRowKeys) => {
-    let record = this.props.data?.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-
-    this.setState({
-      selectedRowKeys,
-      editButton: selectedRowKeys.length === 1,
-      rejectButton:
-        selectedRowKeys.length === 1 &&
-        record?.status != "delivering" &&
-        record?.status != "delivered" &&
-        record?.status != "completed" &&
-        record?.status != "returned" &&
-        record?.status != "cancelled",
-      addNewButton: selectedRowKeys.length === 0,
-    });
+  onSelectChange = (record) => {
+    if (this.state.selectedRowKeys[0] !== record.key) {
+      this.setState({
+        selectedRowKeys: [record.key],
+        record: record,
+        editButton: true,
+        rejectButton:
+          true &&
+          record?.status != "delivering" &&
+          record?.status != "delivered" &&
+          record?.status != "completed" &&
+          record?.status != "returned" &&
+          record?.status != "cancelled",
+        addNewButton: false,
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        record: {},
+        editButton: false,
+        rejectButton: false,
+        addNewButton: true,
+      });
+    }
   };
 
   handleChangeInSelect = (data) => {
@@ -289,7 +296,7 @@ class OrderUI extends Component {
   };
 
   onRadioChange = (e) => {
-  //  console.log(e);
+    //  console.log(e);
     let { data } = this.props;
     let searchValue = e.target.value || e;
     let searchData = [];

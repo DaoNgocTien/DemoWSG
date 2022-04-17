@@ -85,14 +85,25 @@ class ProductUI extends Component {
     }
   };
 
-  onSelectChange = (selectedRowKeys) => {
+  onSelectChange = (record) => {
     // console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({
-      selectedRowKeys,
-      editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length === 1,
-      addNewButton: selectedRowKeys.length === 0,
-    });
+    if (this.state.selectedRowKeys[0] !== record.key) {
+      this.setState({
+        selectedRowKeys: [record.key],
+        record: record,
+        editButton: true,
+        deleteButton: true,
+        addNewButton: false,
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        record: {},
+        editButton: false,
+        deleteButton: false,
+        addNewButton: true,
+      });
+    }
   };
 
   closeModal = () => {
@@ -207,7 +218,6 @@ class ProductUI extends Component {
             return <Tag color="red">DEACTIVE</Tag>;
           }
         }
-
       },
     },
   ];

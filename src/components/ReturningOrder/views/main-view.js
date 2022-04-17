@@ -300,7 +300,7 @@ class OrderReturningUI extends Component {
 
     const rowSelection = {
       selectedRowKeys,
-      onSelect: this.onSelectChange,
+      onChange: this.onSelectChange,
       hideSelectAll: true,
     };
 
