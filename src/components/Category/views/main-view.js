@@ -29,9 +29,9 @@ const propsDefault = {
     createdat: "2022-01-23T12:03:11.309Z",
     updatedat: "2022-01-23T12:03:11.309Z",
   },
-  createCategory: () => { },
-  updateCategory: () => { },
-  deleteCategory: () => { },
+  createCategory: () => {},
+  updateCategory: () => {},
+  deleteCategory: () => {},
 };
 
 class CategoryUI extends Component {
@@ -109,7 +109,7 @@ class CategoryUI extends Component {
       openCreateModal: false,
       openDeleteModal: false,
       openEditModal: false,
-      record:{}
+      record: {},
     });
   };
 
@@ -155,16 +155,18 @@ class CategoryUI extends Component {
 
   onChangeHandler = (e) => {
     let { data } = this.props;
-    let searchList = data.filter(item => {
-      return item.categoryname.includes(e.target.value)
-        || item.createdat.includes(e.target.value)
-        || item.updatedat.includes(e.target.value);
+    let searchList = data.filter((item) => {
+      return (
+        item.categoryname.includes(e.target.value) ||
+        item.createdat.includes(e.target.value) ||
+        item.updatedat.includes(e.target.value)
+      );
     });
     this.setState({
       displayData: searchList,
       searchData: e.target.value,
-    })
-  }
+    });
+  };
 
   render() {
     const {
@@ -183,17 +185,18 @@ class CategoryUI extends Component {
     const { createCategory, updateCategory, deleteCategory } = this.props;
 
     const rowSelection = {
+      type: "radio",
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
     // const hasSelected = selectedRowKeys.length > 0;
 
-    const arr = (window.location.pathname).split("/");
+    const arr = window.location.pathname.split("/");
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title={(arr[2]).toUpperCase()}
+        title={arr[2].toUpperCase()}
         subTitle={`This is a ${arr[2]} page`}
         footer={
           <div>
@@ -265,13 +268,16 @@ class CategoryUI extends Component {
               loading={this.props.loading}
               rowSelection={rowSelection}
               columns={this.columns}
-              dataSource={displayData.length === 0 && searchData === '' ? this.props.data : displayData}
+              dataSource={
+                displayData.length === 0 && searchData === ""
+                  ? this.props.data
+                  : displayData
+              }
               scroll={{ y: 350 }}
             />
           </div>
         }
-      >
-      </PageHeader>
+      ></PageHeader>
     );
   }
 }
