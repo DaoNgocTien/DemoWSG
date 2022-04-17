@@ -308,7 +308,7 @@ class OrdersInCampaign extends React.Component {
                 columns={this.columns}
                 dataSource={
                   displayData.length === 0 && searchData === ""
-                    ? orderList
+                    ? orderList.filter(order => order.status.toUpperCase() !== "NOTADVANCED")
                     : displayData
                 }
                 scroll={{ y: 350 }}
