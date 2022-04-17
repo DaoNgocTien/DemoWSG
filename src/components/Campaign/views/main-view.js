@@ -17,6 +17,7 @@ import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 import OrdersInCampaign from "./orders-in-campaign-view";
 import NumberFormat from "react-number-format";
+import { Link, Redirect, Route } from "react-router-dom";
 
 //  prototype
 const propsProTypes = {
@@ -115,7 +116,7 @@ class CampaignUI extends Component {
       openCreateModal: false,
       openDeleteModal: false,
       openEditModal: false,
-      record:{}
+      record: {}
     });
   };
 
@@ -140,7 +141,20 @@ class CampaignUI extends Component {
     },
     {
       title: "Quantity",
-      dataIndex: "quantity",
+      render: (object) => {
+        // let disabled = object.status === "created" ? "false" : "true";
+        // console.log(object);
+        return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
+
+
+        // if (object.status === "processing") {
+        //   return (
+        //     <Button onClick={() => this.openUploadModal(object)} type="primary">
+        //       Deliver Order
+        //     </Button>
+        //   );
+        // }
+      },
       key: "quantity",
     },
     {
@@ -148,45 +162,65 @@ class CampaignUI extends Component {
       dataIndex: "maxquantity",
       key: "maxquantity",
     },
+    // {
+    //   title: "Price",
+    //   dataIndex: "price",
+    //   width: 200,
+    //   key: "price",
+    //   render: (data) => {
+    //     return (
+    //       <NumberFormat
+    //         value={data ?? "0"}
+    //         thousandSeparator={true}
+    //         suffix={" VND"}
+    //         decimalScale={0}
+    //         displayType="text"
+    //       />
+    //     );
+    //   },
+    // },
+    // {
+    //   title: "Orders",
+    //   dataIndex: "numorder",
+    //   key: "numorder",
+    // },
+    // {
+    //   title: "Advance Percent",
+    //   dataIndex: "advancefee",
+    //   key: "advancefee",
+    //   render: (data) => data + "%",
+    // },
+    // {
+    //   title: "Start Date",
+    //   dataIndex: "fromdate",
+    //   key: "fromdate",
+    //   render: (data) => moment(data).format("MM/DD/YYYY"),
+    // },
+    // {
+    //   title: "End Date",
+    //   dataIndex: "todate",
+    //   key: "todate",
+    //   render: (data) => moment(data).format("MM/DD/YYYY"),
+    // },
     {
-      title: "Price",
-      dataIndex: "price",
-      width: 200,
-      key: "price",
-      render: (data) => {
-        return (
-          <NumberFormat
-            value={data ?? "0"}
-            thousandSeparator={true}
-            suffix={" VND"}
-            decimalScale={0}
-            displayType="text"
-          />
-        );
+      title: "Type",
+      key: "type",
+      render: (object) => {
+        // let disabled = object.status === "created" ? "false" : "true";
+        // console.log(object);
+        return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
+
+
+        // if (object.status === "processing") {
+        //   return (
+        //     <Button onClick={() => this.openUploadModal(object)} type="primary">
+        //       Deliver Order
+        //     </Button>
+        //   );
+        // }
       },
-    },
-    {
-      title: "Orders",
-      dataIndex: "numorder",
-      key: "numorder",
-    },
-    {
-      title: "Advance Percent",
-      dataIndex: "advancefee",
-      key: "advancefee",
-      render: (data) => data + "%",
-    },
-    {
-      title: "Start Date",
-      dataIndex: "fromdate",
-      key: "fromdate",
-      render: (data) => moment(data).format("MM/DD/YYYY"),
-    },
-    {
-      title: "End Date",
-      dataIndex: "todate",
-      key: "todate",
-      render: (data) => moment(data).format("MM/DD/YYYY"),
+      width: 100,
+      fix: "right",
     },
     {
       title: "Status",
@@ -200,6 +234,7 @@ class CampaignUI extends Component {
     },
     {
       title: "Action",
+      key: "action",
       render: (object) => {
         // let disabled = object.status === "created" ? "false" : "true";
         // console.log(disabled);
@@ -321,7 +356,7 @@ class CampaignUI extends Component {
       deleteCampaign,
       data,
     } = this.props;
-  //  console.log(productList);
+    //  console.log(productList);
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
@@ -341,7 +376,8 @@ class CampaignUI extends Component {
               closeModal={this.closeModal}
               createCampaign={createCampaign}
               productList={productList.filter((product) => {
-                return product.quantity - product.maxquantity >= 10;
+                const availableQuantity = product.quantity - product.maxquantity;
+                return availableQuantity >= 10 ;
               })}
               campaingList={data}
             />
@@ -369,11 +405,27 @@ class CampaignUI extends Component {
                   <Space size={4}>
                     <Button
                       type="primary"
+                      onClick={() => this.props.storeCampaign(this.state.record)}
+                      disabled={!orderInCampaignButton}
+                    // style={{ width: 90 }}
+                    >
+                      <Link
+                        className="LinkDecorations"
+                        to={
+                          "/discount/orders-in-campaign"
+                        }
+                      >
+                        View Details
+                      </Link>
+                    </Button>
+                    <Button
+                      type="primary"
                       onClick={() => this.start("openCreateModal")}
                       disabled={!addNewButton}
                     >
                       Add New
                     </Button>
+
                     <Button
                       type="primary"
                       onClick={() => this.start("openEditModal")}
@@ -390,14 +442,7 @@ class CampaignUI extends Component {
                     >
                       Delete
                     </Button>
-                    <Button
-                      type="primary"
-                      onClick={() => this.start("openOrdersInCampaign")}
-                      disabled={!orderInCampaignButton}
-                    // style={{ width: 90 }}
-                    >
-                      Orders in campaigns
-                    </Button>
+
                     <span style={{ marginLeft: 8 }}>
                       {selectedRowKeys.length > 0
                         ? `Selected ${selectedRowKeys.length} items`
@@ -438,7 +483,7 @@ class CampaignUI extends Component {
                   ? this.props.data
                   : displayData
               }
-              scroll={{ y: 350, x: 1700 }}
+              scroll={{ y: 350 }}
             />
           </div>
         }

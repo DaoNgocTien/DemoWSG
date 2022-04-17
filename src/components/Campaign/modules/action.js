@@ -1,4 +1,4 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_CAMPAIGN } from "./constant";
 import Axios from "axios";
 import { Link, Redirect, Route } from "react-router-dom";
 
@@ -217,7 +217,7 @@ const deleteCampaign = id => {
 
 const startCampaignBeforeHand = id => {
   return async (dispatch) => {
-  //  console.log(id);
+    //  console.log(id);
     dispatch(getRequest());
     try {
       const [response] = await Promise.all([
@@ -243,6 +243,19 @@ const startCampaignBeforeHand = id => {
   };
 };
 
+const storeCampaign = record => {
+  return async (dispatch) => {
+    // dispatch(getRequest());
+    dispatch(
+      storeRecord({
+        record: record
+      })
+    );
+    return <Redirect to="/discount/orders-in-campaign" />;
+  };
+};
+
+
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -264,12 +277,21 @@ const getFailed = (err) => {
   };
 };
 
+const storeRecord = (data) => {
+  // console.log(data);
+  return {
+    type: STORE_CAMPAIGN,
+    payload: data,
+  };
+};
+
 const action = {
   getCampaign,
   createCampaign,
   updateCampaign,
   deleteCampaign,
   startCampaignBeforeHand,
+  storeCampaign,
 };
 
 export default action;

@@ -1,4 +1,6 @@
 import Campaign from "../components/Campaign";
+import OrdersInCampaign from "../components/Campaign/views/orders-in-campaign-view";
+
 import CancelledOrder from "../components/CancelledOrder";
 import Category from "../components/Category";
 import DiscountCode from "../components/DiscountCode";
@@ -78,6 +80,12 @@ const routesAdmin = [
     exact: true,
     path: "/discount/campaigns",
     component: Campaign,
+  },
+  
+  {
+    exact: true,
+    path: "/discount/orders-in-campaign",
+    component: OrdersInCampaign,
   },
   {
     exact: true,
