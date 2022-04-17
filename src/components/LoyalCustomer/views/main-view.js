@@ -201,9 +201,9 @@ class LoyalCustomerUI extends Component {
     } = this.props;
 
     const rowSelection = {
-      type: "radio",
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onSelect: this.onSelectChange,
+      hideSelectAll: true,
     };
 
     const arrayLocation = window.location.pathname.split("/");

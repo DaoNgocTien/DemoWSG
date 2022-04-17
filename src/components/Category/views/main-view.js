@@ -6,7 +6,6 @@ import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 
-//  prototype
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
@@ -16,7 +15,6 @@ const propsProTypes = {
   deleteCategory: PropTypes.func,
 };
 
-//  default props
 const propsDefault = {
   index: 1,
   data: [],
@@ -38,7 +36,7 @@ class CategoryUI extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
-    selectedRowKeys: [], // Check here to configure the default column
+    selectedRowKeys: [],
     editButton: false,
     deleteButton: false,
     addNewButton: true,
@@ -50,11 +48,7 @@ class CategoryUI extends Component {
     record: {},
   };
 
-  componentDidMount() {
-    // console.log("CategoryUI");
-    // console.log(this.props);
-    // console.log(this.state);
-  }
+  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -76,35 +70,28 @@ class CategoryUI extends Component {
     }
   };
 
-  onSelectChange = (selectedRowKeys) => {
-    // console.log("selectedRowKeys changed: ", selectedRowKeys);
-    // console.log(this.props.data);
-    let record = this.props.data?.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-    // console.log(record);
-    // this.setState({
-    //   record: this.props.data.filter((item) => {
-    //     return selectedRowKeys.includes(item.id);
-    //   })[0]
-    // });
-    // // console.log(this.state.record);
-    this.setState({
-      selectedRowKeys,
-      record: record,
-      editButton: selectedRowKeys.length === 1,
-      deleteButton: selectedRowKeys.length === 1,
-      addNewButton: selectedRowKeys.length === 0,
-    });
+  onSelectChange = (record) => {
+    // const selectedRowKeys = [];
+    if (this.state.selectedRowKeys[0] !== record.key) {
+      this.setState({
+        selectedRowKeys: [record.key],
+        record: record,
+        editButton: true,
+        deleteButton: true,
+        addNewButton: false,
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        record: {},
+        editButton: false,
+        deleteButton: false,
+        addNewButton: true,
+      });
+    }
   };
 
   closeModal = () => {
-    // this.setState({
-    //   // selectedRowKeys: [],
-    //   // editButton: false,
-    //   // deleteButton: false,
-    //   // addNewButton: true,
-    // });
     this.setState({
       openCreateModal: false,
       openDeleteModal: false,
@@ -139,9 +126,6 @@ class CategoryUI extends Component {
       key: "createdat",
       sorter: (a, b) => a.createdat.length - b.createdat.length,
       render: (data) => moment(data).format("DD-MM-YYYY"),
-      // render: (text, record) => {
-      //   return new Date(record.createdat).toString().slice(0, 24);
-      // },
     },
 
     {
@@ -185,11 +169,10 @@ class CategoryUI extends Component {
     const { createCategory, updateCategory, deleteCategory } = this.props;
 
     const rowSelection = {
-      type: "radio",
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onSelect: this.onSelectChange,
+      hideSelectAll: true,
     };
-    // const hasSelected = selectedRowKeys.length > 0;
 
     const arr = window.location.pathname.split("/");
     return (
@@ -286,5 +269,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(CategoryUI, arePropsEqual);

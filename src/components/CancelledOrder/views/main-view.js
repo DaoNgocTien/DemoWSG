@@ -263,9 +263,9 @@ class CancelledOrderUI extends Component {
     } = this.state;
 
     const rowSelection = {
-      type: "radio",
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onSelect: this.onSelectChange,
+      hideSelectAll: true,
     };
 
     const arrayLocation = window.location.pathname.split("/");

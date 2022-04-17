@@ -175,9 +175,9 @@ class DiscountCodeUI extends Component {
     } = this.props;
 
     const rowSelection = {
-      type: "radio",
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onSelect: this.onSelectChange,
+      hideSelectAll: true,
     };
     // const hasSelected = selectedRowKeys.length > 0;
     const arrayLocation = window.location.pathname.split("/");
