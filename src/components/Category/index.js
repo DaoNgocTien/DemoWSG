@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import action from "./modules/action";
+import { default as productAction } from "../Product/modules/action";
 import CategoryUI from "./views/main-view";
 
 class CategoryPage extends Component {
@@ -27,6 +28,7 @@ class CategoryPage extends Component {
           createCategory={this.props.createCategory}
           updateCategory={this.props.updateCategory}
           deleteCategory={this.props.deleteCategory}
+          productList={this.props.productList}
         />
       </>
     );
@@ -38,16 +40,20 @@ const mapStateToProps = (state) => {
     loading: state.categoryReducer.loading,
     data: state.categoryReducer.data,
     error: state.categoryReducer.err,
+    productList: state.productReducer.data,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getAllCategory: async () => await dispatch(action.getAllCategory()),
+    getAllCategory: async () => {
+      await dispatch(action.getAllCategory());
+      await dispatch(productAction.getAllProduct());
+    },
     createCategory: async (record) => {
       await dispatch(action.createCategory(record));
       await dispatch(action.getAllCategory());
-    }, 
+    },
     updateCategory: async (record) => {
       await dispatch(action.updateCategory(record));
       await dispatch(action.getAllCategory());

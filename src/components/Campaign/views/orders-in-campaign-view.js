@@ -1,6 +1,14 @@
 import {
-  Button, Col, Descriptions,
-  Form, Input, PageHeader, Row, Space, Table, Tag
+  Button,
+  Col,
+  Descriptions,
+  Form,
+  Input,
+  PageHeader,
+  Row,
+  Space,
+  Table,
+  Tag,
 } from "antd";
 import moment from "moment";
 import action from "../../Orders/modules/action";
@@ -24,23 +32,25 @@ class OrdersInCampaign extends React.Component {
     this.props.getOrder(this.props.record.id);
   }
 
-
-  onSelectChange = (selectedRowKeys) => {
+  onSelectChange = (record) => {
     // console.log("selectedRowKeys changed: ", selectedRowKeys);
-    let record = this.props.orderList?.filter((item) => {
-      return selectedRowKeys.includes(item?.id);
-    })[0];
-    // console.log(record);
-    this.setState({
-      selectedRowKeys,
-      record: record,
-      rejectButton: selectedRowKeys.length === 1,
-    });
+    if (this.state.selectedRowKeys[0] !== record.key) {
+      this.setState({
+        selectedRowKeys: [record.key],
+        record: record,
+        rejectButton: true,
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        record: {},
+        rejectButton: false,
+      });
+    }
   };
 
   openModal = () => {
     this.setState({ openRejectModal: true });
-
   };
 
   closeModal = () => {
@@ -83,6 +93,15 @@ class OrdersInCampaign extends React.Component {
       width: 100,
        fixed: "left",
     },
+    {
+      title: "Created At",
+      dataIndex: "createdat",
+      key: "createdat",
+      width: 120,
+      render: (data) => {
+        return moment(data).format("MM/DD/YYYY");
+      },
+    },
     // {
     //   title: "Product Name",
     //   width: 200,
@@ -122,14 +141,15 @@ class OrdersInCampaign extends React.Component {
       key: "totalprice",
       width: 100,
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.totalprice}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.totalprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -138,14 +158,15 @@ class OrdersInCampaign extends React.Component {
       key: "discountprice",
       width: 150,
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.discountprice}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.discountprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -154,14 +175,15 @@ class OrdersInCampaign extends React.Component {
       key: "finalprice",
       width: 100,
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.totalprice - object.discountprice}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.totalprice - object.discountprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -172,20 +194,14 @@ class OrdersInCampaign extends React.Component {
         return object.details[0].notes;
       },
     },
-    {
-      title: "Created At",
-      dataIndex: "createdat",
-      key: "createdat",
-      width: 120,
-      render: (data) => {
-        return moment(data).format("MM/DD/YYYY");
-      },
-    },
+    
    
   ];
 
   onChangeHandler = (e) => {
-    let orderList = this.props.orderList.filter(order => order.campaignid === this.props.record?.id);
+    let orderList = this.props.orderList.filter(
+      (order) => order.campaignid === this.props.record?.id
+    );
 
     let searchList = orderList.filter((item) => {
       return (
@@ -199,7 +215,6 @@ class OrdersInCampaign extends React.Component {
         item.discountprice.includes(e.target.value) ||
         item.createdat.includes(e.target.value) ||
         item.status.includes(e.target.value)
-
       );
     });
     this.setState({
@@ -215,19 +230,23 @@ class OrdersInCampaign extends React.Component {
       displayData,
       searchData,
       openRejectModal,
+    } = this.state;
 
-    } =
-      this.state;
-
-    const { campaign, loading, rejectOrder, orderList = [], record } = this.props;
+    const {
+      campaign,
+      loading,
+      rejectOrder,
+      orderList = [],
+      record,
+    } = this.props;
     // console.log(ordersInCampaign);
 
     //  console.log(this.props);
 
     const rowSelection = {
-      type: "radio",
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onSelect: this.onSelectChange,
+      hideSelectAll: true,
     };
     console.log(record);
     return (
@@ -270,11 +289,9 @@ class OrdersInCampaign extends React.Component {
                 openModal={openRejectModal}
                 closeModal={this.closeModal}
                 rejectOrder={rejectOrder}
-                record={
-                  orderList.find((item) => {
-                    return selectedRowKeys[0] === item?.id;
-                  })
-                }
+                record={orderList.find((item) => {
+                  return selectedRowKeys[0] === item?.id;
+                })}
                 campaignId={record?.id}
               />
               <div style={{ marginBottom: 16 }}>
@@ -310,7 +327,9 @@ class OrdersInCampaign extends React.Component {
                 columns={this.columns}
                 dataSource={
                   displayData.length === 0 && searchData === ""
-                    ? orderList.filter(order => order.status.toUpperCase() !== "NOTADVANCED")
+                    ? orderList.filter(
+                        (order) => order.status.toUpperCase() !== "NOTADVANCED"
+                      )
                     : displayData
                 }
                 scroll={{ y: 350 }}
@@ -376,16 +395,12 @@ class OrdersInCampaign extends React.Component {
 
             </Descriptions>
           </Form>
-          <PageHeader
-            className="site-page-header-responsive"
-
-          ></PageHeader>
+          <PageHeader className="site-page-header-responsive"></PageHeader>
         </PageHeader>
       </>
     );
   }
 }
-
 
 const mapStateToProps = (state) => {
   return {
@@ -399,17 +414,22 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getOrder: async (id) => {
-      await dispatch(action.getOrderByCampaignId(id))
+      await dispatch(action.getOrderByCampaignId(id));
     },
-    rejectOrder: async (orderCode, type, description, image, orderId, campaignId = null) => {
+    rejectOrder: async (
+      orderCode,
+      type,
+      description,
+      image,
+      orderId,
+      campaignId = null
+    ) => {
       //  console.log("Campaign");
 
       await dispatch(
         action.rejectOrder(orderCode, type, description, image, orderId)
       );
-      await dispatch(
-        action.getOrderByCampaignId(campaignId)
-      );
+      await dispatch(action.getOrderByCampaignId(campaignId));
     },
   };
 };
