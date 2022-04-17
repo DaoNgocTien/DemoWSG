@@ -26,7 +26,7 @@ class Campaign extends Component {
         createCampaign={this.props.createCampaign}
         deleteCampaign={this.props.deleteCampaign}
         startCampaignBeforeHand={this.props.startCampaignBeforeHand}
-
+        storeCampaign={this.props.storeCampaign}
       />
     );
   }
@@ -73,6 +73,11 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.getCampaign());
     },
 
+    
+    storeCampaign: async (record) => {
+      await dispatch(action.storeCampaign(record));
+      await dispatch(action.getCampaign());
+    },
     // rejectOrder: async (orderCode, reasonForCancel, imageProof, requester) => {
     //   await dispatch(orderAction.rejectOrder(orderCode, reasonForCancel, imageProof, requester));
     //   await dispatch(orderAction.getOrder());

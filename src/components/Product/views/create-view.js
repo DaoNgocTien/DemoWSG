@@ -160,16 +160,16 @@ class CreatModal extends Component {
                         if (listName.includes(value)) {
                           return Promise.reject(new Error('Product Name exists!'));
                         }
-                        if (value.length > 0 && value.length <= 20) {
+                        if (value.length > 0 && value.length <= 50) {
                           return Promise.resolve();
                         }
 
-                        return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
+                        return Promise.reject(new Error('Product Name is required, length is 1-50 characters!'));
                       },
                     }),
                   ]}
                 >
-                  <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-20 characters"/>
+                  <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-50 characters"/>
                 </Form.Item>
               </Descriptions.Item>
 
@@ -182,7 +182,7 @@ class CreatModal extends Component {
                     },
                     // ({ getFieldValue }) => ({
                     //   validator(_, value) {
-                    //     if (value.length >= 0 && value.length <= 20) {
+                    //     if (value.length >= 0 && value.length <= 50) {
                     //       return Promise.resolve();
                     //     }
 
