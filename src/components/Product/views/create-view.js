@@ -1,7 +1,7 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Button, Descriptions, Form,
-  Input, InputNumber, Modal, Select, Upload
+  Input, InputNumber, Modal, Select, Upload, Space
 } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
@@ -90,7 +90,7 @@ class CreatModal extends Component {
   };
 
   handleChange = ({ fileList, file, event }) => {
-  //  console.log(fileList);
+    //  console.log(fileList);
     // fileList = fileList.slice(-2);
 
     // 2. Read from response and show file link
@@ -124,190 +124,188 @@ class CreatModal extends Component {
 
     return (
       <>
-        <Form id="createProductForm" ref={this.formRef} onFinish={this.handleCreateAndClose}>
-          <Modal
-            width={window.innerWidth * 0.7}
-            heigh={window.innerHeight * 0.5}
-            style={{
-              top: 10,
-            }}
-            title="Add New"
-            visible={openModal}
-            onCancel={this.handleCancel}
-            footer={[
-              <Button onClick={this.handleCancel}>Cancel</Button>,
-              <Button
-                type="primary"
-                form="createProductForm"
-                key="submit"
-                htmlType="submit"
-              >
-                Submit
-              </Button>,
-            ]}
+
+        <Modal
+          width={window.innerWidth * 0.7}
+          heigh={window.innerHeight * 0.5}
+          style={{
+            top: 10,
+          }}
+          title="Add New"
+          visible={openModal}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button onClick={this.handleCancel}>Cancel</Button>,
+            <Button
+              type="primary"
+              form="createProductForm"
+              key="submit"
+              htmlType="submit"
+            >
+              Submit
+            </Button>,
+          ]}
+        >
+          <Form
+            key={listName}
+            name="formS"
+            id="createProductForm"
+            ref={this.formRef}
+            onFinish={this.handleCreateAndClose}
+            layout="vertical"
           >
-            <Descriptions layout="vertical" column={2}>
-              <Descriptions.Item label="Name">
-                <Form.Item name="name"
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Name is required!',
-                    // },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
+            <Space size={30}>
+              <Form.Item name="name" label="Product Name"
+                rules={[
+                  // {
+                  //   required: true,
+                  //   message: 'Name is required!',
+                  // },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
 
-                        if (listName.includes(value)) {
-                          return Promise.reject(new Error('Product Name exists!'));
-                        }
-                        if (value.length > 0 && value.length <= 50) {
-                          return Promise.resolve();
-                        }
+                      if (listName.includes(value)) {
+                        return Promise.reject(new Error('Product Name exists!'));
+                      }
+                      if (value.length > 0 && value.length <= 50) {
+                        return Promise.resolve();
+                      }
 
-                        return Promise.reject(new Error('Product Name is required, length is 1-50 characters!'));
-                      },
-                    }),
-                  ]}
-                >
-                  <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-50 characters"/>
-                </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Category">
-                <Form.Item name="categoryId"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Category is required!',
+                      return Promise.reject(new Error('Product Name is required, length is 1-50 characters!'));
                     },
-                    // ({ getFieldValue }) => ({
-                    //   validator(_, value) {
-                    //     if (value.length >= 0 && value.length <= 50) {
-                    //       return Promise.resolve();
-                    //     }
+                  }),
+                ]}
+              >
+                <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-50 characters" />
+              </Form.Item>
+              <Form.Item name="categoryId" label="Category"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Category is required!',
+                  },
+                  // ({ getFieldValue }) => ({
+                  //   validator(_, value) {
+                  //     if (value.length >= 0 && value.length <= 50) {
+                  //       return Promise.resolve();
+                  //     }
 
-                    //     return Promise.reject(new Error('Category Name length is 1-20 characters!'));
-                    //   },
-                    // }),
-                  ]}
-                >
-                  <Select style={{ width: "60vh" }}>
-                    {categoryList.map((item) => (
-                      <Select.Option key={item.key} value={item.id}>
-                        {item.categoryname}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Descriptions.Item>
+                  //     return Promise.reject(new Error('Category Name length is 1-20 characters!'));
+                  //   },
+                  // }),
+                ]}
+              >
+                <Select style={{ width: "60vh" }}>
+                  {categoryList.map((item) => (
+                    <Select.Option key={item.key} value={item.id}>
+                      {item.categoryname}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Space>
 
-              <Descriptions.Item label="Quantity">
-                <Form.Item name="quantity" initialValue={0}
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Quantity is required!',
-                    // },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (Number(value) > 0) {
-                          return Promise.resolve();
-                        }
+            <Space size={30}>
+              <Form.Item name="quantity" initialValue={0} label="Quantity"
+                rules={[
+                  // {
+                  //   required: true,
+                  //   message: 'Quantity is required!',
+                  // },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (Number(value) > 0) {
+                        return Promise.resolve();
+                      }
 
-                        return Promise.reject(new Error('Quantity is positive number!'));
-                      },
-                    }),
-                  ]}
-                >
-                  <InputNumber min={0} max={999999999999} default={0} style={{ width: "60vh" }} />
-                </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Retail Price">
-                <Form.Item
-                  name="retailPrice"
-                  initialValue={0}
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Price is required!',
-                    // },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (Number(value) > 0) {
-                          return Promise.resolve();
-                        }
-
-                        return Promise.reject(new Error('Price is positive number!'));
-                      },
-                    }),
-                  ]}
-                >
-                  <InputNumber min={0} max={999999999999} default={0} style={{ width: "60vh" }} />
-                </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Description">
-                <Form.Item name="description"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Description is required!',
+                      return Promise.reject(new Error('Quantity is positive number!'));
                     },
+                  }),
+                ]}
+              >
+                <InputNumber min={0} max={999999999999} default={0} style={{ width: "60vh" }} />
+              </Form.Item>
+              <Form.Item
+                label="Retail Price"
+                name="retailPrice"
+                initialValue={0}
+                rules={[
+                  // {
+                  //   required: true,
+                  //   message: 'Price is required!',
+                  // },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (Number(value) > 0) {
+                        return Promise.resolve();
+                      }
 
-                  ]}
-                >
-                  <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} placeholder="Description is required!"/>
-                </Form.Item>
-              </Descriptions.Item>
+                      return Promise.reject(new Error('Price is positive number!'));
+                    },
+                  }),
+                ]}
+              >
+                <InputNumber min={0} max={999999999999} default={0} style={{ width: "60vh" }} />
+              </Form.Item>
+            </Space>
 
-              <Descriptions.Item label="Image">
-                <Form.Item name="image"
-                  rules={[
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (fileList.length >= 1) {
-                          return Promise.resolve();
-                        }
+            <Space size={30}>
+              <Form.Item name="description" label="Description"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Description is required!',
+                  },
 
-                        return Promise.reject(new Error('Product Image is required!!'));
-                      },
-                    }),
-                  ]}
-                >
+                ]}
+              >
+                <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} placeholder="Description is required!" />
+              </Form.Item>
+              <Form.Item name="image" label="Image"
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (fileList.length >= 1) {
+                        return Promise.resolve();
+                      }
 
-                  <>
-                    <Upload
-                      name="file"
-                      action="/files/upload"
-                      listType="picture-card"
-                      fileList={this.state.fileList}
-                      onPreview={this.handlePreview}
-                      onChange={this.handleChange}
-                      style={{ width: "60vh" }}
-                    >
-                      {this.state.fileList.length >= 8 ? null : uploadButton}
-                    </Upload>
-                    <Modal
-                      visible={this.state.previewVisible}
-                      title={this.state.previewTitle}
-                      footer={null}
-                      onCancel={this.handleCancelUploadImage}
-                    >
-                      <img
-                        alt="example"
-                        style={{ width: "100%" }}
-                        src={this.state.previewImage}
-                      />
-                    </Modal>
-                  </>
-                </Form.Item>
-              </Descriptions.Item>
+                      return Promise.reject(new Error('Product Image is required!!'));
+                    },
+                  }),
+                ]}
+              >
 
-            </Descriptions>
+                <>
+                  <Upload
+                    name="file"
+                    action="/files/upload"
+                    listType="picture-card"
+                    fileList={this.state.fileList}
+                    onPreview={this.handlePreview}
+                    onChange={this.handleChange}
+                    style={{ width: "60vh" }}
+                  >
+                    {this.state.fileList.length >= 8 ? null : uploadButton}
+                  </Upload>
+                  <Modal
+                    visible={this.state.previewVisible}
+                    title={this.state.previewTitle}
+                    footer={null}
+                    onCancel={this.handleCancelUploadImage}
+                  >
+                    <img
+                      alt="example"
+                      style={{ width: "100%" }}
+                      src={this.state.previewImage}
+                    />
+                  </Modal>
+                </>
+              </Form.Item>
+            </Space>
 
-          </Modal>
-        </Form>
+
+          </Form>
+        </Modal>
       </>
     );
   }

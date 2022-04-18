@@ -1,6 +1,13 @@
 import {
-  Button, Col, Input, PageHeader,
-  Radio, Row, Select, Table, Tag
+  Button,
+  Col,
+  Input,
+  PageHeader,
+  Radio,
+  Row,
+  Select,
+  Table,
+  Tag,
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -22,9 +29,9 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => { },
-  updateStatusOrder: () => { },
-  getOrder: (status) => { },
+  rejectOrder: () => {},
+  updateStatusOrder: () => {},
+  getOrder: (status) => {},
 };
 
 class CancelledOrderUI extends Component {
@@ -42,7 +49,7 @@ class CancelledOrderUI extends Component {
     viewButton: true,
   };
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -68,26 +75,30 @@ class CancelledOrderUI extends Component {
       selectedRowKeys: [],
       editButton: false,
       viewButton: false,
-      record:{}
+      record: {},
     });
     this.setState({
       openRejectModal: false,
       openEditModal: false,
-      
     });
   };
 
-  onSelectChange = (selectedRowKeys) => {
-    let record = this.props.data?.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-
-    this.setState({
-      selectedRowKeys,
-      editButton: selectedRowKeys.length === 1,
-      viewButton:
-        selectedRowKeys.length === 1
-    });
+  onSelectChange = (record) => {
+    if (this.state.selectedRowKeys[0] !== record.key) {
+      this.setState({
+        selectedRowKeys: [record.key],
+        record: record,
+        editButton: true,
+        viewButton: true,
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        record: {},
+        editButton: false,
+        viewButton: false,
+      });
+    }
   };
   // handleChange = (data) => {
   //   this.props.getOrder(data);
@@ -136,14 +147,15 @@ class CancelledOrderUI extends Component {
       key: "totalprice",
       width: 130,
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.totalprice }
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.totalprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -152,14 +164,15 @@ class CancelledOrderUI extends Component {
       key: "discountprice",
       width: 130,
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.discountprice}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.discountprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -168,14 +181,15 @@ class CancelledOrderUI extends Component {
       key: "finalprice",
       width: 130,
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.totalprice - object.discountprice}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.totalprice - object.discountprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -192,7 +206,7 @@ class CancelledOrderUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data.toUpperCase()}</Tag>
+        return <Tag>{data.toUpperCase()}</Tag>;
       },
       width: 130,
     },
@@ -221,7 +235,7 @@ class CancelledOrderUI extends Component {
   };
 
   onRadioChange = (e) => {
-  //  console.log(e);
+    //  console.log(e);
     let { data } = this.props;
     let searchValue = e.target.value || e;
     let searchData = [];
@@ -263,9 +277,9 @@ class CancelledOrderUI extends Component {
     } = this.state;
 
     const rowSelection = {
-      type: "radio",
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onSelect: this.onSelectChange,
+      hideSelectAll: true,
     };
 
     const arrayLocation = window.location.pathname.split("/");
@@ -291,7 +305,6 @@ class CancelledOrderUI extends Component {
             <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex={3}>
-
                   <Button
                     type="primary"
                     onClick={() => this.start("openEditModal")}

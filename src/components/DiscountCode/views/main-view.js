@@ -6,7 +6,6 @@ import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 
-
 import NumberFormat from "react-number-format";
 //  prototype
 const propsProTypes = {
@@ -46,7 +45,7 @@ class DiscountCodeUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
@@ -114,16 +113,17 @@ class DiscountCodeUI extends Component {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
-      
-      render: (_text, object) => {
-        return <NumberFormat
-          value={object.discountprice }
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
 
+      render: (_text, object) => {
+        return (
+          <NumberFormat
+            value={object.discountprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -131,14 +131,15 @@ class DiscountCodeUI extends Component {
       dataIndex: "minimunpricecondition",
       key: "minimunpricecondition",
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.minimunpricecondition }
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.minimunpricecondition}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -158,11 +159,11 @@ class DiscountCodeUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data.toUpperCase()}</Tag>
+        return <Tag>{data.toUpperCase()}</Tag>;
       },
     },
   ];
-  
+
   onChangeHandler = (e) => {
     let { data } = this.props;
     let searchString = e.target.value;
@@ -184,20 +185,27 @@ class DiscountCodeUI extends Component {
     });
   };
 
-  onSelectChange = (selectedRowKeys) => {
+  onSelectChange = (record) => {
     // console.log("selectedRowKeys changed: ", selectedRowKeys);
     // console.log(this.props.data);
-    let record = this.props.data?.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
 
-    this.setState({
-      selectedRowKeys,
-      record: record,
-      editButton: selectedRowKeys.length === 1 && record?.status !== "deactivated",
-      deleteButton: selectedRowKeys.length === 1 && record?.status !== "deactivated",
-      addNewButton: selectedRowKeys.length === 0,
-    });
+    if (this.state.selectedRowKeys[0] !== record.key) {
+      this.setState({
+        selectedRowKeys: [record.key],
+        record: record,
+        editButton: true && record?.status !== "deactivated",
+        deleteButton: true && record?.status !== "deactivated",
+        addNewButton: false,
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        record: {},
+        editButton: false,
+        deleteButton: false,
+        addNewButton: true,
+      });
+    }
   };
 
   render() {
@@ -221,9 +229,9 @@ class DiscountCodeUI extends Component {
     } = this.props;
 
     const rowSelection = {
-      type: "radio",
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onSelect: this.onSelectChange,
+      hideSelectAll: true,
     };
     // const hasSelected = selectedRowKeys.length > 0;
     const arrayLocation = window.location.pathname.split("/");

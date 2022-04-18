@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import action from "./modules/action";
+import { default as campaignAction } from "../Campaign/modules/action";
 import ProductUI from "./views/main-view";
 
 class ProductPage extends Component {
@@ -28,6 +29,7 @@ class ProductPage extends Component {
           updateProduct={this.props.updateProduct}
           deleteProduct={this.props.deleteProduct}
           categoryList={this.props.categoryList}
+          campaignList={this.props.campaignList.campaigns}
         />
       </>
     );
@@ -40,13 +42,18 @@ const mapStateToProps = (state) => {
     data: state.productReducer.data,
     error: state.productReducer.err,
     categoryList: state.categoryReducer.data,
+    campaignList: state.campaignReducer.data,
+    
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     // getCategory: async () => await dispatch(getCategory()),
-    getAllProduct: async () => await dispatch(action.getAllProduct()),
+    getAllProduct: async () => {
+      await dispatch(action.getAllProduct());
+      await dispatch(campaignAction.getCampaign());
+    },
     createProduct: async (record) => {
       // console.log("createProduct final");
       // console.log(record);

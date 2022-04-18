@@ -1,6 +1,14 @@
 import {
-  Button, Col, Descriptions,
-  Form, Input, PageHeader, Row, Space, Table, Tag
+  Button,
+  Col,
+  Descriptions,
+  Form,
+  Input,
+  PageHeader,
+  Row,
+  Space,
+  Table,
+  Tag,
 } from "antd";
 import moment from "moment";
 import action from "../../Orders/modules/action";
@@ -24,23 +32,25 @@ class OrdersInCampaign extends React.Component {
     this.props.getOrder(this.props.record.id);
   }
 
-
-  onSelectChange = (selectedRowKeys) => {
+  onSelectChange = (record) => {
     // console.log("selectedRowKeys changed: ", selectedRowKeys);
-    let record = this.props.orderList?.filter((item) => {
-      return selectedRowKeys.includes(item?.id);
-    })[0];
-    // console.log(record);
-    this.setState({
-      selectedRowKeys,
-      record: record,
-      rejectButton: selectedRowKeys.length === 1,
-    });
+    if (this.state.selectedRowKeys[0] !== record.key) {
+      this.setState({
+        selectedRowKeys: [record.key],
+        record: record,
+        rejectButton: true,
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        record: {},
+        rejectButton: false,
+      });
+    }
   };
 
   openModal = () => {
     this.setState({ openRejectModal: true });
-
   };
 
   closeModal = () => {
@@ -61,7 +71,7 @@ class OrdersInCampaign extends React.Component {
       render: (_text, _object, index) => {
         return index + 1;
       },
-      width: 100,
+      width:70,
       fixed: "left",
     },
     {
@@ -74,30 +84,49 @@ class OrdersInCampaign extends React.Component {
       fixed: "left",
     },
     {
-      title: "Product Name",
-      width: 200,
-      render: (_text, object, _index) => {
-        // console.log(object);
-        return object.details[0].productname;
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (data) => {
+        return <Tag>{data.toUpperCase()}</Tag>
       },
+      width: 100,
+       fixed: "left",
     },
     {
-      title: "Product Image",
-      width: 150,
-      render: (_text, object, _index) => {
-        // console.log(object);
-        return object.details[0].image === "" ? (
-          ""
-        ) : (
-          <img
-            width="100"
-            alt="show illustrative representation"
-            height="100"
-            src={JSON.parse(object.details[0]?.image)[0].url}
-          />
-        );
+      title: "Created At",
+      dataIndex: "createdat",
+      key: "createdat",
+      width: 120,
+      render: (data) => {
+        return moment(data).format("MM/DD/YYYY");
       },
     },
+    // {
+    //   title: "Product Name",
+    //   width: 200,
+    //   render: (_text, object, _index) => {
+    //     // console.log(object);
+    //     return object.details[0].productname;
+    //   },
+    // },
+    // {
+    //   title: "Product Image",
+    //   width: 150,
+    //   render: (_text, object, _index) => {
+    //     // console.log(object);
+    //     return object.details[0].image === "" ? (
+    //       ""
+    //     ) : (
+    //       <img
+    //         width="100"
+    //         alt="show illustrative representation"
+    //         height="100"
+    //         src={JSON.parse(object.details[0]?.image)[0].url}
+    //       />
+    //     );
+    //   },
+    // },
     {
       title: "Quantity",
       width: 100,
@@ -112,14 +141,15 @@ class OrdersInCampaign extends React.Component {
       key: "totalprice",
       width: 100,
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.totalprice}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.totalprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -128,14 +158,15 @@ class OrdersInCampaign extends React.Component {
       key: "discountprice",
       width: 150,
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.discountprice}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.discountprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -144,14 +175,15 @@ class OrdersInCampaign extends React.Component {
       key: "finalprice",
       width: 100,
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.totalprice - object.discountprice}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.totalprice - object.discountprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -162,28 +194,14 @@ class OrdersInCampaign extends React.Component {
         return object.details[0].notes;
       },
     },
-    {
-      title: "Created At",
-      dataIndex: "createdat",
-      key: "createdat",
-      width: 120,
-      render: (data) => {
-        return moment(data).format("MM/DD/YYYY");
-      },
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (data) => {
-        return <Tag>{data.toUpperCase()}</Tag>
-      },
-      width: 100,
-    },
+    
+   
   ];
 
   onChangeHandler = (e) => {
-    let orderList = this.props.orderList.filter(order => order.campaignid === this.props.record?.id);
+    let orderList = this.props.orderList.filter(
+      (order) => order.campaignid === this.props.record?.id
+    );
 
     let searchList = orderList.filter((item) => {
       return (
@@ -197,7 +215,6 @@ class OrdersInCampaign extends React.Component {
         item.discountprice.includes(e.target.value) ||
         item.createdat.includes(e.target.value) ||
         item.status.includes(e.target.value)
-
       );
     });
     this.setState({
@@ -213,19 +230,23 @@ class OrdersInCampaign extends React.Component {
       displayData,
       searchData,
       openRejectModal,
+    } = this.state;
 
-    } =
-      this.state;
-
-    const { campaign, loading, rejectOrder, orderList = [], record } = this.props;
+    const {
+      campaign,
+      loading,
+      rejectOrder,
+      orderList = [],
+      record,
+    } = this.props;
     // console.log(ordersInCampaign);
 
     //  console.log(this.props);
 
     const rowSelection = {
-      type: "radio",
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onSelect: this.onSelectChange,
+      hideSelectAll: true,
     };
     console.log(record);
     return (
@@ -268,11 +289,9 @@ class OrdersInCampaign extends React.Component {
                 openModal={openRejectModal}
                 closeModal={this.closeModal}
                 rejectOrder={rejectOrder}
-                record={
-                  orderList.find((item) => {
-                    return selectedRowKeys[0] === item?.id;
-                  })
-                }
+                record={orderList.find((item) => {
+                  return selectedRowKeys[0] === item?.id;
+                })}
                 campaignId={record?.id}
               />
               <div style={{ marginBottom: 16 }}>
@@ -308,7 +327,9 @@ class OrdersInCampaign extends React.Component {
                 columns={this.columns}
                 dataSource={
                   displayData.length === 0 && searchData === ""
-                    ? orderList.filter(order => order.status.toUpperCase() !== "NOTADVANCED")
+                    ? orderList.filter(
+                        (order) => order.status.toUpperCase() !== "NOTADVANCED"
+                      )
                     : displayData
                 }
                 scroll={{ y: 350 }}
@@ -317,7 +338,7 @@ class OrdersInCampaign extends React.Component {
           }
         >
           <Form>
-            <Descriptions bordered title="Campaign information" column={2}>
+            <Descriptions bordered column={2} size="small">
               <Descriptions.Item label="Name">
                 {record?.description}
               </Descriptions.Item>
@@ -327,29 +348,59 @@ class OrdersInCampaign extends React.Component {
                   moment(record?.todate).format("MM/DD/YYYY")}
               </Descriptions.Item>
 
+              <Descriptions.Item label="Campaign Type">
+                <Tag color={!record?.isshare ? "blue" : "green"}>{!record?.isshare ? "SINGLE" : "SHARED"}</Tag>
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Campaign Status">
+                <Tag color={record?.status === "ready" ? "blue" : record?.status === "active" ? "red" : record?.status === "done" ? "green" : "grey"}>{record?.status.toUpperCase()}</Tag>
+              </Descriptions.Item>
+
               <Descriptions.Item label="Product">
                 {record?.productname}
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Wholesale price">
+                {record?.price}
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
                 {record?.quantity}
               </Descriptions.Item>
 
-              <Descriptions.Item label="Wholesale percent">
-                {(record?.price / record?.productretailprice) * 100 + " %"}
+              <Descriptions.Item label="Max quantity">
+                {record?.maxquantity}
               </Descriptions.Item>
+
+              <Descriptions.Item label="Campaign Code">
+                {record?.code}
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Number of order">
+                {record?.numorder}
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Product Image" span={2}>
+                <img
+                  width="100"
+                  alt="show illustrative representation"
+                  height="100"
+                  src={JSON.parse(record?.productimage)[0].url}
+                />
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Description" span={2}>
+                {record?.description}
+              </Descriptions.Item>
+
             </Descriptions>
           </Form>
-          <PageHeader
-            className="site-page-header-responsive"
-
-          ></PageHeader>
+          <PageHeader className="site-page-header-responsive"></PageHeader>
         </PageHeader>
       </>
     );
   }
 }
-
 
 const mapStateToProps = (state) => {
   return {
@@ -363,17 +414,22 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getOrder: async (id) => {
-      await dispatch(action.getOrderByCampaignId(id))
+      await dispatch(action.getOrderByCampaignId(id));
     },
-    rejectOrder: async (orderCode, type, description, image, orderId, campaignId = null) => {
+    rejectOrder: async (
+      orderCode,
+      type,
+      description,
+      image,
+      orderId,
+      campaignId = null
+    ) => {
       //  console.log("Campaign");
 
       await dispatch(
         action.rejectOrder(orderCode, type, description, image, orderId)
       );
-      await dispatch(
-        action.getOrderByCampaignId(campaignId)
-      );
+      await dispatch(action.getOrderByCampaignId(campaignId));
     },
   };
 };

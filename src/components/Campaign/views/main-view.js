@@ -19,7 +19,6 @@ import OrdersInCampaign from "./orders-in-campaign-view";
 import NumberFormat from "react-number-format";
 import { Link, Redirect, Route } from "react-router-dom";
 
-//  prototype
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
@@ -30,7 +29,6 @@ const propsProTypes = {
   deleteCampaign: PropTypes.func,
 };
 
-//  default props
 const propsDefault = {
   index: 1,
   data: [],
@@ -43,7 +41,7 @@ class CampaignUI extends Component {
   static defaultProps = propsDefault;
   state = {
     loading: false,
-    selectedRowKeys: [], // Check here to configure the default column
+    selectedRowKeys: [],
     loadingActionButton: false,
     editButton: false,
     deleteButton: false,
@@ -59,12 +57,12 @@ class CampaignUI extends Component {
     orderListInSelectedCampaign: [],
   };
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;
-    //  Get campaign record
+
     let recordToEdit = data.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
@@ -88,16 +86,14 @@ class CampaignUI extends Component {
 
         break;
       case "openOrdersInCampaign": {
-        //  List orders
         let orderList = this.props.orderList;
-        //  List orders in campaign
+
         let orderListInSelectedCampaignInCampaign = orderList?.filter(
           (item) => {
             return selectedRowKeys.includes(item.campaignid);
           }
         );
 
-        //  Set campaign record and orders in campaign into state
         this.setState({
           openDrawer: true,
           record: recordToEdit,
@@ -116,7 +112,7 @@ class CampaignUI extends Component {
       openCreateModal: false,
       openDeleteModal: false,
       openEditModal: false,
-      record: {}
+      record: {},
     });
   };
 
@@ -141,83 +137,43 @@ class CampaignUI extends Component {
     },
     {
       title: "Quantity",
-      render: (object) => {
-        // let disabled = object.status === "created" ? "false" : "true";
-        // console.log(object);
-        return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
-
-
-        // if (object.status === "processing") {
-        //   return (
-        //     <Button onClick={() => this.openUploadModal(object)} type="primary">
-        //       Deliver Order
-        //     </Button>
-        //   );
-        // }
-      },
+      dataIndex: "quantity",
       key: "quantity",
+      sorter: (a, b) => a.quantity - b.quantity,
+      width: 120,
+      fix: "left",
+      // title: "Quantity",
+      // render: (object) => {
+      //   // let disabled = object.status === "created" ? "false" : "true";
+      //   // console.log(object);
+      //   return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
+
+
+      //   // if (object.status === "processing") {
+      //   //   return (
+      //   //     <Button onClick={() => this.openUploadModal(object)} type="primary">
+      //   //       Deliver Order
+      //   //     </Button>
+      //   //   );
+      //   // }
+      // },
+      // key: "quantity",
     },
     {
       title: "Max Quantity",
       dataIndex: "maxquantity",
       key: "maxquantity",
     },
-    // {
-    //   title: "Price",
-    //   dataIndex: "price",
-    //   width: 200,
-    //   key: "price",
-    //   render: (data) => {
-    //     return (
-    //       <NumberFormat
-    //         value={data ?? "0"}
-    //         thousandSeparator={true}
-    //         suffix={" VND"}
-    //         decimalScale={0}
-    //         displayType="text"
-    //       />
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Orders",
-    //   dataIndex: "numorder",
-    //   key: "numorder",
-    // },
-    // {
-    //   title: "Advance Percent",
-    //   dataIndex: "advancefee",
-    //   key: "advancefee",
-    //   render: (data) => data + "%",
-    // },
-    // {
-    //   title: "Start Date",
-    //   dataIndex: "fromdate",
-    //   key: "fromdate",
-    //   render: (data) => moment(data).format("MM/DD/YYYY"),
-    // },
-    // {
-    //   title: "End Date",
-    //   dataIndex: "todate",
-    //   key: "todate",
-    //   render: (data) => moment(data).format("MM/DD/YYYY"),
-    // },
+
     {
       title: "Type",
       key: "type",
       render: (object) => {
-        // let disabled = object.status === "created" ? "false" : "true";
-        // console.log(object);
-        return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
-
-
-        // if (object.status === "processing") {
-        //   return (
-        //     <Button onClick={() => this.openUploadModal(object)} type="primary">
-        //       Deliver Order
-        //     </Button>
-        //   );
-        // }
+        return (
+          <Tag color={!object.isshare ? "blue" : "green"}>
+            {!object.isshare ? "SINGLE" : "SHARED"}
+          </Tag>
+        );
       },
       width: 100,
       fix: "right",
@@ -227,17 +183,15 @@ class CampaignUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag color={data === "ready" ? "blue" : data === "active" ? "red" : data === "done" ? "green" : "grey"}>{data.toUpperCase()}</Tag>;
+        return <Tag color={data === "ready" ? "blue" : data === "active" ? "red" : data === "done" ? "green" : "grey"}>{data.toUpperCase() === "DEACTIVATED" ? "STOP" : data.toUpperCase()}</Tag>;
       },
       width: 100,
-      fix: "right"
+      fix: "right",
     },
     {
       title: "Action",
       key: "action",
       render: (object) => {
-        // let disabled = object.status === "created" ? "false" : "true";
-        // console.log(disabled);
         if (object.status === "ready") {
           return (
             <Button
@@ -248,24 +202,15 @@ class CampaignUI extends Component {
             </Button>
           );
         }
-
-        // if (object.status === "processing") {
-        //   return (
-        //     <Button onClick={() => this.openUploadModal(object)} type="primary">
-        //       Deliver Order
-        //     </Button>
-        //   );
-        // }
       },
       fixed: "right",
       width: 150,
     },
   ];
 
-
-  startCampaignBeforeHand = object => {
+  startCampaignBeforeHand = (object) => {
     this.props.startCampaignBeforeHand(object.id);
-  }
+  };
 
   onChangeHandler = (e) => {
     let { data } = this.props;
@@ -305,28 +250,26 @@ class CampaignUI extends Component {
     });
   };
 
-  onSelectChange = (selectedRowKeys) => {
-    // console.log("selectedRowKeys changed: ", selectedRowKeys);
-    // console.log(this.props.data);
-    let record = this.props.data?.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-
-    // console.log(record);
-    // this.setState({
-    //   record: this.props.data.filter((item) => {
-    //     return selectedRowKeys.includes(item.id);
-    //   })[0]
-    // });
-    // // console.log(this.state.record);
-    this.setState({
-      selectedRowKeys,
-      record: record,
-      editButton: selectedRowKeys.length === 1 && record.status === "ready",
-      deleteButton: selectedRowKeys.length === 1 && record.status === "ready",
-      addNewButton: selectedRowKeys.length === 0,
-      orderInCampaignButton: selectedRowKeys.length === 1,
-    });
+  onSelectChange = (record) => {
+    if (this.state.selectedRowKeys[0] !== record.key) {
+      this.setState({
+        selectedRowKeys: [record.key],
+        record: record,
+        editButton: true && record.status === "ready",
+        deleteButton: true && record.status === "ready",
+        addNewButton: false,
+        orderInCampaignButton: true,
+      });
+    } else {
+      this.setState({
+        selectedRowKeys: [],
+        record: {},
+        editButton: false,
+        deleteButton: false,
+        addNewButton: true,
+        orderInCampaignButton: false,
+      });
+    }
   };
 
   onCloseDrawer = () => {
@@ -356,13 +299,13 @@ class CampaignUI extends Component {
       deleteCampaign,
       data,
     } = this.props;
-    //  console.log(productList);
+
     const rowSelection = {
-      type: "radio",
       selectedRowKeys,
-      onChange: this.onSelectChange,
+      onSelect: this.onSelectChange,
+      hideSelectAll: true,
     };
-    // const hasSelected = selectedRowKeys.length > 0;
+
     const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
@@ -378,7 +321,7 @@ class CampaignUI extends Component {
               createCampaign={createCampaign}
               productList={productList.filter((product) => {
                 const availableQuantity = product.quantity - product.maxquantity;
-                return availableQuantity >= 10 ;
+                return availableQuantity >= 10;
               })}
               campaingList={data}
             />
@@ -406,15 +349,14 @@ class CampaignUI extends Component {
                   <Space size={4}>
                     <Button
                       type="primary"
-                      onClick={() => this.props.storeCampaign(this.state.record)}
+                      onClick={() =>
+                        this.props.storeCampaign(this.state.record)
+                      }
                       disabled={!orderInCampaignButton}
-                    // style={{ width: 90 }}
                     >
                       <Link
                         className="LinkDecorations"
-                        to={
-                          "/discount/orders-in-campaign"
-                        }
+                        to={"/discount/orders-in-campaign"}
                       >
                         View Details
                       </Link>
@@ -459,7 +401,7 @@ class CampaignUI extends Component {
                 </Col>
               </Row>
             </div>
-            <Drawer
+            {/* <Drawer
               width={window.innerWidth * 0.7}
               placement="right"
               size={"736px"}
@@ -467,14 +409,8 @@ class CampaignUI extends Component {
               onClose={this.onCloseDrawer}
               visible={this.state.openDrawer}
             >
-              <OrdersInCampaign
-                campaign={this.state.record}
-              // orderList={this.state.orderListInSelectedCampaign}
-              // loading={this.props.loading}
-              // productList={productList}
-              // rejectOrder={this.props.rejectOrder}
-              />
-            </Drawer>
+              <OrdersInCampaign campaign={this.state.record} />
+            </Drawer> */}
             <Table
               loading={this.props.loading}
               rowSelection={rowSelection}
@@ -497,5 +433,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(CampaignUI, arePropsEqual);
