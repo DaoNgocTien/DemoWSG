@@ -123,12 +123,15 @@ const createCampaign = (record) => {
 
 const updateCampaign = (record) => {
   return async (dispatch) => {
-    // dispatch(getRequest());
+    console.log(record)
+    dispatch(getRequest());
     Axios({
       url: `/campaigns/${record.id}`,
       method: "PUT",
       data: {
-        productId: record.productId,
+       
+        status: "ready",
+        productId: record.productId, 
         fromDate: record.fromDate,
         toDate: record.toDate,
         quantity: record.quantity,
@@ -136,6 +139,7 @@ const updateCampaign = (record) => {
         maxQuantity: record.maxQuantity,
         isShare: record.isShare,
         advanceFee: record.advanceFee,
+        range: record.range,
       },
       withCredentials: true,
     })
@@ -147,14 +151,14 @@ const updateCampaign = (record) => {
               ...category,
             };
           })
-          return (<Redirect to="/discount/campaigns" />);
+          // return (<Redirect to="/discount/campaigns" />);
 
         }
         return (<Redirect to="/discount/campaigns" />);
 
       })
       .catch((err) => {
-        // return dispatch(getFailed(err));
+        return dispatch(getFailed(err));
       });
   };
 };
@@ -255,6 +259,35 @@ const storeCampaign = record => {
   };
 };
 
+const getCampaignById = id => {
+  console.log(id)
+  return async (dispatch) => {
+    try {
+
+      let [campaign] = await Promise.all([
+        Axios({
+          url: `/campaigns/` + id,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+      ]);
+      console.log(campaign.data.data[0])
+      return dispatch(
+        storeRecord({
+          record: {
+            key: campaign.data.data[0].id,
+            ...campaign.data.data[0],
+          }
+        })
+      )
+    } catch (error) {
+      // console.log(error);
+      return dispatch(getFailed());
+    }
+  };
+};
+
 
 const getRequest = () => {
   return {
@@ -292,6 +325,8 @@ const action = {
   deleteCampaign,
   startCampaignBeforeHand,
   storeCampaign,
+  getCampaignById,
+
 };
 
 export default action;

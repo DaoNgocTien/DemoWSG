@@ -81,7 +81,7 @@ class CampaignUI extends Component {
         this.setState({
           loadingActionButton: true,
           openEditModal: true,
-          record: recordToEdit,
+          // record: recordToEdit,
         });
 
         break;
@@ -252,9 +252,10 @@ class CampaignUI extends Component {
 
   onSelectChange = (record) => {
     if (this.state.selectedRowKeys[0] !== record.key) {
+      this.props.getCampaignById(record.id);
       this.setState({
         selectedRowKeys: [record.key],
-        record: record,
+        record: this.props.record,
         editButton: true && record.status === "ready",
         deleteButton: true && record.status === "ready",
         addNewButton: false,
@@ -338,6 +339,7 @@ class CampaignUI extends Component {
               loading={this.props.loading}
               openModal={openEditModal}
               closeModal={this.closeModal}
+              defaultProduct={(productList?.filter(p => p?.id === this.state.record?.productid))[0]}
               productList={productList}
               updateCampaign={updateCampaign}
               record={this.state.record}
