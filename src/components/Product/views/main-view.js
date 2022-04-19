@@ -312,6 +312,7 @@ class ProductUI extends Component {
                 this.state.record
               }
               campaignList={this.state.record ? campaignList.filter(c => c.productid === this.state.record.id) : []}
+              orderList={this.props.orderList}
               availableQuantity={this.state.record?.quantity - this.state.record?.maxquantity ?? 0}
               selectedRowKeys={selectedRowKeys[0]}
               data={this.props.data}

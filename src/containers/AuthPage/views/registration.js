@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import action from "../modules/action";
+import { Link, Redirect, Route } from "react-router-dom";
 
 
 const { RangePicker } = DatePicker;
@@ -111,13 +112,13 @@ class Registration extends Component {
     }
 
     onFinish = (values) => {
-      //  console.log('Received values of form: ', values);
+        //  console.log('Received values of form: ', values);
         let record = {
             username: values.username,
             password: values.password,
             firstName: values.firstname,
             lastName: values.lastname,
-            phone: this.phoneRef.current.value,
+            phone: "0" + String(this.phoneRef.current.value),
             email: values.email,
             roleName: "Supplier"
         };
@@ -126,7 +127,7 @@ class Registration extends Component {
 
     onCheckPhoneNumber = () => {
         const value = this.phoneRef.current.value;
-      //  console.log(value);
+        //  console.log(value);
         this.props.checkPhoneNumber(this.phoneRef.current.value);
         let profile = this.props.profile;
         return this.setState({
@@ -197,7 +198,7 @@ class Registration extends Component {
 
     changePhoneNumber = (e) => {
         const value = this.phoneRef.current.value;
-      //  console.log(value);
+        //  console.log(value);
         // console.log(this.OTPRef.current.value);
         this.props.phoneNumberValidation(value);
 
@@ -224,7 +225,7 @@ class Registration extends Component {
             </div>
         );
         const { loading, profile, phone, OTP, message } = this.props;
-      //  console.log(this.props);
+        //  console.log(this.props);
         // if (loading) return <Loader />;
         return (
             <>
@@ -273,7 +274,7 @@ class Registration extends Component {
                                                     onChange={(e) => this.changePhoneNumber(e)}
                                                     ref={this.phoneRef}
                                                     style={{ width: "60vh" }}
-                                                    placeholder="10-11 characters"
+                                                    placeholder="9-11 characters"
                                                 />
 
                                             </Form.Item>
@@ -308,10 +309,19 @@ class Registration extends Component {
                                     name="username"
                                     label="Username"
                                     rules={[
-                                        {
-                                            required: true,
-                                            message: 'Please input your username!',
-                                        },
+                                        ({ getFieldValue }) => ({
+                                            validator(_, value) {
+
+                                                //   if (listName.includes(value)) {
+                                                //     return Promise.reject(new Error('Product Name exists!'));
+                                                //   }
+                                                if (value.length > 0 && value.length <= 50) {
+                                                    return Promise.resolve();
+                                                }
+
+                                                return Promise.reject(new Error('Username is required, length is 1-50 characters!'));
+                                            },
+                                        }),
                                     ]}
                                     hasFeedback
                                     disabled={!phoneAvailable}
@@ -324,16 +334,26 @@ class Registration extends Component {
                                     name="password"
                                     label="Password"
                                     rules={[
-                                        {
-                                            required: true,
-                                            message: 'Please input your password!',
-                                        },
+                                        ({ getFieldValue }) => ({
+                                            validator(_, value) {
+
+                                                //   if (listName.includes(value)) {
+                                                //     return Promise.reject(new Error('Product Name exists!'));
+                                                //   }
+                                                if (value.length > 0 && value.length <= 50) {
+                                                    return Promise.resolve();
+                                                }
+
+                                                return Promise.reject(new Error('Password is required, length is 1-50 characters!'));
+                                            },
+                                        }),
                                     ]}
+
                                     hasFeedback
                                     disabled={!phoneAvailable}
 
                                 >
-                                    <Input.Password placeholder="1-255 characters" />
+                                    <Input.Password placeholder="1-50 characters" />
                                 </Form.Item>
 
                                 <Form.Item
@@ -359,7 +379,7 @@ class Registration extends Component {
                                     disabled={!phoneAvailable}
 
                                 >
-                                    <Input.Password placeholder="1-255 characters" />
+                                    <Input.Password placeholder="1-50 characters" />
                                 </Form.Item>
 
                                 <Form.Item
@@ -434,7 +454,12 @@ class Registration extends Component {
                                 >
                                     <Space>
                                         <Button htmlType="submit">
-                                            Reset
+                                            <Link
+                                                className="LinkDecorations"
+                                                to={"/"}
+                                            >
+                                                Back
+                                            </Link>
                                         </Button>
                                         <Button type="primary" htmlType="submit">
                                             Register

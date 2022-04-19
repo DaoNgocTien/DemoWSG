@@ -34,9 +34,9 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => {},
-  updateStatusOrder: () => {},
-  getOrder: (status) => {},
+  rejectOrder: () => { },
+  updateStatusOrder: () => { },
+  getOrder: (status) => { },
 };
 
 class OrderUI extends Component {
@@ -115,13 +115,13 @@ class OrderUI extends Component {
         selectedRowKeys: [record.key],
         record: record,
         editButton: true,
-        rejectButton:
-          true &&
-          record?.status != "delivering" &&
-          record?.status != "delivered" &&
-          record?.status != "completed" &&
-          record?.status != "returned" &&
-          record?.status != "cancelled",
+        rejectButton: record?.status === "created",
+        // true &&
+        // record?.status != "delivering" &&
+        // record?.status != "delivered" &&
+        // record?.status != "completed" &&
+        // record?.status != "returned" &&
+        // record?.status != "cancelled",
         addNewButton: false,
       });
     } else {

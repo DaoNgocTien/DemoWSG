@@ -70,20 +70,20 @@ class UpdateModal extends Component {
   }
 
   handleUpdateAndClose = (data) => {
-    switch (this.props.record?.status) {
-      case "incampaign":
-        alert("This product in campaign cannot update");
-        break;
+    // switch (this.props.record?.status) {
+    //   case "incampaign":
+    //     alert("This product in campaign cannot update");
+    //     break;
 
-      default:
-        data.image =
-          this.state.fileList?.length === 0 && this.props.record
-            ? JSON.parse(this.props.record?.image)
-            : this.state.fileList;
-        // console.log(data);
-        this.props.updateProduct(data);
-        break;
-    }
+    //   default:
+    data.image =
+      this.state.fileList?.length === 0 && this.props.record
+        ? JSON.parse(this.props.record?.image)
+        : this.state.fileList;
+    // console.log(data);
+    this.props.updateProduct(data);
+    // break;
+
 
     this.formRef.current.resetFields();
     this.setState({
@@ -93,7 +93,7 @@ class UpdateModal extends Component {
   };
 
   handleCancel = () => {
-    this.formRef.current.resetFields();
+//   this.formRef.current.resetFields();
     this.setState({
       fileList: undefined,
     });
@@ -236,7 +236,7 @@ class UpdateModal extends Component {
       width: 100,
       fix: "right",
     },
-    
+
   ];
 
   onChangeHandler = (e) => {
@@ -398,7 +398,10 @@ class UpdateModal extends Component {
             </Space>
 
             <Space size={30}>
-              <Form.Item name="quantity" label="Quantity"
+              <Form.Item
+                name="quantity"
+                label="Quantity"
+                tooltip="Minimum quantity = total quantity in stock - total quantity in active campaigns"
                 initialValue={record?.quantity}
                 rules={[
                   // {
@@ -420,6 +423,7 @@ class UpdateModal extends Component {
                   min={Number(record?.maxquantity) + 1}
                   max={999999999999}
                   default={0}
+                  placeholder={"Minimum quantity is " + (Number(record?.maxquantity) + 1)}
                   style={{ width: "60vh" }} />
               </Form.Item>
               <Form.Item
@@ -506,9 +510,10 @@ class UpdateModal extends Component {
 
 
           </Form>
+
           <PageHeader
             className="site-page-header-responsive"
-            title={"Campaign: " + campaignList.length}
+            title={"Campaigns: " + campaignList.length}
             footer={
               <div>
 

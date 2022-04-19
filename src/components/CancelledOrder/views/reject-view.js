@@ -55,7 +55,7 @@ class RejectModal extends Component {
   };
 
   handleCancel = () => {
-    this.formRef.current.resetFields();
+   //   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 

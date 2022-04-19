@@ -15,6 +15,7 @@ class NavbarAdmin extends Component {
       withCredentials: true,
     }).then((result) => {
       localStorage.clear();
+      localStorage.removeItem("user");
       return window.location.reload();
     });
   };

@@ -17,7 +17,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo, createRef } from "react";
 import NumberFormat from "react-number-format";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { MinusCircleOutlined, PlusOutlined, UndoOutlined } from "@ant-design/icons";
 import TimelineItem from "antd/lib/timeline/TimelineItem";
 
 const { RangePicker } = DatePicker;
@@ -51,7 +51,7 @@ class CreatModal extends Component {
     minQuantity: 10,
     maxQuantity: 10,
     switchState: true,
-    minWholesalePrice: 500,
+    minWholesalePrice: 100,
     advancePercent: 1,
     minSharedAdvancedPercent: 1,
     minSharedQuantityStep: 2,
@@ -71,6 +71,14 @@ class CreatModal extends Component {
     });
   }
 
+  uniqByKeepFirst(a, key) {
+    let seen = new Set();
+    return a.filter(item => {
+      let k = key(item);
+      return seen.has(k) ? false : seen.add(k);
+    });
+  }
+
   handleCreateAndClose = (data) => {
     console.log(data);
 
@@ -81,42 +89,46 @@ class CreatModal extends Component {
 
     let newCampaign = {};
     if (this.state.switchState) {
-      data.quantities = data.quantities.filter(
-        (value, index, self) =>
-          index ===
-          self.findIndex(
-            (t) => t.quantity === value.quantity && t.price <= value.price
-          )
-      );
-
+      //  Sort array
       data.quantities.sort(function (a, b) {
         return b.quantity - a.quantity;
       });
-      console.log(data.quantities);
-      let errArr = [];
-      let compareArr = [];
-      data.quantities.map((item) => {
-        data.quantities.map((item2) => {
-          if (item.quantity != item2.quantity) {
-            if (item.quantity > item2.quantity && item.price > item2.price) {
-              errArr.push(item);
-              // compareArr.push(item2);
-            }
-          }
-        })
+      //  Remove duplicate quantity
+      // data.quantities = data.quantities.filter(
+      //   (value, index, self) =>
+      //     index ===
+      //     self.findIndex(
+      //       (t) => t.quantity === value.quantity && t.price <= value.price
+      //     )
+      // );
 
-      })
+      const datas = this.uniqByKeepFirst(data.quantities, it => it.quantity);
+      console.log(datas);
+      console.log(data.quantities);
+      // let errArr = [];
+      // let compareArr = [];
+      // data.quantities.map((item) => {
+      //   data.quantities.map((item2) => {
+      //     if (item.quantity != item2.quantity) {
+      //       if (item.quantity > item2.quantity && item.price > item2.price) {
+      //         errArr.push(item);
+      //         // compareArr.push(item2);
+      //       }
+      //     }
+      //   })
+
+      // })
 
       //  Remove item to make valid final array
-      let datas = data.quantities.filter(item => {
-        console.log(!errArr.includes(item));
-        return !errArr.includes(item);
-      })
+      // let datas = data.quantities.filter(item => {
+      //   console.log(!errArr.includes(item));
+      //   return !errArr.includes(item);
+      // })
 
-      //  Change % price to numeric price
-      datas.map(item => {
-        return item.price = item.price * data.wholesalePrice / 100;
-      })
+      // //  Change % price to numeric price
+      // datas.map(item => {
+      //   return item.price = item.price * data.wholesalePrice / 100;
+      // })
 
       //  Set new record
       newCampaign = {
@@ -180,28 +192,42 @@ class CreatModal extends Component {
   };
 
   onSelectProduct = (value) => {
+    // this.formRef.current.resetFields();
+
     let productSelected = this.props.productList?.find(
       (element) => element.id === value
     );
 
-    let campaignListOfSelectedProduct = [];
-    let campaignList = this.props.campaingList ? this.props.campaingList : [];
-    campaignListOfSelectedProduct = campaignList.filter((camp) => {
-      return (
-        camp.productid === value &&
-        (camp.status === "ready" || camp.status === "active")
-      );
-    });
+    // let campaignListOfSelectedProduct = [];
+    // let campaignList = this.props.campaingList ? this.props.campaingList : [];
+    // campaignListOfSelectedProduct = campaignList.filter((camp) => {
+    //   return (
+    //     camp.productid === value &&
+    //     (camp.status === "ready" || camp.status === "active")
+    //   );
+    // });
 
-    let productQuantityOfExistCampaign = 0;
-    campaignListOfSelectedProduct.map(
-      (camp) => (productQuantityOfExistCampaign += Number(camp.maxquantity))
-    );
+    // let productQuantityOfExistCampaign = 0;
+    // campaignListOfSelectedProduct.map(
+    //   (camp) => (productQuantityOfExistCampaign += Number(camp.maxquantity))
+    // );
 
     this.setState({
       productSelected: productSelected,
       availableQuantity:
-        productSelected.quantity - productQuantityOfExistCampaign,
+        productSelected.quantity - productSelected.maxquantity,
+      switchState: true,
+      price:productSelected.retailprice,
+      maxQuantity: "10",
+    });
+    this.formRef.current.setFieldsValue({
+      // description: 'ABCDEF',
+      // price:productSelected.retailprice,
+      wholesalePrice: productSelected.retailprice,
+      quantity: this.state.switchState ? "1" : "10",
+      maxQuantity: "10",
+      advancePercent: "1",
+      isShare: true,
     });
   };
 
@@ -247,30 +273,7 @@ class CreatModal extends Component {
     this.quantityRef.current.value = 1;
 
   };
-  showStepErr = () => {
-    const { errArr = [], compareArr = [] } = this.state.errStepArr;
-    let errMes = "";
 
-    for (let index = 0; index < errArr.length; index++) {
-      const element = errArr[index];
-      errMes +=
-        "Conflict step: " +
-        errArr[index].quantity +
-        " " +
-        errArr[index].price +
-        " - " +
-        compareArr[index].quantity +
-        " " +
-        compareArr[index].price +
-        "\n";
-    }
-
-  }
-  clearStepErr = () => {
-    this.setState({
-      errMes: "",
-    })
-  }
   render() {
     const { openModal } = this.props;
 
@@ -384,7 +387,7 @@ class CreatModal extends Component {
               <Form.Item
                 name="productId"
                 label="Product"
-                initialValue={productList[0]?.id}
+                // initialValue={productList[0]?.id}
                 rules={[
                   {
                     required: true,
@@ -430,20 +433,20 @@ class CreatModal extends Component {
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      const quantity = getFieldValue("quantity");
-                      const advancePercent = getFieldValue("advancePercent");
+                      // const quantity = getFieldValue("quantity");
+                      // const advancePercent = getFieldValue("advancePercent");
                       const range =
                         Number(productSelected?.retailprice) ?? 999999999999;
 
-                      if (value * quantity * advancePercent < 500000) {
-                        return Promise.reject(
-                          new Error(
-                            "Advance percent has to be >= 5000 VND, at least " +
-                            (500000 / (value * quantity) + 1).toFixed() +
-                            " %"
-                          )
-                        );
-                      }
+                      // if (value * quantity * advancePercent < 500000) {
+                      //   return Promise.reject(
+                      //     new Error(
+                      //       "Advance payment has to be >= 5000 VND, at least " +
+                      //       (500000 / (value * quantity) + 1).toFixed() +
+                      //       " %"
+                      //     )
+                      //   );
+                      // }
                       if (value >= 0 && value <= range) {
                         return Promise.resolve();
                       }
@@ -461,7 +464,7 @@ class CreatModal extends Component {
                   addonAfter=" VND"
                   max={productSelected?.retailprice ?? 999999999999}
                   onChange={this.onChangePrice}
-                  min={0}
+                  min={100}
                   style={{ width: "60vh" }}
                 />
               </Form.Item>
@@ -476,12 +479,16 @@ class CreatModal extends Component {
                 tooltip="In single campaign, quantity is the minimum amount of products customer has to buy to end campaign successfully.
                 In shared campaign, quantity is the minimum product customer has to order to join the campaign, default 1"
                 rules={[
+                  {
+                    required: true,
+                    message: "Quantity is required!",
+                  },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       const min = switchState ? 0 : 9;
                       const maxQuantity = getFieldValue('maxQuantity');
-                      const wholesalePrice = getFieldValue('wholesalePrice');
-                      const advancePercent = getFieldValue('advancePercent');
+                      // const wholesalePrice = getFieldValue('wholesalePrice');
+                      // const advancePercent = getFieldValue('advancePercent');
                       if (maxQuantity < value) {
                         return Promise.reject(
                           new Error(
@@ -490,18 +497,18 @@ class CreatModal extends Component {
                         );
                       }
 
-                      if (value * wholesalePrice * advancePercent < 500000) {
-                        return Promise.reject(
-                          new Error(
-                            "Advance percent has to be >= 5000 VND, at least " +
-                            (
-                              500000 / (value * wholesalePrice) +
-                              1
-                            ).toFixed() +
-                            " %"
-                          )
-                        );
-                      }
+                      // if (value * wholesalePrice * advancePercent < 500000) {
+                      //   return Promise.reject(
+                      //     new Error(
+                      //       "Advance payment has to be >= 5000 VND, at least " +
+                      //       (
+                      //         500000 / (value * wholesalePrice) +
+                      //         1
+                      //       ).toFixed() +
+                      //       " %"
+                      //     )
+                      //   );
+                      // }
                       if (value > min) {
                         return Promise.resolve();
                       }
@@ -534,6 +541,10 @@ class CreatModal extends Component {
                 initialValue={10}
                 label="Max Quantity"
                 rules={[
+                  {
+                    required: true,
+                    message: "Max quantity is required!",
+                  },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (getFieldValue("quantity") > value) {
@@ -576,22 +587,22 @@ class CreatModal extends Component {
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      const range = Number(productSelected?.retailprice) ?? 999999999999;
-                      const quantity = getFieldValue('quantity');
-                      const wholesalePrice = getFieldValue('wholesalePrice');
-                      const advancePercent = getFieldValue('advancePercent');
-                      if (wholesalePrice * quantity * value <= 500000) {
-                        return Promise.reject(
-                          new Error(
-                            "Advance percent to be > 5000, at least " +
-                            (
-                              500000 / (minWholesalePrice * maxQuantity) +
-                              1
-                            ).toFixed() +
-                            " %"
-                          )
-                        );
-                      }
+                      // const range = Number(productSelected?.retailprice) ?? 999999999999;
+                      // const quantity = getFieldValue('quantity');
+                      // const wholesalePrice = getFieldValue('wholesalePrice');
+                      // const advancePercent = getFieldValue('advancePercent');
+                      // if (wholesalePrice * quantity * value <= 500000) {
+                      //   return Promise.reject(
+                      //     new Error(
+                      //       "Advance percent to be > 5000, at least " +
+                      //       (
+                      //         500000 / (minWholesalePrice * maxQuantity) +
+                      //         1
+                      //       ).toFixed() +
+                      //       " %"
+                      //     )
+                      //   );
+                      // }
                       return Promise.resolve();
 
                     }
@@ -625,6 +636,7 @@ class CreatModal extends Component {
                 />
               </Form.Item>
             </Space>
+
             <Space size={30}>
               <Form.Item
                 label="Campaign type"
@@ -634,7 +646,7 @@ class CreatModal extends Component {
                 <Space style={{ width: "60vh" }} size={20}>
                   <Switch
                     onClick={this.toggleSwitch}
-                    defaultChecked="true"
+                    ref={this.switchmRef}
                     style={{ marginRight: "20" }}
                   />
                   {this.state.switchState
@@ -654,123 +666,155 @@ class CreatModal extends Component {
                     console.log(record);
                   }}
                 >
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map((field) => (
-                        <Space key={field.key} align="baseline" size={30}>
-                          <Form.Item
-                            noStyle
-                            shouldUpdate={(prevValues, curValues) =>
-                              prevValues.area !== curValues.area ||
-                              prevValues.sights !== curValues.sights
-                            }
-                          >
-                            {() => (
-                              <Form.Item
-                                {...field}
-                                label="Quantity Up To"
-                                name={[field.name, "quantity"]}
-                                initialValue={maxQuantity}
-                              >
-                                <InputNumber
-                                  addonAfter=" products"
-                                  max={maxQuantity}
+                  {(fields, { add, remove }) => {
+                    const reset = () => {
+                      fields.forEach(field => {
+                        remove(field.name)
+                      });
+                      fields.forEach(field => {
+                        remove(field.name)
+                      });
+                      fields.forEach(field => {
+                        remove(field.name)
+                      });
+                    };
+                    return (
+                      <>
+                        {fields.map((field) => (
+                          <Space key={field.key} align="baseline" size={30}>
+                            <Form.Item
+                              noStyle
+                              shouldUpdate={(prevValues, curValues) =>
+                                prevValues.area !== curValues.area ||
+                                prevValues.sights !== curValues.sights
+                              }
+                            >
+                              {() => (
+                                <Form.Item
+                                  {...field}
+                                  label="Quantity Up To"
+                                  name={[field.name, "quantity"]}
+                                  initialValue={1}
+                                  rules={[
+                                    {
+                                      required: true,
+                                      message: "Quantity is required!",
+                                    },
+                                  ]}
+                                >
+                                  <InputNumber
+                                    addonAfter=" products"
+                                    max={maxQuantity}
 
-                                  min={switchState ? 1 : minQuantity}
-                                  style={{ width: "60vh" }}
-                                />
-                              </Form.Item>
-                            )}
-                          </Form.Item>
-                          <Form.Item
-                            {...field}
-                            label="Price"
-                            name={[field.name, 'price']}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Wholesale price percent is required",
-                              },
-                              ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                  const quantity = getFieldValue("quantity");
-                                  const wholesalePrice =
-                                    getFieldValue("wholesalePrice");
-                                  const advancePercent =
-                                    getFieldValue("advancePercent");
-                                  const range = getFieldValue("quantities").sort(
-                                    (a, b) => a.quantity - b.quantity
-                                  );
-                                  const index = _.field.match(/\d/g);
-                                  // c
-                                  console.log(_);
-                                  if (
-                                    quantity *
-                                    advancePercent *
-                                    wholesalePrice *
-                                    value <
-                                    5000 * 100 * 100
-                                  ) {
-                                    return Promise.reject(
-                                      new Error(
-                                        "Wholesale price percent in this step is invalid due to advance percent < 5000, at least " +
-                                        (
-                                          50000000 /
-                                          (quantity *
-                                            wholesalePrice *
-                                            value) +
-                                          1
-                                        ).toFixed() +
-                                        " %"
-                                      )
-                                    );
-                                  }
-                                  return Promise.resolve();
+                                    min={1}
+                                    style={{ width: "60vh" }}
+                                  />
+                                </Form.Item>
+                              )}
+                            </Form.Item>
+                            <Form.Item
+                              {...field}
+                              label="Price"
+                              name={[field.name, 'price']}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Price is required!",
                                 },
-                              }),
-                            ]}
-                            initialValue={advancePercent}
-                          >
-                            <InputNumber
-                              addonAfter="% of wholesale campaign price"
-                              min={1}
-                              max={99}
-                              style={{ width: "60vh" }}
+                                ({ getFieldValue }) => ({
+                                  validator(_, value) {
+                                    // const quantity = getFieldValue("quantity");
+                                    // const wholesalePrice =
+                                    //   getFieldValue("wholesalePrice");
+                                    // const advancePercent =
+                                    //   getFieldValue("advancePercent");
+                                    // const range = getFieldValue("quantities").sort(
+                                    //   (a, b) => a.quantity - b.quantity
+                                    // );
+                                    // const index = _.field.match(/\d/g);
+                                    // c
+                                    // console.log(_);
+                                    // if (
+                                    //   quantity *
+                                    //   advancePercent *
+                                    //   wholesalePrice *
+                                    //   value <
+                                    //   5000 * 100 * 100
+                                    // ) {
+                                    //   return Promise.reject(
+                                    //     new Error(
+                                    //       "Wholesale price percent in this step is invalid due to advance percent < 5000, at least " +
+                                    //       (
+                                    //         50000000 /
+                                    //         (quantity *
+                                    //           wholesalePrice *
+                                    //           value) +
+                                    //         1
+                                    //       ).toFixed() +
+                                    //       " %"
+                                    //     )
+                                    //   );
+                                    // }
+                                    return Promise.resolve();
+                                  },
+                                }),
+                              ]}
+                              initialValue={price}
+                            >
+                              <InputNumber
+                                addonAfter="VND"
+                                min={100}
+                                max={productSelected?.retailprice ?? 999999999999}
+                                style={{ width: "60vh" }}
+                              />
+                            </Form.Item>
+
+                            <MinusCircleOutlined
+                              onClick={() => remove(field.name)}
                             />
+                          </Space>
+                        ))}
+                        <Space size={30}>
+                          <Form.Item>
+                            <Button
+                              // type="dashed"
+                              onClick={reset}
+                              block
+                              icon={<UndoOutlined />}
+                            >
+                              Reset Step
+                            </Button>
                           </Form.Item>
 
-                          <MinusCircleOutlined
-                            onClick={() => remove(field.name)}
-                          />
+                          <Form.Item>
+                            <Button
+                              // type="dashed"
+                              onClick={() => add()}
+                              block
+                              icon={<PlusOutlined />}
+                            >
+                              Add Step
+                            </Button>
+                          </Form.Item>
                         </Space>
-                      ))}
-
-                      <Form.Item>
-                        <Button
-                          type="dashed"
-                          onClick={() => add()}
-                          block
-                          icon={<PlusOutlined />}
-                        >
-                          Add Campaign Discount Step
-                        </Button>
-                      </Form.Item>
-                      <Form.Item>
-                        <Input.TextArea disabled="true" block icon={<PlusOutlined />} rows={5}
-                          value="Share campaign tutorial step by step:
+                        <Form.Item>
+                          <Input.TextArea disabled="true" block icon={<PlusOutlined />} rows={5}
+                            value="Share campaign tutorial step by step:
                           - The higher products customers buy, the better discount price they will get.
-                          - Quantity step - % price conflict: the higher quantity will be counted
+                          - Quantity step - price conflict: the higher quantity will be counted
                           For eq:
-                            + Quantity 15, % price 80
-                            + Quantity 25, % price 70
-                            + Quantity 45, % price 95
-                            + Quantity 55, % price 90
+                            + Quantity 15, price 80
+                            + Quantity 25, price 70
+                            + Quantity 45, price 95
+                            + Quantity 55, price 90
                             -> Quantity valid: 15-25
                             -> Quantity invalid: 45-55">
-                        </Input.TextArea>
-                      </Form.Item>
-                    </>
-                  )}
+                          </Input.TextArea>
+                        </Form.Item>
+                      </>
+                    )
+                  }
+                  }
                 </Form.List>
               </>
             )}
@@ -785,8 +829,8 @@ class CreatModal extends Component {
               <Descriptions.Item label="Quantity in stock">
                 {productSelected?.quantity ?? ""}
               </Descriptions.Item>
-              <Descriptions.Item label="Quantity in campaign">
-                {productSelected ? switchState ? 1 : minQuantity + " -> " + maxQuantity : ""}
+              <Descriptions.Item label="Max quantity in campaign">
+                {maxQuantity ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Retail price">
                 <NumberFormat
