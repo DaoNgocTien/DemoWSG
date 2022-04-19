@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import { connect } from "react-redux";
 import action from "../modules/action";
+import Loader from "./../../../components/Loader";
 
 
 const { Title, Text } = Typography;
@@ -39,7 +40,7 @@ class PasswordTab extends Component {
     previewVisible: false,
     previewImage: "",
     previewTitle: "",
-    fileList: [],
+    fileList: undefined,
     price: 0,
     productSelected: {},
     phoneAvailable: true,
@@ -54,10 +55,14 @@ class PasswordTab extends Component {
 
   componentDidMount() {
     this.props.getProfile();
+    let storedUser = JSON.parse(localStorage.getItem("user"));
+    this.setState({
+      user: storedUser,
+    });
   }
 
   handleCancel = () => {
-    this.formRef.current.resetFields();
+//   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -109,9 +114,9 @@ class PasswordTab extends Component {
         OTPMessage: null,
       });
       let data = this.props.data;
-      // console.log(this.props.data);
+      console.log(this.props.data);
       const user = {
-        phone: this.state.phone,
+        phone:  "0" + String(this.state.phone),
         avatar: JSON.parse(data.avt),
         name: data.name,
         email: data.email,
@@ -143,9 +148,62 @@ class PasswordTab extends Component {
     this.props.updateIdentifcation(values);
   }
 
+
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  handleCancelUploadImage = () => this.setState({ previewVisible: false });
+
+  handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await this.getBase64(file.originFileObj);
+    }
+
+    this.setState({
+      previewImage: file.url,
+      previewVisible: true,
+      previewTitle:
+        file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
+    });
+  };
+
+  handleChange = ({ fileList }) => {
+    console.log(fileList);
+    // this.props.onChangeUpdateProfile();
+    console.log(fileList);
+    fileList = fileList.map((file) => {
+      if (file.response) {
+        file.url = file.response[0].url;
+        file.name = file.response[0].name;
+        file.thumbUrl = null;
+      }
+      return file;
+    });
+
+    this.setState({ fileList });
+  };
+
+
   render() {
-    const { load, imageUrl, phoneAvailable, OTPMessage, fileList, phoneMessage } = this.state;
-    const { data, phoneValidation, identificationValidation } = this.props;
+    const { loading, changeProfileMessage } = this.props;
+    if (loading) return <Loader />;
+
+    const { data } = this.props;
+    const { load, fileList = JSON.parse(data?.identificationimage || "[]") } = this.state;
+    const uploadButton = (
+      <div>
+        {load ? <LoadingOutlined /> : <PlusOutlined />}
+        <div style={{ marginTop: 8 }}>Upload</div>
+      </div>
+    );
+    const { imageUrl, phoneAvailable, OTPMessage, phoneMessage } = this.state;
+    const { phoneValidation, identificationValidation } = this.props;
     const {
       checkPhoneMessage = "",
       phone,
@@ -158,12 +216,6 @@ class PasswordTab extends Component {
     const {
       changePasswordMessage,
     } = data;
-    const uploadButton = (
-      <div>
-        {load ? <LoadingOutlined /> : <PlusOutlined />}
-        <div style={{ marginTop: 8 }}>Upload</div>
-      </div>
-    );
     // console.log(checkPhoneMessage);
     return (
       <>
@@ -295,12 +347,13 @@ class PasswordTab extends Component {
                   //   // }
                   // ]}
 
-                  initialValue={phone}
+                  initialValue={this.state.phone}
                   validateStatus={checkPhoneMessage == null ? "success" : "error"}
                   help={checkPhoneMessage == null ? "We make sure phone number is available!" : checkPhoneMessage}
                 >
                   <Input
                     type="number"
+                    addonBefore="+84"
                     // disabled={data.phoneOTP?? "false"}
                     onChange={(e) => this.onChangePhoneNumber(e)}
                     ref={this.phoneRef}
@@ -335,7 +388,7 @@ class PasswordTab extends Component {
             <Input
               onChange={e => this.checkOTP(e)}
               ref={this.OTPRef}
-              disable={phoneAvailable ?? "true"}
+              disable={phoneAvailable ? "true" : "false"}
             />
 
           </Form.Item>
@@ -366,6 +419,83 @@ class PasswordTab extends Component {
           }}
         >
           <Form.Item
+            name="identificationcard"
+            label="Identification Card"
+            rules={[
+              {
+                required: true,
+                message: "Please input your Identification Card!",
+                whitespace: true,
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+
+                  if (String(value).length >= 1 && String(value).length <= 20) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(
+                    new Error(
+                      "Identification Number is 1-20 characters"
+                    )
+                  );
+                },
+              }),
+            ]}
+            initialValue={data.identificationcard}
+          >
+            <Input type="number" />
+          </Form.Item>
+
+          <Form.Item
+            name="identificationimage"
+            label="Identification Image"
+            rules={[
+              // {
+              //   required: true,
+              //   message: 'Please confirm your password!',
+              // },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (fileList.length >= 1) {
+                    return Promise.resolve();
+                  }
+
+                  return Promise.reject(new Error("Image required!!"));
+                },
+              }),
+            ]}
+          >
+            <>
+              <Upload
+                //JSON.parse(data?.avt || "[]")
+                name="file"
+                action="/files/upload"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+                style={{ width: "60vh" }}
+              >
+                {fileList.length >= 1 ? null : uploadButton}
+              </Upload>
+              <Modal
+                visible={this.state.previewVisible}
+                title={this.state.previewTitle}
+                footer={null}
+                onCancel={this.handleCancelUploadImage}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={this.state.previewImage}
+                />
+              </Modal>
+            </>
+          </Form.Item>
+
+
+          {/* <Form.Item
             name="identificationcard"
             label="Identification Card"
             rules={[{ required: true, message: 'Please input your Identification Card!' }]}
@@ -408,7 +538,7 @@ class PasswordTab extends Component {
                 />
               </Modal>
             </>
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             wrapperCol={{
               span: 12,
@@ -471,7 +601,7 @@ const mapDispatchToProps = (dispatch) => {
     checkingPhoneNumber: async (message) => {
       // // console.log("get campaign");
       await dispatch(action.checkingPhoneNumber(message));
-      await dispatch(action.getProfile());
+      // await dispatch(action.getProfile());
     },
   };
 };

@@ -28,7 +28,7 @@ const getCampaign = (campaignId) => {
       } else {
         [campaigns, products, order] = await Promise.all([
           Axios({
-            url: `/campaigns/All`,
+            url: `/campaigns/ + ${campaignId}`,
             method: "GET",
             withCredentials: true,
             exposedHeaders: ["set-cookie"],

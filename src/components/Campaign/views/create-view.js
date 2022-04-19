@@ -384,7 +384,7 @@ class CreatModal extends Component {
               <Form.Item
                 name="productId"
                 label="Product"
-                initialValue={productList[0]?.id}
+                // initialValue={productList[0]?.id}
                 rules={[
                   {
                     required: true,
@@ -438,7 +438,7 @@ class CreatModal extends Component {
                       if (value * quantity * advancePercent < 500000) {
                         return Promise.reject(
                           new Error(
-                            "Advance percent has to be >= 5000 VND, at least " +
+                            "Advance payment has to be >= 5000 VND, at least " +
                             (500000 / (value * quantity) + 1).toFixed() +
                             " %"
                           )
@@ -493,7 +493,7 @@ class CreatModal extends Component {
                       if (value * wholesalePrice * advancePercent < 500000) {
                         return Promise.reject(
                           new Error(
-                            "Advance percent has to be >= 5000 VND, at least " +
+                            "Advance payment has to be >= 5000 VND, at least " +
                             (
                               500000 / (value * wholesalePrice) +
                               1

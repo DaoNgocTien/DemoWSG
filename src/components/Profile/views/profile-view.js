@@ -50,8 +50,8 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => {},
-  createCampaign: () => {},
+  closeModal: () => { },
+  createCampaign: () => { },
   openModal: false,
   productList: [],
 };
@@ -80,29 +80,24 @@ class ProfileTab extends Component {
     this.props.getProfile();
     let storedUser = JSON.parse(localStorage.getItem("user"));
     this.setState({
-      user: {
-        username: storedUser.username,
-        googleId: storedUser.googleid,
-        loginMethod: storedUser.googleid ? "BY GOOGLE MAIL" : "BY USERNAME",
-        phone: storedUser.phone,
-        ...this.props.data,
-      },
+      user: storedUser,
     });
   }
 
   handleCancel = () => {
-    this.formRef.current.resetFields();
+//   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
   onFinish = (values) => {
+    console.log(values);
     values.avatar =
-      this.state.fileList.length === 0 && this.props.record
+      this.state.fileList?.length === 0 && this.props.record
         ? JSON.parse(this.props.record?.avt)
         : this.state.fileList;
     this.setState({
       user: {
-        // phone: "035497658",
+        phone: this.props.data.phone,
         avatar: values.avatar,
         name: values.name,
         email: values.email,
@@ -138,7 +133,7 @@ class ProfileTab extends Component {
 
   handleChange = ({ fileList }) => {
     console.log(fileList);
-
+    this.props.onChangeUpdateProfile();
     console.log(fileList);
     fileList = fileList.map((file) => {
       if (file.response) {
@@ -153,7 +148,7 @@ class ProfileTab extends Component {
   };
 
   render() {
-    const { loading } = this.props;
+    const { loading, changeProfileMessage } = this.props;
     if (loading) return <Loader />;
 
     const { data } = this.props;
@@ -165,12 +160,14 @@ class ProfileTab extends Component {
       </div>
     );
     let storedUser = data;
-
+    console.log(this.props);
     return (
       <>
         <Title style={{ textAlign: "center", padding: "30px" }} level={3}>
           USER PROFILE
         </Title>
+        <Title type="success" style={{ textAlign: "center", }} level={3}> {changeProfileMessage ? `${changeProfileMessage}` : ""}</Title>
+
         <Form
           {...formItemLayout}
           name="register"
@@ -182,7 +179,7 @@ class ProfileTab extends Component {
             label="Username"
             tooltip="Username can not be channged!"
           >
-            <Tag color="green">{storedUser.username ?? "Unavailable"}</Tag>
+            <Tag color="green">{data.username ?? "Unavailable"}</Tag>
           </Form.Item>
 
           <Form.Item
@@ -194,7 +191,7 @@ class ProfileTab extends Component {
               placement="topLeft"
               title="Suppliers are those who use the WSG System and website to process their business. Their main role is to cooperate with the WSG system to do business"
             >
-              <Tag color="blue">{storedUser.rolename ?? ""}</Tag>
+              <Tag color="blue">{data.rolename ?? ""}</Tag>
             </Tooltip>
           </Form.Item>
 
@@ -208,7 +205,22 @@ class ProfileTab extends Component {
               title="Logging by username / Logging by Google Mail"
             >
               <Tag color="red">
-                {storedUser.username ? "BY USERNAME" : "BY EMAIL"}
+                {data.username ? "BY USERNAME" : "BY EMAIL"}
+              </Tag>
+            </Tooltip>
+          </Form.Item>
+
+          <Form.Item
+            name="phone"
+            label="Phone Number"
+          // tooltip="User's logging method in WSG System"
+          >
+            <Tooltip
+              placement="topLeft"
+              title="Logging by username / Logging by Google Mail"
+            >
+              <Tag color="green">
+                {this.state.user.phone}
               </Tag>
             </Tooltip>
           </Form.Item>
@@ -223,15 +235,21 @@ class ProfileTab extends Component {
                 message: "Please input your fullname!",
                 whitespace: true,
               },
+              {
+                max: 50,
+                message: "Length: 1-50 characters",
+                whitespace: true,
+              }
             ]}
             initialValue={data.name}
           >
-            <Input />
+            <Input onChange={this.props.onChangeUpdateProfile}/>
           </Form.Item>
 
           <Form.Item name="avatar" label="Avatar">
             <>
               <Upload
+              //JSON.parse(data?.avt || "[]")
                 name="file"
                 action="/files/upload"
                 listType="picture-card"
@@ -272,11 +290,11 @@ class ProfileTab extends Component {
             ]}
             initialValue={data.email}
           >
-            <Input />
+            <Input onChange={this.props.onChangeUpdateProfile}/>
           </Form.Item>
 
           <Form.Item name="address" label="Address" initialValue={data.address}>
-            <Input.TextArea showCount maxLength={100} />
+            <Input.TextArea showCount maxLength={100} onChange={this.props.onChangeUpdateProfile}/>
           </Form.Item>
 
           <Form.Item {...tailFormItemLayout}>
@@ -295,6 +313,7 @@ const mapStateToProps = (state) => {
     loading: state.profileReducer.loading,
     data: state.profileReducer.data,
     error: state.profileReducer.err,
+    changeProfileMessage: state.profileReducer.phoneValidation.changeProfileMessage,
   };
 };
 
@@ -311,6 +330,10 @@ const mapDispatchToProps = (dispatch) => {
     updateProfile: async (profile) => {
       await dispatch(action.updateProfile(profile));
       await dispatch(action.getProfile());
+    },
+
+    onChangeUpdateProfile: async () => {
+      await dispatch(action.onChangeUpdateProfile());
     },
   };
 };
