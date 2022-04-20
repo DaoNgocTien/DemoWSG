@@ -63,9 +63,9 @@ class CampaignUI extends Component {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;
 
-    let recordToEdit = data.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
+    // let recordToEdit = data.filter((item) => {
+    //   return selectedRowKeys.includes(item.id);
+    // })[0];
 
     switch (openModal) {
       case "openCreateModal":
@@ -96,7 +96,7 @@ class CampaignUI extends Component {
 
         this.setState({
           openDrawer: true,
-          record: recordToEdit,
+          // record: recordToEdit,
           orderListInSelectedCampaign: orderListInSelectedCampaignInCampaign,
         });
 
@@ -252,16 +252,18 @@ class CampaignUI extends Component {
 
   onSelectChange = (record) => {
     if (this.state.selectedRowKeys[0] !== record.key) {
+      console.log("1")
       this.props.getCampaignById(record.id);
       this.setState({
         selectedRowKeys: [record.key],
-        record: this.props.record,
+        record: record,
         editButton: true && record.status === "ready",
         deleteButton: true && record.status === "ready",
         addNewButton: false,
         orderInCampaignButton: true,
       });
     } else {
+      console.log("2")
       this.setState({
         selectedRowKeys: [],
         record: {},
@@ -306,7 +308,7 @@ class CampaignUI extends Component {
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-
+console.log(this.state.record)
     const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
@@ -358,7 +360,7 @@ class CampaignUI extends Component {
                     >
                       <Link
                         className="LinkDecorations"
-                        to={"/discount/orders-in-campaign/" + this.state.record?.id}
+                        to={"/discount/orders-in-campaign/" + this.props.record?.id}
                       >
                         View Details
                       </Link>

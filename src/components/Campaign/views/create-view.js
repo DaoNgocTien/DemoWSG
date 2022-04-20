@@ -292,7 +292,7 @@ class CreatModal extends Component {
       formListErrMessage,
       errStepArr,
     } = this.state;
-    console.log(productSelected);
+    console.log(productList);
     return (
       <>
         <Modal
