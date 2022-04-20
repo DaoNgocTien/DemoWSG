@@ -189,7 +189,7 @@ class DeleteModal extends Component {
       errStepArr,
     } = this.state;
 
-    console.log(record);
+    // console.log(record);
     return (
       <>
         <Modal

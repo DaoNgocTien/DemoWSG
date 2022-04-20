@@ -28,14 +28,20 @@ class OrdersInCampaign extends React.Component {
     openRejectModal: false,
     displayData: [],
     searchData: "",
+    record: {},
   };
 
   componentDidMount() {
+    console.log(this.props);
+    console.log(this.state);
     this.props.getOrder(this.props.record.id);
     this.props.getOrder(this.props.match.params.recordFromMain);
     this.props.getCampaignById(this.props.match.params.recordFromMain);
-    console.log(this.props);
-    console.log(this.state);
+    this.setState({
+      record: this.props.record,
+    })
+    // console.log(this.props);
+    // console.log(this.state);
   }
 
   onSelectChange = (record) => {
@@ -236,6 +242,7 @@ class OrdersInCampaign extends React.Component {
       displayData,
       searchData,
       openRejectModal,
+      // record
     } = this.state;
 
     const {

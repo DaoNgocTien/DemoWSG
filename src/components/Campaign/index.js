@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, memo } from "react";
 // import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
 import action from "./modules/action";
@@ -15,6 +15,7 @@ class Campaign extends Component {
   }
 
   render() {
+    console.log(this.props.data)
     return (
       <CampaignUI
         data={this.props.data.campaigns}
@@ -95,3 +96,9 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Campaign);
+// const arePropsEqual = (prevProps, nextProps) => {
+//   return prevProps === nextProps;
+// };
+
+// Wrap component using `React.memo()` and pass `arePropsEqual`
+// export default memo(connect(mapStateToProps, mapDispatchToProps)(Campaign), arePropsEqual);

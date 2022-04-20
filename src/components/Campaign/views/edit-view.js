@@ -80,7 +80,7 @@ class EdilModal extends Component {
   }
 
   handleCreateAndClose = (data) => {
-    console.log(data);
+    // console.log(data);
 
     const productSelected =
       this.state.productSelected === {} || !this.state.productSelected
@@ -103,8 +103,8 @@ class EdilModal extends Component {
       // );
 
       const datas = this.uniqByKeepFirst(data.quantities, it => it.quantity);
-      console.log(datas);
-      console.log(data.quantities);
+      // console.log(datas);
+      // console.log(data.quantities);
       // let errArr = [];
       // let compareArr = [];
       // data.quantities.map((item) => {
@@ -121,7 +121,7 @@ class EdilModal extends Component {
 
       //  Remove item to make valid final array
       // let datas = data.quantities.filter(item => {
-      //   console.log(!errArr.includes(item));
+      //   // console.log(!errArr.includes(item));
       //   return !errArr.includes(item);
       // })
 
@@ -152,14 +152,14 @@ class EdilModal extends Component {
       //  Close modal
       this.props.closeModal();
       // data.quantities.filter(item => {
-      //   console.log(!errArr.includes(item));
+      //   // console.log(!errArr.includes(item));
       //   return !errArr.includes(item);
       //   // else {
       //   //   return item;
       //   // }
       // })
-      // console.log(errArr);
-      // console.log(datas);
+      // // console.log(errArr);
+      // // console.log(datas);
       // this.setState({
       //   errStepArr: {
       //     errArr: errArr,
@@ -219,12 +219,12 @@ class EdilModal extends Component {
       availableQuantity:
         productSelected.quantity - productSelected.maxquantity,
       switchState: true,
-      price:productSelected.retailprice,
+      price: productSelected.retailprice,
       maxQuantity: "10",
     });
     this.formRef.current.setFieldsValue({
       // description: 'ABCDEF',
-      
+
 
       wholesalePrice: productSelected.retailprice,
       quantity: this.state.switchState ? "1" : "10",
@@ -294,15 +294,15 @@ class EdilModal extends Component {
       formListErrMessage,
       errStepArr,
     } = this.state;
-    console.log(record);
-    const defaultRange = [];
-    record.range?.map(r => {
-      defaultRange.push ({
-        quantity: r.quantity,
-        price: r.price,
-      })
-    })
-    console.log(defaultRange);
+    console.log(typeof(record?.range)) ;
+    // const defaultRange = [];
+    // record?.range?.map(r => {
+    //   defaultRange.push({
+    //     quantity: r.quantity,
+    //     price: r.price,
+    //   })
+    // })
+    // console.log(defaultRange);
     return (
       <>
         <Modal
@@ -328,6 +328,7 @@ class EdilModal extends Component {
           ]}
         >
           <Form
+            key={record?.key}
             name="formS"
             id="updateCampaignForm"
             ref={this.formRef}
@@ -678,25 +679,25 @@ class EdilModal extends Component {
                 <Form.List
                   name="quantities"
                   onChange={(record) => {
-                    console.log(record);
+                    // console.log(record);
                   }}
-                  initialValue={defaultRange ?? []}
+                  initialValue={record?.range ?? []}
                 >
-                  {(defaultRange, { add, remove }) => {
+                  {(fields, { add, remove }) => {
                     const reset = () => {
-                      defaultRange.forEach(field => {
+                      fields.forEach(field => {
                         remove(field.name)
                       });
-                      defaultRange.forEach(field => {
+                      fields.forEach(field => {
                         remove(field.name)
                       });
-                      defaultRange.forEach(field => {
+                      fields.forEach(field => {
                         remove(field.name)
                       });
                     };
                     return (
                       <>
-                        {defaultRange.map((field) => (
+                        {fields.map((field) => (
                           <Space key={field.key} align="baseline" size={30}>
                             <Form.Item
                               noStyle
@@ -749,7 +750,7 @@ class EdilModal extends Component {
                                     // );
                                     // const index = _.field.match(/\d/g);
                                     // c
-                                    // console.log(_);
+                                    // // console.log(_);
                                     // if (
                                     //   quantity *
                                     //   advancePercent *
@@ -967,13 +968,13 @@ export default memo(EdilModal, arePropsEqual);
 //   }
 
 //   handleCreateAndClose = (data) => {
-//     console.log(data);
-//     // console.log(this.state.productSelected);
+//     // console.log(data);
+//     // // console.log(this.state.productSelected);
 //     const productSelected =
 //       this.state.productSelected === {} || !this.state.productSelected
 //         ? this.props.productList[0]
 //         : this.state.productSelected;
-//     // console.log(data);
+//     // // console.log(data);
 //     let newCampaign = {};
 //     if (this.state.switchState) {
 
@@ -1003,7 +1004,7 @@ export default memo(EdilModal, arePropsEqual);
 
 //       //  Remove item to make valid final array
 //       let datas = data.quantities.filter(item => {
-//         console.log(!errArr.includes(item));
+//         // console.log(!errArr.includes(item));
 //         return !errArr.includes(item);
 //       })
 
@@ -1033,14 +1034,14 @@ export default memo(EdilModal, arePropsEqual);
 //       //  Close modal
 //       this.props.closeModal();
 //       // data.quantities.filter(item => {
-//       //   console.log(!errArr.includes(item));
+//       //   // console.log(!errArr.includes(item));
 //       //   return !errArr.includes(item);
 //       //   // else {
 //       //   //   return item;
 //       //   // }
 //       // })
-//       // console.log(errArr);
-//       // console.log(datas);
+//       // // console.log(errArr);
+//       // // console.log(datas);
 //       // this.setState({
 //       //   errStepArr: {
 //       //     errArr: errArr,
@@ -1096,11 +1097,11 @@ export default memo(EdilModal, arePropsEqual);
 //       availableQuantity: productSelected.quantity - productQuantityOfExistCampaign,
 //       // minWholesalePrice: productSelected.retailprice < 5000 ? 5000 :
 //     });
-//     // console.log(productSelected)
-//     // console.log(this.state.availableQuantity)
-//     // console.log(this.state.productSelected)
-//     // console.log(productSelected.quantity)
-//     // console.log(productQuantityOfExistCampaign)
+//     // // console.log(productSelected)
+//     // // console.log(this.state.availableQuantity)
+//     // // console.log(this.state.productSelected)
+//     // // console.log(productSelected.quantity)
+//     // // console.log(productQuantityOfExistCampaign)
 //   };
 
 //   onChangePrice = (value) => {
@@ -1186,7 +1187,7 @@ export default memo(EdilModal, arePropsEqual);
 //       errStepArr,
 //     } =
 //       this.state;
-//     console.log(productSelected)
+//     // console.log(productSelected)
 //     return (
 //       <>
 
@@ -1370,7 +1371,7 @@ export default memo(EdilModal, arePropsEqual);
 //                       const quantity = getFieldValue('quantity');
 //                       const advancePercent = getFieldValue('advancePercent');
 //                       const range = Number(productSelected?.retailprice) ?? 999999999999;
-//                       // console.log(value * quantity * advancePercent)
+//                       // // console.log(value * quantity * advancePercent)
 //                       if (value * quantity * advancePercent < 500000) {
 //                         return Promise.reject(new Error('Advance percent has to be >= 5000 VND, at least ' + (500000 / (value * quantity) + 1).toFixed() + " %"));
 //                       }
@@ -1417,7 +1418,7 @@ export default memo(EdilModal, arePropsEqual);
 //                       if (maxQuantity < value) {
 //                         return Promise.reject(new Error('Quantity can not bigger than max quantity!'));
 //                       }
-//                       // console.log(value * wholesalePrice * advancePercent);
+//                       // // console.log(value * wholesalePrice * advancePercent);
 //                       if (value * wholesalePrice * advancePercent < 500000) {
 //                         return Promise.reject(new Error('Advance percent has to be >= 5000 VND, at least ' + (500000 / (value * wholesalePrice) + 1).toFixed() + " %"));
 //                       }
@@ -1604,8 +1605,8 @@ export default memo(EdilModal, arePropsEqual);
 //                                   const quantity = getFieldValue('quantity');
 //                                   const wholesalePrice = getFieldValue('wholesalePrice');
 //                                   const advancePercent = getFieldValue('advancePercent');
-//                                   console.log(quantity * advancePercent * wholesalePrice * value);
-//                                   console.log(500000 / (quantity * advancePercent * wholesalePrice));
+//                                   // console.log(quantity * advancePercent * wholesalePrice * value);
+//                                   // console.log(500000 / (quantity * advancePercent * wholesalePrice));
 //                                   const { errArr = [], compareArr = [] } = errStepArr;
 
 //                                   if (quantity * advancePercent * wholesalePrice * value < 5000 * 100 * 100) {
