@@ -12,6 +12,8 @@ import {
 } from "antd";
 import moment from "moment";
 import action from "../../Orders/modules/action";
+import {default as campaignAction} from "./../modules/action";
+
 import { connect } from "react-redux";
 import React, { memo } from "react";
 import RejectModal from "../../Orders/views/reject-view";
@@ -30,6 +32,10 @@ class OrdersInCampaign extends React.Component {
 
   componentDidMount() {
     this.props.getOrder(this.props.record.id);
+    this.props.getOrder(this.props.match.params.recordFromMain);
+    this.props.getCampaignById(this.props.match.params.recordFromMain);
+    console.log(this.props);
+    console.log(this.state);
   }
 
   onSelectChange = (record) => {
@@ -413,6 +419,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getCampaignById: async (id) => {
+      await dispatch(campaignAction.getCampaign(id));
+    },
+
     getOrder: async (id) => {
       await dispatch(action.getOrderByCampaignId(id));
     },

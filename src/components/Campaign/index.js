@@ -20,13 +20,14 @@ class Campaign extends Component {
         data={this.props.data.campaigns}
         loading={this.props.loading}
         getCampaign={this.props.getCampaign}
-        // orderList={this.props.orderList}
+        record={this.props.record}
         productList={this.props.data.products}
         updateCampaign={this.props.updateCampaign}
         createCampaign={this.props.createCampaign}
         deleteCampaign={this.props.deleteCampaign}
         startCampaignBeforeHand={this.props.startCampaignBeforeHand}
         storeCampaign={this.props.storeCampaign}
+        getCampaignById={this.props.getCampaignById}
       />
     );
   }
@@ -37,6 +38,8 @@ const mapStateToProps = (state) => {
     loading: state.campaignReducer.loading,
     data: state.campaignReducer.data,
     error: state.campaignReducer.err,
+    record: state.campaignReducer.record,
+
     // productList: state.productReducer.data,
     // orderList: state.orderReducer.data.orders,
   };
@@ -47,6 +50,12 @@ const mapDispatchToProps = (dispatch) => {
     getCampaign: async (campaignId) => {
       // console.log("get campaign");
       await dispatch(action.getCampaign(campaignId));
+      // await dispatch(orderAction.getOrder());
+    },
+
+    getCampaignById: async (campaignId) => {
+      // console.log("get campaign");
+      await dispatch(action.getCampaignById(campaignId));
       // await dispatch(orderAction.getOrder());
     },
 

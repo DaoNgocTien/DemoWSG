@@ -21,13 +21,19 @@ const getProfile = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      console.log(profile);
       if (profile.status === 200) {
-        let user = {
-          ...profile.data.data.account,
-          ...profile.data.data.profile,
+        // if(profile.data.data.user.rolename ==="Supplier")
+        let user = profile.data.data.user.rolename === "Supplier" ? {
+          rolename: profile.data.data.user.rolename,
+          ...profile.data.data.supplierData[0],
+        } : {
+          rolename: profile.data.data.user.rolename,
+          ...profile.data.data.systemProfileData[0],
         };
+        console.log(user);
         localStorage.setItem("user", JSON.stringify(user));
-        return dispatch(getSuccess(profile.data.data));
+        return dispatch(getSuccess(user));
       }
       return dispatch(getFailed());
     } catch (error) {
@@ -122,6 +128,7 @@ const checkingPhoneNumber = (message) => {
 };
 
 const updateProfile = (user) => {
+  console.log(user);
   return async (dispatch) => {
     try {
       dispatch(getRequest());
@@ -137,20 +144,20 @@ const updateProfile = (user) => {
       ]);
 
       if (updateResponse.status === 200) {
-        dispatch(
-          getPhoneValidation({
-            changePhoneMessage: "Phone number changed successfully!",
-          })
-        );
         return dispatch(
-          getSuccess({
-            username: updateResponse.data.data.account.username,
-            password: updateResponse.data.data.account.password,
-            googleid: updateResponse.data.data.account.googleid,
-            phone: updateResponse.data.data.account.phone,
-            ...updateResponse.data.data.profile,
+          getPhoneValidation({
+            changeProfileMessage: "Profile changed successfully!",
           })
         );
+        // return dispatch(
+        //   getSuccess({
+        //     username: updateResponse.data.data.account.username,
+        //     password: updateResponse.data.data.account.password,
+        //     googleid: updateResponse.data.data.account.googleid,
+        //     phone: updateResponse.data.data.account.phone,
+        //     ...updateResponse.data.data.profile,
+        //   })
+        // );
       }
       return dispatch(getFailed());
     } catch (error) {
@@ -158,6 +165,16 @@ const updateProfile = (user) => {
     }
   };
 };
+
+const onChangeUpdateProfile = () => {
+  return async (dispatch) => {
+    return dispatch(
+      getPhoneValidation({
+        changeProfileMessage: "",
+      })
+    );
+  }
+}
 
 const updateIdentifcation = (card) => {
   return async (dispatch) => {
@@ -260,6 +277,7 @@ const action = {
   getProfile,
   updateIdentifcation,
   updateEWallet,
+  onChangeUpdateProfile,
 };
 
 export default action;

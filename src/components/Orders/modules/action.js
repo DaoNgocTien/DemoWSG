@@ -165,7 +165,7 @@ const getOrderByCampaignId = (id) => {
       const orderInCampaign = orders.data.data.filter(order => {
         return id === order.campaignid;
       });
-    //  console.log(orderInCampaign);
+     console.log(id);
       return dispatch(
         getSuccess({
           orders: orderInCampaign.map((order) => {

@@ -20,6 +20,7 @@ const campaignReducer = (state = initialState, action) => {
       state.loading = false;
       state.record = action.payload.record;
       state.err = null;
+      console.log(state);
       return { ...state };
 
     case GET_DATA_SUCCESS:

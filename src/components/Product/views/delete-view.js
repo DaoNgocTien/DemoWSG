@@ -93,7 +93,7 @@ class DeleteModal extends Component {
   };
 
   handleCancel = () => {
-    this.formRef.current.resetFields();
+//   this.formRef.current.resetFields();
     this.setState({
       fileList: undefined,
     });
