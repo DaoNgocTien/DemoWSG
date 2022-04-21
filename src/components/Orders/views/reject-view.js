@@ -42,8 +42,9 @@ class RejectModal extends Component {
   handleRejectAndClose = (data) => {
     // console.log(this.props.record);
     //  this.props.campaignId != null => request from orders-in-campaign component
-    console.log(data)
-    this.props.campaignid != null ?
+    console.log(this.state.requester)
+    console.log(this.props.record);
+    this.props.record.campaignid != null ?
 
       this.props.rejectOrder(
         this.props.record.ordercode,
@@ -51,14 +52,18 @@ class RejectModal extends Component {
         data.reason,
         this.state.fileList,
         this.props.record.id,
-        this.props.campaignId)
+        this.props.record.campaignid,
+        this.state.requester,
+        )
       :
       this.props.rejectOrder(
         this.props.record.ordercode,
         "retail",
         data.reason,
         this.state.fileList,
-        this.props.record.id);
+        this.props.record.id,
+        this.state.requester
+        );
     // this.formRef.current.resetFields();
     this.props.closeModal();
   };
