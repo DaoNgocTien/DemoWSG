@@ -12,7 +12,7 @@ import {
 } from "antd";
 import moment from "moment";
 import action from "../../Orders/modules/action";
-import {default as campaignAction} from "./../modules/action";
+import { default as campaignAction } from "./../modules/action";
 
 import { connect } from "react-redux";
 import React, { memo } from "react";
@@ -28,14 +28,20 @@ class OrdersInCampaign extends React.Component {
     openRejectModal: false,
     displayData: [],
     searchData: "",
+    record: {},
   };
 
   componentDidMount() {
+    console.log(this.props);
+    console.log(this.state);
     this.props.getOrder(this.props.record.id);
     this.props.getOrder(this.props.match.params.recordFromMain);
     this.props.getCampaignById(this.props.match.params.recordFromMain);
-    console.log(this.props);
-    console.log(this.state);
+    this.setState({
+      record: this.props.record,
+    })
+    // console.log(this.props);
+    // console.log(this.state);
   }
 
   onSelectChange = (record) => {
@@ -77,7 +83,7 @@ class OrdersInCampaign extends React.Component {
       render: (_text, _object, index) => {
         return index + 1;
       },
-      width:70,
+      width: 70,
       fixed: "left",
     },
     {
@@ -97,7 +103,7 @@ class OrdersInCampaign extends React.Component {
         return <Tag>{data.toUpperCase()}</Tag>
       },
       width: 100,
-       fixed: "left",
+      fixed: "left",
     },
     {
       title: "Created At",
@@ -200,8 +206,8 @@ class OrdersInCampaign extends React.Component {
         return object.details[0].notes;
       },
     },
-    
-   
+
+
   ];
 
   onChangeHandler = (e) => {
@@ -236,6 +242,7 @@ class OrdersInCampaign extends React.Component {
       displayData,
       searchData,
       openRejectModal,
+      // record
     } = this.state;
 
     const {
@@ -334,8 +341,8 @@ class OrdersInCampaign extends React.Component {
                 dataSource={
                   displayData.length === 0 && searchData === ""
                     ? orderList.filter(
-                        (order) => order.status.toUpperCase() !== "NOTADVANCED"
-                      )
+                      (order) => order.status.toUpperCase() !== "NOTADVANCED"
+                    )
                     : displayData
                 }
                 scroll={{ y: 350 }}
@@ -432,12 +439,13 @@ const mapDispatchToProps = (dispatch) => {
       description,
       image,
       orderId,
-      campaignId = null
+      campaignId = null,
+      requester
     ) => {
       //  console.log("Campaign");
 
       await dispatch(
-        action.rejectOrder(orderCode, type, description, image, orderId)
+        action.rejectOrder(orderCode, type, description, image, orderId, requester)
       );
       await dispatch(action.getOrderByCampaignId(campaignId));
     },

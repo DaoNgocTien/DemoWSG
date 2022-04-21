@@ -99,16 +99,20 @@ const updateStatusOrder = (data, image) => {
   };
 };
 
-const rejectOrder = (orderCode, type, description, image, orderId) => {
+const rejectOrder = (orderCode, type, description, image, orderId, requester) => {
   const user = JSON.parse(localStorage.getItem("user"));
-  // console.log(user);
+  console.log(user);
   let reject = {
     orderCode: orderCode,
     type: type,
     description: "has been cancelled by " + user.rolename + " for: " + description,
     image: image,
     orderId: orderId,
+    supplierId: user.id,
+    cancelLinkRequestor: requester
   };
+  console.log(reject);
+
   return async (dispatch) => {
     dispatch(getRequest());
     try {

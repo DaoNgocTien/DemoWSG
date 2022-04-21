@@ -47,16 +47,39 @@ const getCampaign = (campaignId) => {
           }),
         ]);
       }
+      //  Filter products to remove product which its available quantity <10
+      let availableProducts = products.data.data.filter(p => {
+        let max = 0;
+        campaigns.data.data.map(c => {
+          max += c.productid === p.id ? Number(c.maxquantity) : 0;
+        })
+        return p.quantity - max >= 10;
+      })
+
+      //  Filter order to remove order which its status is notAdvanced
       order.data?.data.filter(order => order.status !== "notAdvanced");
+     
       return dispatch(
         getSuccess({
           campaigns: campaigns.data.data.map((campaign) => {
             return {
               key: campaign.id,
+
               ...campaign,
+              range: JSON.parse(campaign.range),
             };
           }),
-          products: products.data.data,
+          products: availableProducts.map(p => {
+            let max = 0;
+            campaigns.data.data.map(c => {
+              max += c.productid === p.id ? Number(c.maxquantity) : 0;
+            })
+            return {
+              key: p.id,
+              maxquantity: max,
+              ...p,
+            };
+          }),
           order:
             order !== {}
               ? order.data?.data.map((item) => {
@@ -106,6 +129,7 @@ const createCampaign = (record) => {
         getSuccess({
           campaigns: campaigns.data.data.map((campaign) => {
             return {
+              range: JSON.parse(campaign.range),
               key: campaign.id,
               ...campaign,
             };
@@ -124,14 +148,14 @@ const createCampaign = (record) => {
 const updateCampaign = (record) => {
   return async (dispatch) => {
     console.log(record)
-    dispatch(getRequest());
+    // dispatch(getRequest());
     Axios({
       url: `/campaigns/${record.id}`,
       method: "PUT",
       data: {
-       
+
         status: "ready",
-        productId: record.productId, 
+        productId: record.productId,
         fromDate: record.fromDate,
         toDate: record.toDate,
         quantity: record.quantity,
@@ -154,7 +178,7 @@ const updateCampaign = (record) => {
           // return (<Redirect to="/discount/campaigns" />);
 
         }
-        return (<Redirect to="/discount/campaigns" />);
+        // return (<Redirect to="/discount/campaigns" />);
 
       })
       .catch((err) => {
@@ -250,6 +274,7 @@ const startCampaignBeforeHand = id => {
 const storeCampaign = record => {
   return async (dispatch) => {
     // dispatch(getRequest());
+    console.log(record)
     dispatch(
       storeRecord({
         record: record
