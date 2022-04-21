@@ -42,6 +42,7 @@ class RejectModal extends Component {
   handleRejectAndClose = (data) => {
     // console.log(this.props.record);
     //  this.props.campaignId != null => request from orders-in-campaign component
+    console.log(data)
     this.props.campaignid != null ?
 
       this.props.rejectOrder(
