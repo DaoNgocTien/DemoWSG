@@ -57,7 +57,7 @@ class CampaignUI extends Component {
     orderListInSelectedCampaign: [],
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
@@ -112,7 +112,7 @@ class CampaignUI extends Component {
       openCreateModal: false,
       openDeleteModal: false,
       openEditModal: false,
-      record: {},
+      // record: {},
     });
   };
 
@@ -308,7 +308,7 @@ class CampaignUI extends Component {
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-console.log(this.state.record)
+    console.log(this.state.record)
     const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
@@ -329,11 +329,12 @@ console.log(this.state.record)
               campaingList={data}
             />
             <DeleteModal
+              loading={this.props.loading}
               openModal={openDeleteModal}
               closeModal={this.closeModal}
               deleteCampaign={deleteCampaign}
+              defaultProduct={(productList?.filter(p => p?.id === this.state.record?.productid))[0]}
               productList={productList}
-              updateCampaign={updateCampaign}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
             />
@@ -341,9 +342,9 @@ console.log(this.state.record)
               loading={this.props.loading}
               openModal={openEditModal}
               closeModal={this.closeModal}
+              updateCampaign={updateCampaign}
               defaultProduct={(productList?.filter(p => p?.id === this.state.record?.productid))[0]}
               productList={productList}
-              updateCampaign={updateCampaign}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
             />

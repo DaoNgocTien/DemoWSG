@@ -99,7 +99,7 @@ const updateStatusOrder = (data, image) => {
   };
 };
 
-const rejectOrder = (orderCode, type, description, image, orderId) => {
+const rejectOrder = (orderCode, type, description, image, orderId, requester) => {
   const user = JSON.parse(localStorage.getItem("user"));
   console.log(user);
   let reject = {
@@ -109,7 +109,7 @@ const rejectOrder = (orderCode, type, description, image, orderId) => {
     image: image,
     orderId: orderId,
     supplierId: user.id,
-    cancelLinkRequestor: "Supplier"
+    cancelLinkRequestor: requester
   };
   console.log(reject);
 
