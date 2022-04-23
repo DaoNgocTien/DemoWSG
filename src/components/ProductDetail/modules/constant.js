@@ -1,0 +1,3 @@
+export const GET_DATA_SUCCESS = "product/GET_PRODUCT_DETAIL_SUCCESSS";
+export const GET_DATA_REQUEST = "product/GET_PRODUCT_DETAIL_REQUEST";
+export const GET_DATA_FAIL = "product/GET_PRODUCT_DETAIL_FAIL";

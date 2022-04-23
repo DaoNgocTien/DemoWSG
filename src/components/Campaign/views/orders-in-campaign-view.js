@@ -22,7 +22,7 @@ import NumberFormat from "react-number-format";
 class OrdersInCampaign extends React.Component {
   state = {
     loading: false,
-    selectedRowKeys: [], // Check here to configure the default column
+    selectedRowKeys: [], 
     loadingActionButton: false,
     rejectButton: false,
     openRejectModal: false,
@@ -40,12 +40,12 @@ class OrdersInCampaign extends React.Component {
     this.setState({
       record: this.props.record,
     })
-    // console.log(this.props);
-    // console.log(this.state);
+    
+    
   }
 
   onSelectChange = (record) => {
-    // console.log("selectedRowKeys changed: ", selectedRowKeys);
+    
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({
         selectedRowKeys: [record.key],
@@ -90,7 +90,7 @@ class OrdersInCampaign extends React.Component {
       title: "Customer Name",
       width: 150,
       render: (_text, object, _index) => {
-        // console.log(object);
+        
         return object.customerfirstname + " " + object.customerlastname;
       },
       fixed: "left",
@@ -114,36 +114,36 @@ class OrdersInCampaign extends React.Component {
         return moment(data).format("MM/DD/YYYY");
       },
     },
-    // {
-    //   title: "Product Name",
-    //   width: 200,
-    //   render: (_text, object, _index) => {
-    //     // console.log(object);
-    //     return object.details[0].productname;
-    //   },
-    // },
-    // {
-    //   title: "Product Image",
-    //   width: 150,
-    //   render: (_text, object, _index) => {
-    //     // console.log(object);
-    //     return object.details[0].image === "" ? (
-    //       ""
-    //     ) : (
-    //       <img
-    //         width="100"
-    //         alt="show illustrative representation"
-    //         height="100"
-    //         src={JSON.parse(object.details[0]?.image)[0].url}
-    //       />
-    //     );
-    //   },
-    // },
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     {
       title: "Quantity",
       width: 100,
       render: (_text, object, _index) => {
-        // console.log(object);
+        
         return object.details[0].quantity;
       },
     },
@@ -202,7 +202,7 @@ class OrdersInCampaign extends React.Component {
       title: "Notes",
       width: 300,
       render: (_text, object, _index) => {
-        // console.log(object);
+        
         return object.details[0].notes;
       },
     },
@@ -242,7 +242,7 @@ class OrdersInCampaign extends React.Component {
       displayData,
       searchData,
       openRejectModal,
-      // record
+      
     } = this.state;
 
     const {
@@ -252,9 +252,9 @@ class OrdersInCampaign extends React.Component {
       orderList = [],
       record,
     } = this.props;
-    // console.log(ordersInCampaign);
+    
 
-    //  console.log(this.props);
+    
 
     const rowSelection = {
       selectedRowKeys,
@@ -269,33 +269,33 @@ class OrdersInCampaign extends React.Component {
           onBack={() => window.history.back()}
           title="CAMPAIGN DETAILS"
           subTitle={`This is a campaign detail page`}
-          // extra={[
-          //   <Button
-          //     type="danger"
-          //     onClick={this.showModal}
-          //     style={{ marginLeft: 3 }}
-          //     hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1}
-          //   >
-          //     Reject Returning Request
-          //   </Button>,
+          
+          
+          
+          
+          
+          
+          
+          
+          
 
-          //   <Button
-          //     type="primary"
-          //     onClick={this.handleAcceptAndClose}
-          //     style={{ marginLeft: 3 }}
-          //     hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1}
-          //   >
-          //     Accept Returning Request
-          //   </Button>,
-          //   <Button
-          //     type="primary"
-          //     onClick={() => window.history.back()}
-          //     style={{ marginLeft: 3 }}
-          //     hidden={!(this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1)}
-          //   >
-          //     Back
-          //   </Button>,
-          // ]}
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           footer={
             <div>
               <RejectModal
@@ -366,7 +366,7 @@ class OrdersInCampaign extends React.Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Status">
-                <Tag color={record?.status === "ready" ? "blue" : record?.status === "active" ? "red" : record?.status === "done" ? "green" : "grey"}>{record?.status.toUpperCase()}</Tag>
+                <Tag color={record?.status === "ready" ? "blue" : record?.status === "active" ? "red" : record?.status === "done" ? "green" : "grey"}>{record?.status}</Tag>
               </Descriptions.Item>
 
               <Descriptions.Item label="Product">
@@ -398,7 +398,7 @@ class OrdersInCampaign extends React.Component {
                   width="100"
                   alt="show illustrative representation"
                   height="100"
-                  src={JSON.parse(record?.productimage)[0].url}
+                  
                 />
               </Descriptions.Item>
 
@@ -442,7 +442,7 @@ const mapDispatchToProps = (dispatch) => {
       campaignId = null,
       requester
     ) => {
-      //  console.log("Campaign");
+      
 
       await dispatch(
         action.rejectOrder(orderCode, type, description, image, orderId, requester)

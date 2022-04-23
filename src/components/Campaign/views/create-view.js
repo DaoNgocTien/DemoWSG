@@ -335,6 +335,7 @@ class CreatModal extends Component {
                   },
                   () => ({
                     validator(_, value) {
+                      console.log(value)
                       if (value.length > 0 && value.length <= 50) {
                         return Promise.resolve();
                       }
