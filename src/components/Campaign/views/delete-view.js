@@ -263,7 +263,7 @@ class DeleteModal extends Component {
                 />
               </Form.Item>
               <Form.Item
-                label="Campaign duration"
+                label="Campaign Duration"
                 name="date"
                 initialValue={[
                   moment(this.props.record?.fromdate),
@@ -1064,7 +1064,7 @@ export default memo(DeleteModal, arePropsEqual);
 //               </Form.Item>
 
 //               <Form.Item
-//                 label="Campaign duration"
+//                 label="Campaign Duration"
 //                 name="date"
 //                 initialValue={[
 //                   moment(this.props.record?.fromdate),
@@ -1993,7 +1993,7 @@ export default memo(DeleteModal, arePropsEqual);
 //                 />
 //               </Form.Item>
 //               <Form.Item
-//                 label="Campaign duration"
+//                 label="Campaign Duration"
 //                 name="date"
 //                 initialValue={[moment(), moment().add(1, "days")]}
 //                 rules={[
@@ -2905,7 +2905,7 @@ export default memo(DeleteModal, arePropsEqual);
 
 // //               </Form.Item>
 // //               <Form.Item
-// //                 label="Campaign duration"
+// //                 label="Campaign Duration"
 // //                 name="date"
 // //                 initialValue={[
 // //                   moment(this.props.record?.fromdate),
