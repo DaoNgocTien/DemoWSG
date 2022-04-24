@@ -355,7 +355,7 @@ class OrdersInCampaign extends React.Component {
               <Descriptions.Item label="Name">
                 {record?.description}
               </Descriptions.Item>
-              <Descriptions.Item label="Campaign duration">
+              <Descriptions.Item label="Campaign Duration">
                 {moment(record?.fromdate).format("MM/DD/YYYY") +
                   ` - ` +
                   moment(record?.todate).format("MM/DD/YYYY")}
