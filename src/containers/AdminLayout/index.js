@@ -33,6 +33,7 @@ import Notification from "../../components/Notification";
 
 import { ref, onValue, set, remove } from "firebase/database";
 import { realtime } from "../../services/firebase";
+import { adminRoutePaths } from "../../routes/admin";
 
 const { SubMenu } = Menu;
 const { Header, Sider, Content } = Layout;
@@ -205,9 +206,16 @@ class AdminRender extends Component {
             breakpoint="md"
             collapsed={collapsed}
           >
-            <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
+            <Menu
+              mode="inline"
+              style={{ height: "100%", borderRight: 0 }}
+              defaultSelectedKeys={["Dashboard"]}
+            >
               <Menu.Item key="Dashboard" icon={<HomeTwoTone />}>
-                <Link className="LinkDecorations" to="/">
+                <Link
+                  className="LinkDecorations"
+                  to={adminRoutePaths.dashboard}
+                >
                   Dashboard
                 </Link>
               </Menu.Item>
@@ -225,28 +233,12 @@ class AdminRender extends Component {
                 </Menu.Item>
               </SubMenu>
 
-              <SubMenu
-                key="orders"
-                title="Orders"
-                icon={<ReconciliationTwoTone />}
-              >
-                <Menu.Item key="all-order">
-                  <Link className="LinkDecorations" to="/orders/all-order">
-                    All orders
-                  </Link>
-                </Menu.Item>
-                {/* <Menu.Item key="returned">
-                  <Link className="LinkDecorations" to="/orders/returned">
-                    Returned
-                  </Link>
-                </Menu.Item> */}
-                <Menu.Item key="cancelled">
-                  <Link className="LinkDecorations" to="/orders/cancelled">
-                    Cancelled
-                  </Link>
-                </Menu.Item>
-              </SubMenu>
-
+              <Menu.Item key="Orders" icon={<ReconciliationTwoTone />}>
+                <Link className="LinkDecorations" to={adminRoutePaths.orders}>
+                  Orders
+                </Link>
+              </Menu.Item>
+              
               <SubMenu
                 key="Discount"
                 title="Discounts"

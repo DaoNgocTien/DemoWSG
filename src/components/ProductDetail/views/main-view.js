@@ -14,8 +14,8 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 // import CreateModal from "./create-view";
-// import DeleteModal from "./delete-view";
-// import EditModal from "./edit-view";
+import DeleteModal from "./delete-view";
+import EditModal from "./edit-view";
 import NumberFormat from "react-number-format";
 
 const propsProTypes = {
@@ -44,16 +44,16 @@ class ProductUI extends Component {
   componentDidMount() {}
 
   campaignColumns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      width: 100,
-      fixed: "left",
-    },
+    // {
+    //   title: "No.",
+    //   dataIndex: "No.",
+    //   key: "No.",
+    //   render: (text, object, index) => {
+    //     return index + 1;
+    //   },
+    //   width: 100,
+    //   fixed: "left",
+    // },
     {
       title: "Product Name",
       dataIndex: "productname",
@@ -76,7 +76,13 @@ class ProductUI extends Component {
       key: "maxquantity",
       width: 120,
     },
-
+    {
+      title: "Created Date",
+      dataIndex: "createdat",
+      key: "createdat",
+      width: 120,
+      render: (data) => moment(data).format("MM/DD/YYYY"),
+    },
     {
       title: "Type",
       key: "type",
@@ -115,13 +121,13 @@ class ProductUI extends Component {
       fix: "right",
     },
     {
-      title: "Action",
-      key: "action",
+      title: "",
+      key: "",
       render: (object) => {
         if (object.status === "ready") {
           return (
             <Button
-              onClick={() => this.startCampaignBeforeHand(object)}
+              // onClick={() => this.startCampaignBeforeHand(object)}
               type="primary"
             >
               Start Campaign
@@ -133,17 +139,81 @@ class ProductUI extends Component {
       width: 150,
     },
   ];
+  closeModal = () => {
+    this.setState({
+      openCreateModal: false,
+      openDeleteModal: false,
+      openEditModal: false,
+    });
+  };
+
+  start = (openModal) => {
+    switch (openModal) {
+      case "openDeleteModal":
+        this.setState({ loadingActionButton: true, openDeleteModal: true });
+
+        break;
+
+      case "openEditModal":
+        this.setState({ loadingActionButton: true, openEditModal: true });
+
+        break;
+      default:
+        break;
+    }
+  };
 
   render() {
     const { record, categoryList, campaignList } = this.props;
-    console.log(campaignList);
     return (
       <>
         <PageHeader
           className="site-page-header-responsive"
           onBack={() => window.history.back()}
           title={record?.name.toUpperCase()}
+          extra={[
+            <Button
+              type="danger"
+              onClick={() => this.start("openDeleteModal")}
+              // disabled={!deleteButton}
+              style={{ width: 90 }}
+            >
+              Disable
+            </Button>,
+            <Button
+              type="primary"
+              onClick={() => this.start("openEditModal")}
+              // disabled={!this.state.editButton}
+              style={{ width: 90 }}
+            >
+              Edit
+            </Button>,
+          ]}
+        ></PageHeader>
+        <DeleteModal
+          loading={this.props.loading}
+          openModal={this.state.openDeleteModal}
+          closeModal={this.closeModal}
+          categoryList={categoryList}
+          deleteProduct={this.props.deleteProduct}
+          record={record}
+          availableQuantity={
+            this.state.record?.quantity - this.state.record?.maxquantity ?? 0
+          }
+          data={this.props.data}
         />
+        <EditModal
+          loading={this.props.loading}
+          openModal={this.state.openEditModal}
+          closeModal={this.closeModal}
+          categoryList={categoryList}
+          updateProduct={this.props.updateProduct}
+          record={record}
+          orderList={this.props.orderList}
+          availableQuantity={true}
+          data={this.props.data}
+        />
+
         <Descriptions
           bordered
           column={2}

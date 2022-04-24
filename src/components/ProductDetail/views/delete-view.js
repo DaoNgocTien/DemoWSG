@@ -1,7 +1,6 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Button,
-  Descriptions,
   Form,
   Input,
   InputNumber,
@@ -9,16 +8,10 @@ import {
   Select,
   Upload,
   Space,
-  Tag,
-  PageHeader,
-  Row,
-  Col,
-  Table,
 } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
-import NumberFormat from "react-number-format";
 //  prototype
 const propsProTypes = {
   closeModal: PropTypes.func,
@@ -30,8 +23,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  updateProduct: () => { },
+  closeModal: () => {},
+  updateProduct: () => {},
   defaultProduct: {
     key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
     id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
@@ -63,7 +56,6 @@ class DeleteModal extends Component {
     displayData: [],
     searchKey: "",
   };
-  formRef = React.createRef();
 
   componentDidMount() {
     // console.log(this.props);
@@ -85,7 +77,6 @@ class DeleteModal extends Component {
         break;
     }
 
-    this.formRef.current.resetFields();
     this.setState({
       fileList: [],
     });
@@ -93,7 +84,6 @@ class DeleteModal extends Component {
   };
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
     this.setState({
       fileList: undefined,
     });
@@ -140,88 +130,6 @@ class DeleteModal extends Component {
 
     this.setState({ fileList });
   };
-
-  columns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      width: 100,
-      fixed: "left",
-    },
-    {
-      title: "Campaign Name",
-      dataIndex: "description",
-      key: "description",
-      sorter: (a, b) => a.description.length - b.description.length,
-      width: 200,
-      fix: "left",
-    },
-    {
-      title: "Orders",
-      dataIndex: "numorder",
-      key: "numorder",
-      width: 120,
-      fix: "left",
-      // title: "Quantity",
-      // render: (object) => {
-      //   // let disabled = object.status === "created" ? "false" : "true";
-      //   // console.log(object);
-      //   return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
-
-
-      //   // if (object.status === "processing") {
-      //   //   return (
-      //   //     <Button onClick={() => this.openUploadModal(object)} type="primary">
-      //   //       Deliver Order
-      //   //     </Button>
-      //   //   );
-      //   // }
-      // },
-      // key: "quantity",
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-      sorter: (a, b) => a.quantity - b.quantity,
-      width: 120,
-      fix: "left",
-    },
-    {
-      title: "Max Quantity",
-      dataIndex: "maxquantity",
-      key: "maxquantity",
-    },
-
-    {
-      title: "Type",
-      key: "type",
-      render: (object) => {
-        return (
-          <Tag color={!object.isshare ? "blue" : "green"}>
-            {!object.isshare ? "SINGLE" : "SHARED"}
-          </Tag>
-        );
-      },
-      width: 100,
-      fix: "right",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (data) => {
-        return <Tag color={data === "ready" ? "blue" : data === "active" ? "red" : data === "done" ? "green" : "grey"}>{data.toUpperCase() === "DEACTIVATED" ? "STOP" : data.toUpperCase()}</Tag>;
-      },
-      width: 100,
-      fix: "right",
-    },
-    
-  ];
 
   onChangeHandler = (e) => {
     let data = this.props.campaignList;
@@ -272,7 +180,6 @@ class DeleteModal extends Component {
         this.props.deleteProduct(this.props.record?.id);
         break;
     }
-    this.formRef.current.resetFields();
     this.props.closeModal();
   };
   render() {
@@ -283,7 +190,8 @@ class DeleteModal extends Component {
       load,
       fileList = JSON.parse(record?.image || "[]"),
       displayData,
-      searchKey, } = this.state;
+      searchKey,
+    } = this.state;
     // this.state.fileList =
     //   this.props.record && this.state.fileList !== 0
     //     ? JSON.parse(this.props.record?.image)
@@ -300,7 +208,6 @@ class DeleteModal extends Component {
     });
     return (
       <>
-
         <Modal
           width={window.innerWidth * 0.7}
           heigh={window.innerHeight * 0.5}
@@ -325,7 +232,6 @@ class DeleteModal extends Component {
           <Form
             key={record?.id}
             id="deleteProductForm"
-            ref={this.formRef}
             onFinish={this.handleDeleteAndClose}
             layout="vertical"
           >
@@ -343,7 +249,9 @@ class DeleteModal extends Component {
               />
             </Form.Item>
             <Space size={30}>
-              <Form.Item name="name" label="Product Name"
+              <Form.Item
+                name="name"
+                label="Product Name"
                 initialValue={record?.name}
                 rules={[
                   // {
@@ -352,27 +260,38 @@ class DeleteModal extends Component {
                   // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-
                       if (listName.includes(value)) {
-                        return Promise.reject(new Error('Product Name exists!'));
+                        return Promise.reject(
+                          new Error("Product Name exists!")
+                        );
                       }
                       if (value.length > 0 && value.length <= 50) {
                         return Promise.resolve();
                       }
 
-                      return Promise.reject(new Error('Product Name is required, length is 1-50 characters!'));
+                      return Promise.reject(
+                        new Error(
+                          "Product Name is required, length is 1-50 characters!"
+                        )
+                      );
                     },
                   }),
                 ]}
               >
-                <Input style={{ width: "60vh" }} placeholder="Name is required, length is 1-50 characters" disabled="true" />
+                <Input
+                  style={{ width: "60vh" }}
+                  placeholder="Name is required, length is 1-50 characters"
+                  disabled="true"
+                />
               </Form.Item>
-              <Form.Item name="categoryId" label="Category"
+              <Form.Item
+                name="categoryId"
+                label="Category"
                 initialValue={record?.categoryid}
                 rules={[
                   {
                     required: true,
-                    message: 'Category is required!',
+                    message: "Category is required!",
                   },
                   // ({ getFieldValue }) => ({
                   //   validator(_, value) {
@@ -385,8 +304,7 @@ class DeleteModal extends Component {
                   // }),
                 ]}
               >
-                <Select style={{ width: "60vh" }}  disabled="true" >
-                  
+                <Select style={{ width: "60vh" }} disabled="true">
                   {categoryList.map((item) => (
                     <Select.Option key={item.key} value={item.id}>
                       {item.categoryname}
@@ -397,7 +315,9 @@ class DeleteModal extends Component {
             </Space>
 
             <Space size={30}>
-              <Form.Item name="quantity" label="Quantity"
+              <Form.Item
+                name="quantity"
+                label="Quantity"
                 initialValue={record?.quantity}
                 rules={[
                   // {
@@ -410,17 +330,20 @@ class DeleteModal extends Component {
                         return Promise.resolve();
                       }
 
-                      return Promise.reject(new Error('Quantity is positive number!'));
+                      return Promise.reject(
+                        new Error("Quantity is positive number!")
+                      );
                     },
                   }),
                 ]}
               >
                 <InputNumber
-                 disabled="true" 
+                  disabled="true"
                   min={Number(record?.maxquantity) + 1}
                   max={999999999999}
                   default={0}
-                  style={{ width: "60vh" }} />
+                  style={{ width: "60vh" }}
+                />
               </Form.Item>
               <Form.Item
                 label="Retail Price"
@@ -437,27 +360,41 @@ class DeleteModal extends Component {
                         return Promise.resolve();
                       }
 
-                      return Promise.reject(new Error('Price is positive number!'));
+                      return Promise.reject(
+                        new Error("Price is positive number!")
+                      );
                     },
                   }),
                 ]}
               >
-                <InputNumber min={0} max={999999999999} default={0} style={{ width: "60vh" }}  disabled="true" />
+                <InputNumber
+                  min={0}
+                  max={999999999999}
+                  default={0}
+                  style={{ width: "60vh" }}
+                  disabled="true"
+                />
               </Form.Item>
             </Space>
 
             <Space size={30}>
-              <Form.Item name="description" label="Description"
+              <Form.Item
+                name="description"
+                label="Description"
                 initialValue={record?.description}
                 rules={[
                   {
                     required: true,
-                    message: 'Description is required!',
+                    message: "Description is required!",
                   },
-
                 ]}
               >
-                <Input.TextArea  disabled="true"  autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} placeholder="Description is required!" />
+                <Input.TextArea
+                  disabled="true"
+                  autoSize={{ minRows: 3, maxRows: 5 }}
+                  style={{ width: "60vh" }}
+                  placeholder="Description is required!"
+                />
               </Form.Item>
               <Form.Item
                 name="image"
@@ -478,7 +415,7 @@ class DeleteModal extends Component {
               >
                 <>
                   <Upload
-                   disabled="true" 
+                    disabled="true"
                     name="file"
                     action="/files/upload"
                     listType="picture-card"
@@ -504,49 +441,7 @@ class DeleteModal extends Component {
                 </>
               </Form.Item>
             </Space>
-
-
           </Form>
-          <PageHeader
-            className="site-page-header-responsive"
-            title={"Campaign: " + campaignList.length}
-            footer={
-              <div>
-
-                <div style={{ marginBottom: 16 }}>
-                  <Row>
-                    <Col flex="auto">
-                      <Space size={4}>
-                        <span style={{ marginLeft: 8 }}>
-                          {"Total products in active campaign: " + record?.maxquantity + " products"}
-                        </span>
-                      </Space>
-                    </Col>
-                    <Col flex="300px">
-                      <Input
-                        onChange={(e) => this.onChangeHandler(e)}
-                        placeholder="Search data"
-                      />
-                    </Col>
-                  </Row>
-                </div>
-                <Table
-                  key={record?.key}
-                  loading={this.props.loading}
-                  // rowSelection={rowSelection}
-                  columns={this.columns}
-                  dataSource={
-                    displayData.length === 0 && searchKey === ""
-                      ? this.props.campaignList
-                      : displayData
-                  }
-                  scroll={{ y: 350 }}
-                />
-              </div>
-            }
-          >
-
-          </PageHeader>
         </Modal>
       </>
     );
@@ -557,324 +452,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-// Wrap component using `React.memo()` and pass `arePropsEqual`
 export default memo(DeleteModal, arePropsEqual);
-
-
-// import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-// import {
-//   Button,
-//   Descriptions,
-//   Form,
-//   Input,
-//   InputNumber,
-//   Modal,
-//   Select,
-//   Upload,
-//   Image,
-// } from "antd";
-// import PropTypes from "prop-types";
-// import React, { Component, memo } from "react";
-
-// import NumberFormat from "react-number-format";
-// //  prototype
-// const propsProTypes = {
-//   closeModal: PropTypes.func,
-//   deleteProduct: PropTypes.func,
-//   defaultProduct: PropTypes.object,
-//   openModal: PropTypes.bool,
-//   categoryList: PropTypes.array,
-// };
-
-// //  default props
-// const propsDefault = {
-//   closeModal: () => {},
-//   deleteProduct: () => {},
-//   defaultProduct: {
-//     key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-//     id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-//     name: "test222 again Product",
-//     supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-//     retailprice: "5.00",
-//     quantity: 11,
-//     description: "testttttt",
-//     image: "",
-//     categoryid: null,
-//     status: "active",
-//     typeofproduct: "",
-//     createdat: "2022-01-07T14:08:02.994Z",
-//     updatedat: "2022-01-13T16:34:09.908Z",
-//     categoryname: null,
-//   },
-//   openModal: false,
-//   categoryList: [],
-// };
-
-// class DeleteModal extends Component {
-//   static propTypes = propsProTypes;
-//   static defaultProps = propsDefault;
-//   state = {
-//     previewVisible: false,
-//     previewImage: "",
-//     previewTitle: "",
-//     fileList: undefined,
-//   };
-//   formRef = React.createRef();
-
-//   componentDidMount() {
-//     // console.log(this.props);
-//   }
-
-//   handleDeleteAndClose = (data) => {
-//     // console.log(data);
-//     switch (this.props.record?.status) {
-//       case "incampaign":
-//         alert("This product in campaign cannot delete");
-//         break;
-
-//       default:
-//         this.props.deleteProduct(this.props.record?.id);
-//         break;
-//     }
-//     this.formRef.current.resetFields();
-//     this.props.closeModal();
-//   };
-
-//   handleDelete = (data) => {
-//     this.props.deleteProduct(this.props.record?.id);
-//     this.formRef.current.resetFields();
-//     this.props.closeModal();
-//   };
-
-//   handleCancel = () => {
-//     this.formRef.current.resetFields();
-//     this.props.closeModal();
-//   };
-
-//   getBase64(file) {
-//     return new Promise((resolve, reject) => {
-//       const reader = new FileReader();
-//       reader.readAsDataURL(file);
-//       reader.onload = () => resolve(reader.result);
-//       reader.onerror = (error) => reject(error);
-//     });
-//   }
-
-//   handleCancelUploadImage = () => this.setState({ previewVisible: false });
-
-//   handlePreview = async (file) => {
-//     if (!file.url && !file.preview) {
-//       file.preview = await this.getBase64(file.originFileObj);
-//     }
-
-//     this.setState({
-//       previewImage: file.url,
-//       previewVisible: true,
-//       previewTitle:
-//         file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
-//     });
-//   };
-
-//   handleChange = ({ fileList, file, event }) => {
-//     // fileList = fileList.slice(-2);
-//     // console.log(fileList);
-//     // 2. Read from response and show file link
-//     fileList = fileList.map((file) => {
-//       if (file.response) {
-//         // Component will show file.url as link
-//         file.url = file.response[0].url;
-//         file.name = file.response[0].name;
-//         file.thumbUrl = null;
-//       }
-//       return file;
-//     });
-
-//     this.setState({ fileList });
-//   };
-
-//   render() {
-//     const { openModal, record } = this.props;
-
-//     const { data, categoryList } = this.props;
-//     const {
-//       load,
-//       imageUrl,
-//       fileList = JSON.parse(record?.image || "[]"),
-//     } = this.state;
-//     // this.state.fileList =
-//     //   this.props.record && this.state.fileList !== 0
-//     //     ? JSON.parse(this.props.record?.image)
-//     //     : [];
-//     const uploadButton = (
-//       <div>
-//         {load ? <LoadingOutlined /> : <PlusOutlined />}
-//         <div style={{ marginTop: 8 }}>Upload</div>
-//       </div>
-//     );
-
-//     return (
-//       <>
-//         <Form
-//           key={record?.id}
-//           id="deleteProductForm"
-//           ref={this.formRef}
-//           onFinish={this.handleDeleteAndClose}
-//         >
-//           <Modal
-//             width={window.innerWidth * 0.7}
-//             heigh={window.innerHeight * 0.5}
-//             style={{
-//               top: 10,
-//             }}
-//             title="Delete a record"
-//             visible={openModal}
-//             onCancel={this.handleCancel}
-//             footer={[
-//               <Button onClick={this.handleCancel}>Cancel</Button>,
-//               <Button
-//                 type="danger"
-//                 form="deleteProductForm"
-//                 key="submit"
-//                 htmlType="submit"
-//               >
-//                 Delete
-//               </Button>,
-//             ]}
-//           >
-//             <Form.Item
-//               label="Product ID"
-//               name="id"
-//               initialValue={record?.id}
-//               hidden="true"
-//             >
-//               <Input
-//                 placeholder="Product ID"
-//                 defaultValue={record?.id}
-//                 disabled={true}
-//                 hidden={true}
-//               />
-//             </Form.Item>
-
-//             <Descriptions layout="vertical" column={2}>
-//               <Descriptions.Item label="Name">
-//                 <Form.Item name="name" initialValue={record?.name}>
-//                   <Input
-//                     defaultValue={record?.name}
-//                     style={{ width: "60vh" }}
-//                     disabled={true}
-//                   />
-//                 </Form.Item>
-//               </Descriptions.Item>
-
-//               <Descriptions.Item label="Category">
-//                 <Form.Item name="categoryId" initialValue={record?.categoryid}>
-//                   <Select
-//                     defaultValue={record?.categoryid}
-//                     style={{ width: "60vh" }}
-//                     disabled={true}
-//                   >
-//                     {categoryList.map((item) => (
-//                       <Select.Option key={item.key} value={item.id}>
-//                         {item.categoryname}
-//                       </Select.Option>
-//                     ))}
-//                   </Select>
-//                 </Form.Item>
-//               </Descriptions.Item>
-
-//               <Descriptions.Item label="Quantity">
-//                 <Form.Item name="quantity" initialValue={record?.quantity}>
-//                   <InputNumber
-//                     min={0}
-//                     defaultValue={record?.quantity}
-//                     style={{ width: "60vh" }}
-//                     disabled={true}
-//                   />
-//                 </Form.Item>
-//               </Descriptions.Item>
-
-//               <Descriptions.Item label="Retail Price">
-//                 <Form.Item
-//                   name="retailPrice"
-//                   initialValue={record?.retailprice}
-//                 >
-//                   <NumberFormat
-//                     value={record?.retailprice}
-//                     thousandSeparator={true}
-//                     suffix={" VND"}
-//                     decimalScale={0}
-//                     displayType="text"
-//                   />
-//                 </Form.Item>
-//               </Descriptions.Item>
-
-//               <Descriptions.Item label="Description">
-//                 <Form.Item
-//                   name="description"
-//                   initialValue={record?.description}
-//                 >
-//                   <Input.TextArea
-//                     disabled={true}
-//                     autoSize={{ minRows: 3, maxRows: 5 }}
-//                     defaultValue={record?.description}
-//                     style={{ width: "60vh" }}
-//                   />
-//                 </Form.Item>
-//               </Descriptions.Item>
-
-//               <Descriptions.Item label="Image">
-//                 <Form.Item name="image">
-//                   <>
-//                     {fileList.map((item) => {
-//                       return (
-//                         <Image
-//                           src={item.url}
-//                           preview={{
-//                             src: item.url,
-//                           }}
-//                           width={150}
-//                           height={150}
-//                         />
-//                       );
-//                     })}
-//                     {/* <Upload
-//                       disabled={true}
-//                       name="file"
-//                       action="/files/upload"
-//                       listType="picture-card"
-//                       fileList={this.props.record ? fileList : []}
-//                       onPreview={this.handlePreview}
-//                       onChange={this.handleChange}
-//                       style={{ width: "60vh" }}
-//                     >
-//                       {this.state.fileList.length >= 8 ? null : uploadButton}
-//                     </Upload>
-//                     <Modal
-//                       visible={this.state.previewVisible}
-//                       title={this.state.previewTitle}
-//                       footer={null}
-//                       onCancel={this.handleCancelUploadImage}
-//                     >
-//                       <img
-//                         alt="example"
-//                         style={{ width: "100%" }}
-//                         src={this.state.previewImage}
-//                       />
-//                     </Modal> */}
-//                   </>
-//                 </Form.Item>
-//               </Descriptions.Item>
-//             </Descriptions>
-//           </Modal>
-//         </Form>
-//       </>
-//     );
-//   }
-// }
-
-// const arePropsEqual = (prevProps, nextProps) => {
-//   return prevProps === nextProps;
-// };
-
-// // Wrap component using `React.memo()` and pass `arePropsEqual`
-// export default memo(DeleteModal, arePropsEqual);

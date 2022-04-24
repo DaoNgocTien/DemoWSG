@@ -34,8 +34,8 @@ class ProductPage extends Component {
           // data={this.props.data}
           loading={this.props.loading}
           // createProduct={this.props.createProduct}
-          // updateProduct={this.props.updateProduct}
-          // deleteProduct={this.props.deleteProduct}
+          updateProduct={this.props.updateProduct}
+          deleteProduct={this.props.deleteProduct}
           categoryList={this.props.categoryList}
           campaignList={this.props.campaignList.campaigns?.filter(element => element.productid === data.id)}
           // orderList={this.props.orderList.orders}

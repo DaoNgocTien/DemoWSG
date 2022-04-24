@@ -6,6 +6,7 @@ import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 import { Link } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -112,15 +113,15 @@ class CategoryUI extends Component {
   };
 
   columns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (_text, _object, index) => {
-        return index + 1;
-      },
-      width: 100,
-    },
+    // {
+    //   title: "No.",
+    //   dataIndex: "No.",
+    //   key: "No.",
+    //   render: (_text, _object, index) => {
+    //     return index + 1;
+    //   },
+    //   width: 100,
+    // },
 
     {
       title: "Name",
@@ -128,23 +129,22 @@ class CategoryUI extends Component {
       key: "categoryname",
       sorter: (a, b) => a.categoryname.length - b.categoryname.length,
     },
-    
+
     {
       title: "Pruducts",
       dataIndex: "numOfProduct",
       key: "numOfProduct",
-      width: 200
+      width: 200,
     },
-    
+
     {
-      title: "Created At",
+      title: "Created Date",
       dataIndex: "createdat",
       key: "createdat",
       sorter: (a, b) => a.createdat.length - b.createdat.length,
       render: (data) => moment(data).format("DD-MM-YYYY"),
-      width: 200
+      width: 200,
     },
-
   ];
 
   onChangeHandler = (e) => {
@@ -219,8 +219,16 @@ class CategoryUI extends Component {
             />
 
             <div style={{ marginBottom: 16 }}>
-              <Row>
-                <Col flex="auto">
+              <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+                <Col span={12}>
+                  <Input
+                    prefix={<SearchOutlined />}
+                    ref={this.searchSelf}
+                    onChange={(e) => this.onChangeHandler(e)}
+                    placeholder="Search for categories..."
+                  />
+                </Col>
+                <Col>
                   <Space size={3}>
                     <Button
                       type="primary"
@@ -258,12 +266,6 @@ class CategoryUI extends Component {
                         : ""}
                     </span> */}
                   </Space>
-                </Col>
-                <Col flex="300px">
-                  <Input
-                    onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search data"
-                  />
                 </Col>
               </Row>
             </div>

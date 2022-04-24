@@ -6,7 +6,9 @@ import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 import NumberFormat from "react-number-format";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
+import { OpenInNew } from "@material-ui/icons";
 
 //  prototype
 const propsProTypes = {
@@ -125,14 +127,14 @@ class ProductUI extends Component {
   };
 
   columns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      width: 60,
-      render: (text, object, index) => index + 1,
-      fixed: "left",
-    },
+    // {
+    //   title: "No.",
+    //   dataIndex: "No.",
+    //   key: "No.",
+    //   width: 60,
+    //   render: (text, object, index) => index + 1,
+    //   fixed: "left",
+    // },
     {
       title: "Image",
       dataIndex: "image",
@@ -232,6 +234,27 @@ class ProductUI extends Component {
             return <Tag color="red">DEACTIVE</Tag>;
           }
         }
+      },
+    },
+
+    {
+      title: "",
+      width: 64,
+      render: (object) => {
+        return (
+          <Link to={`/product/${object.id}`}>
+            <Button
+              icon={<OpenInNew />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+            />
+          </Link>
+        );
       },
     },
   ];
@@ -352,46 +375,57 @@ class ProductUI extends Component {
               selectedRowKeys={selectedRowKeys[0]}
               data={this.props.data}
             />
-
-            <div style={{ marginBottom: 16 }}>
+            <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+              <Col span={12}>
+                <Input
+                  prefix={<SearchOutlined />}
+                  ref={this.searchSelf}
+                  onChange={(e) => this.onChangeHandler(e)}
+                  placeholder="Search for products..."
+                />
+              </Col>
+              <Col>
+                {" "}
+                <Space size={3}>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openCreateModal")}
+                    disabled={!addNewButton}
+                  >
+                    Add New
+                  </Button>
+                  {/* <Link to={`/product/${selectedRowKeys[0]}`}>
+                    <Button type="primary" disabled={!viewDetailButton}>
+                      View Detail
+                    </Button>
+                  </Link>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openEditModal")}
+                    disabled={!editButton}
+                    style={{ width: 90 }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    type="danger"
+                    onClick={() => this.start("openDeleteModal")}
+                    disabled={!deleteButton}
+                    style={{ width: 90 }}
+                  >
+                    Delete
+                  </Button>
+                  <span style={{ marginLeft: 8 }}>
+                    {selectedRowKeys.length > 0
+                      ? `Selected ${selectedRowKeys.length} items`
+                      : ""}
+                  </span> */}
+                </Space>
+              </Col>
+            </Row>
+            {/* <div style={{ marginBottom: 16 }}>
               <Row>
-                <Col flex="auto">
-                  <Space size={3}>
-                    <Button
-                      type="primary"
-                      onClick={() => this.start("openCreateModal")}
-                      disabled={!addNewButton}
-                    >
-                      Add New
-                    </Button>
-                    <Link to={`/product/${selectedRowKeys[0]}`}>
-                      <Button type="primary" disabled={!viewDetailButton}>
-                        View Detail
-                      </Button>
-                    </Link>
-                    <Button
-                      type="primary"
-                      onClick={() => this.start("openEditModal")}
-                      disabled={!editButton}
-                      style={{ width: 90 }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      type="danger"
-                      onClick={() => this.start("openDeleteModal")}
-                      disabled={!deleteButton}
-                      style={{ width: 90 }}
-                    >
-                      Delete
-                    </Button>
-                    <span style={{ marginLeft: 8 }}>
-                      {selectedRowKeys.length > 0
-                        ? `Selected ${selectedRowKeys.length} items`
-                        : ""}
-                    </span>
-                  </Space>
-                </Col>
+                <Col flex="auto"></Col>
                 <Col flex="300px">
                   <Input
                     onChange={(e) => this.onChangeHandler(e)}
@@ -399,10 +433,10 @@ class ProductUI extends Component {
                   />
                 </Col>
               </Row>
-            </div>
+            </div> */}
             <Table
               loading={this.props.loading}
-              rowSelection={rowSelection}
+              // rowSelection={rowSelection}
               columns={this.columns}
               dataSource={
                 displayData.length === 0 && searchKey === ""

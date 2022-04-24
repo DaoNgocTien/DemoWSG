@@ -35,12 +35,10 @@ const createProduct = (record) => {
     })
       .then((response) => {
         if (response.status === 200) {
-          // console.log(response.data.data);
+          //
         }
       })
       .catch(() => {
-        // // console.log(err);
-        // // console.log(typeof (err));
         return dispatch(getFailed());
       })
       .finally(() => {});
@@ -48,7 +46,6 @@ const createProduct = (record) => {
 };
 
 const updateProduct = (record) => {
-  // console.log(record);
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -65,16 +62,11 @@ const updateProduct = (record) => {
       withCredentials: true,
     })
       .then((response) => {
-        // console.log(response);
         if (response.status === 200) {
-          // // console.log(response);
-          // return window.location.reload();
-          // console.log(response.data.data);
+          return window.location.reload();
         }
       })
       .catch(() => {
-        // console.log(err);
-        // console.log(typeof (err));
         return dispatch(getFailed());
       });
   };
@@ -89,15 +81,11 @@ const deleteProduct = (id) => {
       withCredentials: true,
     })
       .then((response) => {
-        // console.log(response);
         if (response.status === 200) {
-          // console.log(response);
-          // return window.location.reload();
+          return window.location.reload();
         }
       })
       .catch(() => {
-        // console.log(err);
-        // console.log(typeof (err));
         return dispatch(getFailed());
       });
   };

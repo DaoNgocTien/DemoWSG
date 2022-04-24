@@ -62,7 +62,6 @@ class UpdateModal extends Component {
     displayData: [],
     searchKey: "",
   };
-  formRef = React.createRef();
 
   componentDidMount() {}
 
@@ -74,7 +73,6 @@ class UpdateModal extends Component {
 
     this.props.updateProduct(data);
 
-    this.formRef.current.resetFields();
     this.setState({
       fileList: [],
     });
@@ -124,85 +122,6 @@ class UpdateModal extends Component {
 
     this.setState({ fileList });
   };
-
-  columns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      width: 100,
-      fixed: "left",
-    },
-    {
-      title: "Campaign Name",
-      dataIndex: "description",
-      key: "description",
-      sorter: (a, b) => a.description.length - b.description.length,
-      width: 200,
-      fix: "left",
-    },
-    {
-      title: "Orders",
-      dataIndex: "numorder",
-      key: "numorder",
-      width: 120,
-      fix: "left",
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-      sorter: (a, b) => a.quantity - b.quantity,
-      width: 120,
-      fix: "left",
-    },
-    {
-      title: "Max Quantity",
-      dataIndex: "maxquantity",
-      key: "maxquantity",
-    },
-
-    {
-      title: "Type",
-      key: "type",
-      render: (object) => {
-        return (
-          <Tag color={!object.isshare ? "blue" : "green"}>
-            {!object.isshare ? "SINGLE" : "SHARED"}
-          </Tag>
-        );
-      },
-      width: 100,
-      fix: "right",
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (data) => {
-        return (
-          <Tag
-            color={
-              data === "ready"
-                ? "blue"
-                : data === "active"
-                ? "red"
-                : data === "done"
-                ? "green"
-                : "grey"
-            }
-          >
-            {data.toUpperCase() === "DEACTIVATED" ? "STOP" : data.toUpperCase()}
-          </Tag>
-        );
-      },
-      width: 100,
-      fix: "right",
-    },
-  ];
 
   onChangeHandler = (e) => {
     let data = this.props.campaignList;
@@ -283,7 +202,6 @@ class UpdateModal extends Component {
           <Form
             key={record?.id}
             id="updateProductForm"
-            ref={this.formRef}
             onFinish={this.handleUpdateAndClose}
             layout="vertical"
           >
@@ -467,45 +385,6 @@ class UpdateModal extends Component {
               </Form.Item>
             </Space>
           </Form>
-
-          <PageHeader
-            className="site-page-header-responsive"
-            title={"Campaigns: " + campaignList.length}
-            footer={
-              <div>
-                <div style={{ marginBottom: 16 }}>
-                  <Row>
-                    <Col flex="auto">
-                      <Space size={4}>
-                        <span style={{ marginLeft: 8 }}>
-                          {"Total products in active campaign: " +
-                            record?.maxquantity +
-                            " products"}
-                        </span>
-                      </Space>
-                    </Col>
-                    <Col flex="300px">
-                      <Input
-                        onChange={(e) => this.onChangeHandler(e)}
-                        placeholder="Search data"
-                      />
-                    </Col>
-                  </Row>
-                </div>
-                <Table
-                  key={record?.key}
-                  loading={this.props.loading}
-                  columns={this.columns}
-                  dataSource={
-                    displayData.length === 0 && searchKey === ""
-                      ? this.props.campaignList
-                      : displayData
-                  }
-                  scroll={{ y: 350 }}
-                />
-              </div>
-            }
-          ></PageHeader>
         </Modal>
       </>
     );
