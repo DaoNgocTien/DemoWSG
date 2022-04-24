@@ -41,7 +41,7 @@ function App() {
   return (
     <>
       {/* <BusinessConditionUI /> */}
-      <BrowserRouter>
+      <BrowserRouter forceRefresh>
         <div>
           <Switch>
             {showLayoutAdmin(routesAdmin)}

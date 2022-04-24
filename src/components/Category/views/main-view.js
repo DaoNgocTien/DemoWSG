@@ -5,6 +5,7 @@ import React, { Component, memo } from "react";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
+import { Link } from "react-router-dom";
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -46,6 +47,7 @@ class CategoryUI extends Component {
     displayData: [],
     searchData: "",
     record: {},
+    viewDetailButton: false,
   };
 
   componentDidMount() {}
@@ -74,17 +76,18 @@ class CategoryUI extends Component {
     // const selectedRowKeys = [];
     console.log(record);
     let isExisted = false;
-    this.props.productList.map(p => {
-      if(p.categoryid === record.id){
-        isExisted = true;        
+    this.props.productList.map((p) => {
+      if (p.categoryid === record.id) {
+        isExisted = true;
       }
-    })
+    });
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({
         selectedRowKeys: [record.key],
         record: record,
         editButton: true,
         deleteButton: !isExisted,
+        viewDetailButton: true,
         addNewButton: false,
       });
     } else {
@@ -93,6 +96,7 @@ class CategoryUI extends Component {
         record: {},
         editButton: false,
         deleteButton: false,
+        viewDetailButton: false,
         addNewButton: true,
       });
     }
@@ -116,7 +120,6 @@ class CategoryUI extends Component {
         return index + 1;
       },
       width: 100,
-      fixed: "left",
     },
 
     {
@@ -124,31 +127,33 @@ class CategoryUI extends Component {
       dataIndex: "categoryname",
       key: "categoryname",
       sorter: (a, b) => a.categoryname.length - b.categoryname.length,
-      fix: "left",
     },
-
+    
+    {
+      title: "Pruducts",
+      dataIndex: "numOfProduct",
+      key: "numOfProduct",
+      width: 200
+    },
+    
     {
       title: "Created At",
       dataIndex: "createdat",
       key: "createdat",
       sorter: (a, b) => a.createdat.length - b.createdat.length,
       render: (data) => moment(data).format("DD-MM-YYYY"),
+      width: 200
     },
 
-    {
-      title: "Updated At",
-      dataIndex: "updatedat",
-      key: "updatedat",
-      sorter: (a, b) => a.updatedat.length - b.updatedat.length,
-      render: (data) => moment(data).format("DD-MM-YYYY"),
-    },
   ];
 
   onChangeHandler = (e) => {
     let { data } = this.props;
     let searchList = data.filter((item) => {
       return (
-        item?.categoryname?.toUpperCase().includes(e.target.value.toUpperCase()) ||
+        item?.categoryname
+          ?.toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
         item?.createdat?.toUpperCase().includes(e.target.value.toUpperCase()) ||
         item?.updatedat?.toUpperCase().includes(e.target.value.toUpperCase())
       );
@@ -171,6 +176,7 @@ class CategoryUI extends Component {
       displayData,
       searchData,
       record,
+      viewDetailButton,
     } = this.state;
 
     const { createCategory, updateCategory, deleteCategory } = this.props;
@@ -223,6 +229,13 @@ class CategoryUI extends Component {
                     >
                       Add New
                     </Button>
+                    <Link
+                      to={`/products/catalog?category=${selectedRowKeys[0]}`}
+                    >
+                      <Button type="primary" disabled={!viewDetailButton}>
+                        View Products
+                      </Button>
+                    </Link>
                     <Button
                       type="primary"
                       onClick={() => this.start("openEditModal")}

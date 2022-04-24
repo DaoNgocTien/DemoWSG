@@ -10,6 +10,7 @@ import LoyalCustomer from "../components/LoyalCustomer";
 import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
 import Order from "../components/Orders";
 import Product from "../components/Product";
+import ProductDetail from "../components/ProductDetail";
 import Profile from "../components/Profile";
 import ReturningOrder from "../components/ReturningOrder";
 import Transaction from "../components/Transaction";
@@ -17,9 +18,6 @@ import SettlePaymentUI from "../components/Transaction/views/settle-payment-view
 import DashBoard from "../containers/AdminLayout/DashBoard";
 import AuthPage from "../containers/AuthPage";
 import Registration from "../containers/AuthPage/views/registration";
-
-
-
 
 const routesAdmin = [
   {
@@ -43,6 +41,11 @@ const routesAdmin = [
     exact: true,
     path: "/products/catalog",
     component: Product,
+  },
+  {
+    exact: true,
+    path: "/product/:id",
+    component: ProductDetail,
   },
 
   {
@@ -75,13 +78,12 @@ const routesAdmin = [
     component: Transaction,
   },
 
-
   {
     exact: true,
     path: "/discount/campaigns",
     component: Campaign,
   },
-  
+
   {
     exact: true,
     path: "/discount/orders-in-campaign/:recordFromMain",
@@ -129,4 +131,3 @@ const routesAuth = [
   },
 ];
 export { routesAdmin, routesAuth };
-
