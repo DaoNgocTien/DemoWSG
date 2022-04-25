@@ -1,9 +1,4 @@
-import {
-  IdcardTwoTone,
-  LoadingOutlined,
-  PlusOutlined,
-  SafetyCertificateTwoTone,
-} from "@ant-design/icons";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Descriptions,
@@ -17,7 +12,6 @@ import {
   Typography,
   Upload,
 } from "antd";
-import { Link, Redirect, Route } from "react-router-dom";
 
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -25,6 +19,8 @@ import React, { Component, memo } from "react";
 import Loader from "../../../components/Loader";
 import InformationModal from "./information-view";
 import NumberFormat from "react-number-format";
+import RejectModal from "./reject-view";
+
 const { Title } = Typography;
 const { TabPane } = Tabs;
 
@@ -38,10 +34,10 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
-  rejectOrder: () => { },
-  acceptRequest: () => { },
+  closeModal: () => {},
+  updateCampaign: () => {},
+  rejectOrder: () => {},
+  acceptRequest: () => {},
   record: {},
   openModal: false,
 };
@@ -57,18 +53,23 @@ class HandleReturningOrderUI extends Component {
       previewTitle: "",
       fileList: [],
       isModalVisible: false,
+      openRejectModal: false,
     };
   }
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
 
-  componentDidMount() { }
+  componentDidMount() {}
   showModal = () => {
     this.setState({ isModalVisible: true });
   };
 
+  showRejectModal = () => {
+    this.setState({ openRejectModal: true });
+  };
+
   handleCancel = () => {
-    this.setState({ isModalVisible: false });
+    this.setState({ isModalVisible: false, openRejectModal: false });
   };
 
   getBase64(file) {
@@ -109,7 +110,6 @@ class HandleReturningOrderUI extends Component {
   };
 
   handleRejectAndClose = (data) => {
-    // alert("handleRejectAndClose");
     const user = JSON.parse(localStorage.getItem("user"));
 
     this.props.rejectRequest({
@@ -121,21 +121,16 @@ class HandleReturningOrderUI extends Component {
       image: this.state.fileList || [],
     });
     this.handleCancel();
-    window.history.back();
+    // window.history.back();
   };
 
   handleAcceptAndClose = () => {
-    // data.image = this.state.fileList;
-    //orderCode, type, image = [], orderId
-  //  console.log(this.props.data);
     this.props.acceptRequest(
       this.props.data.order.ordercode,
       this.props.data.order.campaignid ? "campaign" : "retail",
       [],
       this.props.data.order.id
     );
-    // this.handleCancel();
-    // window.history.back();
   };
 
   columns = [
@@ -179,17 +174,18 @@ class HandleReturningOrderUI extends Component {
     {
       title: "Price",
       dataIndex: "price",
-       width: 200,
+      width: 200,
       key: "price",
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.price}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.price}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
@@ -202,29 +198,29 @@ class HandleReturningOrderUI extends Component {
       dataIndex: "totalprice",
       key: "totalprice",
       render: (_text, object) => {
-        return <NumberFormat
-          value={object.totalprice}
-          thousandSeparator={true}
-          suffix={" VND"}
-          decimalScale={0}
-          displayType="text"
-        />
-
+        return (
+          <NumberFormat
+            value={object.totalprice}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
       },
     },
     {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-      fix:"right"
+      fix: "right",
     },
   ];
 
   render() {
-    const { loading, acceptRequest, rejectRequest, record } = this.props;
+    const { loading, data } = this.props;
     if (loading) return <Loader />;
     this.state.record = this.props.record;
-    const { data } = this.props;
     const { load, imageUrl } = this.state;
 
     const uploadButton = (
@@ -233,16 +229,17 @@ class HandleReturningOrderUI extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-  //  console.log(this.props.record);
+    console.log(this.props.data);
     let handledBySupplier = 0;
-    record?.complainRecord?.orderstatushistory?.map(item => {
+    data.orderHistories?.statushistory?.map((item) => {
       if (item.statushistory === "returning") {
         handledBySupplier++;
       }
-    })
+    });
+    console.log(handledBySupplier > 1);
     return (
       <>
-        <Form id="rejectOrderForm" onFinish={this.handleRejectAndClose}>
+        <Form id="rejectReturnOrderForm" onFinish={this.handleRejectAndClose}>
           <Modal
             title="Reason Of Reject Return Order"
             visible={this.state.isModalVisible}
@@ -252,18 +249,11 @@ class HandleReturningOrderUI extends Component {
               <Button onClick={this.handleCancel}>Cancel</Button>,
               <Button
                 type="danger"
-                form="rejectOrderForm"
+                form="rejectReturnOrderForm"
                 key="submit"
                 htmlType="submit"
               >
-                {/* <Link
-                  className="LinkDecorations"
-                  to={
-                    "/returning"
-                  } */}
-                {/* > */}
                 Reject
-                {/* </Link> */}
               </Button>,
             ]}
           >
@@ -323,17 +313,26 @@ class HandleReturningOrderUI extends Component {
             </Descriptions>
           </Modal>
         </Form>
+
+        <RejectModal
+          openModal={this.state.openRejectModal}
+          closeModal={this.handleCancel}
+          rejectOrder={this.props.rejectOrder}
+          record={data?.order}
+        />
+
         <PageHeader
           className="site-page-header-responsive"
           onBack={() => window.history.back()}
-          title="HANDLE ORDER RETURNING"
-          subTitle={`This is a returning order handleing page`}
+          title="ORDER DETAIL"
           extra={[
             <Button
               type="danger"
               onClick={this.showModal}
               style={{ marginLeft: 3 }}
-              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1}
+              hidden={
+                data?.order?.status !== "returning" || handledBySupplier > 1
+              }
             >
               Reject Returning Request
             </Button>,
@@ -342,7 +341,6 @@ class HandleReturningOrderUI extends Component {
               type="primary"
               onClick={this.handleAcceptAndClose}
               style={{ marginLeft: 3 }}
-              hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1}
             >
               Accept Returning Request
             </Button>,
@@ -350,85 +348,65 @@ class HandleReturningOrderUI extends Component {
               type="primary"
               onClick={() => window.history.back()}
               style={{ marginLeft: 3 }}
-              hidden={!(this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1)}
+              hidden={!(handledBySupplier > 1)}
             >
               Back
             </Button>,
+            <Button
+              type="danger"
+              onClick={this.showRejectModal}
+              style={{ marginLeft: 3 }}
+            >
+              reject
+            </Button>,
           ]}
-          footer={
-            <>
-              <Tabs defaultActiveKey="returning" centered type="card">
-                <TabPane
-                  tab={
-                    <span>
-                      <IdcardTwoTone style={{ fontSize: "25px" }} />
-                      Returning Request
-                    </span>
-                  }
-                  key="returning"
-                  style={{ background: "#ffffff" }}
-                ></TabPane>
-
-                <TabPane
-                  tab={
-                    <span style={{ alignItems: "center" }}>
-                      <SafetyCertificateTwoTone style={{ fontSize: "25px" }} />
-                      Order History
-                    </span>
-                  }
-                  key="history"
-                  style={{ background: "#ffffff" }}
-                >
-                  <>
-                    <Title
-                      style={{ textAlign: "center", padding: "30px" }}
-                      level={3}
-                    >
-                      ORDER HISTORY
-                    </Title>
-                    <Timeline mode="left" reverse="true">
-                      {data.orderHistories?.map((orderHistory) => {
-                        return (
-                          <Timeline.Item
-                            label={moment(orderHistory.createdat).format(
-                              "MM/DD/YYYY HH:mm:ss"
-                            )}
-                          >
-                            <h4>{orderHistory.statushistory}</h4>
-                            <p>{orderHistory.description}</p>
-                            <Image.PreviewGroup>
-                              {orderHistory.image ? (
-                                JSON.parse(orderHistory.image)?.map((image) => {
-                                  return (
-                                    <Image
-                                      width={200}
-                                      height={200}
-                                      src={image.url}
-                                      preview={{
-                                        src: image.url,
-                                      }}
-                                    />
-                                  );
-                                })
-                              ) : (
-                                <></>
-                              )}
-                            </Image.PreviewGroup>
-                          </Timeline.Item>
-                        );
-                      })}
-                    </Timeline>
-                  </>
-                </TabPane>
-              </Tabs>
-            </>
-          }
         >
           <>
-            <Title style={{ textAlign: "center", padding: "30px" }} level={3}>
-              ORDER INFORMATION
-            </Title>
-            <InformationModal record={data} />
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="Infomation" key="1">
+                <InformationModal record={data} />
+              </TabPane>
+              <TabPane tab="History" key="2">
+                <Title
+                  style={{ textAlign: "left", fontWeight: "bold" }}
+                  level={5}
+                >
+                  Order History
+                </Title>
+                <Timeline mode="left" reverse="true">
+                  {data.orderHistories?.map((orderHistory) => {
+                    return (
+                      <Timeline.Item
+                        label={moment(orderHistory.createdat).format(
+                          "MM/DD/YYYY HH:mm:ss"
+                        )}
+                      >
+                        <h4>{orderHistory.statushistory}</h4>
+                        <p>{orderHistory.description}</p>
+                        <Image.PreviewGroup>
+                          {orderHistory.image ? (
+                            JSON.parse(orderHistory.image)?.map((image) => {
+                              return (
+                                <Image
+                                  width={200}
+                                  height={200}
+                                  src={image.url}
+                                  preview={{
+                                    src: image.url,
+                                  }}
+                                />
+                              );
+                            })
+                          ) : (
+                            <></>
+                          )}
+                        </Image.PreviewGroup>
+                      </Timeline.Item>
+                    );
+                  })}
+                </Timeline>
+              </TabPane>
+            </Tabs>
           </>
         </PageHeader>
       </>

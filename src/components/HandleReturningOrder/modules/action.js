@@ -27,7 +27,7 @@ const getData = (orderCode) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-    //  console.log(order);
+      //  console.log(order);
       return dispatch(
         getSuccess({
           orderHistories: orderHistories.data.data.map((orderHistory) => {
@@ -73,8 +73,8 @@ const rejectRequest = (data) => {
 };
 
 const storeComplainRecord = (record) => {
-//  console.log("storeComplainRecord action");
-//  console.log(record);
+  //  console.log("storeComplainRecord action");
+  //  console.log(record);
   return async (dispatch) => {
     try {
       return dispatch(getComplainRecord({ complainRecord: record }));
@@ -91,11 +91,13 @@ const acceptRequest = (orderCode, type, image = [], orderId) => {
     orderId: orderId,
     orderCode: orderCode,
     type: type,
-    description: "has been accepted by " + user.rolename + " for: Customer requests to return order",
+    description:
+      "has been accepted by " +
+      user.rolename +
+      " for: Customer requests to return order",
     image: image,
-    status: "requestAccepted"
-  }
-//  console.log(body);
+    status: "requestAccepted",
+  };
   return async (dispatch) => {
     dispatch(getRequest());
     try {
@@ -111,6 +113,49 @@ const acceptRequest = (orderCode, type, image = [], orderId) => {
       return dispatch(getSuccess(acceptRequestResponse));
     } catch (error) {
       return dispatch(getFailed());
+    }
+  };
+};
+
+const rejectOrder = (
+  orderCode,
+  type,
+  description,
+  image,
+  orderId,
+  requester
+) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  let reject = {
+    orderCode: orderCode,
+    type: type,
+    description:
+      "has been cancelled by " + user.rolename + " for: " + description,
+    image: image,
+    orderId: orderId,
+    supplierId: user.id,
+    cancelLinkRequestor: requester,
+  };
+  console.log(reject);
+
+  return async (dispatch) => {
+    dispatch(getRequest());
+    try {
+      const [rejectResponse, orders, campaigns] = await Promise.all([
+        Axios({
+          url: `/order/status/supplier/cancel`,
+          method: "PUT",
+          data: reject,
+          withCredentials: true,
+        }),
+      ]);
+      return dispatch(
+        getSuccess({
+          orders: [],
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed(error));
     }
   };
 };
@@ -147,6 +192,7 @@ const action = {
   storeComplainRecord,
   rejectRequest,
   acceptRequest,
+  rejectOrder,
 };
 
 export default action;

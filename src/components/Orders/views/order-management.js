@@ -1,4 +1,9 @@
-import { EditFilled, LoadingOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  EditFilled,
+  LoadingOutlined,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { OpenInNew } from "@material-ui/icons";
 import {
   Button,
@@ -19,6 +24,7 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
+import { Link } from "react-router-dom";
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -34,9 +40,9 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => { },
-  updateStatusOrder: () => { },
-  getOrder: (status) => { },
+  rejectOrder: () => {},
+  updateStatusOrder: () => {},
+  getOrder: (status) => {},
 };
 
 class OrderManagement extends Component {
@@ -64,9 +70,7 @@ class OrderManagement extends Component {
   searchSelf = React.createRef();
   selectSelf = React.createRef();
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -114,12 +118,7 @@ class OrderManagement extends Component {
         record: record,
         editButton: true,
         rejectButton: record?.status === "created",
-        // true &&
-        // record?.status != "delivering" &&
-        // record?.status != "delivered" &&
-        // record?.status != "completed" &&
-        // record?.status != "returned" &&
-        // record?.status != "cancelled",
+
         addNewButton: false,
       });
     } else {
@@ -138,56 +137,13 @@ class OrderManagement extends Component {
   };
 
   columns = [
-   
     {
       title: "Customer",
       render: (_text, object, _index) => {
-        // console.log(object);
         return object.customerfirstname + " " + object.customerlastname;
       },
     },
-    // {
-    //   title: "Discount Price",
-    //   dataIndex: "discountprice",
-    //   key: "discountprice",
-    //   width: 130,
-    //   render: (data) => {
-    //     return data ? (
-    //       <NumberFormat
-    //         value={data}
-    //         thousandSeparator={true}
-    //         suffix={" VND"}
-    //         decimalScale={0}
-    //         displayType="text"
-    //       />
-    //     ) : (
-    //       <NumberFormat
-    //         value={"0"}
-    //         thousandSeparator={true}
-    //         suffix={" VND"}
-    //         decimalScale={0}
-    //         displayType="text"
-    //       />
-    //     );
-    //   },
-    // },
-    // {
-    //   title: "Final Price",
-    //   dataIndex: "finalprice",
-    //   key: "finalprice",
-    //   render: (text, object) => {
-    //     return (
-    //       <NumberFormat
-    //         value={object.totalprice - object.discountprice}
-    //         thousandSeparator={true}
-    //         suffix={" VND"}
-    //         decimalScale={0}
-    //         displayType="text"
-    //       />
-    //     );
-    //   },
-    //   width: 130,
-    // },
+
     {
       title: "Order date",
       dataIndex: "createdat",
@@ -225,7 +181,7 @@ class OrderManagement extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        const status = data.status
+        const status = data.status;
 
         return <Tag>{data.toUpperCase()}</Tag>;
       },
@@ -234,37 +190,21 @@ class OrderManagement extends Component {
       title: "",
       width: 64,
       render: (object) => {
-
-        return <Button 
-        icon={<OpenInNew />} 
-        type="default" 
-        shape="circle"
-        onClick={() => console.log('123')} 
-        style={{
-          border: 'none',
-          boxShadow: 'none',
-          background: 'none'
-        }}
-        />
-     
-        // if (object.status === "created") {
-        //   return (
-        //     <Button
-        //       onClick={() => this.changeStatus(object, [])}
-        //       type="primary"
-        //     >
-        //       Processing Order
-        //     </Button>
-        //   );
-        // }
-
-        // if (object.status === "processing") {
-        //   return (
-        //     <Button onClick={() => this.openUploadModal(object)} type="primary">
-        //       Deliver Order
-        //     </Button>
-        //   );
-        // }
+        return (
+          <Link to={`/orders/${object.ordercode}`}>
+            <Button
+              icon={<OpenInNew />}
+              type="default"
+              shape="circle"
+              onClick={() => console.log("123")}
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+            />
+          </Link>
+        );
       },
       fixed: "right",
     },
@@ -347,7 +287,7 @@ class OrderManagement extends Component {
       displayData: searchData,
       searchKey: searchValue,
     });
-  }
+  };
 
   openUploadModal = (object) => {
     this.setState({
@@ -387,12 +327,8 @@ class OrderManagement extends Component {
   };
 
   handleChange = ({ fileList, file, event }) => {
-    // fileList = fileList.slice(-2);
-    // console.log(fileList);
-    // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
-        // Component will show file.url as link
         file.url = file.response[0].url;
         file.name = file.response[0].name;
         file.thumbUrl = null;
@@ -411,18 +347,17 @@ class OrderManagement extends Component {
   };
 
   render() {
-
     const {
       selectedRowKeys,
       displayData,
       searchKey,
-    
+
       openUploadModal,
     } = this.state;
 
     const arrayLocation = window.location.pathname.split("/");
     const { load, fileList } = this.state;
-   
+
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
@@ -436,7 +371,6 @@ class OrderManagement extends Component {
         title={arrayLocation[1].toUpperCase()}
         footer={
           <div>
-
             <Form
               id="uploadImageForDeliveringForm"
               onFinish={this.uploadImageForDelivering}
@@ -462,7 +396,6 @@ class OrderManagement extends Component {
                 <Form.Item
                   name="image"
                   rules={[
-                   
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (fileList.length >= 1) {
@@ -500,27 +433,33 @@ class OrderManagement extends Component {
                     </Modal>
                   </>
                 </Form.Item>
-              
               </Modal>
             </Form>
             <div>
-          
-
-              <Menu mode="horizontal" defaultSelectedKeys={['allOrders']}>
-                <Menu.Item key="allOrders" onClick={() => this.onClickOrderTab("all")}>
+              <Menu mode="horizontal" defaultSelectedKeys={["allOrders"]}>
+                <Menu.Item
+                  key="allOrders"
+                  onClick={() => this.onClickOrderTab("all")}
+                >
                   All orders
                 </Menu.Item>
 
-                <Menu.Item key="retailOrders" onClick={() => this.onClickOrderTab("retail")}>
+                <Menu.Item
+                  key="retailOrders"
+                  onClick={() => this.onClickOrderTab("retail")}
+                >
                   Retail orders
                 </Menu.Item>
 
-                <Menu.Item key="wholesaleOrders" onClick={() => this.onClickOrderTab("wholesale")}>
+                <Menu.Item
+                  key="wholesaleOrders"
+                  onClick={() => this.onClickOrderTab("wholesale")}
+                >
                   Wholesale orders
                 </Menu.Item>
               </Menu>
-              
-              <Row style={{padding: '20px 0'}} gutter={[16, 0]}>
+
+              <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
                 <Col span={12}>
                   <Input
                     prefix={<SearchOutlined />}
@@ -529,7 +468,7 @@ class OrderManagement extends Component {
                     placeholder="Search for orders..."
                   />
                 </Col>
-                <Col >
+                <Col>
                   <Select
                     ref={this.selectSelf}
                     title="Status"
@@ -550,7 +489,6 @@ class OrderManagement extends Component {
                   </Select>
                 </Col>
               </Row>
-
             </div>
             <Table
               loading={this.props.loading}

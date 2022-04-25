@@ -59,8 +59,8 @@ const adminRoutes = [
   },
   {
     exact: true,
-    path: `${adminRoutePaths.orders}/:id`,
-    component: OrderDetail,
+    path: `${adminRoutePaths.orders}/:orderCode`,
+    component: HandleReturningOrder,
   },
 
   {
