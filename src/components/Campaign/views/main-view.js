@@ -18,6 +18,8 @@ import EditModal from "./edit-view";
 import OrdersInCampaign from "./orders-in-campaign-view";
 import NumberFormat from "react-number-format";
 import { Link, Redirect, Route } from "react-router-dom";
+import { PlayCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import { OpenInNew, PlayCircleFilledOutlined } from "@material-ui/icons";
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -57,7 +59,7 @@ class CampaignUI extends Component {
     orderListInSelectedCampaign: [],
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
@@ -111,16 +113,16 @@ class CampaignUI extends Component {
   };
 
   columns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      width: 100,
-      fixed: "left",
-    },
+    // {
+    //   title: "No.",
+    //   dataIndex: "No.",
+    //   key: "No.",
+    //   render: (text, object, index) => {
+    //     return index + 1;
+    //   },
+    //   width: 100,
+    //   fixed: "left",
+    // },
     {
       title: "Product Name",
       dataIndex: "productname",
@@ -141,6 +143,7 @@ class CampaignUI extends Component {
       title: "Max Quantity",
       dataIndex: "maxquantity",
       key: "maxquantity",
+      width: 120,
     },
 
     {
@@ -167,10 +170,10 @@ class CampaignUI extends Component {
               data === "ready"
                 ? "blue"
                 : data === "active"
-                ? "red"
-                : data === "done"
-                ? "green"
-                : "grey"
+                  ? "red"
+                  : data === "done"
+                    ? "green"
+                    : "grey"
             }
           >
             {data.toUpperCase() === "DEACTIVATED" ? "STOP" : data.toUpperCase()}
@@ -181,18 +184,45 @@ class CampaignUI extends Component {
       fix: "right",
     },
     {
-      title: "Action",
-      key: "action",
+      title: "",
+      key: "",
       render: (object) => {
         if (object.status === "ready") {
-          return (
-            <Button
+          return (<>
+
+            <Link to={`/discount/campaign/${object.id}`}>
+              <Button icon={<OpenInNew />}
+                type="default"
+                shape="circle"
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  background: "none",
+                }} />
+            </Link>
+            {/* <Button
+              icon={<PlayCircleOutlined />}
               onClick={() => this.startCampaignBeforeHand(object)}
-              type="primary"
-            >
-              Start Campaign
-            </Button>
+              type=""
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }} /> */}
+          </>
           );
+        } else {
+          return <Link to={`/discount/campaign/${object.id}`}>
+            <Button icon={<OpenInNew />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }} />
+          </Link>
         }
       },
       fixed: "right",
@@ -321,7 +351,7 @@ class CampaignUI extends Component {
               })}
               campaingList={data}
             />
-            <DeleteModal
+            {/* <DeleteModal
               loading={this.props.loading}
               openModal={openDeleteModal}
               closeModal={this.closeModal}
@@ -348,8 +378,57 @@ class CampaignUI extends Component {
               productList={productList}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
-            />
-            <div style={{ marginBottom: 16 }}>
+            /> */}
+
+            <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+              <Col span={12}>
+                <Input
+                  prefix={<SearchOutlined />}
+                  ref={this.searchSelf}
+                  onChange={(e) => this.onChangeHandler(e)}
+                  placeholder="Search for campaigns..."
+                />
+              </Col>
+              <Col>
+                <Space size={3}>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openCreateModal")}
+                    disabled={!addNewButton}
+                  >
+                    Add New
+                  </Button>
+                  {/* <Link to={`/product/${selectedRowKeys[0]}`}>
+                    <Button type="primary" disabled={!viewDetailButton}>
+                      View Detail
+                    </Button>
+                  </Link>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openEditModal")}
+                    disabled={!editButton}
+                    style={{ width: 90 }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    type="danger"
+                    onClick={() => this.start("openDeleteModal")}
+                    disabled={!deleteButton}
+                    style={{ width: 90 }}
+                  >
+                    Delete
+                  </Button>
+                  <span style={{ marginLeft: 8 }}>
+                    {selectedRowKeys.length > 0
+                      ? `Selected ${selectedRowKeys.length} items`
+                      : ""}
+                  </span> */}
+                </Space>
+              </Col>
+            </Row>
+
+            {/* <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex="auto">
                   <Space size={4}>
@@ -409,7 +488,7 @@ class CampaignUI extends Component {
                   />
                 </Col>
               </Row>
-            </div>
+            </div> */}
             {/* <Drawer
               width={window.innerWidth * 0.7}
               placement="right"
@@ -422,7 +501,7 @@ class CampaignUI extends Component {
             </Drawer> */}
             <Table
               loading={this.props.loading}
-              rowSelection={rowSelection}
+              // rowSelection={rowSelection}
               columns={this.columns}
               dataSource={
                 displayData.length === 0 && searchKey === ""

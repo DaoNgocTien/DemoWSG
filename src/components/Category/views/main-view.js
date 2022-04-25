@@ -131,7 +131,7 @@ class CategoryUI extends Component {
     },
 
     {
-      title: "Pruducts",
+      title: "Products",
       dataIndex: "numOfProduct",
       key: "numOfProduct",
       width: 200,
