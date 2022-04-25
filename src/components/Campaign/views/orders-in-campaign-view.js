@@ -9,9 +9,11 @@ import {
   Space,
   Table,
   Tag,
+  Popconfirm,
 } from "antd";
 import moment from "moment";
 import action from "../../Orders/modules/action";
+
 import { default as campaignAction } from "./../modules/action";
 
 import { connect } from "react-redux";
@@ -29,6 +31,8 @@ class OrdersInCampaign extends React.Component {
     displayData: [],
     searchData: "",
     record: {},
+    visiblePop: false,
+    confirmLoading: false,
   };
 
   componentDidMount() {
@@ -202,6 +206,23 @@ class OrdersInCampaign extends React.Component {
       searchData: e.target.value,
     });
   };
+  showPopconfirm = () => {
+    this.setState({ visiblePop: true });
+  };
+
+  handleOk = () => {
+    this.props.startCampaignBeforeHand(this.props.record?.id)
+    this.setState({ confirmLoading: true });
+    setTimeout(() => {
+      this.setState({ visiblePop: false });
+      this.setState({ confirmLoading: false });
+    }, 2000);
+  };
+
+  handleCancel = () => {
+    console.log('Clicked cancel button');
+    this.setState({ visiblePop: false });
+  };
 
   render() {
     const {
@@ -225,7 +246,7 @@ class OrdersInCampaign extends React.Component {
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-    console.log(orderList);
+    console.log(record);
     return (
       <>
         <PageHeader
@@ -233,6 +254,27 @@ class OrdersInCampaign extends React.Component {
           onBack={() => window.history.back()}
           title="CAMPAIGN DETAILS"
           subTitle={`This is a campaign detail page`}
+          extra={[
+            <Popconfirm
+              title="Update campaign start day to today and modify exist campaigns: stop ready campaigns, finish active campaigns"
+              visible={this.state.visiblePop}
+              onConfirm={this.handleOk}
+              okButtonProps={{ loading: this.state.confirmLoading }}
+              onCancel={this.handleCancel}
+            >
+              <Button type="primary" onClick={this.showPopconfirm} hidden={record?.status !== "ready"}>
+                Start Campaign
+              </Button>
+            </Popconfirm>
+            ,
+            <Button
+              onClick={() => this.props.doneCampaignBeforeHand(record)}
+              type="primary"
+              hidden={record?.status !== "active"}
+            >
+              Done Campaign
+            </Button>
+          ]}
           footer={
             <div>
               <RejectModal
@@ -278,8 +320,8 @@ class OrdersInCampaign extends React.Component {
                 dataSource={
                   displayData.length === 0 && searchData === ""
                     ? orderList.filter(
-                        (order) => order.status.toUpperCase() !== "NOTADVANCED"
-                      )
+                      (order) => order.status.toUpperCase() !== "NOTADVANCED"
+                    )
                     : displayData
                 }
                 scroll={{ y: 350 }}
@@ -288,7 +330,10 @@ class OrdersInCampaign extends React.Component {
           }
         >
           <Form>
-            <Descriptions bordered column={2} size="small">
+            <Descriptions bordered
+              column={2}
+              size="small"
+              labelStyle={{ width: "20%", fontWeight: "bold" }}>
               <Descriptions.Item label="Name">
                 {record?.description}
               </Descriptions.Item>
@@ -310,10 +355,10 @@ class OrdersInCampaign extends React.Component {
                     record?.status === "ready"
                       ? "blue"
                       : record?.status === "active"
-                      ? "red"
-                      : record?.status === "done"
-                      ? "green"
-                      : "grey"
+                        ? "red"
+                        : record?.status === "done"
+                          ? "green"
+                          : "grey"
                   }
                 >
                   {record?.status}
@@ -403,6 +448,18 @@ const mapDispatchToProps = (dispatch) => {
       );
       await dispatch(action.getOrderByCampaignId(campaignId));
     },
+    startCampaignBeforeHand: async (id) => {
+      await dispatch(campaignAction.startCampaignBeforeHand(id));
+      await dispatch(campaignAction.getCampaignById(id));
+      await dispatch(campaignAction.getCampaign());
+    },
+
+    doneCampaignBeforeHand: async (id) => {
+      // await dispatch(campaignAction.startCampaignBeforeHand(id));
+      await dispatch(campaignAction.getCampaignById(id));
+      await dispatch(campaignAction.getCampaign());
+    },
+
   };
 };
 
