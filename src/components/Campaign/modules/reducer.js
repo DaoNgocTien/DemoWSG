@@ -16,11 +16,10 @@ const campaignReducer = (state = initialState, action) => {
       return { ...state };
 
     case STORE_CAMPAIGN:
-      console.log(action);
       state.loading = false;
       state.record = action.payload.record;
+      state.orders = action.payload.orders;
       state.err = null;
-      console.log(state);
       return { ...state };
 
     case GET_DATA_SUCCESS:

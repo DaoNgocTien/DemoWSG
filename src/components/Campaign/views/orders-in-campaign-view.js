@@ -22,7 +22,7 @@ import NumberFormat from "react-number-format";
 class OrdersInCampaign extends React.Component {
   state = {
     loading: false,
-    selectedRowKeys: [], 
+    selectedRowKeys: [],
     loadingActionButton: false,
     rejectButton: false,
     openRejectModal: false,
@@ -35,17 +35,14 @@ class OrdersInCampaign extends React.Component {
     console.log(this.props);
     console.log(this.state);
     this.props.getOrder(this.props.record.id);
-    this.props.getOrder(this.props.match.params.recordFromMain);
-    this.props.getCampaignById(this.props.match.params.recordFromMain);
+    this.props.getOrder(this.props.match.params.id);
+    this.props.getCampaignById(this.props.match.params.id);
     this.setState({
       record: this.props.record,
-    })
-    
-    
+    });
   }
 
   onSelectChange = (record) => {
-    
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({
         selectedRowKeys: [record.key],
@@ -90,7 +87,6 @@ class OrdersInCampaign extends React.Component {
       title: "Customer Name",
       width: 150,
       render: (_text, object, _index) => {
-        
         return object.customerfirstname + " " + object.customerlastname;
       },
       fixed: "left",
@@ -100,7 +96,7 @@ class OrdersInCampaign extends React.Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data.toUpperCase()}</Tag>
+        return <Tag>{data.toUpperCase()}</Tag>;
       },
       width: 100,
       fixed: "left",
@@ -114,36 +110,11 @@ class OrdersInCampaign extends React.Component {
         return moment(data).format("MM/DD/YYYY");
       },
     },
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     {
       title: "Quantity",
       width: 100,
       render: (_text, object, _index) => {
-        
         return object.details[0].quantity;
       },
     },
@@ -202,12 +173,9 @@ class OrdersInCampaign extends React.Component {
       title: "Notes",
       width: 300,
       render: (_text, object, _index) => {
-        
         return object.details[0].notes;
       },
     },
-
-
   ];
 
   onChangeHandler = (e) => {
@@ -242,7 +210,6 @@ class OrdersInCampaign extends React.Component {
       displayData,
       searchData,
       openRejectModal,
-      
     } = this.state;
 
     const {
@@ -252,16 +219,13 @@ class OrdersInCampaign extends React.Component {
       orderList = [],
       record,
     } = this.props;
-    
-
-    
 
     const rowSelection = {
       selectedRowKeys,
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-    console.log(record);
+    console.log(orderList);
     return (
       <>
         <PageHeader
@@ -269,33 +233,6 @@ class OrdersInCampaign extends React.Component {
           onBack={() => window.history.back()}
           title="CAMPAIGN DETAILS"
           subTitle={`This is a campaign detail page`}
-          
-          
-          
-          
-          
-          
-          
-          
-          
-
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
           footer={
             <div>
               <RejectModal
@@ -341,8 +278,8 @@ class OrdersInCampaign extends React.Component {
                 dataSource={
                   displayData.length === 0 && searchData === ""
                     ? orderList.filter(
-                      (order) => order.status.toUpperCase() !== "NOTADVANCED"
-                    )
+                        (order) => order.status.toUpperCase() !== "NOTADVANCED"
+                      )
                     : displayData
                 }
                 scroll={{ y: 350 }}
@@ -362,11 +299,25 @@ class OrdersInCampaign extends React.Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Type">
-                <Tag color={!record?.isshare ? "blue" : "green"}>{!record?.isshare ? "SINGLE" : "SHARED"}</Tag>
+                <Tag color={!record?.isshare ? "blue" : "green"}>
+                  {!record?.isshare ? "SINGLE" : "SHARED"}
+                </Tag>
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Status">
-                <Tag color={record?.status === "ready" ? "blue" : record?.status === "active" ? "red" : record?.status === "done" ? "green" : "grey"}>{record?.status}</Tag>
+                <Tag
+                  color={
+                    record?.status === "ready"
+                      ? "blue"
+                      : record?.status === "active"
+                      ? "red"
+                      : record?.status === "done"
+                      ? "green"
+                      : "grey"
+                  }
+                >
+                  {record?.status}
+                </Tag>
               </Descriptions.Item>
 
               <Descriptions.Item label="Product">
@@ -398,14 +349,12 @@ class OrdersInCampaign extends React.Component {
                   width="100"
                   alt="show illustrative representation"
                   height="100"
-                  
                 />
               </Descriptions.Item>
 
               <Descriptions.Item label="Description" span={2}>
                 {record?.description}
               </Descriptions.Item>
-
             </Descriptions>
           </Form>
           <PageHeader className="site-page-header-responsive"></PageHeader>
@@ -417,8 +366,8 @@ class OrdersInCampaign extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.orderReducer.loading,
-    orderList: state.orderReducer.data.orders,
+    loading: state.campaignReducer.loading,
+    orderList: state.campaignReducer.orders,
     error: state.orderReducer.err,
     record: state.campaignReducer.record,
   };
@@ -427,11 +376,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getCampaignById: async (id) => {
-      await dispatch(campaignAction.getCampaign(id));
+      await dispatch(campaignAction.getCampaignById(id));
     },
 
     getOrder: async (id) => {
-      await dispatch(action.getOrderByCampaignId(id));
+      // await dispatch(action.getOrderByCampaignId(id));
     },
     rejectOrder: async (
       orderCode,
@@ -442,10 +391,15 @@ const mapDispatchToProps = (dispatch) => {
       campaignId = null,
       requester
     ) => {
-      
-
       await dispatch(
-        action.rejectOrder(orderCode, type, description, image, orderId, requester)
+        action.rejectOrder(
+          orderCode,
+          type,
+          description,
+          image,
+          orderId,
+          requester
+        )
       );
       await dispatch(action.getOrderByCampaignId(campaignId));
     },

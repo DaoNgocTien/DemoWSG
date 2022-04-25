@@ -363,7 +363,7 @@ class CampaignUI extends Component {
                       <Link
                         className="LinkDecorations"
                         to={
-                          "/discount/orders-in-campaign/" +
+                          "/discount/campaign/" +
                           this.props.record?.id
                         }
                       >

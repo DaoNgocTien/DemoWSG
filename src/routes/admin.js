@@ -84,7 +84,7 @@ const adminRoutes = [
   
   {
     exact: true,
-    path: "/discount/orders-in-campaign/:recordFromMain",
+    path: "/discount/campaign/:id",
     component: OrdersInCampaign,
   },
   {
