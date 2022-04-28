@@ -91,6 +91,28 @@ const deleteProduct = (id) => {
   };
 };
 
+const activeProduct = (id) => {
+  return async (dispatch) => {
+    dispatch(getRequest());
+    Axios({
+      url: `/products/active`,
+      method: "PUT",
+      withCredentials: true,
+      data: {
+        productId: id,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return window.location.reload();
+        }
+      })
+      .catch(() => {
+        return dispatch(getFailed());
+      });
+  };
+};
+
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -116,6 +138,7 @@ const action = {
   createProduct: createProduct,
   updateProduct: updateProduct,
   deleteProduct: deleteProduct,
+  activeProduct: activeProduct,
 };
 
 export default action;

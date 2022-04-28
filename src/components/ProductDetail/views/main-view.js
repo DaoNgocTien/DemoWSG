@@ -25,6 +25,7 @@ const propsProTypes = {
   createProduct: PropTypes.func,
   updateProduct: PropTypes.func,
   deleteProduct: PropTypes.func,
+  activeProduct: PropTypes.func,
 };
 
 const propsDefault = {
@@ -34,6 +35,7 @@ const propsDefault = {
   createCategory: () => {},
   updateCategory: () => {},
   deleteProduct: () => {},
+  activeProduct: () => {},
 };
 
 class ProductUI extends Component {
@@ -163,6 +165,10 @@ class ProductUI extends Component {
     }
   };
 
+  activeProduct = (id) => {
+    return this.props.activeProduct(id);
+  };
+
   render() {
     const { record, categoryList, campaignList } = this.props;
     return (
@@ -176,9 +182,19 @@ class ProductUI extends Component {
               type="danger"
               onClick={() => this.start("openDeleteModal")}
               // disabled={!deleteButton}
+              hidden={record?.status === "deactivated"}
               style={{ width: 90 }}
             >
               Disable
+            </Button>,
+            <Button
+              type="primary"
+              onClick={() => this.activeProduct(record?.id)}
+              // disabled={!deleteButton}
+              hidden={record?.status === "active"}
+              style={{ width: 90 }}
+            >
+              Active
             </Button>,
             <Button
               type="primary"

@@ -155,14 +155,14 @@ class AuthPage extends Component {
                     Log in
                   </Button>
                 </Form.Item>
-                <GoogleLogin
+                {/* <GoogleLogin
                   clientId="641513059325-n3suicaa1j3fsph5fqaft0okgh57gv2l.apps.googleusercontent.com"
                   buttonText="Sign in with Google"
                   onSuccess={this.props.googleOAuth2}
                   onFailure={this.props.googleOAuth2}
                   cookiePolicy={"single_host_origin"}
                   className="google-button"
-                />
+                /> */}
                 <br />
                 <a href="/registration" style={{ float: "right" }}>
                   Register now!
