@@ -83,6 +83,7 @@ class AdminRender extends Component {
       this.getNotif();
       axios.get(`/notif/getNotiForLoginUser`).then((res) => {
         const notif = res.data.data;
+        console.log(notif)
         this.setState({ notif });
       });
     }
@@ -238,7 +239,7 @@ class AdminRender extends Component {
                   Orders
                 </Link>
               </Menu.Item>
-              
+
               <SubMenu
                 key="Discount"
                 title="Discounts"
@@ -330,7 +331,7 @@ class AdminRender extends Component {
                       > */}
                       <List.Item.Meta
                         // avatar={<Avatar src={item.picture.large} />}
-                        title={<Link to="/orders/all-order">{item.link}</Link>}
+                        title={<Link to={`/orders/${item.link}`}>{item.link}</Link>}
                         description={item.message}
                       />
                       {/* </Skeleton> */}

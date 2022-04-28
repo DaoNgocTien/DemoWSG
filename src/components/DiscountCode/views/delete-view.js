@@ -1,6 +1,6 @@
 import {
   Button, DatePicker, Descriptions, Form,
-  Input, InputNumber, Modal, Select
+  Input, InputNumber, Modal, Space
 } from "antd";
 import Axios from "axios";
 import moment from "moment";
@@ -124,11 +124,6 @@ class DeleteModal extends Component {
     }
     return (
       <>
-        <Form
-          id="deleteDiscountCodeForm"
-          ref={this.formRef}
-          onFinish={this.handleDeleteAndClose}
-        >
           <Modal
             width={window.innerWidth * 0.7}
             heigh={window.innerHeight * 0.5}
@@ -150,125 +145,145 @@ class DeleteModal extends Component {
               </Button>,
             ]}
           >
-            <Descriptions bordered column={2}>
-              <Descriptions.Item label="Discount Code duration">
-                <Form.Item
-                  name="date"
-                  initialValue={[
-                    moment(this.props.record?.startdate),
-                    moment(this.props.record?.enddate),
-                  ]}
-                >
-                  <RangePicker
-                    disabled={true}
-                    style={{ width: "60vh" }}
-                    ranges={{
-                      Today: [moment(), moment()],
-                      "This Week": [
-                        moment().startOf("week"),
-                        moment().endOf("week"),
-                      ],
-                      "This Month": [
-                        moment().startOf("month"),
-                        moment().endOf("month"),
-                      ],
-                    }}
-                    defaultValue={[
-                      moment(this.props.record?.startdate),
-                      moment(this.props.record?.enddate),
-                    ]}
-                    format="MM/DD/YYYY"
-                    onChange={this.onChange}
-                  />
-                </Form.Item>
-              </Descriptions.Item>
+           <Form
+            id="updateDiscountCodeForm"
+            ref={this.formRef}
+            onFinish={this.handleDeleteAndClose}
+            layout="vertical"
+          >
+            <Space size={30}>
+              <Form.Item
+                label="Discount Code duration"
+                name="date"
+                initialValue={
+                  [moment(this.props.record?.startdate),
+                  moment(this.props.record?.enddate),]
+                }
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <RangePicker
+                disabled={true}
+                  style={{ width: "60vh" }}
+                  ranges={{
+                    Today: [moment(), moment()],
+                    "This Week": [
+                      moment().startOf("week"),
+                      moment().endOf("week"),
+                    ],
+                    "This Month": [
+                      moment().startOf("month"),
+                      moment().endOf("month"),
+                    ],
+                  }}
+                  format="MM/DD/YYYY"
+                  onChange={this.onChange}
+                />
+              </Form.Item>
+              <Form.Item name="code" label="Code" initialValue={this.props.record?.code}
+                rules={[
+                  // {
+                  //   required: true,
+                  //   message: 'Name is required!',
+                  // },
+                  () => ({
+                    validator(_, value) {
 
-              <Descriptions.Item label="Code">
-                <Form.Item name="code" initialValue={this.props.record?.code}>
-                  <Input defaultValue={this.props.record?.code} style={{ width: "60vh" }} disabled={true} />
-                </Form.Item>
-              </Descriptions.Item>
+                      if (value.length > 0 && value.length <= 200) {
+                        return Promise.resolve();
+                      }
 
-              <Descriptions.Item label="Discount price">
-                <Form.Item
-                  name="discountPrice"
-                  initialValue={this.props.record?.discountprice}
-                >
+                      return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                    },
+                  }),
+                ]}
+              >
+                <Input style={{ width: "60vh" }} placeholder="Code is required, length is 1-200 characters!" disabled={true}/>
+              </Form.Item>
+            </Space>
+            <Space size={30}>
+              <Form.Item name="discountPrice" initialValue={this.props.record?.discountprice} label="Discount price"
+                rules={[
+                  // {
+                  //   required: true,
+                  //   message: 'Name is required!',
+                  // },
+                  () => ({
+                    // validator(_, value) {
 
-                  <NumberFormat
-                    value={this.props.record?.discountprice}
-                    thousandSeparator={true}
-                    suffix={" VND"}
-                    decimalScale={0}
-                    displayType="text"
-                  />
-                  {/* <InputNumber
-                    disabled={true}
-                    defaultValue={this.props.record?.discountprice}
-                    style={{ width: "60vh" }}
-                  /> */}
-                </Form.Item>
-              </Descriptions.Item>
+                    //   if (listName.includes(value)) {
+                    //     return Promise.reject(new Error('Product Name exists!'));
+                    //   }
+                    //   if (value.length >= 0 && value.length <= 20) {
+                    //     return Promise.resolve();
+                    //   }
 
-              <Descriptions.Item label="Minimun price">
-                <Form.Item
-                  name="minimunPrice"
-                  initialValue={this.props.record?.minimunpricecondition}
-                >
-                  <NumberFormat
-                    value={this.props.record?.minimunpricecondition}
-                    thousandSeparator={true}
-                    suffix={" VND"}
-                    decimalScale={0}
-                    displayType="text"
-                  />
-                </Form.Item>
-              </Descriptions.Item>
+                    //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
+                    validator(_, value) {
+                      if (Number(value) > 0) {
+                        return Promise.resolve();
+                      }
 
-              <Descriptions.Item label="Product">
-                <Form.Item
-                  name="productId"
-                  initialValue={this.props.record?.productid}
-                >
-                  <Select onChange={this.onSelectProduct} style={{ width: "60vh" }} disabled={true}>
-                    {productList.map((item) => {
-                      return (
-                        <Select.Option key={item.key} value={item.id}>
-                          {item.name}
-                        </Select.Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-              </Descriptions.Item>
-              {/* 
-              <Descriptions.Item label="Status">
-                <Form.Item
-                  name="status"
-                  initialValue={this.props.record?.status}
-                >
-                  <Select>
-                    <Select.Option key="public" value="public">
-                      Public
-                    </Select.Option>
-                    <Select.Option key="private" value="private">
-                      Private
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
-              </Descriptions.Item> */}
+                      return Promise.reject(new Error('Discount price is positive number!'));
+                    },
+                  }),
+                ]}
+                help="Minimum discount price is 1000!"
+              >
+                <InputNumber min={1000} max={999999999999} style={{ width: "60vh" }} disabled={true}/>
+              </Form.Item>
+              {/* </Descriptions.Item>
 
-              <Descriptions.Item label="Quantity">
-                <Form.Item
-                  name="quantity"
-                  initialValue={this.props.record?.quantity}
-                >
-                  <InputNumber defaultValue={this.props.record?.quantity} style={{ width: "60vh" }} disabled={true} />
-                </Form.Item>
-              </Descriptions.Item>
-            </Descriptions>
+          <Descriptions.Item label="Minimun price"> */}
+              <Form.Item name="minimunPrice" initialValue={this.props.record?.minimunpricecondition} label="Minimun price"
+                rules={[
+                  // {
+                  //   required: true,
+                  //   message: 'Name is required!',
+                  // },
+                  () => ({
+                    // validator(_, value) {
+
+                    //   if (listName.includes(value)) {
+                    //     return Promise.reject(new Error('Product Name exists!'));
+                    //   }
+                    //   if (value.length >= 0 && value.length <= 20) {
+                    //     return Promise.resolve();
+                    //   }
+
+                    //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
+                    validator(_, value) {
+                      if (Number(value) > 0) {
+                        return Promise.resolve();
+                      }
+
+                      return Promise.reject(new Error('Minimum price is positive number!'));
+                    },
+                  }),
+                ]}
+                help="Minimum price to use discount code is 1000!"
+
+              >
+                <InputNumber style={{ width: "60vh" }} min={1000} max={999999999999} disabled={true}/>
+              </Form.Item>
+            </Space>
+
+
+
+            <Space size={30}>
+              <Form.Item
+                name="description"
+                label="Description"
+                initialValue={this.props.record?.description}
+              >
+                <Input.TextArea style={{ width: "60vh" }} disabled={true}/>
+              </Form.Item>
+            </Space>
+          </Form >
           </Modal>
-        </Form>
       </>
     );
   }

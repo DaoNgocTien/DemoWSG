@@ -21,7 +21,7 @@ import {
 } from "recharts";
 
 const { Header, Content, Footer, Sider } = Layout;
-const { Text } = Typography;
+const { Text, Title } = Typography;
 //  prototype
 const propsProTypes = {
   index: PropTypes.number,
@@ -101,18 +101,18 @@ class DashboardUI extends Component {
       amt: 2400,
     },
     {
-      name: "sep",
+      name: "Aug",
       Earnings: 20000,
       amt: 2400,
     },
     {
       name: "",
-      Earnings: 30000,
+      Earnings: 25000,
       amt: 2400,
     },
     {
-      name: "nov",
-      Earnings: 25000,
+      name: "Sep",
+      Earnings: 20000,
       amt: 2400,
     },
     {
@@ -120,8 +120,120 @@ class DashboardUI extends Component {
       Earnings: 35000,
       amt: 2400,
     },
+    {
+      name: "Oct",
+      Earnings: 40000,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Earnings: 42000,
+      amt: 2400,
+    },
+    {
+      name: "Nov",
+      Earnings: 48000,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Earnings: 55000,
+      amt: 2400,
+    },
+    {
+      name: "Dec",
+      Earnings: 62000,
+      amt: 2400,
+    },
   ];
 
+  orderData = [
+    {
+      name: "Jan",
+      Orders: 0,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Orders: 100,
+      amt: 2400,
+    },
+    {
+      name: "Mar",
+      Orders: 70,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Orders: 150,
+      amt: 2400,
+    },
+    {
+      name: "May",
+      Orders: 100,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Orders: 200,
+      amt: 2400,
+    },
+    {
+      name: "Jul",
+      Orders: 150,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Orders: 250,
+      amt: 2400,
+    },
+    {
+      name: "Aug",
+      Orders: 200,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Orders: 250,
+      amt: 2400,
+    },
+    {
+      name: "Sep",
+      Orders: 200,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Orders: 350,
+      amt: 2400,
+    },
+    {
+      name: "Oct",
+      Orders: 400,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Orders: 420,
+      amt: 2400,
+    },
+    {
+      name: "Nov",
+      Orders: 480,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Orders: 550,
+      amt: 2400,
+    },
+    {
+      name: "Dec",
+      Orders: 620,
+      amt: 2400,
+    },
+  ];
   componentDidMount() { }
 
   render() {
@@ -143,52 +255,60 @@ class DashboardUI extends Component {
             // subTitle={`This is a ${arrayLocation[2]} page`}
             footer={
               <Row>
-                <LineChart
-                  width={500}
-                  height={300}
-                  data={this.data}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="Earnings"
-                    stroke="#8884d8"
-                    activeDot={{ r: 10 }}
-                  />
-                </LineChart>
-                <LineChart
-                  width={500}
-                  height={300}
-                  data={this.data}
-                  margin={{
-                    top: 5,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="Earnings"
-                    stroke="#8884d8"
-                    activeDot={{ r: 10 }}
-                  />
-                </LineChart>
+                <Col>
+                  <Title level={3}>Income by time</Title>
+                  <LineChart
+                    width={500}
+                    height={300}
+                    data={this.data}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="Earnings"
+                      stroke="#8884d8"
+                      activeDot={{ r: 10 }}
+                    />
+                  </LineChart>
+                </Col>
+
+                <Col>
+                  <Title level={3}>Orders by time</Title>
+                  <LineChart
+                    width={500}
+                    height={300}
+                    data={this.orderData}
+                    margin={{
+                      top: 5,
+                      right: 30,
+                      left: 20,
+                      bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="Orders"
+                      stroke="#8884d8"
+                      activeDot={{ r: 10 }}
+                    />
+                  </LineChart>
+                </Col>
+
               </Row>
             }
           >
@@ -207,7 +327,7 @@ class DashboardUI extends Component {
                   />
                   <Space>
                     <Text >Last 30 days</Text>
-                    <Text type="warning"><ArrowDownOutlined style={{ marginTop: "5px" }} />30%</Text>
+                    <Text type="success"><ArrowUpOutlined style={{ marginTop: "5px" }} />30%</Text>
                   </Space>
                 </Card>
               </Col>
@@ -224,7 +344,7 @@ class DashboardUI extends Component {
                   />
                   <Space>
                     <Text style={{ marginTop: "35px" }}>Last 30 days</Text>
-                    <Text type="warning"><ArrowDownOutlined />30%</Text>
+                    <Text type="success"><ArrowUpOutlined />30%</Text>
                   </Space>
                 </Card>
               </Col>
@@ -241,7 +361,7 @@ class DashboardUI extends Component {
                   />
                   <Space>
                     <Text style={{ marginTop: "35px" }}>Last 30 days</Text>
-                    <Text type="warning"><ArrowDownOutlined />30%</Text>
+                    <Text type="success"><ArrowUpOutlined />30%</Text>
                   </Space>
                 </Card>
               </Col>

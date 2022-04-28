@@ -45,7 +45,7 @@ class DiscountCodeUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
@@ -162,6 +162,11 @@ class DiscountCodeUI extends Component {
         return <Tag>{data.toUpperCase()}</Tag>;
       },
     },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+    },
   ];
 
   onChangeHandler = (e) => {
@@ -169,14 +174,14 @@ class DiscountCodeUI extends Component {
     let searchString = e.target.value;
     let searchList = data.filter((item) => {
       return (
-        item.productname.toUpperCase().includes(searchString.toUpperCase()) ||
-        item.code.includes(searchString) ||
-        item.quantity.includes(searchString) ||
-        item.discountprice.includes(searchString) ||
-        item.minimunpricecondition.includes(searchString) ||
-        item.startdate.includes(searchString) ||
-        item.enddate.includes(searchString) ||
-        item.status.includes(searchString)
+        String(item?.description).toUpperCase().includes(searchString.toUpperCase()) ||
+        String(item?.code).includes(searchString.toUpperCase()) ||
+        String(item?.quantity).includes(searchString.toUpperCase()) ||
+        String(item?.discountprice).includes(searchString.toUpperCase()) ||
+        String(item?.minimunpricecondition).includes(searchString.toUpperCase()) ||
+        String(item?.startdate).includes(searchString.toUpperCase()) ||
+        String(item?.enddate).includes(searchString.toUpperCase()) ||
+        String(item?.status).includes(searchString.toUpperCase())
       );
     });
     this.setState({
@@ -187,7 +192,6 @@ class DiscountCodeUI extends Component {
 
   onSelectChange = (record) => {
     // console.log("selectedRowKeys changed: ", selectedRowKeys);
-    // console.log(this.props.data);
 
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({
@@ -236,6 +240,7 @@ class DiscountCodeUI extends Component {
     // const hasSelected = selectedRowKeys.length > 0;
     const arrayLocation = window.location.pathname.split("/");
     const pageTitle = arrayLocation[2].split("-");
+    console.log(this.state.record);
     return (
       <PageHeader
         className="site-page-header-responsive"
