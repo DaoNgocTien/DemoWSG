@@ -7,7 +7,18 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import { Link, Redirect, Route } from "react-router-dom";
-
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  PieChart,
+  Pie,
+  Sector,
+} from "recharts";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Text } = Typography;
@@ -48,6 +59,68 @@ class DashboardUI extends Component {
     record: {},
     orderList: [],
   };
+  data = [
+    {
+      name: "Jan",
+      Earnings: 0,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Earnings: 10000,
+      amt: 2400,
+    },
+    {
+      name: "Mar",
+      Earnings: 5000,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Earnings: 15000,
+      amt: 2400,
+    },
+    {
+      name: "May",
+      Earnings: 10000,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Earnings: 20000,
+      amt: 2400,
+    },
+    {
+      name: "Jul",
+      Earnings: 15000,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Earnings: 25000,
+      amt: 2400,
+    },
+    {
+      name: "sep",
+      Earnings: 20000,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Earnings: 30000,
+      amt: 2400,
+    },
+    {
+      name: "nov",
+      Earnings: 25000,
+      amt: 2400,
+    },
+    {
+      name: "",
+      Earnings: 35000,
+      amt: 2400,
+    },
+  ];
 
   componentDidMount() { }
 
@@ -68,11 +141,56 @@ class DashboardUI extends Component {
             // onBack={() => window.history.back()}
             title="WHOLESALE GROUP DASHBOARD"
             // subTitle={`This is a ${arrayLocation[2]} page`}
-            // footer={
-
-              
-
-            // }
+            footer={
+              <Row>
+                <LineChart
+                  width={500}
+                  height={300}
+                  data={this.data}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="Earnings"
+                    stroke="#8884d8"
+                    activeDot={{ r: 10 }}
+                  />
+                </LineChart>
+                <LineChart
+                  width={500}
+                  height={300}
+                  data={this.data}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="Earnings"
+                    stroke="#8884d8"
+                    activeDot={{ r: 10 }}
+                  />
+                </LineChart>
+              </Row>
+            }
           >
             {/* Statistic  */}
             <Row gutter={16}>
@@ -147,7 +265,7 @@ class DashboardUI extends Component {
             </Row>
           </PageHeader >
         </Content >
-        <Sider
+        {/* <Sider
           style={{
             background: "#fff",
             // overflow: 'auto',
@@ -176,7 +294,7 @@ class DashboardUI extends Component {
               Report 01/2022
             </Menu.Item>
           </Menu>
-        </Sider>
+        </Sider> */}
       </Layout >
     );
   }

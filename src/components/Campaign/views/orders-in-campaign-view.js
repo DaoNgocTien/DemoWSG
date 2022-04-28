@@ -273,6 +273,20 @@ class OrdersInCampaign extends React.Component {
               hidden={record?.status !== "active"}
             >
               Done Campaign
+            </Button>,
+            <Button
+              onClick={() => this.props.doneCampaignBeforeHand(record)}
+              type="primary"
+              hidden={record?.status !== "ready"}
+            >
+              Edit Campaign
+            </Button>,
+            <Button
+              onClick={() => this.props.doneCampaignBeforeHand(record)}
+              type="danger"
+              hidden={record?.status !== "ready"}
+            >
+              Delete Campaign
             </Button>
           ]}
           footer={

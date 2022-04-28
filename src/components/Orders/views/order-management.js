@@ -4,7 +4,7 @@ import {
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { OpenInNew } from "@material-ui/icons";
+import { OpenInNew, deliv} from "@material-ui/icons";
 import {
   Button,
   Col,
@@ -40,9 +40,9 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => {},
-  updateStatusOrder: () => {},
-  getOrder: (status) => {},
+  rejectOrder: () => { },
+  updateStatusOrder: () => { },
+  getOrder: (status) => { },
 };
 
 class OrderManagement extends Component {
@@ -70,7 +70,7 @@ class OrderManagement extends Component {
   searchSelf = React.createRef();
   selectSelf = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   start = (openModal) => {
     switch (openModal) {
@@ -191,19 +191,45 @@ class OrderManagement extends Component {
       width: 64,
       render: (object) => {
         return (
-          <Link to={`/orders/${object.ordercode}`}>
+          <>
+            <Link to={`/orders/${object.ordercode}`}>
+              <Button
+                icon={<OpenInNew />}
+                type="default"
+                shape="circle"
+                onClick={() => console.log("123")}
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  background: "none",
+                }}
+              />
+            </Link>
             <Button
-              icon={<OpenInNew />}
-              type="default"
+              onClick={() => this.changeStatus(object, [])}
+              icon={<mdiPlayCircle />}
+              // type="default"
               shape="circle"
-              onClick={() => console.log("123")}
               style={{
                 border: "none",
                 boxShadow: "none",
                 background: "none",
               }}
+              hidden={object.status !== "created"}
             />
-          </Link>
+            <Button
+              onClick={() => this.openUploadModal(object)}
+              icon={<mdiTruckDelivery />}
+              // type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+              hidden={object.status !== "processing"}
+            />
+          </>
         );
       },
       fixed: "right",
