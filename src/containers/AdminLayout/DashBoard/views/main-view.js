@@ -139,7 +139,7 @@ class DashboardUI extends Component {
         <Content>
           <PageHeader
             // onBack={() => window.history.back()}
-            title="WHOLESALE GROUP DASHBOARD"
+            title={`Hello, ${JSON.parse(localStorage.getItem('user') ?? '{name: ""}').name}`}
             // subTitle={`This is a ${arrayLocation[2]} page`}
             footer={
               <Row>
