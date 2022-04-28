@@ -33,11 +33,13 @@ class ProductPage extends Component {
           record={this.props.data}
           // data={this.props.data}
           loading={this.props.loading}
-          // createProduct={this.props.createProduct}
+          activeProduct={this.props.activeProduct}
           updateProduct={this.props.updateProduct}
           deleteProduct={this.props.deleteProduct}
           categoryList={this.props.categoryList}
-          campaignList={this.props.campaignList.campaigns?.filter(element => element.productid === data.id)}
+          campaignList={this.props.campaignList.campaigns?.filter(
+            (element) => element.productid === data.id
+          )}
           // orderList={this.props.orderList.orders}
           // url={this.props.location.search}
         />
@@ -67,6 +69,13 @@ const mapDispatchToProps = (dispatch) => {
     },
     deleteProduct: async (id) => {
       await dispatch(action.deleteProduct(id));
+      // await dispatch(action.getOneProduct(id));
+      // await dispatch(campaignAction.getCampaign());
+    },
+    activeProduct: async (id) => {
+      await dispatch(action.activeProduct(id));
+      // await dispatch(action.getOneProduct(id));
+      // await dispatch(campaignAction.getCampaign());
     },
   };
 };

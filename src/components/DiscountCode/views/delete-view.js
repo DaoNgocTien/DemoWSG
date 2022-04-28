@@ -18,8 +18,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  deleteDiscountCode: () => { },
+  closeModal: () => {},
+  deleteDiscountCode: () => {},
   openModal: false,
   categoryList: [],
 };
@@ -37,7 +37,7 @@ class DeleteModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   handleDeleteAndClose = (data) => {
     this.props.deleteDiscountCode(this.props.record?.id);
@@ -45,7 +45,7 @@ class DeleteModal extends Component {
   };
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
+    //   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 

@@ -10,8 +10,7 @@ const { Text } = Typography;
 class AuthPage extends Component {
   state = {
     openForgotPasswordModal: false,
-
-  }
+  };
   openMessage = () => {
     const key = "updatable";
     message.error({ content: "Can't Access !", key, duration: 2 });
@@ -46,15 +45,17 @@ class AuthPage extends Component {
 
     const { loading, error } = this.props;
     if (loading) return <Loader />;
-  //  console.log(this.props);
+    //  console.log(this.props);
     if (!localStorage.getItem("user")) {
       return (
         <div className="main_form_body">
           <div className="form__wrapper">
             <div className="form__container">
               <h2 style={{ textAlign: "center" }}>LOGIN</h2>
-                <Text type="danger" style={{ textAlign: "center", }} > {error}</Text>
-
+              <Text type="danger" style={{ textAlign: "center" }}>
+                {" "}
+                {error}
+              </Text>
 
               <ForgotPassword
                 openModal={openForgotPasswordModal}
@@ -77,8 +78,13 @@ class AuthPage extends Component {
                     // },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
-                        if ((value + "").length > 50 || (value + "").length < 1) {
-                          return Promise.reject(new Error(`Username is between 1-50 characters!`));
+                        if (
+                          (value + "").length > 50 ||
+                          (value + "").length < 1
+                        ) {
+                          return Promise.reject(
+                            new Error(`Username is between 1-50 characters!`)
+                          );
                         }
                         // if (error) {
                         //   return Promise.reject(new Error(`Username or password is not correct!`));
@@ -99,7 +105,7 @@ class AuthPage extends Component {
                   <Input
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     placeholder="Username is between 1-50 characters"
-                  // onChange={this.props.onLogin}
+                    // onChange={this.props.onLogin}
                   />
                 </Form.Item>
                 <Form.Item
@@ -111,8 +117,13 @@ class AuthPage extends Component {
                     // },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
-                        if ((value + "").length > 50 || (value + "").length < 1) {
-                          return Promise.reject(new Error(`Password is between 1-50 characters!`));
+                        if (
+                          (value + "").length > 50 ||
+                          (value + "").length < 1
+                        ) {
+                          return Promise.reject(
+                            new Error(`Password is between 1-50 characters!`)
+                          );
                         }
                         // if (error) {
                         //   return Promise.reject(new Error(`Username or password is not correct!`));
@@ -134,7 +145,7 @@ class AuthPage extends Component {
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
                     placeholder="Password is between 1-50 characters!"
-                  // onChange={this.props.onLogin}
+                    // onChange={this.props.onLogin}
                   />
                 </Form.Item>
                 <Form.Item>
@@ -193,7 +204,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     onLogin: () => {
       dispatch(action.onLogin());
-    }
+    },
   };
 };
 

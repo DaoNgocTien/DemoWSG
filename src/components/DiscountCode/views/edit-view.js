@@ -18,8 +18,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  updateDiscountCode: () => { },
+  closeModal: () => {},
+  updateDiscountCode: () => {},
   openModal: false,
   categoryList: [],
 };
@@ -37,8 +37,7 @@ class UpdateModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
     let newDiscountCode = {
@@ -143,8 +142,7 @@ class UpdateModal extends Component {
       if (currentProductWhenPopup) {
         maxPrice = currentProductWhenPopup.retailprice;
       }
-    }
-    else {
+    } else {
       maxPrice = productSelected.retailprice;
     }
 

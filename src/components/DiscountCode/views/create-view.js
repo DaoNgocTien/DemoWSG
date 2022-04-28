@@ -18,8 +18,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  createDiscountCode: () => { },
+  closeModal: () => {},
+  createDiscountCode: () => {},
   openModal: false,
   productList: [],
 };
@@ -36,7 +36,7 @@ class CreatModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   handleCreateAndClose = (data) => {
     let newDiscountCode = {

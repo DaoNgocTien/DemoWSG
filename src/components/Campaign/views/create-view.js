@@ -17,7 +17,11 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo, createRef } from "react";
 import NumberFormat from "react-number-format";
-import { MinusCircleOutlined, PlusOutlined, UndoOutlined } from "@ant-design/icons";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  UndoOutlined,
+} from "@ant-design/icons";
 import TimelineItem from "antd/lib/timeline/TimelineItem";
 
 const { RangePicker } = DatePicker;
@@ -31,8 +35,8 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => { },
-  createCampaign: () => { },
+  closeModal: () => {},
+  createCampaign: () => {},
   openModal: false,
   productList: [],
 };
@@ -73,7 +77,7 @@ class CreatModal extends Component {
 
   uniqByKeepFirst(a, key) {
     let seen = new Set();
-    return a.filter(item => {
+    return a.filter((item) => {
       let k = key(item);
       return seen.has(k) ? false : seen.add(k);
     });
@@ -102,7 +106,7 @@ class CreatModal extends Component {
       //     )
       // );
 
-      const datas = this.uniqByKeepFirst(data.quantities, it => it.quantity);
+      const datas = this.uniqByKeepFirst(data.quantities, (it) => it.quantity);
       data.quantities.sort(function (a, b) {
         return a.quantity - b.quantity;
       });
@@ -144,9 +148,8 @@ class CreatModal extends Component {
         description: data.description,
         advanceFee: data.advancePercent,
         isShare: this.state.switchState ? true : false,
-        range: [...datas]
-
-      }
+        range: [...datas],
+      };
 
       //  Insert into database
       this.props.createCampaign(newCampaign);
@@ -168,10 +171,7 @@ class CreatModal extends Component {
       //     compareArr: compareArr
       //   }
       // })
-
-
-    }
-    else {
+    } else {
       newCampaign = {
         productId: data.productId,
         fromDate: data.date[0],
@@ -217,10 +217,9 @@ class CreatModal extends Component {
 
     this.setState({
       productSelected: productSelected,
-      availableQuantity:
-        productSelected.quantity - productSelected.maxquantity,
+      availableQuantity: productSelected.quantity - productSelected.maxquantity,
       switchState: true,
-      price:productSelected.retailprice,
+      price: productSelected.retailprice,
       maxQuantity: "10",
     });
     this.formRef.current.setFieldsValue({
@@ -272,9 +271,8 @@ class CreatModal extends Component {
   toggleSwitch = () => {
     this.setState({
       switchState: !this.state.switchState,
-    })
+    });
     this.quantityRef.current.value = 1;
-
   };
 
   render() {
@@ -338,7 +336,7 @@ class CreatModal extends Component {
                   },
                   () => ({
                     validator(_, value) {
-                      console.log(value)
+                      console.log(value);
                       if (value.length > 0 && value.length <= 50) {
                         return Promise.resolve();
                       }
@@ -398,8 +396,14 @@ class CreatModal extends Component {
                   },
                   () => ({
                     validator(_, value) {
-                      if (Number(productSelected?.retailprice) * Number(availableQuantity) < 5000) {
-                        return Promise.reject(new Error('Unable to use product'));
+                      if (
+                        Number(productSelected?.retailprice) *
+                          Number(availableQuantity) <
+                        5000
+                      ) {
+                        return Promise.reject(
+                          new Error("Unable to use product")
+                        );
                       }
                       return Promise.resolve();
                     },
@@ -413,8 +417,9 @@ class CreatModal extends Component {
                   {productList.map((item) => {
                     if (
                       [item.quantity - item.maxquantity] *
-                      Number(item.retailprice) >
-                      5000
+                        Number(item.retailprice) >
+                        5000 &&
+                      item.status !== "deactivated"
                     )
                       return (
                         <Select.Option key={item.key} value={item.id}>
@@ -476,7 +481,6 @@ class CreatModal extends Component {
 
             <Space size={30}>
               <Form.Item
-
                 name="quantity"
                 initialValue={switchState ? 1 : minQuantity}
                 label="Quantity"
@@ -490,7 +494,7 @@ class CreatModal extends Component {
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       const min = switchState ? 0 : 9;
-                      const maxQuantity = getFieldValue('maxQuantity');
+                      const maxQuantity = getFieldValue("maxQuantity");
                       // const wholesalePrice = getFieldValue('wholesalePrice');
                       // const advancePercent = getFieldValue('advancePercent');
                       if (maxQuantity < value) {
@@ -608,9 +612,8 @@ class CreatModal extends Component {
                       //   );
                       // }
                       return Promise.resolve();
-
-                    }
-                  })
+                    },
+                  }),
                 ]}
               >
                 <InputNumber
@@ -663,7 +666,6 @@ class CreatModal extends Component {
               ""
             ) : (
               <>
-
                 <Form.List
                   name="quantities"
                   onChange={(record) => {
@@ -672,14 +674,14 @@ class CreatModal extends Component {
                 >
                   {(fields, { add, remove }) => {
                     const reset = () => {
-                      fields.forEach(field => {
-                        remove(field.name)
+                      fields.forEach((field) => {
+                        remove(field.name);
                       });
-                      fields.forEach(field => {
-                        remove(field.name)
+                      fields.forEach((field) => {
+                        remove(field.name);
                       });
-                      fields.forEach(field => {
-                        remove(field.name)
+                      fields.forEach((field) => {
+                        remove(field.name);
                       });
                     };
                     return (
@@ -709,7 +711,6 @@ class CreatModal extends Component {
                                   <InputNumber
                                     addonAfter=" products"
                                     max={maxQuantity}
-
                                     min={1}
                                     style={{ width: "60vh" }}
                                   />
@@ -719,7 +720,7 @@ class CreatModal extends Component {
                             <Form.Item
                               {...field}
                               label="Price"
-                              name={[field.name, 'price']}
+                              name={[field.name, "price"]}
                               rules={[
                                 {
                                   required: true,
@@ -768,7 +769,9 @@ class CreatModal extends Component {
                               <InputNumber
                                 addonAfter="VND"
                                 min={100}
-                                max={productSelected?.retailprice ?? 999999999999}
+                                max={
+                                  productSelected?.retailprice ?? 999999999999
+                                }
                                 style={{ width: "60vh" }}
                               />
                             </Form.Item>
@@ -802,7 +805,11 @@ class CreatModal extends Component {
                           </Form.Item>
                         </Space>
                         <Form.Item>
-                          <Input.TextArea disabled="true" block icon={<PlusOutlined />} rows={5}
+                          <Input.TextArea
+                            disabled="true"
+                            block
+                            icon={<PlusOutlined />}
+                            rows={5}
                             value="Share campaign tutorial step by step:
                           - The higher products customers buy, the better discount price they will get.
                           - Quantity step - price conflict: the higher quantity will be counted
@@ -812,13 +819,12 @@ class CreatModal extends Component {
                             + Quantity 45, price 95
                             + Quantity 55, price 90
                             -> Quantity valid: 15-25
-                            -> Quantity invalid: 45-55">
-                          </Input.TextArea>
+                            -> Quantity invalid: 45-55"
+                          ></Input.TextArea>
                         </Form.Item>
                       </>
-                    )
-                  }
-                  }
+                    );
+                  }}
                 </Form.List>
               </>
             )}
@@ -871,8 +877,7 @@ class CreatModal extends Component {
                       ? JSON.parse(productSelected?.image)
                       : []
                   }
-                >
-                </Upload>
+                ></Upload>
               </Descriptions.Item>
             </Descriptions>
           </Form>
