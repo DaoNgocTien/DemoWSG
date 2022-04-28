@@ -1,4 +1,4 @@
-import { STORE_CREATING_ERR, GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_CAMPAIGN } from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_CAMPAIGN } from "./constant";
 
 let initialState = {
   loading: true,
@@ -7,7 +7,8 @@ let initialState = {
   record: {},
   orders: [],
   isStartAbleMessage: "",
-  isStartAble: false
+  isStartAble: false,
+  availableProducts: [],
 };
 
 const campaignReducer = (state = initialState, action) => {
@@ -24,13 +25,7 @@ const campaignReducer = (state = initialState, action) => {
       state.orders = action.payload.orders;
       state.isStartAbleMessage = action.payload.isStartAbleMessage;
       state.isStartAble = action.payload.isStartAble;
-      state.err = null;
-      return { ...state };
-
-    case STORE_CREATING_ERR:
-      state.loading = false;
-      state.creatingMessage = action.payload.creatingMessage;
-      state.creatingErr = action.payload.creatingErr;
+      state.availableProducts = action.payload.products;
       state.err = null;
       return { ...state };
 

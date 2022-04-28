@@ -103,6 +103,9 @@ class CreatModal extends Component {
       // );
 
       const datas = this.uniqByKeepFirst(data.quantities, it => it.quantity);
+      data.quantities.sort(function (a, b) {
+        return a.quantity - b.quantity;
+      });
       console.log(datas);
       console.log(data.quantities);
       // let errArr = [];
