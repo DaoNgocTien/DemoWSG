@@ -1,8 +1,9 @@
 import {
-  Button, DatePicker, Descriptions, Form, InputNumber, Modal
+  Button, DatePicker, Descriptions, Form, InputNumber, Modal, Input
 } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
+import moment from "moment";
 
 const { RangePicker } = DatePicker;
 
@@ -16,8 +17,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => {},
-  createLoyalCustomerCondition: () => {},
+  closeModal: () => { },
+  createLoyalCustomerCondition: () => { },
   openModal: false,
   productList: [],
 };
@@ -34,7 +35,7 @@ class CreatModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   handleCreateAndClose = (data) => {
     // console.log("DiscountCode create");
@@ -74,7 +75,7 @@ class CreatModal extends Component {
             style={{
               top: 10,
             }}
-            title="Add New"
+            title={"Add New"}
             visible={openModal}
             onCancel={this.handleCancel}
             footer={[
@@ -90,6 +91,12 @@ class CreatModal extends Component {
             ]}
           >
             <Descriptions layout="vertical" column={2}>
+              <Descriptions.Item label="Condition Name">
+                <Form.Item name="name" initialValue={"CONDITION " + moment().format("MM/DD/YYYY")}>
+                  <Input disabled="true" style={{ width: "60vh" }} />
+                </Form.Item>
+              </Descriptions.Item>
+
               <Descriptions.Item label="Min Order">
                 <Form.Item name="minOrder" initialValue={1}>
                   <InputNumber defaultValue={1} style={{ width: "60vh" }} />
@@ -113,7 +120,6 @@ class CreatModal extends Component {
                   />
                 </Form.Item>
               </Descriptions.Item>
-              <Descriptions.Item label=""></Descriptions.Item>
             </Descriptions>
           </Modal>
         </Form>

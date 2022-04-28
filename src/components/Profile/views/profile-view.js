@@ -85,7 +85,7 @@ class ProfileTab extends Component {
   }
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
+    //   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -215,14 +215,14 @@ class ProfileTab extends Component {
             label="Phone Number"
           // tooltip="User's logging method in WSG System"
           >
-            <Tooltip
+            {/* <Tooltip
               placement="topLeft"
               title="Logging by username / Logging by Google Mail"
-            >
-              <Tag color="green">
-                {this.state.user.phone}
-              </Tag>
-            </Tooltip>
+            > */}
+            <Tag color="green">
+              {this.state.user.phone}
+            </Tag>
+            {/* </Tooltip> */}
           </Form.Item>
 
           <Form.Item
@@ -243,13 +243,13 @@ class ProfileTab extends Component {
             ]}
             initialValue={data.name}
           >
-            <Input onChange={this.props.onChangeUpdateProfile}/>
+            <Input onChange={this.props.onChangeUpdateProfile} />
           </Form.Item>
 
           <Form.Item name="avatar" label="Avatar">
             <>
               <Upload
-              //JSON.parse(data?.avt || "[]")
+                //JSON.parse(data?.avt || "[]")
                 name="file"
                 action="/files/upload"
                 listType="picture-card"
@@ -290,11 +290,20 @@ class ProfileTab extends Component {
             ]}
             initialValue={data.email}
           >
-            <Input onChange={this.props.onChangeUpdateProfile}/>
+            {data.username ?
+              <Input onChange={this.props.onChangeUpdateProfile} />
+              :
+              <Tooltip
+                placement="topLeft"
+                title="User logins by Gmail can not change email"
+              >
+                <Input onChange={this.props.onChangeUpdateProfile} disabled="false" />
+              </Tooltip>
+            }
           </Form.Item>
 
           <Form.Item name="address" label="Address" initialValue={data.address}>
-            <Input.TextArea showCount maxLength={100} onChange={this.props.onChangeUpdateProfile}/>
+            <Input.TextArea showCount maxLength={100} onChange={this.props.onChangeUpdateProfile} />
           </Form.Item>
 
           <Form.Item {...tailFormItemLayout}>

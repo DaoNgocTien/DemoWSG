@@ -5,7 +5,6 @@ import React, { Component, memo } from "react";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
-
 //  prototype
 const propsProTypes = {
   index: PropTypes.number,
@@ -95,6 +94,12 @@ class DiscountCodeUI extends Component {
       },
       width: 100,
       fixed: "left",
+    },
+    {
+      title: "Condition Name",
+      dataIndex: "startdate",
+      key: "startdate",
+      render: (data) => ("Condition " +  moment(data).format("MM/DD/YYYY")).toUpperCase(),
     },
     {
       title: "Min Order",
