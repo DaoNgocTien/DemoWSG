@@ -5,6 +5,8 @@ import React, { Component, memo } from "react";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
+import { Link } from "react-router-dom";
+import { SearchOutlined } from "@ant-design/icons";
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -46,6 +48,7 @@ class CategoryUI extends Component {
     displayData: [],
     searchData: "",
     record: {},
+    viewDetailButton: false,
   };
 
   componentDidMount() {}
@@ -74,17 +77,18 @@ class CategoryUI extends Component {
     // const selectedRowKeys = [];
     console.log(record);
     let isExisted = false;
-    this.props.productList.map(p => {
-      if(p.categoryid === record.id){
-        isExisted = true;        
+    this.props.productList.map((p) => {
+      if (p.categoryid === record.id) {
+        isExisted = true;
       }
-    })
+    });
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({
         selectedRowKeys: [record.key],
         record: record,
         editButton: true,
         deleteButton: !isExisted,
+        viewDetailButton: true,
         addNewButton: false,
       });
     } else {
@@ -93,6 +97,7 @@ class CategoryUI extends Component {
         record: {},
         editButton: false,
         deleteButton: false,
+        viewDetailButton: false,
         addNewButton: true,
       });
     }
@@ -108,39 +113,37 @@ class CategoryUI extends Component {
   };
 
   columns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (_text, _object, index) => {
-        return index + 1;
-      },
-      width: 100,
-      fixed: "left",
-    },
+    // {
+    //   title: "No.",
+    //   dataIndex: "No.",
+    //   key: "No.",
+    //   render: (_text, _object, index) => {
+    //     return index + 1;
+    //   },
+    //   width: 100,
+    // },
 
     {
       title: "Name",
       dataIndex: "categoryname",
       key: "categoryname",
       sorter: (a, b) => a.categoryname.length - b.categoryname.length,
-      fix: "left",
     },
 
     {
-      title: "Created At",
+      title: "Products",
+      dataIndex: "numOfProduct",
+      key: "numOfProduct",
+      width: 200,
+    },
+
+    {
+      title: "Created Date",
       dataIndex: "createdat",
       key: "createdat",
       sorter: (a, b) => a.createdat.length - b.createdat.length,
       render: (data) => moment(data).format("DD-MM-YYYY"),
-    },
-
-    {
-      title: "Updated At",
-      dataIndex: "updatedat",
-      key: "updatedat",
-      sorter: (a, b) => a.updatedat.length - b.updatedat.length,
-      render: (data) => moment(data).format("DD-MM-YYYY"),
+      width: 200,
     },
   ];
 
@@ -148,7 +151,9 @@ class CategoryUI extends Component {
     let { data } = this.props;
     let searchList = data.filter((item) => {
       return (
-        item?.categoryname?.toUpperCase().includes(e.target.value.toUpperCase()) ||
+        item?.categoryname
+          ?.toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
         item?.createdat?.toUpperCase().includes(e.target.value.toUpperCase()) ||
         item?.updatedat?.toUpperCase().includes(e.target.value.toUpperCase())
       );
@@ -171,6 +176,7 @@ class CategoryUI extends Component {
       displayData,
       searchData,
       record,
+      viewDetailButton,
     } = this.state;
 
     const { createCategory, updateCategory, deleteCategory } = this.props;
@@ -213,8 +219,16 @@ class CategoryUI extends Component {
             />
 
             <div style={{ marginBottom: 16 }}>
-              <Row>
-                <Col flex="auto">
+              <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+                <Col span={12}>
+                  <Input
+                    prefix={<SearchOutlined />}
+                    ref={this.searchSelf}
+                    onChange={(e) => this.onChangeHandler(e)}
+                    placeholder="Search for categories..."
+                  />
+                </Col>
+                <Col>
                   <Space size={3}>
                     <Button
                       type="primary"
@@ -223,6 +237,13 @@ class CategoryUI extends Component {
                     >
                       Add New
                     </Button>
+                    <Link
+                      to={`/products/catalog?category=${selectedRowKeys[0]}`}
+                    >
+                      <Button type="primary" disabled={!viewDetailButton}>
+                        View Products
+                      </Button>
+                    </Link>
                     <Button
                       type="primary"
                       onClick={() => this.start("openEditModal")}
@@ -245,12 +266,6 @@ class CategoryUI extends Component {
                         : ""}
                     </span> */}
                   </Space>
-                </Col>
-                <Col flex="300px">
-                  <Input
-                    onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search data"
-                  />
                 </Col>
               </Row>
             </div>

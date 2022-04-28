@@ -1,12 +1,13 @@
 import "./App.css";
-import React from 'react';
+import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import { routesAdmin, routesAuth } from "./routes";
+// import { routesAdmin, routesAuth } from "./routes";
 import "antd/dist/antd.css";
 import AdminLayout from "./containers/AdminLayout";
 import PageNotFound from "./containers/PageNotFound";
-import BusinessConditionUI from "./containers/AuthPage/views/business-condition-view";
+import { adminRoutes } from "./routes/admin";
+import { authRoutes } from "./routes/auth";
 
 function App() {
   const showLayoutAdmin = (routes) => {
@@ -40,12 +41,11 @@ function App() {
   };
   return (
     <>
-      {/* <BusinessConditionUI /> */}
-      <BrowserRouter>
+      <BrowserRouter forceRefresh>
         <div>
           <Switch>
-            {showLayoutAdmin(routesAdmin)}
-            {showLayoutAuth(routesAuth)}
+            {showLayoutAdmin(adminRoutes)}
+            {showLayoutAuth(authRoutes)}
             <Route path="/" component={PageNotFound} />
           </Switch>
         </div>
@@ -55,5 +55,3 @@ function App() {
 }
 
 export default App;
-
-

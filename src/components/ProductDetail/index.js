@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import action from "./modules/action";
 import { default as campaignAction } from "../Campaign/modules/action";
 import { default as orderAction } from "../Orders/modules/action";
+import Loader from "../../components/Loader";
 
 import ProductUI from "./views/main-view";
 
@@ -18,25 +19,27 @@ class ProductPage extends Component {
   }
 
   componentDidMount() {
-    const search = this.props.location.search;
-    const category = new URLSearchParams(search).get("category");
-    console.log(category);
-    this.props.getAllProduct(category);
+    console.log(this.props);
+    this.props.getOneProduct(this.props.match.params.id);
   }
 
   render() {
+    console.log(this.props.data);
+    const { loading, data } = this.props;
+    if (loading) return <Loader />;
     return (
       <>
         <ProductUI
-          data={this.props.data}
+          record={this.props.data}
+          // data={this.props.data}
           loading={this.props.loading}
-          createProduct={this.props.createProduct}
+          // createProduct={this.props.createProduct}
           updateProduct={this.props.updateProduct}
           deleteProduct={this.props.deleteProduct}
           categoryList={this.props.categoryList}
-          campaignList={this.props.campaignList.campaigns}
-          orderList={this.props.orderList.orders}
-          url={this.props.location.search}
+          campaignList={this.props.campaignList.campaigns?.filter(element => element.productid === data.id)}
+          // orderList={this.props.orderList.orders}
+          // url={this.props.location.search}
         />
       </>
     );
@@ -45,33 +48,25 @@ class ProductPage extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.productReducer.loading,
-    data: state.productReducer.data,
-    error: state.productReducer.err,
+    loading: state.productDetailReducer.loading,
+    data: state.productDetailReducer.data,
+    error: state.productDetailReducer.err,
     categoryList: state.categoryReducer.data,
     campaignList: state.campaignReducer.data,
-    orderList: state.orderReducer.data,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getAllProduct: async (category) => {
-      await dispatch(action.getAllProduct(category));
+    getOneProduct: async (id) => {
+      await dispatch(action.getOneProduct(id));
       await dispatch(campaignAction.getCampaign());
-      await dispatch(orderAction.getOrder());
-    },
-    createProduct: async (record) => {
-      await dispatch(action.createProduct(record));
-      await dispatch(action.getAllProduct());
     },
     updateProduct: async (record) => {
       await dispatch(action.updateProduct(record));
-      await dispatch(action.getAllProduct());
     },
     deleteProduct: async (id) => {
       await dispatch(action.deleteProduct(id));
-      await dispatch(action.getAllProduct());
     },
   };
 };

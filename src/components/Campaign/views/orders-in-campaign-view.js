@@ -9,9 +9,16 @@ import {
   Space,
   Table,
   Tag,
+  Popconfirm,
+  Image,
+  Tooltip,
+  Popover,
 } from "antd";
+import { OpenInNew, PlayCircleFilledOutlined } from "@material-ui/icons";
+
 import moment from "moment";
 import action from "../../Orders/modules/action";
+
 import { default as campaignAction } from "./../modules/action";
 
 import { connect } from "react-redux";
@@ -19,33 +26,37 @@ import React, { memo } from "react";
 import RejectModal from "../../Orders/views/reject-view";
 import NumberFormat from "react-number-format";
 
+import DeleteModal from "./delete-view";
+import EditModal from "./edit-view";
 class OrdersInCampaign extends React.Component {
   state = {
     loading: false,
-    selectedRowKeys: [], // Check here to configure the default column
+    selectedRowKeys: [],
     loadingActionButton: false,
     rejectButton: false,
     openRejectModal: false,
+    openDeleteModal: false,
+    openEditModal: false,
     displayData: [],
     searchData: "",
     record: {},
+    visiblePop: false,
+    confirmLoading: false,
+    stepVisible: false,
   };
 
   componentDidMount() {
-    console.log(this.props);
-    console.log(this.state);
-    this.props.getOrder(this.props.record.id);
-    this.props.getOrder(this.props.match.params.recordFromMain);
-    this.props.getCampaignById(this.props.match.params.recordFromMain);
-    this.setState({
-      record: this.props.record,
-    })
     // console.log(this.props);
     // console.log(this.state);
+    // this.props.getOrder(this.props.record.id);
+    // this.props.getOrder(this.props.match.params.id);
+    this.props.getCampaignById(this.props.match.params.id);
+    // this.setState({
+    //   record: this.props.record,
+    // });
   }
 
   onSelectChange = (record) => {
-    // console.log("selectedRowKeys changed: ", selectedRowKeys);
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({
         selectedRowKeys: [record.key],
@@ -72,6 +83,8 @@ class OrdersInCampaign extends React.Component {
     });
     this.setState({
       openRejectModal: false,
+      openDeleteModal: false,
+      openEditModal: false,
     });
   };
 
@@ -90,7 +103,6 @@ class OrdersInCampaign extends React.Component {
       title: "Customer Name",
       width: 150,
       render: (_text, object, _index) => {
-        // console.log(object);
         return object.customerfirstname + " " + object.customerlastname;
       },
       fixed: "left",
@@ -100,7 +112,7 @@ class OrdersInCampaign extends React.Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag>{data.toUpperCase()}</Tag>
+        return <Tag>{data.toUpperCase()}</Tag>;
       },
       width: 100,
       fixed: "left",
@@ -114,36 +126,11 @@ class OrdersInCampaign extends React.Component {
         return moment(data).format("MM/DD/YYYY");
       },
     },
-    // {
-    //   title: "Product Name",
-    //   width: 200,
-    //   render: (_text, object, _index) => {
-    //     // console.log(object);
-    //     return object.details[0].productname;
-    //   },
-    // },
-    // {
-    //   title: "Product Image",
-    //   width: 150,
-    //   render: (_text, object, _index) => {
-    //     // console.log(object);
-    //     return object.details[0].image === "" ? (
-    //       ""
-    //     ) : (
-    //       <img
-    //         width="100"
-    //         alt="show illustrative representation"
-    //         height="100"
-    //         src={JSON.parse(object.details[0]?.image)[0].url}
-    //       />
-    //     );
-    //   },
-    // },
+
     {
       title: "Quantity",
       width: 100,
       render: (_text, object, _index) => {
-        // console.log(object);
         return object.details[0].quantity;
       },
     },
@@ -202,12 +189,9 @@ class OrdersInCampaign extends React.Component {
       title: "Notes",
       width: 300,
       render: (_text, object, _index) => {
-        // console.log(object);
         return object.details[0].notes;
       },
     },
-
-
   ];
 
   onChangeHandler = (e) => {
@@ -235,6 +219,61 @@ class OrdersInCampaign extends React.Component {
     });
   };
 
+  handleOk = () => {
+    this.props.startCampaignBeforeHand(this.props.record?.id)
+    this.setState({ confirmLoading: true });
+    setTimeout(() => {
+      this.setState({ visiblePop: false });
+      this.setState({ confirmLoading: false });
+    }, 2000);
+  };
+
+  handleCancel = () => {
+    console.log('Clicked cancel button');
+    this.setState({ visiblePop: false });
+  };
+  hide = () => {
+    this.setState({
+      stepVisible: false,
+    });
+  };
+
+  handleVisibleChange = stepVisible => {
+    this.setState({ stepVisible });
+  };
+
+  stepCloumns = [
+    {
+      title: "Products Up To",
+      dataIndex: "quantity",
+      key: "quantity",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+    },
+  ]
+
+  start = (openModal) => {
+    switch (openModal) {
+      case "openDeleteModal":
+        this.setState({
+          openDeleteModal: true
+        });
+        break;
+
+      case "openEditModal":
+        this.setState({
+          openEditModal: true,
+        });
+        break;
+
+      default:
+        break;
+    }
+  };
+
   render() {
     const {
       selectedRowKeys,
@@ -242,26 +281,29 @@ class OrdersInCampaign extends React.Component {
       displayData,
       searchData,
       openRejectModal,
-      // record
+      openDeleteModal,
+      openEditModal,
     } = this.state;
 
     const {
       campaign,
       loading,
       rejectOrder,
+      deleteCampaign,
+      updateCampaign,
       orderList = [],
       record,
+      isStartAbleMessage,
+      isStartAble,
+      productList
     } = this.props;
-    // console.log(ordersInCampaign);
-
-    //  console.log(this.props);
 
     const rowSelection = {
       selectedRowKeys,
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-    console.log(record);
+    console.log(this.props);
     return (
       <>
         <PageHeader
@@ -269,35 +311,76 @@ class OrdersInCampaign extends React.Component {
           onBack={() => window.history.back()}
           title="CAMPAIGN DETAILS"
           subTitle={`This is a campaign detail page`}
-          // extra={[
-          //   <Button
-          //     type="danger"
-          //     onClick={this.showModal}
-          //     style={{ marginLeft: 3 }}
-          //     hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1}
-          //   >
-          //     Reject Returning Request
-          //   </Button>,
+          extra={[
+            // <Popconfirm
+            //   title="Update campaign start day to today and modify exist campaigns: stop ready campaigns, finish active campaigns"
+            //   visible={this.state.visiblePop}
+            //   onConfirm={this.handleOk}
+            //   okButtonProps={{ loading: this.state.confirmLoading }}
+            //   onCancel={this.handleCancel}
+            // >
+            <Button
+              type="primary"
+              onClick={() => this.props.startCampaignBeforeHand(record?.id)}
+              hidden={record?.status !== "ready"}
+              disabled={!isStartAble}
 
-          //   <Button
-          //     type="primary"
-          //     onClick={this.handleAcceptAndClose}
-          //     style={{ marginLeft: 3 }}
-          //     hidden={this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1}
-          //   >
-          //     Accept Returning Request
-          //   </Button>,
-          //   <Button
-          //     type="primary"
-          //     onClick={() => window.history.back()}
-          //     style={{ marginLeft: 3 }}
-          //     hidden={!(this.props.record?.complainRecord?.status === "returned" || handledBySupplier > 1)}
-          //   >
-          //     Back
-          //   </Button>,
-          // ]}
+            >
+              {isStartAble ?
+                "Start Campaign"
+                :
+                <Popover content={isStartAbleMessage} title="Reason campaign can not be started!">
+                  Start Campaign
+                </Popover>}
+              {/* // <Popover content={isStartAbleMessage} title="Reason campaign can not be started!">
+                //   Start Campaign
+                // </Popover> */}
+            </Button>
+            ,
+            <Button
+              onClick={() => this.props.startCampaignBeforeHand(record?.id)}
+              type="primary"
+              hidden={record?.status !== "active"}
+            >
+              Done Campaign
+            </Button>,
+            <Button
+              onClick={() => this.start("openEditModal")}
+              type="primary"
+              hidden={record?.status !== "ready"}
+            >
+              Edit Campaign
+            </Button>,
+            <Button
+              onClick={() => this.start("openDeleteModal")}
+              type="danger"
+              hidden={record?.status !== "ready"}
+            >
+              Delete Campaign
+            </Button>
+          ]}
           footer={
             <div>
+              <DeleteModal
+                loading={this.props.loading}
+                openModal={openDeleteModal}
+                closeModal={this.closeModal}
+                deleteCampaign={deleteCampaign}
+                defaultProduct={record?.product}
+                productList={productList}
+                record={record}
+              // selectedRowKeys={selectedRowKeys[0]}
+              />
+              <EditModal
+                loading={this.props.loading}
+                openModal={openEditModal}
+                closeModal={this.closeModal}
+                updateCampaign={updateCampaign}
+                defaultProduct={record?.product}
+                productList={productList}
+                record={record}
+              // selectedRowKeys={selectedRowKeys[0]}
+              />
               <RejectModal
                 openModal={openRejectModal}
                 closeModal={this.closeModal}
@@ -315,6 +398,7 @@ class OrdersInCampaign extends React.Component {
                         type="danger"
                         onClick={() => this.openModal()}
                         disabled={!rejectButton}
+                        hidden={record?.status !== "active"}
                         style={{ width: 90 }}
                       >
                         Reject
@@ -351,29 +435,66 @@ class OrdersInCampaign extends React.Component {
           }
         >
           <Form>
-            <Descriptions bordered column={2} size="small">
+            <Descriptions bordered
+              column={2}
+              size="small"
+              labelStyle={{ width: "20%", fontWeight: "bold" }}>
               <Descriptions.Item label="Name">
                 {record?.description}
               </Descriptions.Item>
-              <Descriptions.Item label="Campaign duration">
+
+              <Descriptions.Item label="Campaign Duration">
                 {moment(record?.fromdate).format("MM/DD/YYYY") +
                   ` - ` +
                   moment(record?.todate).format("MM/DD/YYYY")}
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Type">
-                <Tag color={!record?.isshare ? "blue" : "green"}>{!record?.isshare ? "SINGLE" : "SHARED"}</Tag>
+
+                <Popover
+                  content={
+                    <>
+                      <Table
+                        columns={this.stepCloumns}
+                        dataSource={
+                          record?.range ? JSON.parse(record?.range) : []
+                        }
+                      // scroll={{ y: 350 }}
+                      />
+                    </>
+
+                  }
+                  trigger="click"
+                  visible={this.state.stepVisible}
+                  onVisibleChange={this.handleVisibleChange}
+                >
+                  <Tag color={!record?.isshare ? "blue" : "green"}>
+                    {!record?.isshare ? "SINGLE" : "SHARED"}
+                  </Tag>
+                </Popover>
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Status">
-                <Tag color={record?.status === "ready" ? "blue" : record?.status === "active" ? "red" : record?.status === "done" ? "green" : "grey"}>{record?.status.toUpperCase()}</Tag>
+                <Tag
+                  color={
+                    record?.status === "ready"
+                      ? "blue"
+                      : record?.status === "active"
+                        ? "red"
+                        : record?.status === "done"
+                          ? "green"
+                          : "grey"
+                  }
+                >
+                  {(record?.status ?? "").toUpperCase()}
+                </Tag>
               </Descriptions.Item>
 
               <Descriptions.Item label="Product">
                 {record?.productname}
               </Descriptions.Item>
 
-              <Descriptions.Item label="Wholesale price">
+              <Descriptions.Item label="Wholesale Price">
                 {record?.price}
               </Descriptions.Item>
 
@@ -381,7 +502,7 @@ class OrdersInCampaign extends React.Component {
                 {record?.quantity}
               </Descriptions.Item>
 
-              <Descriptions.Item label="Max quantity">
+              <Descriptions.Item label="Max Quantity">
                 {record?.maxquantity}
               </Descriptions.Item>
 
@@ -389,23 +510,32 @@ class OrdersInCampaign extends React.Component {
                 {record?.code}
               </Descriptions.Item>
 
-              <Descriptions.Item label="Number of order">
+              <Descriptions.Item label="Number of Order">
                 {record?.numorder}
               </Descriptions.Item>
 
               <Descriptions.Item label="Product Image" span={2}>
-                <img
-                  width="100"
-                  alt="show illustrative representation"
-                  height="100"
-                  src={JSON.parse(record?.productimage)[0].url}
-                />
+                {record?.productimage ? (
+                  JSON.parse(record?.productimage)?.map((image) => {
+                    return (
+                      <Image
+                        width={100}
+                        height={100}
+                        src={image.url}
+                        preview={{
+                          src: image.url,
+                        }}
+                      />
+                    );
+                  })
+                ) : (
+                  <></>
+                )}
               </Descriptions.Item>
 
               <Descriptions.Item label="Description" span={2}>
                 {record?.description}
               </Descriptions.Item>
-
             </Descriptions>
           </Form>
           <PageHeader className="site-page-header-responsive"></PageHeader>
@@ -417,21 +547,24 @@ class OrdersInCampaign extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    loading: state.orderReducer.loading,
-    orderList: state.orderReducer.data.orders,
+    loading: state.campaignReducer.loading,
+    orderList: state.campaignReducer.orders,
     error: state.orderReducer.err,
     record: state.campaignReducer.record,
+    isStartAbleMessage: state.campaignReducer.isStartAbleMessage,
+    isStartAble: state.campaignReducer.isStartAble,
+    productList: state.campaignReducer.availableProducts,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getCampaignById: async (id) => {
-      await dispatch(campaignAction.getCampaign(id));
+      await dispatch(campaignAction.getCampaignById(id));
     },
 
     getOrder: async (id) => {
-      await dispatch(action.getOrderByCampaignId(id));
+      // await dispatch(action.getOrderByCampaignId(id));
     },
     rejectOrder: async (
       orderCode,
@@ -442,13 +575,42 @@ const mapDispatchToProps = (dispatch) => {
       campaignId = null,
       requester
     ) => {
-      //  console.log("Campaign");
-
       await dispatch(
-        action.rejectOrder(orderCode, type, description, image, orderId, requester)
+        action.rejectOrder(
+          orderCode,
+          type,
+          description,
+          image,
+          orderId,
+          requester
+        )
       );
       await dispatch(action.getOrderByCampaignId(campaignId));
     },
+    startCampaignBeforeHand: async (id) => {
+      await dispatch(campaignAction.startCampaignBeforeHand(id));
+      await dispatch(campaignAction.getCampaignById(id));
+      await dispatch(campaignAction.getCampaign());
+    },
+
+    doneCampaignBeforeHand: async (id) => {
+      await dispatch(campaignAction.doneCampaignBeforeHand(id));
+      await dispatch(campaignAction.getCampaignById(id));
+      await dispatch(campaignAction.getCampaign());
+    },
+
+    updateCampaign: async (record) => {
+      await dispatch(campaignAction.updateCampaign(record));
+      await dispatch(campaignAction.getCampaignById(record.id));
+      await dispatch(campaignAction.getCampaign());
+    },
+
+    deleteCampaign: async (id) => {
+      await dispatch(campaignAction.deleteCampaign(id));
+      await dispatch(campaignAction.getCampaignById(id));
+      await dispatch(campaignAction.getCampaign());
+    },
+
   };
 };
 

@@ -9,6 +9,7 @@ import loyalCustomerConditionReducer from "../../components/LoyalCustomerConditi
 import notificationReducer from "../../components/Notification/modules/reducer";
 import orderReducer from "../../components/Orders/modules/reducer";
 import productReducer from "../../components/Product/modules/reducer";
+import productDetailReducer from "../../components/ProductDetail/modules/reducer";
 import profileReducer from "../../components/Profile/modules/reducer";
 import { default as complainOrder, default as ReturningOrderReducer } from "../../components/ReturningOrder/modules/reducer";
 import transactionReducer from "../../components/Transaction/modules/reducer";
@@ -39,7 +40,7 @@ const rootReducer = combineReducers({
   handleReturningOrderReducer,
   complainOrder,
   cancelledOrderReducer,
-
+  productDetailReducer
 });
 
 export default rootReducer;

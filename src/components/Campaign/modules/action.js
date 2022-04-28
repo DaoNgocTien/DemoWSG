@@ -1,4 +1,10 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_CAMPAIGN } from "./constant";
+import {
+  GET_DATA_FAIL,
+  GET_DATA_REQUEST,
+  GET_DATA_SUCCESS,
+  STORE_CAMPAIGN,
+  STORE_CREATING_ERR,
+} from "./constant";
 import Axios from "axios";
 import { Link, Redirect, Route } from "react-router-dom";
 
@@ -10,7 +16,6 @@ const getCampaign = (campaignId) => {
         products,
         order = {};
       if (!campaignId) {
-        // console.log("test");
         [campaigns, products] = await Promise.all([
           Axios({
             url: `/campaigns/All`,
@@ -47,18 +52,17 @@ const getCampaign = (campaignId) => {
           }),
         ]);
       }
-      //  Filter products to remove product which its available quantity <10
-      let availableProducts = products.data.data.filter(p => {
-        let max = 0;
-        campaigns.data.data.map(c => {
-          max += c.productid === p.id ? Number(c.maxquantity) : 0;
-        })
-        return p.quantity - max >= 10;
-      })
 
-      //  Filter order to remove order which its status is notAdvanced
-      order.data?.data.filter(order => order.status !== "notAdvanced");
-     
+      let availableProducts = products.data.data.filter((p) => {
+        let max = 0;
+        campaigns.data.data.map((c) => {
+          max += c.productid === p.id ? Number(c.maxquantity) : 0;
+        });
+        return p.quantity - max >= 10;
+      });
+
+      order.data?.data.filter((order) => order.status !== "notAdvanced");
+
       return dispatch(
         getSuccess({
           campaigns: campaigns.data.data.map((campaign) => {
@@ -69,11 +73,11 @@ const getCampaign = (campaignId) => {
               range: JSON.parse(campaign.range),
             };
           }),
-          products: availableProducts.map(p => {
+          products: availableProducts.map((p) => {
             let max = 0;
-            campaigns.data.data.map(c => {
+            campaigns.data.data.map((c) => {
               max += c.productid === p.id ? Number(c.maxquantity) : 0;
-            })
+            });
             return {
               key: p.id,
               maxquantity: max,
@@ -92,7 +96,6 @@ const getCampaign = (campaignId) => {
         })
       );
     } catch (error) {
-      // console.log(error);
       return dispatch(getFailed());
     }
   };
@@ -122,8 +125,9 @@ const createCampaign = (record) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-
-      // console.log(order);
+      if (createResponse.data.message) {
+        alert(createResponse.data.message);
+      }
 
       dispatch(
         getSuccess({
@@ -137,9 +141,8 @@ const createCampaign = (record) => {
           products: products.data.data,
         })
       );
-      return (<Redirect to="/discount/campaigns" />);
+      return <Redirect to="/discount/campaigns" />;
     } catch (error) {
-      // console.log(error);
       return dispatch(getFailed());
     }
   };
@@ -147,13 +150,12 @@ const createCampaign = (record) => {
 
 const updateCampaign = (record) => {
   return async (dispatch) => {
-    console.log(record)
-    // dispatch(getRequest());
+    console.log(record);
+
     Axios({
       url: `/campaigns/${record.id}`,
       method: "PUT",
       data: {
-
         status: "ready",
         productId: record.productId,
         fromDate: record.fromDate,
@@ -169,17 +171,16 @@ const updateCampaign = (record) => {
     })
       .then((result) => {
         if (result.status === 200) {
+          if (result.data.message) {
+            alert(result.data.message);
+          }
           const data = result.data.data.map((category) => {
             return {
               key: category.id,
               ...category,
             };
-          })
-          // return (<Redirect to="/discount/campaigns" />);
-
+          });
         }
-        // return (<Redirect to="/discount/campaigns" />);
-
       })
       .catch((err) => {
         return dispatch(getFailed(err));
@@ -187,7 +188,7 @@ const updateCampaign = (record) => {
   };
 };
 
-const deleteCampaign = id => {
+const deleteCampaign = (id) => {
   return async (dispatch) => {
     let deleteResponse,
       campaigns,
@@ -200,52 +201,19 @@ const deleteCampaign = id => {
         method: "DELETE",
         withCredentials: true,
       }),
-      // Axios({
-      //   url: `/campaigns/All`,
-      //   method: "GET",
-      //   withCredentials: true,
-      //   exposedHeaders: ["set-cookie"],
-      // }),
-      // Axios({
-      //   url: `/products/All`,
-      //   method: "GET",
-      //   withCredentials: true,
-      //   exposedHeaders: ["set-cookie"],
-      // }),
-      // Axios({
-      //   url: `/order/supplier/campaign/${id}`,
-      //   method: "GET",
-      //   withCredentials: true,
-      //   exposedHeaders: ["set-cookie"],
-      // }),
     ]);
 
     dispatch(
       getSuccess({
         campaigns: [],
-      }));
-    return (<Redirect to="/discount/campaigns" />);
-
-    //     Axios({
-    //       url: `/campaigns/${id}`,
-    //       method: "DELETE",
-    //       withCredentials: true,
-    //     }).then((response) => {
-    //       // console.log(response);
-    //       if (response.status === 200) {
-    //         // console.log(response);
-    //         // return window.location.reload();
-    //       }
-    //     }).catch((err) => {
-    //       // console.log(err);
-    //       return dispatch(getFailed());
-    //     });
+      })
+    );
+    return <Redirect to="/discount/campaigns" />;
   };
-}
+};
 
-const startCampaignBeforeHand = id => {
+const startCampaignBeforeHand = (id) => {
   return async (dispatch) => {
-    //  console.log(id);
     dispatch(getRequest());
     try {
       const [response] = await Promise.all([
@@ -257,62 +225,140 @@ const startCampaignBeforeHand = id => {
           },
           withCredentials: true,
         }),
-
       ]);
 
       dispatch(
         getSuccess({
           campaigns: [],
-        }));
-      return (<Redirect to="/discount/campaigns" />);
+        })
+      );
+      // return <Redirect to="/discount/campaigns" />;
     } catch (error) {
       return dispatch(getFailed());
     }
   };
 };
 
-const storeCampaign = record => {
+const doneCampaignBeforeHand = (id) => {
   return async (dispatch) => {
-    // dispatch(getRequest());
-    console.log(record)
+    dispatch(getRequest());
+    try {
+      const [response] = await Promise.all([
+        Axios({
+          url: `/campaigns/update/active`,
+          method: "PUT",
+          data: {
+            campaignId: id,
+          },
+          withCredentials: true,
+        }),
+      ]);
+
+      dispatch(
+        getSuccess({
+          campaigns: [],
+        })
+      );
+      // return <Redirect to="/discount/campaigns" />;
+    } catch (error) {
+      return dispatch(getFailed());
+    }
+  };
+};
+
+const storeCampaign = (record) => {
+  return async (dispatch) => {
+    console.log(record);
     dispatch(
       storeRecord({
-        record: record
+        record: record,
       })
     );
     return <Redirect to="/discount/orders-in-campaign" />;
   };
 };
 
-const getCampaignById = id => {
-  console.log(id)
+const getCampaignById = (id) => {
   return async (dispatch) => {
     try {
-
-      let [campaign] = await Promise.all([
+      let [campaign, orders, products, campaigns] = await Promise.all([
         Axios({
           url: `/campaigns/` + id,
           method: "GET",
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
+        Axios({
+          url: `/order/supplier/campaign/${id}`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+        Axios({
+          url: `/products/All`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+        Axios({
+          url: `/campaigns/All`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
       ]);
-      console.log(campaign.data.data[0])
+      console.log(campaign.data.data.campaign);
+      //  Get all product with available quantity >= 10
+      let availableProducts = products.data.data.filter((p) => {
+        let max = 0;
+        campaigns.data.data.map((c) => {
+          max += c.productid === p.id ? Number(c.maxquantity) : 0;
+        });
+        return p.quantity - max >= 10;
+      });
       return dispatch(
         storeRecord({
           record: {
-            key: campaign.data.data[0].id,
-            ...campaign.data.data[0],
-          }
+            key: campaign.data.data.campaign.id,
+            productname: campaign.data.data.product.name,
+            productimage: campaign.data.data.product.image,
+            numorder: orders.data?.data.length,
+            product: campaign.data.data.product,
+            ...campaign.data.data.campaign,
+          },
+
+          products: availableProducts.map((p) => {
+            let max = 0;
+            campaigns.data.data.map((c) => {
+              max += c.productid === p.id ? Number(c.maxquantity) : 0;
+            });
+            return {
+              key: p.id,
+              maxquantity: max,
+              ...p,
+            };
+          }),
+
+          isStartAbleMessage: campaign.data.data.reason,
+
+          isStartAble: campaign.data.data.startable,
+
+          orders:
+            orders !== {}
+              ? orders.data?.data.map((item) => {
+                return {
+                  key: item.id,
+                  ...item,
+                };
+              })
+              : {},
         })
-      )
+      );
     } catch (error) {
-      // console.log(error);
       return dispatch(getFailed());
     }
   };
 };
-
 
 const getRequest = () => {
   return {
@@ -321,7 +367,6 @@ const getRequest = () => {
 };
 
 const getSuccess = (data) => {
-  // console.log(data);
   return {
     type: GET_DATA_SUCCESS,
     payload: data,
@@ -336,9 +381,15 @@ const getFailed = (err) => {
 };
 
 const storeRecord = (data) => {
-  // console.log(data);
   return {
     type: STORE_CAMPAIGN,
+    payload: data,
+  };
+};
+
+const creatingErr = (data) => {
+  return {
+    type: STORE_CREATING_ERR,
     payload: data,
   };
 };
@@ -349,9 +400,9 @@ const action = {
   updateCampaign,
   deleteCampaign,
   startCampaignBeforeHand,
+  doneCampaignBeforeHand,
   storeCampaign,
   getCampaignById,
-
 };
 
 export default action;

@@ -18,6 +18,8 @@ import EditModal from "./edit-view";
 import OrdersInCampaign from "./orders-in-campaign-view";
 import NumberFormat from "react-number-format";
 import { Link, Redirect, Route } from "react-router-dom";
+import { PlayCircleOutlined, SearchOutlined } from "@ant-design/icons";
+import { OpenInNew, PlayCircleFilledOutlined } from "@material-ui/icons";
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -63,10 +65,6 @@ class CampaignUI extends Component {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;
 
-    // let recordToEdit = data.filter((item) => {
-    //   return selectedRowKeys.includes(item.id);
-    // })[0];
-
     switch (openModal) {
       case "openCreateModal":
         this.setState({ loadingActionButton: true, openCreateModal: true });
@@ -81,7 +79,6 @@ class CampaignUI extends Component {
         this.setState({
           loadingActionButton: true,
           openEditModal: true,
-          // record: recordToEdit,
         });
 
         break;
@@ -96,7 +93,7 @@ class CampaignUI extends Component {
 
         this.setState({
           openDrawer: true,
-          // record: recordToEdit,
+
           orderListInSelectedCampaign: orderListInSelectedCampaignInCampaign,
         });
 
@@ -112,21 +109,20 @@ class CampaignUI extends Component {
       openCreateModal: false,
       openDeleteModal: false,
       openEditModal: false,
-      // record: {},
     });
   };
 
   columns = [
-    {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      width: 100,
-      fixed: "left",
-    },
+    // {
+    //   title: "No.",
+    //   dataIndex: "No.",
+    //   key: "No.",
+    //   render: (text, object, index) => {
+    //     return index + 1;
+    //   },
+    //   width: 100,
+    //   fixed: "left",
+    // },
     {
       title: "Product Name",
       dataIndex: "productname",
@@ -142,27 +138,12 @@ class CampaignUI extends Component {
       sorter: (a, b) => a.quantity - b.quantity,
       width: 120,
       fix: "left",
-      // title: "Quantity",
-      // render: (object) => {
-      //   // let disabled = object.status === "created" ? "false" : "true";
-      //   // console.log(object);
-      //   return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
-
-
-      //   // if (object.status === "processing") {
-      //   //   return (
-      //   //     <Button onClick={() => this.openUploadModal(object)} type="primary">
-      //   //       Deliver Order
-      //   //     </Button>
-      //   //   );
-      //   // }
-      // },
-      // key: "quantity",
     },
     {
       title: "Max Quantity",
       dataIndex: "maxquantity",
       key: "maxquantity",
+      width: 120,
     },
 
     {
@@ -183,24 +164,65 @@ class CampaignUI extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return <Tag color={data === "ready" ? "blue" : data === "active" ? "red" : data === "done" ? "green" : "grey"}>{data.toUpperCase() === "DEACTIVATED" ? "STOP" : data.toUpperCase()}</Tag>;
+        return (
+          <Tag
+            color={
+              data === "ready"
+                ? "blue"
+                : data === "active"
+                  ? "red"
+                  : data === "done"
+                    ? "green"
+                    : "grey"
+            }
+          >
+            {data.toUpperCase() === "DEACTIVATED" ? "STOP" : data.toUpperCase()}
+          </Tag>
+        );
       },
       width: 100,
       fix: "right",
     },
     {
-      title: "Action",
-      key: "action",
+      title: "",
+      key: "",
       render: (object) => {
         if (object.status === "ready") {
-          return (
-            <Button
+          return (<>
+
+            <Link to={`/discount/campaign/${object.id}`}>
+              <Button icon={<OpenInNew />}
+                type="default"
+                shape="circle"
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  background: "none",
+                }} />
+            </Link>
+            {/* <Button
+              icon={<PlayCircleOutlined />}
               onClick={() => this.startCampaignBeforeHand(object)}
-              type="primary"
-            >
-              Start Campaign
-            </Button>
+              type=""
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }} /> */}
+          </>
           );
+        } else {
+          return <Link to={`/discount/campaign/${object.id}`}>
+            <Button icon={<OpenInNew />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }} />
+          </Link>
         }
       },
       fixed: "right",
@@ -252,7 +274,7 @@ class CampaignUI extends Component {
 
   onSelectChange = (record) => {
     if (this.state.selectedRowKeys[0] !== record.key) {
-      console.log("1")
+      console.log("1");
       this.props.getCampaignById(record.id);
       this.setState({
         selectedRowKeys: [record.key],
@@ -263,7 +285,7 @@ class CampaignUI extends Component {
         orderInCampaignButton: true,
       });
     } else {
-      console.log("2")
+      console.log("2");
       this.setState({
         selectedRowKeys: [],
         record: {},
@@ -308,7 +330,7 @@ class CampaignUI extends Component {
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-    console.log(this.state.record)
+    console.log(this.state.record);
     const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
@@ -323,17 +345,22 @@ class CampaignUI extends Component {
               closeModal={this.closeModal}
               createCampaign={createCampaign}
               productList={productList.filter((product) => {
-                const availableQuantity = product.quantity - product.maxquantity;
+                const availableQuantity =
+                  product.quantity - product.maxquantity;
                 return availableQuantity >= 10;
               })}
               campaingList={data}
             />
-            <DeleteModal
+            {/* <DeleteModal
               loading={this.props.loading}
               openModal={openDeleteModal}
               closeModal={this.closeModal}
               deleteCampaign={deleteCampaign}
-              defaultProduct={(productList?.filter(p => p?.id === this.state.record?.productid))[0]}
+              defaultProduct={
+                (productList?.filter(
+                  (p) => p?.id === this.state.record?.productid
+                ))[0]
+              }
               productList={productList}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
@@ -343,12 +370,65 @@ class CampaignUI extends Component {
               openModal={openEditModal}
               closeModal={this.closeModal}
               updateCampaign={updateCampaign}
-              defaultProduct={(productList?.filter(p => p?.id === this.state.record?.productid))[0]}
+              defaultProduct={
+                (productList?.filter(
+                  (p) => p?.id === this.state.record?.productid
+                ))[0]
+              }
               productList={productList}
               record={this.state.record}
               selectedRowKeys={selectedRowKeys[0]}
-            />
-            <div style={{ marginBottom: 16 }}>
+            /> */}
+
+            <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+              <Col span={12}>
+                <Input
+                  prefix={<SearchOutlined />}
+                  ref={this.searchSelf}
+                  onChange={(e) => this.onChangeHandler(e)}
+                  placeholder="Search for campaigns..."
+                />
+              </Col>
+              <Col>
+                <Space size={3}>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openCreateModal")}
+                    disabled={!addNewButton}
+                  >
+                    Add New
+                  </Button>
+                  {/* <Link to={`/product/${selectedRowKeys[0]}`}>
+                    <Button type="primary" disabled={!viewDetailButton}>
+                      View Detail
+                    </Button>
+                  </Link>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openEditModal")}
+                    disabled={!editButton}
+                    style={{ width: 90 }}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    type="danger"
+                    onClick={() => this.start("openDeleteModal")}
+                    disabled={!deleteButton}
+                    style={{ width: 90 }}
+                  >
+                    Delete
+                  </Button>
+                  <span style={{ marginLeft: 8 }}>
+                    {selectedRowKeys.length > 0
+                      ? `Selected ${selectedRowKeys.length} items`
+                      : ""}
+                  </span> */}
+                </Space>
+              </Col>
+            </Row>
+
+            {/* <div style={{ marginBottom: 16 }}>
               <Row>
                 <Col flex="auto">
                   <Space size={4}>
@@ -361,7 +441,10 @@ class CampaignUI extends Component {
                     >
                       <Link
                         className="LinkDecorations"
-                        to={"/discount/orders-in-campaign/" + this.props.record?.id}
+                        to={
+                          "/discount/campaign/" +
+                          this.props.record?.id
+                        }
                       >
                         View Details
                       </Link>
@@ -405,7 +488,7 @@ class CampaignUI extends Component {
                   />
                 </Col>
               </Row>
-            </div>
+            </div> */}
             {/* <Drawer
               width={window.innerWidth * 0.7}
               placement="right"
@@ -418,7 +501,7 @@ class CampaignUI extends Component {
             </Drawer> */}
             <Table
               loading={this.props.loading}
-              rowSelection={rowSelection}
+              // rowSelection={rowSelection}
               columns={this.columns}
               dataSource={
                 displayData.length === 0 && searchKey === ""

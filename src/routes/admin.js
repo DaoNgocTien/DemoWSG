@@ -1,30 +1,31 @@
 import Campaign from "../components/Campaign";
 import OrdersInCampaign from "../components/Campaign/views/orders-in-campaign-view";
 
-import CancelledOrder from "../components/CancelledOrder";
 import Category from "../components/Category";
 import DiscountCode from "../components/DiscountCode";
 import HandleReturningOrder from "../components/HandleReturningOrder";
 import LoyalCustomer from "../components/LoyalCustomer";
-// import HandleUI from "../components/ReturningOrder/views/handle-view";
 import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
-import Order from "../components/Orders";
+import Orders from "../components/Orders";
+import OrderDetail from "../components/Orders/views/order-detail";
 import Product from "../components/Product";
+import ProductDetail from "../components/ProductDetail";
 import Profile from "../components/Profile";
 import ReturningOrder from "../components/ReturningOrder";
 import Transaction from "../components/Transaction";
 import SettlePaymentUI from "../components/Transaction/views/settle-payment-view";
 import DashBoard from "../containers/AdminLayout/DashBoard";
-import AuthPage from "../containers/AuthPage";
-import Registration from "../containers/AuthPage/views/registration";
 
+const adminRoutePaths = {
+  dashboard: "/",
+  orders: "/orders"
 
+};
 
-
-const routesAdmin = [
+const adminRoutes = [
   {
     exact: true,
-    path: "/",
+    path: adminRoutePaths.dashboard,
     component: DashBoard,
   },
 
@@ -47,20 +48,19 @@ const routesAdmin = [
 
   {
     exact: true,
-    path: "/orders/all-order",
-    component: Order,
+    path: "/product/:id",
+    component: ProductDetail,
   },
 
   {
     exact: true,
-    path: "/orders/cancelled",
-    component: CancelledOrder,
+    path: adminRoutePaths.orders,
+    component: Orders,
   },
-
   {
     exact: true,
-    path: "/orders/:status",
-    component: Order,
+    path: `${adminRoutePaths.orders}/:orderCode`,
+    component: HandleReturningOrder,
   },
 
   {
@@ -84,7 +84,7 @@ const routesAdmin = [
   
   {
     exact: true,
-    path: "/discount/orders-in-campaign/:recordFromMain",
+    path: "/discount/campaign/:id",
     component: OrdersInCampaign,
   },
   {
@@ -115,18 +115,4 @@ const routesAdmin = [
   },
 ];
 
-const routesAuth = [
-  {
-    exact: false,
-    path: "/login",
-    component: AuthPage,
-  },
-
-  {
-    exact: false,
-    path: "/registration",
-    component: Registration,
-  },
-];
-export { routesAdmin, routesAuth };
-
+export { adminRoutes, adminRoutePaths }

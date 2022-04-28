@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import action from "./modules/action";
-import OrderUI from "./views/main-view";
+import OrderManagement from "./views/order-management";
 
-class Order extends Component {
+class Orders extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -15,7 +15,7 @@ class Order extends Component {
 
   render() {
     return (
-      <OrderUI
+      <OrderManagement
         getOrder={this.props.getOrder}
         data={this.props.data.orders}
         loading={this.props.loading}
@@ -52,4 +52,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Order);
+export default connect(mapStateToProps, mapDispatchToProps)(Orders);

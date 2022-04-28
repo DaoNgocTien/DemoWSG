@@ -18,7 +18,8 @@ const propsDefault = {
   openModal: false,
 };
 
-class EditModal extends Component {
+class OrderDetail extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -249,4 +250,4 @@ const arePropsEqual = (prevProps, nextProps) => {
 };
 
 // Wrap component using `React.memo()` and pass `arePropsEqual`
-export default memo(EditModal, arePropsEqual);
+export default memo(OrderDetail, arePropsEqual);

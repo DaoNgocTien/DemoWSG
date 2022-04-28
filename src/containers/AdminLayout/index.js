@@ -33,6 +33,7 @@ import Notification from "../../components/Notification";
 
 import { ref, onValue, set, remove } from "firebase/database";
 import { realtime } from "../../services/firebase";
+import { adminRoutePaths } from "../../routes/admin";
 
 const { SubMenu } = Menu;
 const { Header, Sider, Content } = Layout;
@@ -63,11 +64,11 @@ class AdminRender extends Component {
     } else {
       const user = JSON.parse(localStorage.getItem("user"));
       this.setState({
-        from: JSON.parse(localStorage.getItem("user")).id,
+        from: JSON.parse(localStorage.getItem("user")).accountid,
       });
-      onValue(ref(realtime, `message/${user.id}`), (snapshot) => {
+      onValue(ref(realtime, `message/${user.accountid}`), (snapshot) => {
         if (snapshot.val()) {
-          //  console.log(snapshot.val());
+          console.log(snapshot.val());
           this.setState({
             userMessages: Object.keys(snapshot.val()),
             messages: snapshot.val(),
@@ -139,7 +140,7 @@ class AdminRender extends Component {
 
   setMessagesDetail = (data) => {
     this.setState({
-      from: JSON.parse(localStorage.getItem("user")).id,
+      from: JSON.parse(localStorage.getItem("user")).accountid,
       to: data.userinfo.id,
       messageDetails: data,
     });
@@ -205,9 +206,16 @@ class AdminRender extends Component {
             breakpoint="md"
             collapsed={collapsed}
           >
-            <Menu mode="inline" style={{ height: "100%", borderRight: 0 }}>
+            <Menu
+              mode="inline"
+              style={{ height: "100%", borderRight: 0 }}
+              defaultSelectedKeys={["Dashboard"]}
+            >
               <Menu.Item key="Dashboard" icon={<HomeTwoTone />}>
-                <Link className="LinkDecorations" to="/">
+                <Link
+                  className="LinkDecorations"
+                  to={adminRoutePaths.dashboard}
+                >
                   Dashboard
                 </Link>
               </Menu.Item>
@@ -225,28 +233,12 @@ class AdminRender extends Component {
                 </Menu.Item>
               </SubMenu>
 
-              <SubMenu
-                key="orders"
-                title="Orders"
-                icon={<ReconciliationTwoTone />}
-              >
-                <Menu.Item key="all-order">
-                  <Link className="LinkDecorations" to="/orders/all-order">
-                    All orders
-                  </Link>
-                </Menu.Item>
-                {/* <Menu.Item key="returned">
-                  <Link className="LinkDecorations" to="/orders/returned">
-                    Returned
-                  </Link>
-                </Menu.Item> */}
-                <Menu.Item key="cancelled">
-                  <Link className="LinkDecorations" to="/orders/cancelled">
-                    Cancelled
-                  </Link>
-                </Menu.Item>
-              </SubMenu>
-
+              <Menu.Item key="Orders" icon={<ReconciliationTwoTone />}>
+                <Link className="LinkDecorations" to={adminRoutePaths.orders}>
+                  Orders
+                </Link>
+              </Menu.Item>
+              
               <SubMenu
                 key="Discount"
                 title="Discounts"
@@ -398,7 +390,7 @@ class AdminRender extends Component {
                       {this.state.messageDetails.data?.map((message) => {
                         if (
                           message.from ===
-                          JSON.parse(localStorage.getItem("user")).id
+                          JSON.parse(localStorage.getItem("user")).accountid
                         ) {
                           if (message.message) {
                             return (
@@ -415,7 +407,7 @@ class AdminRender extends Component {
                             return (
                               <Message
                                 type="custom"
-                                Model={{
+                                model={{
                                   direction: "outgoing",
                                 }}
                               >
@@ -432,37 +424,38 @@ class AdminRender extends Component {
                               </Message>
                             );
                           }
-                        }
-                        if (message.message) {
-                          return (
-                            <Message
-                              model={{
-                                message: `${message.message}`,
-                                direction: "incoming",
-                                position: "normal",
-                              }}
-                            />
-                          );
                         } else {
-                          return (
-                            <Message
-                              type="custom"
-                              Model={{
-                                direction: "outgoing",
-                              }}
-                            >
-                              <Message.CustomContent>
-                                <Image
-                                  width={150}
-                                  height={150}
-                                  src={message.file}
-                                  preview={{
-                                    src: message.file,
-                                  }}
-                                />
-                              </Message.CustomContent>
-                            </Message>
-                          );
+                          if (message.message) {
+                            return (
+                              <Message
+                                model={{
+                                  message: `${message.message}`,
+                                  direction: "incoming",
+                                  position: "normal",
+                                }}
+                              />
+                            );
+                          } else {
+                            return (
+                              <Message
+                                model={{
+                                  direction: "incoming",
+                                  type: "custom",
+                                }}
+                              >
+                                <Message.CustomContent>
+                                  <Image
+                                    width={150}
+                                    height={150}
+                                    src={message.file}
+                                    preview={{
+                                      src: message.file,
+                                    }}
+                                  />
+                                </Message.CustomContent>
+                              </Message>
+                            );
+                          }
                         }
                       })}
                     </MessageList>

@@ -11,7 +11,7 @@ class HandleReturningOrder extends Component {
 
   componentDidMount() {
     const orderCode = this.props.match.params.orderCode;
-  //  console.log(this.props);
+
     this.props.getReturningOrder(orderCode);
   }
 
@@ -23,6 +23,7 @@ class HandleReturningOrder extends Component {
         getReturningOrder={this.props.getReturningOrder}
         acceptRequest={this.props.acceptRequest}
         rejectRequest={this.props.rejectRequest}
+        rejectOrder={this.props.rejectOrder}
         record={this.props.record}
       />
     );
@@ -52,6 +53,27 @@ const mapDispatchToProps = (dispatch) => {
     rejectRequest: async (data) => {
       await dispatch(action.rejectRequest(data));
       return window.location.reload();
+    },
+
+    rejectOrder: async (
+      orderCode,
+      type,
+      description,
+      image,
+      orderId,
+      requester
+    ) => {
+      await dispatch(
+        action.rejectOrder(
+          orderCode,
+          type,
+          description,
+          image,
+          orderId,
+          requester
+        )
+      );
+      // await dispatch(action.getOrder());
     },
   };
 };

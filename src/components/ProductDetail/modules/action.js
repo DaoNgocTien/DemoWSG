@@ -2,25 +2,18 @@ import Axios from "axios";
 import { default as categoryAction } from "../../Category/modules/action";
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 
-const getAllProduct = (category) => {
+const getOneProduct = (id) => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/products/All?${category ? "categoryId=" + category : ""}`,
+      url: `/products/${id}`,
       method: "GET",
       withCredentials: true,
       exposedHeaders: ["set-cookie"],
     })
       .then((result) => {
         if (result.status === 200) {
-          // console.log("getAllProduct: ");
-          // console.log(result.data.data);
-          const data = (result.data.data).map(product => {
-            return {
-              key: product.id,
-              ...product
-            }
-          });
+          const data = result.data.data;
           dispatch(categoryAction.getAllCategory());
           return dispatch(getSuccess(data));
         }
@@ -31,7 +24,7 @@ const getAllProduct = (category) => {
   };
 };
 
-const createProduct = record => {
+const createProduct = (record) => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -39,23 +32,20 @@ const createProduct = record => {
       method: "POST",
       data: record,
       withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        // console.log(response.data.data);
-      }
     })
+      .then((response) => {
+        if (response.status === 200) {
+          //
+        }
+      })
       .catch(() => {
-        // // console.log(err);
-        // // console.log(typeof (err));
         return dispatch(getFailed());
       })
-      .finally(() => {
-      });
+      .finally(() => {});
   };
-}
+};
 
 const updateProduct = (record) => {
-  // console.log(record);
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -70,41 +60,36 @@ const updateProduct = (record) => {
         image: record?.image,
       },
       withCredentials: true,
-    }).then((response) => {
-      // console.log(response);
-      if (response.status === 200) {
-        // // console.log(response);
-        // return window.location.reload();
-        // console.log(response.data.data);
-      }
-    }).catch(() => {
-      // console.log(err);
-      // console.log(typeof (err));
-      return dispatch(getFailed());
-    });
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return window.location.reload();
+        }
+      })
+      .catch(() => {
+        return dispatch(getFailed());
+      });
   };
-}
+};
 
-const deleteProduct = id => {
+const deleteProduct = (id) => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
       url: `/products/${id}`,
       method: "DELETE",
       withCredentials: true,
-    }).then((response) => {
-      // console.log(response);
-      if (response.status === 200) {
-        // console.log(response);
-        // return window.location.reload();
-      }
-    }).catch(() => {
-      // console.log(err);
-      // console.log(typeof (err));
-      return dispatch(getFailed());
-    });
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return window.location.reload();
+        }
+      })
+      .catch(() => {
+        return dispatch(getFailed());
+      });
   };
-}
+};
 
 const getRequest = () => {
   return {
@@ -127,10 +112,10 @@ const getFailed = (err) => {
 };
 
 const action = {
-  getAllProduct: getAllProduct,
+  getOneProduct: getOneProduct,
   createProduct: createProduct,
   updateProduct: updateProduct,
-  deleteProduct: deleteProduct
-}
+  deleteProduct: deleteProduct,
+};
 
 export default action;

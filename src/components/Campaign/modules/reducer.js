@@ -4,7 +4,11 @@ let initialState = {
   loading: true,
   data: [],
   err: null,
-  record: {}
+  record: {},
+  orders: [],
+  isStartAbleMessage: "",
+  isStartAble: false,
+  availableProducts: [],
 };
 
 const campaignReducer = (state = initialState, action) => {
@@ -16,11 +20,13 @@ const campaignReducer = (state = initialState, action) => {
       return { ...state };
 
     case STORE_CAMPAIGN:
-      console.log(action);
       state.loading = false;
       state.record = action.payload.record;
+      state.orders = action.payload.orders;
+      state.isStartAbleMessage = action.payload.isStartAbleMessage;
+      state.isStartAble = action.payload.isStartAble;
+      state.availableProducts = action.payload.products;
       state.err = null;
-      console.log(state);
       return { ...state };
 
     case GET_DATA_SUCCESS:

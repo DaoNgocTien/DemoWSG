@@ -103,6 +103,9 @@ class CreatModal extends Component {
       // );
 
       const datas = this.uniqByKeepFirst(data.quantities, it => it.quantity);
+      data.quantities.sort(function (a, b) {
+        return a.quantity - b.quantity;
+      });
       console.log(datas);
       console.log(data.quantities);
       // let errArr = [];
@@ -335,6 +338,7 @@ class CreatModal extends Component {
                   },
                   () => ({
                     validator(_, value) {
+                      console.log(value)
                       if (value.length > 0 && value.length <= 50) {
                         return Promise.resolve();
                       }
@@ -354,7 +358,7 @@ class CreatModal extends Component {
                 />
               </Form.Item>
               <Form.Item
-                label="Campaign duration"
+                label="Campaign Duration"
                 name="date"
                 initialValue={[moment(), moment().add(1, "days")]}
                 rules={[

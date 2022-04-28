@@ -1,9 +1,19 @@
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import {
+  OpenInNew,
+  PlayCircleOutline,
+  LocalShipping,
+} from "@material-ui/icons";
 import {
   Button,
   Col,
   Form,
   Input,
+  Menu,
   Modal,
   PageHeader,
   Radio,
@@ -16,9 +26,8 @@ import {
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-import EditModal from "./edit-view";
-import RejectModal from "./reject-view";
 import NumberFormat from "react-number-format";
+import { Link } from "react-router-dom";
 
 const propsProTypes = {
   index: PropTypes.number,
@@ -34,12 +43,12 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => { },
-  updateStatusOrder: () => { },
-  getOrder: (status) => { },
+  rejectOrder: () => {},
+  updateStatusOrder: () => {},
+  getOrder: (status) => {},
 };
 
-class OrderUI extends Component {
+class OrderManagement extends Component {
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
   state = {
@@ -64,11 +73,7 @@ class OrderUI extends Component {
   searchSelf = React.createRef();
   selectSelf = React.createRef();
 
-  componentDidMount() {
-    // console.log(this.radioSelf.current.defaultValue);
-    // console.log(this.searchSelf.current.defaultValue);
-    // console.log(this.selectSelf.current.defaultValue);
-  }
+  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -116,12 +121,7 @@ class OrderUI extends Component {
         record: record,
         editButton: true,
         rejectButton: record?.status === "created",
-        // true &&
-        // record?.status != "delivering" &&
-        // record?.status != "delivered" &&
-        // record?.status != "completed" &&
-        // record?.status != "returned" &&
-        // record?.status != "cancelled",
+
         addNewButton: false,
       });
     } else {
@@ -141,135 +141,106 @@ class OrderUI extends Component {
 
   columns = [
     {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
-      },
-      fixed: "left",
-      width: 80,
+      title: "Order Code",
+      dataIndex: "ordercode",
+      key: "ordercode",
     },
     {
-      title: "Customer Name",
-      width: 150,
+      title: "Customer",
       render: (_text, object, _index) => {
-        // console.log(object);
         return object.customerfirstname + " " + object.customerlastname;
       },
     },
 
     {
-      title: "Total Price",
-      dataIndex: "totalprice",
-      key: "totalprice",
-      width: 130,
-      render: (data) => {
-        return data ? (
-          <NumberFormat
-            value={data}
-            thousandSeparator={true}
-            suffix={" VND"}
-            decimalScale={0}
-            displayType="text"
-          />
-        ) : (
-          <NumberFormat
-            value={"0"}
-            thousandSeparator={true}
-            suffix={" VND"}
-            decimalScale={0}
-            displayType="text"
-          />
-        );
-      },
-    },
-    {
-      title: "Discount Price",
-      dataIndex: "discountprice",
-      key: "discountprice",
-      width: 130,
-      render: (data) => {
-        return data ? (
-          <NumberFormat
-            value={data}
-            thousandSeparator={true}
-            suffix={" VND"}
-            decimalScale={0}
-            displayType="text"
-          />
-        ) : (
-          <NumberFormat
-            value={"0"}
-            thousandSeparator={true}
-            suffix={" VND"}
-            decimalScale={0}
-            displayType="text"
-          />
-        );
-      },
-    },
-    {
-      title: "Final Price",
-      dataIndex: "finalprice",
-      key: "finalprice",
-      render: (text, object) => {
-        return (
-          <NumberFormat
-            value={object.totalprice - object.discountprice}
-            thousandSeparator={true}
-            suffix={" VND"}
-            decimalScale={0}
-            displayType="text"
-          />
-        );
-      },
-      width: 130,
-    },
-    {
-      title: "Created At",
+      title: "Order date",
       dataIndex: "createdat",
       key: "createdat",
       render: (data) => {
         return moment(data).format("MM/DD/YYYY");
       },
-      width: 130,
+    },
+    {
+      title: "Total amount",
+      dataIndex: "totalprice",
+      key: "totalprice",
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
       render: (data) => {
+        const status = data.status;
         return <Tag>{data.toUpperCase()}</Tag>;
       },
-      width: 130,
+      width: 100,
     },
     {
-      title: "Action",
+      title: "",
+      width: 130,
       render: (object) => {
-        // let disabled = object.status === "created" ? "false" : "true";
-        // console.log(disabled);
-        if (object.status === "created") {
-          return (
+        return (
+          <>
+            <Link to={`/orders/${object.ordercode}`}>
+              <Button
+                icon={<OpenInNew />}
+                type="default"
+                shape="circle"
+                onClick={() => console.log("123")}
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  background: "none",
+                }}
+              />
+            </Link>
             <Button
               onClick={() => this.changeStatus(object, [])}
-              type="primary"
-            >
-              Processing Order
-            </Button>
-          );
-        }
-
-        if (object.status === "processing") {
-          return (
-            <Button onClick={() => this.openUploadModal(object)} type="primary">
-              Deliver Order
-            </Button>
-          );
-        }
+              icon={<PlayCircleOutline />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+              hidden={object.status !== "created"}
+            />
+            <Button
+              onClick={() => this.openUploadModal(object)}
+              icon={<LocalShipping />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+              hidden={object.status !== "processing"}
+            />
+          </>
+        );
       },
       fixed: "right",
-      width: 150,
     },
   ];
 
@@ -283,10 +254,8 @@ class OrderUI extends Component {
         item.customerlastname
           .toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
-        item.totalprice.includes(e.target.value) ||
-        item.discountprice.includes(e.target.value) ||
-        item.createdat.includes(e.target.value) ||
-        item.status.includes(e.target.value)
+        item.ordercode.includes(e.target.value) ||
+        item.createdat.includes(e.target.value)
       );
     });
     this.setState({
@@ -296,10 +265,38 @@ class OrderUI extends Component {
   };
 
   onRadioChange = (e) => {
-    //  console.log(e);
     let { data } = this.props;
     let searchValue = e.target.value || e;
     let searchData = [];
+    switch (searchValue) {
+      case "retail":
+        searchData = data.filter((item) => {
+          return item.campaign.length === 0;
+        });
+        break;
+
+      case "wholesale":
+        searchData = data.filter((item) => {
+          return item.campaign.length > 0;
+        });
+        break;
+
+      default:
+        searchValue = "";
+        break;
+    }
+
+    this.setState({
+      displayData: searchData,
+      searchKey: searchValue,
+    });
+  };
+
+  onClickOrderTab = (searchValue) => {
+    let { data } = this.props;
+
+    let searchData = [];
+
     switch (searchValue) {
       case "retail":
         searchData = data.filter((item) => {
@@ -362,12 +359,8 @@ class OrderUI extends Component {
   };
 
   handleChange = ({ fileList, file, event }) => {
-    // fileList = fileList.slice(-2);
-    // console.log(fileList);
-    // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
-        // Component will show file.url as link
         file.url = file.response[0].url;
         file.name = file.response[0].name;
         file.thumbUrl = null;
@@ -386,71 +379,30 @@ class OrderUI extends Component {
   };
 
   render() {
-    const { rejectOrder, updateStatusOrder, data } = this.props;
-
     const {
       selectedRowKeys,
       displayData,
       searchKey,
-      openEditModal,
-      editButton,
-      openRejectModal,
-      rejectButton,
-      openUploadModal,
-      closeUploadModal,
-    } = this.state;
 
-    const rowSelection = {
-      selectedRowKeys,
-      onSelect: this.onSelectChange,
-      hideSelectAll: true,
-    };
+      openUploadModal,
+    } = this.state;
 
     const arrayLocation = window.location.pathname.split("/");
     const { load, fileList } = this.state;
-    // this.state.fileList =
-    //   this.props.record && this.state.fileList !== 0
-    //     ? JSON.parse(this.props.record?.image)
-    //     : [];
+
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    // console.log(data);
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
         title={arrayLocation[1].toUpperCase()}
-        subTitle={`This is a ${arrayLocation[1]} page`}
         footer={
           <div>
-            <EditModal
-              openModal={openEditModal}
-              closeModal={this.closeModal}
-              updateStatusOrder={updateStatusOrder}
-              record={
-                this.props.data.filter((item) => {
-                  return selectedRowKeys.includes(item.id);
-                })[0]
-              }
-              selectedRowKeys={selectedRowKeys[0]}
-            />
-
-            <RejectModal
-              openModal={openRejectModal}
-              closeModal={this.closeModal}
-              rejectOrder={rejectOrder}
-              record={
-                this.props.data.filter((item) => {
-                  return selectedRowKeys.includes(item.id);
-                })[0]
-              }
-              selectedRowKeys={selectedRowKeys[0]}
-            />
-
             <Form
               id="uploadImageForDeliveringForm"
               onFinish={this.uploadImageForDelivering}
@@ -476,10 +428,6 @@ class OrderUI extends Component {
                 <Form.Item
                   name="image"
                   rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Please confirm your password!',
-                    // },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (fileList.length >= 1) {
@@ -517,79 +465,42 @@ class OrderUI extends Component {
                     </Modal>
                   </>
                 </Form.Item>
-                {/* <Form.Item>
-                  <Button onClick={this.handleCancel}>Cancel</Button>
-                </Form.Item>
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    form="uploadImageForDeliveringForm"
-                    key="submit"
-                    htmlType="submit"
-                  >
-                    Submit
-                  </Button>
-                </Form.Item> */}
               </Modal>
             </Form>
-            <div style={{ marginBottom: 16 }}>
-              <Row>
-                <Col flex={3}>
-                  <Button
-                    type="primary"
-                    onClick={() => this.start("openEditModal")}
-                    disabled={
-                      !editButton || this.state.selectedRowKeys.length === 0
-                        ? true
-                        : false
-                    }
-                    style={{ marginLeft: 3 }}
-                  >
-                    View Details
-                  </Button>
+            <div>
+              <Menu mode="horizontal" defaultSelectedKeys={["allOrders"]}>
+                <Menu.Item
+                  key="allOrders"
+                  onClick={() => this.onClickOrderTab("all")}
+                >
+                  All orders
+                </Menu.Item>
 
-                  <Button
-                    type="danger"
-                    onClick={() => this.start("openRejectModal")}
-                    disabled={
-                      !rejectButton || this.state.selectedRowKeys.length === 0
-                        ? true
-                        : false
-                    }
-                    style={{ marginLeft: 3 }}
-                  >
-                    Reject Order
-                  </Button>
-                </Col>
-                <Col flex={3}>
-                  <span style={{ marginLeft: 8 }}>
-                    {selectedRowKeys.length > 0
-                      ? `Selected ${selectedRowKeys.length} items`
-                      : ""}
-                  </span>
-                </Col>
+                <Menu.Item
+                  key="retailOrders"
+                  onClick={() => this.onClickOrderTab("retail")}
+                >
+                  Retail orders
+                </Menu.Item>
 
-                <Col flex={4}>
+                <Menu.Item
+                  key="wholesaleOrders"
+                  onClick={() => this.onClickOrderTab("wholesale")}
+                >
+                  Wholesale orders
+                </Menu.Item>
+              </Menu>
+
+              <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+                <Col span={12}>
                   <Input
+                    prefix={<SearchOutlined />}
                     ref={this.searchSelf}
                     onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search data"
+                    placeholder="Search for orders..."
                   />
                 </Col>
-              </Row>
-              <Row style={{ marginTop: "10px" }}>
-                <Col flex={6}>
-                  <Radio.Group
-                    onChange={(e) => this.onRadioChange(e)}
-                    onFocus={(e) => this.onRadioChange(e)}
-                    defaultValue="all"
-                    ref={this.radioSelf}
-                  >
-                    <Radio value="all">All Orders</Radio>
-                    <Radio value="retail">Retail Orders</Radio>
-                    <Radio value="wholesale">Wholesale Orders</Radio>
-                  </Radio.Group>
-                  Status:
+                <Col>
                   <Select
                     ref={this.selectSelf}
                     title="Status"
@@ -609,19 +520,16 @@ class OrderUI extends Component {
                     <Select.Option value="returned">returned</Select.Option>
                   </Select>
                 </Col>
-                <Col flex={4}></Col>
               </Row>
             </div>
             <Table
               loading={this.props.loading}
-              rowSelection={rowSelection}
               columns={this.columns}
               dataSource={
                 displayData.length === 0 && searchKey === ""
                   ? this.props.data
                   : displayData
               }
-              scroll={{ y: 350, x: 1000 }}
             />
           </div>
         }
@@ -634,4 +542,4 @@ const arePropsEqual = (prevProps, nextProps) => {
   return prevProps === nextProps;
 };
 
-export default memo(OrderUI, arePropsEqual);
+export default memo(OrderManagement, arePropsEqual);

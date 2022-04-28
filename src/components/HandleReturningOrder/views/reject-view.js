@@ -41,13 +41,10 @@ class RejectModal extends Component {
   }
   static propTypes = propsProTypes;
   static defaultProps = propsDefault;
-  formRef = React.createRef();
 
   componentDidMount() {}
 
-  handleRejectAndClose = (data) => {
-    console.log(this.state.requester);
-    console.log(this.props.record);
+  handleRejectOrderAndClose = (data) => {
     this.props.record.campaignid != null
       ? this.props.rejectOrder(
           this.props.record.ordercode,
@@ -71,7 +68,6 @@ class RejectModal extends Component {
   };
 
   handleCancel = () => {
-    this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -202,18 +198,12 @@ class RejectModal extends Component {
       <>
         <Form
           id="rejectOrderForm"
-          key={this.state.record?.key}
-          ref={this.formRef}
-          onFinish={this.handleRejectAndClose}
+          onFinish={this.handleRejectOrderAndClose}
           layout="vertical"
         >
           <Modal
             width={window.innerWidth * 0.7}
-            title={`Order of ${
-              this.state.record.customerfirstname +
-              " " +
-              this.state.record.customerlastname
-            }`}
+            title={"Reject Order"}
             visible={openModal}
             onCancel={this.handleCancel}
             footer={[
@@ -245,7 +235,6 @@ class RejectModal extends Component {
                 {this.state.record?.discountprice}VND
               </Descriptions.Item>
               <Descriptions.Item label="Final Price">
-                {" "}
                 {this.state.record?.totalprice -
                   this.state.record?.discountprice}
                 VND
