@@ -79,8 +79,8 @@ class EdilModal extends Component {
     });
   }
 
-  handleCreateAndClose = (data) => {
-    // console.log(data);
+  handleEditAndClose = (data) => {
+    console.log(data);
 
     const productSelected =
       this.state.productSelected === {} || !this.state.productSelected
@@ -200,6 +200,7 @@ class EdilModal extends Component {
       (element) => element.id === value
     );
 
+    console.log(productSelected)
     // let campaignListOfSelectedProduct = [];
     // let campaignList = this.props.campaingList ? this.props.campaingList : [];
     // campaignListOfSelectedProduct = campaignList.filter((camp) => {
@@ -294,8 +295,8 @@ class EdilModal extends Component {
       formListErrMessage,
       errStepArr,
     } = this.state;
-    console.log(typeof(record?.range)) ;
-    console.log(record?.range) ;
+    console.log(typeof (record?.range));
+    console.log(record?.range);
 
     // const defaultRange = [];
     // record?.range?.map(r => {
@@ -334,7 +335,7 @@ class EdilModal extends Component {
             name="formS"
             id="updateCampaignForm"
             ref={this.formRef}
-            onFinish={this.handleCreateAndClose}
+            onFinish={this.handleEditAndClose}
             layout="vertical"
           >
             <Space size={30}>
@@ -683,7 +684,7 @@ class EdilModal extends Component {
                   onChange={(record) => {
                     // console.log(record);
                   }}
-                  initialValue={record?.range ?? []}
+                  initialValue={record?.range ? JSON.parse(record?.range) : []}
                 >
                   {(fields, { add, remove }) => {
                     const reset = () => {

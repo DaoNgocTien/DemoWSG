@@ -3,6 +3,7 @@ import {
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
   STORE_CAMPAIGN,
+  STORE_CREATING_ERR,
 } from "./constant";
 import Axios from "axios";
 import { Link, Redirect, Route } from "react-router-dom";
@@ -86,11 +87,11 @@ const getCampaign = (campaignId) => {
           order:
             order !== {}
               ? order.data?.data.map((item) => {
-                  return {
-                    key: item.id,
-                    ...item,
-                  };
-                })
+                return {
+                  key: item.id,
+                  ...item,
+                };
+              })
               : {},
         })
       );
@@ -124,6 +125,9 @@ const createCampaign = (record) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      if (createResponse.data.message) {
+        alert(createResponse.data.message);
+      }
 
       dispatch(
         getSuccess({
@@ -167,6 +171,9 @@ const updateCampaign = (record) => {
     })
       .then((result) => {
         if (result.status === 200) {
+          if (result.data.message) {
+            alert(result.data.message);
+          }
           const data = result.data.data.map((category) => {
             return {
               key: category.id,
@@ -225,7 +232,34 @@ const startCampaignBeforeHand = (id) => {
           campaigns: [],
         })
       );
-      return <Redirect to="/discount/campaigns" />;
+      // return <Redirect to="/discount/campaigns" />;
+    } catch (error) {
+      return dispatch(getFailed());
+    }
+  };
+};
+
+const doneCampaignBeforeHand = (id) => {
+  return async (dispatch) => {
+    dispatch(getRequest());
+    try {
+      const [response] = await Promise.all([
+        Axios({
+          url: `/campaigns/update/active`,
+          method: "PUT",
+          data: {
+            campaignId: id,
+          },
+          withCredentials: true,
+        }),
+      ]);
+
+      dispatch(
+        getSuccess({
+          campaigns: [],
+        })
+      );
+      // return <Redirect to="/discount/campaigns" />;
     } catch (error) {
       return dispatch(getFailed());
     }
@@ -247,7 +281,7 @@ const storeCampaign = (record) => {
 const getCampaignById = (id) => {
   return async (dispatch) => {
     try {
-      let [campaign, orders] = await Promise.all([
+      let [campaign, orders, products, campaigns] = await Promise.all([
         Axios({
           url: `/campaigns/` + id,
           method: "GET",
@@ -260,22 +294,63 @@ const getCampaignById = (id) => {
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
         }),
+        Axios({
+          url: `/products/All`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+        Axios({
+          url: `/campaigns/All`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
       ]);
-      console.log(campaign.data.data[0]);
+      console.log(campaign.data.data.campaign);
+      //  Get all product with available quantity >= 10
+      let availableProducts = products.data.data.filter((p) => {
+        let max = 0;
+        campaigns.data.data.map((c) => {
+          max += c.productid === p.id ? Number(c.maxquantity) : 0;
+        });
+        return p.quantity - max >= 10;
+      });
       return dispatch(
         storeRecord({
           record: {
-            key: campaign.data.data[0].id,
-            ...campaign.data.data[0],
+            key: campaign.data.data.campaign.id,
+            productname: campaign.data.data.product.name,
+            productimage: campaign.data.data.product.image,
+            numorder: orders.data?.data.length,
+            product: campaign.data.data.product,
+            ...campaign.data.data.campaign,
           },
+
+          products: availableProducts.map((p) => {
+            let max = 0;
+            campaigns.data.data.map((c) => {
+              max += c.productid === p.id ? Number(c.maxquantity) : 0;
+            });
+            return {
+              key: p.id,
+              maxquantity: max,
+              ...p,
+            };
+          }),
+
+          isStartAbleMessage: campaign.data.data.reason,
+
+          isStartAble: campaign.data.data.startable,
+
           orders:
             orders !== {}
               ? orders.data?.data.map((item) => {
-                  return {
-                    key: item.id,
-                    ...item,
-                  };
-                })
+                return {
+                  key: item.id,
+                  ...item,
+                };
+              })
               : {},
         })
       );
@@ -312,12 +387,20 @@ const storeRecord = (data) => {
   };
 };
 
+const creatingErr = (data) => {
+  return {
+    type: STORE_CREATING_ERR,
+    payload: data,
+  };
+};
+
 const action = {
   getCampaign,
   createCampaign,
   updateCampaign,
   deleteCampaign,
   startCampaignBeforeHand,
+  doneCampaignBeforeHand,
   storeCampaign,
   getCampaignById,
 };
