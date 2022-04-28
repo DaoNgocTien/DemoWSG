@@ -10,6 +10,7 @@ import {
   Table,
   Tag,
   Popconfirm,
+  Tooltip,
 } from "antd";
 import moment from "moment";
 import action from "../../Orders/modules/action";
@@ -36,14 +37,14 @@ class OrdersInCampaign extends React.Component {
   };
 
   componentDidMount() {
-    console.log(this.props);
-    console.log(this.state);
-    this.props.getOrder(this.props.record.id);
-    this.props.getOrder(this.props.match.params.id);
+    // console.log(this.props);
+    // console.log(this.state);
+    // this.props.getOrder(this.props.record.id);
+    // this.props.getOrder(this.props.match.params.id);
     this.props.getCampaignById(this.props.match.params.id);
-    this.setState({
-      record: this.props.record,
-    });
+    // this.setState({
+    //   record: this.props.record,
+    // });
   }
 
   onSelectChange = (record) => {
@@ -239,6 +240,8 @@ class OrdersInCampaign extends React.Component {
       rejectOrder,
       orderList = [],
       record,
+      isStartAbleMessage,
+      isStartAble
     } = this.props;
 
     const rowSelection = {
@@ -246,7 +249,7 @@ class OrdersInCampaign extends React.Component {
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-    console.log(record);
+    console.log(this.props);
     return (
       <>
         <PageHeader
@@ -255,17 +258,27 @@ class OrdersInCampaign extends React.Component {
           title="CAMPAIGN DETAILS"
           subTitle={`This is a campaign detail page`}
           extra={[
-            <Popconfirm
-              title="Update campaign start day to today and modify exist campaigns: stop ready campaigns, finish active campaigns"
-              visible={this.state.visiblePop}
-              onConfirm={this.handleOk}
-              okButtonProps={{ loading: this.state.confirmLoading }}
-              onCancel={this.handleCancel}
-            >
-              <Button type="primary" onClick={this.showPopconfirm} hidden={record?.status !== "ready"}>
-                Start Campaign
+            // <Popconfirm
+            //   title="Update campaign start day to today and modify exist campaigns: stop ready campaigns, finish active campaigns"
+            //   visible={this.state.visiblePop}
+            //   onConfirm={this.handleOk}
+            //   okButtonProps={{ loading: this.state.confirmLoading }}
+            //   onCancel={this.handleCancel}
+            // >
+              <Button
+                type="primary"
+                onClick={this.showPopconfirm}
+                hidden={record?.status !== "ready"}
+                disabled={isStartAble}
+              >
+                <Tooltip
+                  placement="topLeft"
+                  title={isStartAbleMessage}
+                >
+                  Start Campaign
+                </Tooltip>
               </Button>
-            </Popconfirm>
+            // </Popconfirm> 
             ,
             <Button
               onClick={() => this.props.doneCampaignBeforeHand(record)}
@@ -308,6 +321,7 @@ class OrdersInCampaign extends React.Component {
                         type="danger"
                         onClick={() => this.openModal()}
                         disabled={!rejectButton}
+                        hidden={record?.status !== "active"}
                         style={{ width: 90 }}
                       >
                         Reject
@@ -429,6 +443,8 @@ const mapStateToProps = (state) => {
     orderList: state.campaignReducer.orders,
     error: state.orderReducer.err,
     record: state.campaignReducer.record,
+    isStartAbleMessage: state.campaignReducer.isStartAbleMessage,
+    isStartAble: state.campaignReducer.isStartAble
   };
 };
 

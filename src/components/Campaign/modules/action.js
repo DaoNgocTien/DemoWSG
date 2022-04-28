@@ -3,6 +3,7 @@ import {
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
   STORE_CAMPAIGN,
+  STORE_CREATING_ERR,
 } from "./constant";
 import Axios from "axios";
 import { Link, Redirect, Route } from "react-router-dom";
@@ -86,11 +87,11 @@ const getCampaign = (campaignId) => {
           order:
             order !== {}
               ? order.data?.data.map((item) => {
-                  return {
-                    key: item.id,
-                    ...item,
-                  };
-                })
+                return {
+                  key: item.id,
+                  ...item,
+                };
+              })
               : {},
         })
       );
@@ -124,7 +125,15 @@ const createCampaign = (record) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-
+      // if (createResponse.data.message) {
+      //   dispatch(
+      //     creatingErr({
+      //       creatingMessage: createResponse.data.message,
+      //       creatingErr: true
+      //     })
+      //   )
+      // }
+      alert(createResponse.data.message);
       dispatch(
         getSuccess({
           campaigns: campaigns.data.data.map((campaign) => {
@@ -261,21 +270,23 @@ const getCampaignById = (id) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      console.log(campaign.data.data[0]);
+      console.log(campaign.data.data.campaign);
       return dispatch(
         storeRecord({
           record: {
-            key: campaign.data.data[0].id,
-            ...campaign.data.data[0],
+            key: campaign.data.data.campaign.id,
+            ...campaign.data.data.campaign,
           },
+          isStartAbleMessage: campaign.data.data.reason,
+          isStartAble: campaign.data.data.startable,
           orders:
             orders !== {}
               ? orders.data?.data.map((item) => {
-                  return {
-                    key: item.id,
-                    ...item,
-                  };
-                })
+                return {
+                  key: item.id,
+                  ...item,
+                };
+              })
               : {},
         })
       );
@@ -308,6 +319,13 @@ const getFailed = (err) => {
 const storeRecord = (data) => {
   return {
     type: STORE_CAMPAIGN,
+    payload: data,
+  };
+};
+
+const creatingErr = (data) => {
+  return {
+    type: STORE_CREATING_ERR,
     payload: data,
   };
 };
