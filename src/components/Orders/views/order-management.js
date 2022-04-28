@@ -1,10 +1,13 @@
 import {
-  EditFilled,
   LoadingOutlined,
   PlusOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { OpenInNew, deliv} from "@material-ui/icons";
+import {
+  OpenInNew,
+  PlayCircleOutline,
+  LocalShipping,
+} from "@material-ui/icons";
 import {
   Button,
   Col,
@@ -40,9 +43,9 @@ const propsDefault = {
   data: [],
   products: [],
   defaultCampaign: {},
-  rejectOrder: () => { },
-  updateStatusOrder: () => { },
-  getOrder: (status) => { },
+  rejectOrder: () => {},
+  updateStatusOrder: () => {},
+  getOrder: (status) => {},
 };
 
 class OrderManagement extends Component {
@@ -70,7 +73,7 @@ class OrderManagement extends Component {
   searchSelf = React.createRef();
   selectSelf = React.createRef();
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -138,6 +141,11 @@ class OrderManagement extends Component {
 
   columns = [
     {
+      title: "Order Code",
+      dataIndex: "ordercode",
+      key: "ordercode",
+    },
+    {
       title: "Customer",
       render: (_text, object, _index) => {
         return object.customerfirstname + " " + object.customerlastname;
@@ -182,13 +190,13 @@ class OrderManagement extends Component {
       key: "status",
       render: (data) => {
         const status = data.status;
-
         return <Tag>{data.toUpperCase()}</Tag>;
       },
+      width: 100,
     },
     {
       title: "",
-      width: 64,
+      width: 130,
       render: (object) => {
         return (
           <>
@@ -207,8 +215,8 @@ class OrderManagement extends Component {
             </Link>
             <Button
               onClick={() => this.changeStatus(object, [])}
-              icon={<mdiPlayCircle />}
-              // type="default"
+              icon={<PlayCircleOutline />}
+              type="default"
               shape="circle"
               style={{
                 border: "none",
@@ -219,8 +227,8 @@ class OrderManagement extends Component {
             />
             <Button
               onClick={() => this.openUploadModal(object)}
-              icon={<mdiTruckDelivery />}
-              // type="default"
+              icon={<LocalShipping />}
+              type="default"
               shape="circle"
               style={{
                 border: "none",
@@ -246,10 +254,8 @@ class OrderManagement extends Component {
         item.customerlastname
           .toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
-        item.totalprice.includes(e.target.value) ||
-        item.discountprice.includes(e.target.value) ||
-        item.createdat.includes(e.target.value) ||
-        item.status.includes(e.target.value)
+        item.ordercode.includes(e.target.value) ||
+        item.createdat.includes(e.target.value)
       );
     });
     this.setState({

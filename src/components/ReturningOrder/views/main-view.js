@@ -2,8 +2,9 @@ import { Button, Col, Input, PageHeader, Radio, Row, Table, Tag } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-import { Link, Redirect, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
+import { OpenInNew } from "@material-ui/icons";
 const propsProTypes = {
   index: PropTypes.number,
   data: PropTypes.array,
@@ -85,105 +86,48 @@ class OrderReturningUI extends Component {
 
   columns = [
     {
-      title: "No.",
-      dataIndex: "No.",
-      key: "No.",
-      render: (text, object, index) => {
-        return index + 1;
+      title: "Order Code",
+      dataIndex: "ordercode",
+      key: "ordercode",
+    },
+    {
+      title: "Customer",
+      render: (_text, object, _index) => {
+        return object.customerfirstname + " " + object.customerlastname;
       },
-      fixed: "left",
-      width: 100,
-    },
-    {
-      title: "First Name",
-      dataIndex: "customerfirstname",
-      key: "customerfirstname",
-      sorter: (a, b) => a.customerfirstname.length - b.customerfirstname.length,
-      fix: "left",
-      width: 100,
-    },
-    {
-      title: "Last Name",
-      dataIndex: "customerlastname",
-      key: "customerlastname",
-      sorter: (a, b) => a.customerlastname.length - b.customerlastname.length,
-      fix: "left",
-      width: 100,
     },
 
     {
-      title: "In Campaign",
-      dataIndex: "campaign",
-      key: "campaign",
-      render: (text, object) => {
-        let campaign = object.campaign;
-        return campaign.length > 0
-          ? moment(campaign[0].fromdate).format("MM/DD/YYYY") +
-              " " +
-              moment(campaign[0].todate).format("MM/DD/YYYY")
-          : "";
-      },
-      width: 100,
-    },
-    {
-      title: "Total Price",
-      dataIndex: "totalprice",
-      key: "totalprice",
-      width: 100,
-      render: (_text, object) => {
-        return (
-          <NumberFormat
-            value={object.totalprice}
-            thousandSeparator={true}
-            suffix={" VND"}
-            decimalScale={0}
-            displayType="text"
-          />
-        );
-      },
-    },
-    {
-      title: "Discount Price",
-      dataIndex: "discountprice",
-      key: "discountprice",
-      width: 100,
-      render: (_text, object) => {
-        return (
-          <NumberFormat
-            value={object.discountprice}
-            thousandSeparator={true}
-            suffix={" VND"}
-            decimalScale={0}
-            displayType="text"
-          />
-        );
-      },
-    },
-    {
-      title: "Final Price",
-      dataIndex: "finalprice",
-      key: "finalprice",
-      width: 100,
-      render: (_text, object) => {
-        return (
-          <NumberFormat
-            value={object.totalprice - object.discountprice}
-            thousandSeparator={true}
-            suffix={" VND"}
-            decimalScale={0}
-            displayType="text"
-          />
-        );
-      },
-    },
-    {
-      title: "Created At",
+      title: "Order date",
       dataIndex: "createdat",
       key: "createdat",
       render: (data) => {
         return moment(data).format("MM/DD/YYYY");
       },
-      width: 100,
+    },
+    {
+      title: "Total amount",
+      dataIndex: "totalprice",
+      key: "totalprice",
+      render: (data) => {
+        return data ? (
+          <NumberFormat
+            value={data}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        ) : (
+          <NumberFormat
+            value={"0"}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
     {
       title: "Status",
@@ -199,7 +143,7 @@ class OrderReturningUI extends Component {
       width: 100,
     },
     {
-      title: "Action",
+      title: "",
       render: (object) => {
         let showButton = false;
         if (object.status === "returning") {
@@ -217,7 +161,19 @@ class OrderReturningUI extends Component {
             Confirm Received
           </Button>
         ) : (
-          ""
+          <Link to={`/order/handle/returning/${object.ordercode}`}>
+            <Button
+              icon={<OpenInNew />}
+              type="default"
+              shape="circle"
+              onClick={() => console.log("123")}
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+            />
+          </Link>
         );
       },
       fixed: "right",
@@ -292,9 +248,9 @@ class OrderReturningUI extends Component {
       selectedRowKeys,
       displayData,
       searchKey,
-      openDetailModal,
-      viewButton,
-      openHandleModal,
+      // openDetailModal,
+      // viewButton,
+      // openHandleModal,
       actionButton,
     } = this.state;
 
@@ -373,7 +329,7 @@ class OrderReturningUI extends Component {
             </div>
             <Table
               loading={this.props.loading}
-              rowSelection={rowSelection}
+              // rowSelection={rowSelection}
               columns={this.columns}
               dataSource={
                 displayData.length === 0 && searchKey === ""
