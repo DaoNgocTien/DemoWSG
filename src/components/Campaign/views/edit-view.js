@@ -17,7 +17,11 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo, createRef } from "react";
 import NumberFormat from "react-number-format";
-import { MinusCircleOutlined, PlusOutlined, UndoOutlined } from "@ant-design/icons";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  UndoOutlined,
+} from "@ant-design/icons";
 import TimelineItem from "antd/lib/timeline/TimelineItem";
 
 const { RangePicker } = DatePicker;
@@ -31,8 +35,8 @@ const propsProTypes = {
 };
 
 const propsDefault = {
-  closeModal: () => { },
-  createCampaign: () => { },
+  closeModal: () => {},
+  createCampaign: () => {},
   openModal: false,
   productList: [],
 };
@@ -65,15 +69,11 @@ class EdilModal extends Component {
   switchmRef = React.createRef();
   quantityRef = React.createRef();
 
-  componentDidMount() {
-    // this.setState({
-    //   productSelected: this.props.productList[0],
-    // });
-  }
+  componentDidMount() {}
 
   uniqByKeepFirst(a, key) {
     let seen = new Set();
-    return a.filter(item => {
+    return a.filter((item) => {
       let k = key(item);
       return seen.has(k) ? false : seen.add(k);
     });
@@ -89,48 +89,12 @@ class EdilModal extends Component {
 
     let newCampaign = {};
     if (this.state.switchState) {
-      //  Sort array
       data.quantities.sort(function (a, b) {
         return b.quantity - a.quantity;
       });
-      //  Remove duplicate quantity
-      // data.quantities = data.quantities.filter(
-      //   (value, index, self) =>
-      //     index ===
-      //     self.findIndex(
-      //       (t) => t.quantity === value.quantity && t.price <= value.price
-      //     )
-      // );
 
-      const datas = this.uniqByKeepFirst(data.quantities, it => it.quantity);
-      // console.log(datas);
-      // console.log(data.quantities);
-      // let errArr = [];
-      // let compareArr = [];
-      // data.quantities.map((item) => {
-      //   data.quantities.map((item2) => {
-      //     if (item.quantity != item2.quantity) {
-      //       if (item.quantity > item2.quantity && item.price > item2.price) {
-      //         errArr.push(item);
-      //         // compareArr.push(item2);
-      //       }
-      //     }
-      //   })
+      const datas = this.uniqByKeepFirst(data.quantities, (it) => it.quantity);
 
-      // })
-
-      //  Remove item to make valid final array
-      // let datas = data.quantities.filter(item => {
-      //   // console.log(!errArr.includes(item));
-      //   return !errArr.includes(item);
-      // })
-
-      // //  Change % price to numeric price
-      // datas.map(item => {
-      //   return item.price = item.price * data.wholesalePrice / 100;
-      // })
-
-      //  Set new record
       newCampaign = {
         id: this.props.record?.id,
         productId: this.state.productSelected?.id,
@@ -142,34 +106,13 @@ class EdilModal extends Component {
         description: data.description,
         advanceFee: data.advancePercent,
         isShare: this.state.switchState ? true : false,
-        range: [...datas]
+        range: [...datas],
+      };
 
-      }
-
-      //  Insert into database
       this.props.updateCampaign(newCampaign);
 
-      //  Close modal
       this.props.closeModal();
-      // data.quantities.filter(item => {
-      //   // console.log(!errArr.includes(item));
-      //   return !errArr.includes(item);
-      //   // else {
-      //   //   return item;
-      //   // }
-      // })
-      // // console.log(errArr);
-      // // console.log(datas);
-      // this.setState({
-      //   errStepArr: {
-      //     errArr: errArr,
-      //     compareArr: compareArr
-      //   }
-      // })
-
-
-    }
-    else {
+    } else {
       newCampaign = {
         id: this.props.record?.id,
         productId: this.state.productSelected?.id,
@@ -189,44 +132,24 @@ class EdilModal extends Component {
   };
 
   handleCancel = () => {
-    // this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
   onSelectProduct = (value) => {
-    // this.formRef.current.resetFields();
-
     let productSelected = this.props.productList?.find(
       (element) => element.id === value
     );
 
-    console.log(productSelected)
-    // let campaignListOfSelectedProduct = [];
-    // let campaignList = this.props.campaingList ? this.props.campaingList : [];
-    // campaignListOfSelectedProduct = campaignList.filter((camp) => {
-    //   return (
-    //     camp.productid === value &&
-    //     (camp.status === "ready" || camp.status === "active")
-    //   );
-    // });
-
-    // let productQuantityOfExistCampaign = 0;
-    // campaignListOfSelectedProduct.map(
-    //   (camp) => (productQuantityOfExistCampaign += Number(camp.maxquantity))
-    // );
+    console.log(productSelected);
 
     this.setState({
       productSelected: productSelected,
-      availableQuantity:
-        productSelected.quantity - productSelected.maxquantity,
+      availableQuantity: productSelected.quantity - productSelected.maxquantity,
       switchState: true,
       price: productSelected.retailprice,
       maxQuantity: "10",
     });
     this.formRef.current.setFieldsValue({
-      // description: 'ABCDEF',
-
-
       wholesalePrice: productSelected.retailprice,
       quantity: this.state.switchState ? "1" : "10",
       maxQuantity: "10",
@@ -273,9 +196,8 @@ class EdilModal extends Component {
   toggleSwitch = () => {
     this.setState({
       switchState: !this.state.switchState,
-    })
+    });
     this.quantityRef.current.value = 1;
-
   };
 
   render() {
@@ -295,17 +217,9 @@ class EdilModal extends Component {
       formListErrMessage,
       errStepArr,
     } = this.state;
-    console.log(typeof (record?.range));
+    console.log(typeof record?.range);
     console.log(record?.range);
 
-    // const defaultRange = [];
-    // record?.range?.map(r => {
-    //   defaultRange.push({
-    //     quantity: r.quantity,
-    //     price: r.price,
-    //   })
-    // })
-    // console.log(defaultRange);
     return (
       <>
         <Modal
@@ -332,7 +246,7 @@ class EdilModal extends Component {
         >
           <Form
             key={record?.key}
-            name="formS"
+            name="updateCampaignForm"
             id="updateCampaignForm"
             ref={this.formRef}
             onFinish={this.handleEditAndClose}
@@ -412,8 +326,14 @@ class EdilModal extends Component {
                   },
                   () => ({
                     validator(_, value) {
-                      if (Number(productSelected?.retailprice) * Number(availableQuantity) < 5000) {
-                        return Promise.reject(new Error('Unable to use product'));
+                      if (
+                        Number(productSelected?.retailprice) *
+                          Number(availableQuantity) <
+                        5000
+                      ) {
+                        return Promise.reject(
+                          new Error("Unable to use product")
+                        );
                       }
                       return Promise.resolve();
                     },
@@ -427,7 +347,7 @@ class EdilModal extends Component {
                   {productList.map((item) => {
                     if (
                       [item.quantity - item.maxquantity] *
-                      Number(item.retailprice) >
+                        Number(item.retailprice) >
                       5000
                     )
                       return (
@@ -451,20 +371,9 @@ class EdilModal extends Component {
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      // const quantity = getFieldValue("quantity");
-                      // const advancePercent = getFieldValue("advancePercent");
                       const range =
                         Number(productSelected?.retailprice) ?? 999999999999;
 
-                      // if (value * quantity * advancePercent < 500000) {
-                      //   return Promise.reject(
-                      //     new Error(
-                      //       "Advance payment has to be >= 5000 VND, at least " +
-                      //       (500000 / (value * quantity) + 1).toFixed() +
-                      //       " %"
-                      //     )
-                      //   );
-                      // }
                       if (value >= 0 && value <= range) {
                         return Promise.resolve();
                       }
@@ -490,7 +399,6 @@ class EdilModal extends Component {
 
             <Space size={30}>
               <Form.Item
-
                 name="quantity"
                 initialValue={record?.quantity}
                 label="Quantity"
@@ -504,9 +412,8 @@ class EdilModal extends Component {
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       const min = switchState ? 0 : 9;
-                      const maxQuantity = getFieldValue('maxQuantity');
-                      // const wholesalePrice = getFieldValue('wholesalePrice');
-                      // const advancePercent = getFieldValue('advancePercent');
+                      const maxQuantity = getFieldValue("maxQuantity");
+
                       if (maxQuantity < value) {
                         return Promise.reject(
                           new Error(
@@ -515,18 +422,6 @@ class EdilModal extends Component {
                         );
                       }
 
-                      // if (value * wholesalePrice * advancePercent < 500000) {
-                      //   return Promise.reject(
-                      //     new Error(
-                      //       "Advance payment has to be >= 5000 VND, at least " +
-                      //       (
-                      //         500000 / (value * wholesalePrice) +
-                      //         1
-                      //       ).toFixed() +
-                      //       " %"
-                      //     )
-                      //   );
-                      // }
                       if (value > min) {
                         return Promise.resolve();
                       }
@@ -605,26 +500,9 @@ class EdilModal extends Component {
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      // const range = Number(productSelected?.retailprice) ?? 999999999999;
-                      // const quantity = getFieldValue('quantity');
-                      // const wholesalePrice = getFieldValue('wholesalePrice');
-                      // const advancePercent = getFieldValue('advancePercent');
-                      // if (wholesalePrice * quantity * value <= 500000) {
-                      //   return Promise.reject(
-                      //     new Error(
-                      //       "Advance percent to be > 5000, at least " +
-                      //       (
-                      //         500000 / (minWholesalePrice * maxQuantity) +
-                      //         1
-                      //       ).toFixed() +
-                      //       " %"
-                      //     )
-                      //   );
-                      // }
                       return Promise.resolve();
-
-                    }
-                  })
+                    },
+                  }),
                 ]}
               >
                 <InputNumber
@@ -678,24 +556,21 @@ class EdilModal extends Component {
               ""
             ) : (
               <>
-
                 <Form.List
                   name="quantities"
-                  onChange={(record) => {
-                    // console.log(record);
-                  }}
+                  onChange={(record) => {}}
                   initialValue={record?.range ? JSON.parse(record?.range) : []}
                 >
                   {(fields, { add, remove }) => {
                     const reset = () => {
-                      fields.forEach(field => {
-                        remove(field.name)
+                      fields.forEach((field) => {
+                        remove(field.name);
                       });
-                      fields.forEach(field => {
-                        remove(field.name)
+                      fields.forEach((field) => {
+                        remove(field.name);
                       });
-                      fields.forEach(field => {
-                        remove(field.name)
+                      fields.forEach((field) => {
+                        remove(field.name);
                       });
                     };
                     return (
@@ -725,7 +600,6 @@ class EdilModal extends Component {
                                   <InputNumber
                                     addonAfter=" products"
                                     max={maxQuantity}
-
                                     min={1}
                                     style={{ width: "60vh" }}
                                   />
@@ -735,7 +609,7 @@ class EdilModal extends Component {
                             <Form.Item
                               {...field}
                               label="Price"
-                              name={[field.name, 'price']}
+                              name={[field.name, "price"]}
                               rules={[
                                 {
                                   required: true,
@@ -743,38 +617,6 @@ class EdilModal extends Component {
                                 },
                                 ({ getFieldValue }) => ({
                                   validator(_, value) {
-                                    // const quantity = getFieldValue("quantity");
-                                    // const wholesalePrice =
-                                    //   getFieldValue("wholesalePrice");
-                                    // const advancePercent =
-                                    //   getFieldValue("advancePercent");
-                                    // const range = getFieldValue("quantities").sort(
-                                    //   (a, b) => a.quantity - b.quantity
-                                    // );
-                                    // const index = _.field.match(/\d/g);
-                                    // c
-                                    // // console.log(_);
-                                    // if (
-                                    //   quantity *
-                                    //   advancePercent *
-                                    //   wholesalePrice *
-                                    //   value <
-                                    //   5000 * 100 * 100
-                                    // ) {
-                                    //   return Promise.reject(
-                                    //     new Error(
-                                    //       "Wholesale price percent in this step is invalid due to advance percent < 5000, at least " +
-                                    //       (
-                                    //         50000000 /
-                                    //         (quantity *
-                                    //           wholesalePrice *
-                                    //           value) +
-                                    //         1
-                                    //       ).toFixed() +
-                                    //       " %"
-                                    //     )
-                                    //   );
-                                    // }
                                     return Promise.resolve();
                                   },
                                 }),
@@ -784,7 +626,9 @@ class EdilModal extends Component {
                               <InputNumber
                                 addonAfter="VND"
                                 min={100}
-                                max={productSelected?.retailprice ?? 999999999999}
+                                max={
+                                  productSelected?.retailprice ?? 999999999999
+                                }
                                 style={{ width: "60vh" }}
                               />
                             </Form.Item>
@@ -797,7 +641,6 @@ class EdilModal extends Component {
                         <Space size={30}>
                           <Form.Item>
                             <Button
-                              // type="dashed"
                               onClick={reset}
                               block
                               icon={<UndoOutlined />}
@@ -808,7 +651,6 @@ class EdilModal extends Component {
 
                           <Form.Item>
                             <Button
-                              // type="dashed"
                               onClick={() => add()}
                               block
                               icon={<PlusOutlined />}
@@ -818,7 +660,11 @@ class EdilModal extends Component {
                           </Form.Item>
                         </Space>
                         <Form.Item>
-                          <Input.TextArea disabled="true" block icon={<PlusOutlined />} rows={5}
+                          <Input.TextArea
+                            disabled="true"
+                            block
+                            icon={<PlusOutlined />}
+                            rows={5}
                             value="Share campaign tutorial step by step:
                           - The higher products customers buy, the better discount price they will get.
                           - Quantity step - price conflict: the higher quantity will be counted
@@ -828,13 +674,12 @@ class EdilModal extends Component {
                             + Quantity 45, price 95
                             + Quantity 55, price 90
                             -> Quantity valid: 15-25
-                            -> Quantity invalid: 45-55">
-                          </Input.TextArea>
+                            -> Quantity invalid: 45-55"
+                          ></Input.TextArea>
                         </Form.Item>
                       </>
-                    )
-                  }
-                  }
+                    );
+                  }}
                 </Form.List>
               </>
             )}
@@ -844,7 +689,9 @@ class EdilModal extends Component {
                 {productSelected?.name ?? defaultProduct?.name ?? ""}
               </Descriptions.Item>
               <Descriptions.Item label="Category">
-                {productSelected?.categoryname ?? defaultProduct?.categoryname ?? ""}
+                {productSelected?.categoryname ??
+                  defaultProduct?.categoryname ??
+                  ""}
               </Descriptions.Item>
               <Descriptions.Item label="Quantity in stock">
                 {productSelected?.quantity ?? defaultProduct?.quantity ?? ""}
@@ -854,7 +701,11 @@ class EdilModal extends Component {
               </Descriptions.Item>
               <Descriptions.Item label="Retail price">
                 <NumberFormat
-                  value={productSelected?.retailprice ?? defaultProduct?.retailprice ?? ""}
+                  value={
+                    productSelected?.retailprice ??
+                    defaultProduct?.retailprice ??
+                    ""
+                  }
                   thousandSeparator={true}
                   suffix={" VND"}
                   decimalScale={0}
@@ -872,7 +723,11 @@ class EdilModal extends Component {
               </Descriptions.Item>
               <Descriptions.Item label="Description">
                 <Input.TextArea
-                  value={productSelected?.description ?? defaultProduct?.description ?? ""}
+                  value={
+                    productSelected?.description ??
+                    defaultProduct?.description ??
+                    ""
+                  }
                   rows={5}
                   bordered={false}
                 />
@@ -884,11 +739,12 @@ class EdilModal extends Component {
                   listType="picture-card"
                   fileList={
                     productSelected?.image
-                      ? JSON.parse(productSelected?.image) : defaultProduct?.image
-                        ? JSON.parse(defaultProduct?.image) : []
+                      ? JSON.parse(productSelected?.image)
+                      : defaultProduct?.image
+                      ? JSON.parse(defaultProduct?.image)
+                      : []
                   }
-                >
-                </Upload>
+                ></Upload>
               </Descriptions.Item>
             </Descriptions>
           </Form>
