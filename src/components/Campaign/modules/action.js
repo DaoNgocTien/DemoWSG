@@ -87,11 +87,11 @@ const getCampaign = (campaignId) => {
           order:
             order !== {}
               ? order.data?.data.map((item) => {
-                return {
-                  key: item.id,
-                  ...item,
-                };
-              })
+                  return {
+                    key: item.id,
+                    ...item,
+                  };
+                })
               : {},
         })
       );
@@ -226,7 +226,11 @@ const startCampaignBeforeHand = (id) => {
           withCredentials: true,
         }),
       ]);
-
+      if (response.status === 200) {
+        if (!response.data.data) {
+          alert(response.data.message);
+        }
+      }
       dispatch(
         getSuccess({
           campaigns: [],
@@ -245,7 +249,7 @@ const doneCampaignBeforeHand = (id) => {
     try {
       const [response] = await Promise.all([
         Axios({
-          url: `/campaigns/update/active`,
+          url: `/campaigns/supplier/doneCampaign`,
           method: "PUT",
           data: {
             campaignId: id,
@@ -346,11 +350,11 @@ const getCampaignById = (id) => {
           orders:
             orders !== {}
               ? orders.data?.data.map((item) => {
-                return {
-                  key: item.id,
-                  ...item,
-                };
-              })
+                  return {
+                    key: item.id,
+                    ...item,
+                  };
+                })
               : {},
         })
       );

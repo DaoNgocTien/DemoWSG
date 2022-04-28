@@ -338,7 +338,7 @@ class OrdersInCampaign extends React.Component {
             </Button>
             ,
             <Button
-              onClick={() => this.props.startCampaignBeforeHand(record?.id)}
+              onClick={() => this.props.doneCampaignBeforeHand(record?.id)}
               type="primary"
               hidden={record?.status !== "active"}
             >

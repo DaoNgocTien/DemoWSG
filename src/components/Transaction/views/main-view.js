@@ -55,7 +55,7 @@ class TransactionUI extends Component {
       amount: parseInt(data.amount),
       ordercode: data.ordercode,
       bankCode: "NCB",
-      orderDesciption: `order finalization with amount ${data.amount}`,
+      orderDescription: `order finalization with amount ${data.amount}`,
       orderType: "orderFinalization",
     };
     this.props.updateTransaction(newData);
