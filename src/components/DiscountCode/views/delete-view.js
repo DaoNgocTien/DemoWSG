@@ -1,6 +1,12 @@
 import {
-  Button, DatePicker, Descriptions, Form,
-  Input, InputNumber, Modal, Select
+  Button,
+  DatePicker,
+  Descriptions,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
 } from "antd";
 import Axios from "axios";
 import moment from "moment";
@@ -18,8 +24,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  deleteDiscountCode: () => { },
+  closeModal: () => {},
+  deleteDiscountCode: () => {},
   openModal: false,
   categoryList: [],
 };
@@ -37,7 +43,7 @@ class DeleteModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   handleDeleteAndClose = (data) => {
     this.props.deleteDiscountCode(this.props.record?.id);
@@ -45,7 +51,7 @@ class DeleteModal extends Component {
   };
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
+    //   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -185,7 +191,11 @@ class DeleteModal extends Component {
 
               <Descriptions.Item label="Code">
                 <Form.Item name="code" initialValue={this.props.record?.code}>
-                  <Input defaultValue={this.props.record?.code} style={{ width: "60vh" }} disabled={true} />
+                  <Input
+                    defaultValue={this.props.record?.code}
+                    style={{ width: "60vh" }}
+                    disabled={true}
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -194,7 +204,6 @@ class DeleteModal extends Component {
                   name="discountPrice"
                   initialValue={this.props.record?.discountprice}
                 >
-
                   <NumberFormat
                     value={this.props.record?.discountprice}
                     thousandSeparator={true}
@@ -222,48 +231,6 @@ class DeleteModal extends Component {
                     decimalScale={0}
                     displayType="text"
                   />
-                </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Product">
-                <Form.Item
-                  name="productId"
-                  initialValue={this.props.record?.productid}
-                >
-                  <Select onChange={this.onSelectProduct} style={{ width: "60vh" }} disabled={true}>
-                    {productList.map((item) => {
-                      return (
-                        <Select.Option key={item.key} value={item.id}>
-                          {item.name}
-                        </Select.Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-              </Descriptions.Item>
-              {/* 
-              <Descriptions.Item label="Status">
-                <Form.Item
-                  name="status"
-                  initialValue={this.props.record?.status}
-                >
-                  <Select>
-                    <Select.Option key="public" value="public">
-                      Public
-                    </Select.Option>
-                    <Select.Option key="private" value="private">
-                      Private
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
-              </Descriptions.Item> */}
-
-              <Descriptions.Item label="Quantity">
-                <Form.Item
-                  name="quantity"
-                  initialValue={this.props.record?.quantity}
-                >
-                  <InputNumber defaultValue={this.props.record?.quantity} style={{ width: "60vh" }} disabled={true} />
                 </Form.Item>
               </Descriptions.Item>
             </Descriptions>

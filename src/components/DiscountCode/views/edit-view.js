@@ -1,6 +1,13 @@
 import {
-  Button, DatePicker, Descriptions, Form,
-  Input, InputNumber, Modal, Select, Upload
+  Button,
+  DatePicker,
+  Descriptions,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Upload,
 } from "antd";
 import Axios from "axios";
 import moment from "moment";
@@ -18,8 +25,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  updateDiscountCode: () => { },
+  closeModal: () => {},
+  updateDiscountCode: () => {},
   openModal: false,
   categoryList: [],
 };
@@ -37,16 +44,13 @@ class UpdateModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
     // console.log(data);
     let newDiscountCode = {
-      productId: data.productId,
       startDate: data.date[0],
       endDate: data.date[1],
-      quantity: data.quantity,
       discountPrice: data.discountPrice,
       minimunPriceCondition: data.minimunPrice,
       // status: "private",
@@ -62,7 +66,7 @@ class UpdateModal extends Component {
   };
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
+    //   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -143,18 +147,17 @@ class UpdateModal extends Component {
     const currentProductWhenPopup = this.props.productList?.find(
       (element) => element.id === this.props.record?.productid
     );
-  //  console.log(currentProductWhenPopup);
+    //  console.log(currentProductWhenPopup);
     let maxPrice = 0;
     if (productSelected == null) {
       if (currentProductWhenPopup) {
         maxPrice = currentProductWhenPopup.retailprice;
       }
-    }
-    else {
+    } else {
       maxPrice = productSelected.retailprice;
     }
 
-  //  console.log(maxPrice);
+    //  console.log(maxPrice);
     return (
       <>
         <Form
@@ -239,8 +242,10 @@ class UpdateModal extends Component {
                 </Form.Item>
               </Descriptions.Item>
 
-              <Descriptions.Item label="Code"              >
-                <Form.Item name="code" initialValue={this.props.record?.code}
+              <Descriptions.Item label="Code">
+                <Form.Item
+                  name="code"
+                  initialValue={this.props.record?.code}
                   rules={[
                     // {
                     //   required: true,
@@ -248,7 +253,6 @@ class UpdateModal extends Component {
                     // },
                     () => ({
                       validator(_, value) {
-
                         //   if (listName.includes(value)) {
                         //     return Promise.reject(new Error('Product Name exists!'));
                         //   }
@@ -256,7 +260,11 @@ class UpdateModal extends Component {
                           return Promise.resolve();
                         }
 
-                        return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                        return Promise.reject(
+                          new Error(
+                            "Code is required, length is 1-200 characters!"
+                          )
+                        );
                         // validator(_, value) {
                         //   if (Number(value) > 0) {
                         //     return Promise.resolve();
@@ -267,7 +275,11 @@ class UpdateModal extends Component {
                     }),
                   ]}
                 >
-                  <Input defaultValue={this.props.record?.code} style={{ width: "60vh" }} placeholder="Code is required, length is 1-200 characters!" />
+                  <Input
+                    defaultValue={this.props.record?.code}
+                    style={{ width: "60vh" }}
+                    placeholder="Code is required, length is 1-200 characters!"
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
@@ -275,36 +287,13 @@ class UpdateModal extends Component {
                 <Form.Item
                   name="discountPrice"
                   initialValue={this.props.record?.discountprice}
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Name is required!',
-                    // },
-                    () => ({
-                      // validator(_, value) {
-
-                      //   if (listName.includes(value)) {
-                      //     return Promise.reject(new Error('Product Name exists!'));
-                      //   }
-                      // if (value.length > 0 && value.length <= 200) {
-                      //   return Promise.resolve();
-                      // }
-
-                      // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
-                      validator(_, value) {
-
-                        if (Number(value) > 0) {
-                          return Promise.resolve();
-                        }
-
-                        return Promise.reject(new Error('Discount price is positive number!'));
-                      },
-                    }),
-                  ]}
-                  help="Discount price is 1000 -> product retail price!"
                 >
                   <NumberFormat
-                    value={productSelected == null ? maxPrice : productSelected.retailprice}
+                    value={
+                      productSelected == null
+                        ? maxPrice
+                        : productSelected.retailprice
+                    }
                     thousandSeparator={true}
                     suffix={" VND"}
                     decimalScale={0}
@@ -323,35 +312,13 @@ class UpdateModal extends Component {
                 <Form.Item
                   name="minimunPrice"
                   initialValue={this.props.record?.minimunpricecondition}
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Name is required!',
-                    // },
-                    () => ({
-                      // validator(_, value) {
-
-                      //   if (listName.includes(value)) {
-                      //     return Promise.reject(new Error('Product Name exists!'));
-                      //   }
-                      // if (value.length > 0 && value.length <= 200) {
-                      //   return Promise.resolve();
-                      // }
-
-                      // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
-                      validator(_, value) {
-                        if (Number(value) > 0) {
-                          return Promise.resolve();
-                        }
-
-                        return Promise.reject(new Error('Minimum is positive number!'));
-                      },
-                    }),
-                  ]}
-                  help="Minimum price is 1000!"
                 >
                   <NumberFormat
-                    value={productSelected == null ? maxPrice : productSelected.retailprice}
+                    value={
+                      productSelected == null
+                        ? maxPrice
+                        : productSelected.retailprice
+                    }
                     thousandSeparator={true}
                     suffix={" VND"}
                     decimalScale={0}
@@ -362,60 +329,6 @@ class UpdateModal extends Component {
                     min={1000}
                     max={999999999999}
                   /> */}
-                </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Product">
-                <Form.Item
-                  name="productId"
-                  initialValue={this.props.record?.productid}
-
-                >
-                  <Select onChange={this.onSelectProduct} style={{ width: "60vh" }}>
-                    {productList.map((item) => {
-                      return (
-                        <Select.Option key={item.key} value={item.id}>
-                          {item.name}
-                        </Select.Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Quantity">
-                <Form.Item
-                  name="quantity"
-                  initialValue={this.props.record?.quantity}
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Name is required!',
-                    // },
-                    () => ({
-                      // validator(_, value) {
-
-                      //   if (listName.includes(value)) {
-                      //     return Promise.reject(new Error('Product Name exists!'));
-                      //   }
-                      // if (value.length > 0 && value.length <= 200) {
-                      //   return Promise.resolve();
-                      // }
-
-                      // return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
-                      validator(_, value) {
-                        if (Number(value) > 0) {
-                          return Promise.resolve();
-                        }
-
-                        return Promise.reject(new Error('Quantity is positive number!'));
-                      },
-                    }),
-                  ]}
-                  help="Minimum quantity is 1!"
-
-                >
-                  <InputNumber defaultValue={this.props.record?.quantity} style={{ width: "60vh" }} min={1} max={999999999999} />
                 </Form.Item>
               </Descriptions.Item>
             </Descriptions>

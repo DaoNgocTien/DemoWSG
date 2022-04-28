@@ -1,6 +1,12 @@
 import {
-  Button, DatePicker, Descriptions, Form,
-  Input, InputNumber, Modal, Select
+  Button,
+  DatePicker,
+  Descriptions,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
@@ -18,8 +24,8 @@ const propsProTypes = {
 
 //  default props
 const propsDefault = {
-  closeModal: () => { },
-  createDiscountCode: () => { },
+  closeModal: () => {},
+  createDiscountCode: () => {},
   openModal: false,
   productList: [],
 };
@@ -36,17 +42,17 @@ class CreatModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   handleCreateAndClose = (data) => {
     let newDiscountCode = {
-      productId: data.productId,
+      // productId: data.productId,
       startDate: data.date[0],
       endDate: data.date[1],
-      quantity: data.quantity,
+      // quantity: data.quantity,
       discountPrice: data.discountPrice,
       minimunPriceCondition: data.minimunPrice,
-      code: data.code
+      code: data.code,
     };
     this.props.createDiscountCode(newDiscountCode);
     this.props.closeModal();
@@ -133,7 +139,8 @@ class CreatModal extends Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Code">
-                <Form.Item name="code"
+                <Form.Item
+                  name="code"
                   rules={[
                     // {
                     //   required: true,
@@ -141,132 +148,39 @@ class CreatModal extends Component {
                     // },
                     () => ({
                       validator(_, value) {
-
                         if (value.length > 0 && value.length <= 200) {
                           return Promise.resolve();
                         }
 
-                        return Promise.reject(new Error('Code is required, length is 1-200 characters!'));
+                        return Promise.reject(
+                          new Error(
+                            "Code is required, length is 1-200 characters!"
+                          )
+                        );
                       },
                     }),
                   ]}
                 >
-                  <Input style={{ width: "60vh" }} placeholder="Code is required, length is 1-200 characters!" />
+                  <Input
+                    style={{ width: "60vh" }}
+                    placeholder="Code is required, length is 1-200 characters!"
+                  />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Discount price">
-                <Form.Item name="discountPrice" initialValue={productSelected?.retailprice <= 999999999999 ? productSelected?.retailprice : 1000}
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Name is required!',
-                    // },
-                    () => ({
-                      // validator(_, value) {
-
-                      //   if (listName.includes(value)) {
-                      //     return Promise.reject(new Error('Product Name exists!'));
-                      //   }
-                      //   if (value.length >= 0 && value.length <= 20) {
-                      //     return Promise.resolve();
-                      //   }
-
-                      //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
-                      validator(_, value) {
-                        if (Number(value) > 0) {
-                          return Promise.resolve();
-                        }
-
-                        return Promise.reject(new Error('Discount price is positive number!'));
-                      },
-                    }),
-                  ]}
-                  help="Discount price is 1000 -> product retail price!"
-                >
-                  <InputNumber min={1000} max={productSelected?.retailprice <= 999999999999 ? productSelected?.retailprice : 999999999999} style={{ width: "60vh" }} />
+                <Form.Item name="discountPrice">
+                  <InputNumber min={1000} style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Minimun price">
-                <Form.Item name="minimunPrice" initialValue={productSelected?.retailprice <= 999999999999 ? productSelected?.retailprice : 1000}
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Name is required!',
-                    // },
-                    () => ({
-                      // validator(_, value) {
-
-                      //   if (listName.includes(value)) {
-                      //     return Promise.reject(new Error('Product Name exists!'));
-                      //   }
-                      //   if (value.length >= 0 && value.length <= 20) {
-                      //     return Promise.resolve();
-                      //   }
-
-                      //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
-                      validator(_, value) {
-                        if (Number(value) > 0) {
-                          return Promise.resolve();
-                        }
-
-                        return Promise.reject(new Error('Minimum price is positive number!'));
-                      },
-                    }),
-                  ]}
-                  help="Minimum price is 1000!"
-
-                >
-                  <InputNumber style={{ width: "60vh" }} min={1000} max={999999999999} />
-                </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Product">
-                <Form.Item name="productId" initialValue={productList[0]?.id}>
-                  <Select onChange={this.onSelectProduct} style={{ width: "60vh" }} >
-                    {productList.map((item) => {
-                      return (
-                        <Select.Option key={item.key} value={item.id}>
-                          {item.name}
-                        </Select.Option>
-                      );
-                    })}
-                  </Select>
-                </Form.Item>
-              </Descriptions.Item>
-
-              <Descriptions.Item label="Quantity">
-                <Form.Item name="quantity" initialValue={1}
-                  rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Name is required!',
-                    // },
-                    () => ({
-                      // validator(_, value) {
-
-                      //   if (listName.includes(value)) {
-                      //     return Promise.reject(new Error('Product Name exists!'));
-                      //   }
-                      //   if (value.length >= 0 && value.length <= 20) {
-                      //     return Promise.resolve();
-                      //   }
-
-                      //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
-                      validator(_, value) {
-                        if (Number(value) > 0) {
-                          return Promise.resolve();
-                        }
-
-                        return Promise.reject(new Error('Quantity is positive number!'));
-                      },
-                    }),
-                  ]}
-                  help="Minimum quantity is 1!"
-
-                >
-                  <InputNumber defaultValue={1} style={{ width: "60vh" }} min={1} max={999999999999} />
+                <Form.Item name="minimunPrice">
+                  <InputNumber
+                    style={{ width: "60vh" }}
+                    min={1000}
+                    max={999999999999}
+                  />
                 </Form.Item>
               </Descriptions.Item>
             </Descriptions>
