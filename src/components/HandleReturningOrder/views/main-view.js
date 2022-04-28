@@ -331,7 +331,7 @@ class HandleReturningOrderUI extends Component {
               onClick={this.showModal}
               style={{ marginLeft: 3 }}
               hidden={
-                data?.order?.status !== "returning" || handledBySupplier > 1
+                data.order?.status !== "returning" || handledBySupplier > 1
               }
             >
               Reject Returning Request
@@ -341,6 +341,9 @@ class HandleReturningOrderUI extends Component {
               type="primary"
               onClick={this.handleAcceptAndClose}
               style={{ marginLeft: 3 }}
+              hidden={
+                data.order?.status !== "returning" || handledBySupplier > 1
+              }
             >
               Accept Returning Request
             </Button>,
@@ -356,6 +359,7 @@ class HandleReturningOrderUI extends Component {
               type="danger"
               onClick={this.showRejectModal}
               style={{ marginLeft: 3 }}
+              hidden={data.order?.status !== "processing" && data.order?.status !== "created"}
             >
               reject
             </Button>,
