@@ -220,7 +220,7 @@ class OrdersInCampaign extends React.Component {
   };
 
   handleOk = () => {
-    this.props.startCampaignBeforeHand(this.props.record?.id)
+    this.props.startCampaignBeforeHand(this.props.record?.id);
     this.setState({ confirmLoading: true });
     setTimeout(() => {
       this.setState({ visiblePop: false });
@@ -229,7 +229,7 @@ class OrdersInCampaign extends React.Component {
   };
 
   handleCancel = () => {
-    console.log('Clicked cancel button');
+    console.log("Clicked cancel button");
     this.setState({ visiblePop: false });
   };
   hide = () => {
@@ -238,7 +238,7 @@ class OrdersInCampaign extends React.Component {
     });
   };
 
-  handleVisibleChange = stepVisible => {
+  handleVisibleChange = (stepVisible) => {
     this.setState({ stepVisible });
   };
 
@@ -253,13 +253,13 @@ class OrdersInCampaign extends React.Component {
       dataIndex: "price",
       key: "price",
     },
-  ]
+  ];
 
   start = (openModal) => {
     switch (openModal) {
       case "openDeleteModal":
         this.setState({
-          openDeleteModal: true
+          openDeleteModal: true,
         });
         break;
 
@@ -295,7 +295,7 @@ class OrdersInCampaign extends React.Component {
       record,
       isStartAbleMessage,
       isStartAble,
-      productList
+      productList,
     } = this.props;
 
     const rowSelection = {
@@ -324,19 +324,21 @@ class OrdersInCampaign extends React.Component {
               onClick={() => this.props.startCampaignBeforeHand(record?.id)}
               hidden={record?.status !== "ready"}
               disabled={!isStartAble}
-
             >
-              {isStartAble ?
+              {isStartAble ? (
                 "Start Campaign"
-                :
-                <Popover content={isStartAbleMessage} title="Reason campaign can not be started!">
+              ) : (
+                <Popover
+                  content={isStartAbleMessage}
+                  title="Reason campaign can not be started!"
+                >
                   Start Campaign
-                </Popover>}
+                </Popover>
+              )}
               {/* // <Popover content={isStartAbleMessage} title="Reason campaign can not be started!">
                 //   Start Campaign
                 // </Popover> */}
-            </Button>
-            ,
+            </Button>,
             <Button
               onClick={() => this.props.doneCampaignBeforeHand(record?.id)}
               type="primary"
@@ -357,7 +359,7 @@ class OrdersInCampaign extends React.Component {
               hidden={record?.status !== "ready"}
             >
               Delete Campaign
-            </Button>
+            </Button>,
           ]}
           footer={
             <div>
@@ -369,7 +371,7 @@ class OrdersInCampaign extends React.Component {
                 defaultProduct={record?.product}
                 productList={productList}
                 record={record}
-              // selectedRowKeys={selectedRowKeys[0]}
+                // selectedRowKeys={selectedRowKeys[0]}
               />
               <EditModal
                 loading={this.props.loading}
@@ -379,7 +381,7 @@ class OrdersInCampaign extends React.Component {
                 defaultProduct={record?.product}
                 productList={productList}
                 record={record}
-              // selectedRowKeys={selectedRowKeys[0]}
+                // selectedRowKeys={selectedRowKeys[0]}
               />
               <RejectModal
                 openModal={openRejectModal}
@@ -425,8 +427,8 @@ class OrdersInCampaign extends React.Component {
                 dataSource={
                   displayData.length === 0 && searchData === ""
                     ? orderList.filter(
-                      (order) => order.status.toUpperCase() !== "NOTADVANCED"
-                    )
+                        (order) => order.status.toUpperCase() !== "NOTADVANCED"
+                      )
                     : displayData
                 }
                 scroll={{ y: 350 }}
@@ -435,10 +437,12 @@ class OrdersInCampaign extends React.Component {
           }
         >
           <Form>
-            <Descriptions bordered
+            <Descriptions
+              bordered
               column={2}
               size="small"
-              labelStyle={{ width: "20%", fontWeight: "bold" }}>
+              labelStyle={{ width: "20%", fontWeight: "bold" }}
+            >
               <Descriptions.Item label="Name">
                 {record?.description}
               </Descriptions.Item>
@@ -450,7 +454,6 @@ class OrdersInCampaign extends React.Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Type">
-
                 <Popover
                   content={
                     <>
@@ -459,10 +462,9 @@ class OrdersInCampaign extends React.Component {
                         dataSource={
                           record?.range ? JSON.parse(record?.range) : []
                         }
-                      // scroll={{ y: 350 }}
+                        // scroll={{ y: 350 }}
                       />
                     </>
-
                   }
                   trigger="click"
                   visible={this.state.stepVisible}
@@ -480,10 +482,10 @@ class OrdersInCampaign extends React.Component {
                     record?.status === "ready"
                       ? "blue"
                       : record?.status === "active"
-                        ? "red"
-                        : record?.status === "done"
-                          ? "green"
-                          : "grey"
+                      ? "red"
+                      : record?.status === "done"
+                      ? "green"
+                      : "grey"
                   }
                 >
                   {(record?.status ?? "").toUpperCase()}
@@ -495,7 +497,13 @@ class OrdersInCampaign extends React.Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Wholesale Price">
-                {record?.price}
+                <NumberFormat
+                  value={record?.price}
+                  thousandSeparator={true}
+                  suffix={" VND"}
+                  decimalScale={0}
+                  displayType="text"
+                />
               </Descriptions.Item>
 
               <Descriptions.Item label="Quantity">
@@ -610,7 +618,6 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(campaignAction.getCampaignById(id));
       await dispatch(campaignAction.getCampaign());
     },
-
   };
 };
 

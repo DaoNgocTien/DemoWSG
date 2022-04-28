@@ -9,20 +9,18 @@ import {
   Select,
   Switch,
   Upload,
-  Tooltip,
   Space,
   Typography,
 } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
-import React, { Component, memo, createRef } from "react";
+import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
 import {
   MinusCircleOutlined,
   PlusOutlined,
   UndoOutlined,
 } from "@ant-design/icons";
-import TimelineItem from "antd/lib/timeline/TimelineItem";
 
 const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
@@ -203,7 +201,7 @@ class EdilModal extends Component {
   render() {
     const { openModal, defaultProduct } = this.props;
     const { productList, record } = this.props;
-    const {
+    let {
       productSelected,
       price = 0,
       availableQuantity,
@@ -217,6 +215,9 @@ class EdilModal extends Component {
       formListErrMessage,
       errStepArr,
     } = this.state;
+    productSelected = productSelected
+      ? productSelected
+      : productList.find((p) => p.id === record.productid);
     console.log(typeof record?.range);
     console.log(record?.range);
 
@@ -348,7 +349,8 @@ class EdilModal extends Component {
                     if (
                       [item.quantity - item.maxquantity] *
                         Number(item.retailprice) >
-                      5000
+                        5000 &&
+                      item.status !== "deactivated"
                     )
                       return (
                         <Select.Option key={item.key} value={item.id}>
@@ -372,8 +374,9 @@ class EdilModal extends Component {
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       const range =
-                        Number(productSelected?.retailprice) ?? 999999999999;
+                        Number(productSelected?.retailprice) || 99999999;
 
+                      console.log(productSelected);
                       if (value >= 0 && value <= range) {
                         return Promise.resolve();
                       }
