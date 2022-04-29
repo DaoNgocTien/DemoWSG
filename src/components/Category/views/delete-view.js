@@ -40,13 +40,13 @@
 //     static defaultProps = propsDefault;
 
 //     componentDidMount() {
-//         // console.log("DeleteModal");
-//         // console.log(this.props);
+//         // //console.log("DeleteModal");
+//         // //console.log(this.props);
 //     }
 
 //     handleDelete = () => {
 //         (this.props.selectedRowKeys).map(item => {
-//             // console.log(item);
+//             // //console.log(item);
 //             return this.props.deleteCategory(item);
 //         })
 //         this.props.closeModal();
@@ -185,9 +185,9 @@ class DeleteModel extends Component {
     formRef = React.createRef();
 
     componentDidMount() {
-        // console.log("EditModal Didmount");
+        // //console.log("EditModal Didmount");
 
-        // console.log(this.props);
+        // //console.log(this.props);
         this.formRef.current.setFieldsValue({
             id: this.props.record?.id,
             categoryname: this.props.record?.categoryname,

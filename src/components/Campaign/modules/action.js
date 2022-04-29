@@ -1,12 +1,12 @@
+import Axios from "axios";
+import { Redirect } from "react-router-dom";
 import {
   GET_DATA_FAIL,
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
   STORE_CAMPAIGN,
-  STORE_CREATING_ERR,
+  STORE_CREATING_ERR
 } from "./constant";
-import Axios from "axios";
-import { Link, Redirect, Route } from "react-router-dom";
 
 const getCampaign = (campaignId) => {
   return async (dispatch) => {
@@ -60,42 +60,38 @@ const getCampaign = (campaignId) => {
         });
         return p.quantity - max >= 10;
       });
+      const campaignsList = campaigns.data.data.length == 0 ? [] : campaigns.data.data?.map((campaign) => {
+        //console.log(campaign)
+        return {
+          key: campaign.id,
 
-      order.data?.data.filter((order) => order.status !== "notAdvanced");
+          ...campaign,
+          range: JSON.parse(campaign.range),
+        };
+      })
+      const productList = availableProducts.map((p) => {
+        //console.log(p)
+        let max = 0;
+        if (campaigns.data.data.length !== 0)
+          campaigns.data.data.map((c) => {
+            //console.log(c)
+            max += c.productid === p.id ? Number(c.maxquantity) : 0;
+          });
+        return {
+          key: p.id,
+          maxquantity: max,
+          ...p,
+        };
+      });
 
       return dispatch(
         getSuccess({
-          campaigns: campaigns.data.data.map((campaign) => {
-            return {
-              key: campaign.id,
-
-              ...campaign,
-              range: JSON.parse(campaign.range),
-            };
-          }),
-          products: availableProducts.map((p) => {
-            let max = 0;
-            campaigns.data.data.map((c) => {
-              max += c.productid === p.id ? Number(c.maxquantity) : 0;
-            });
-            return {
-              key: p.id,
-              maxquantity: max,
-              ...p,
-            };
-          }),
-          order:
-            order !== {}
-              ? order.data?.data.map((item) => {
-                  return {
-                    key: item.id,
-                    ...item,
-                  };
-                })
-              : {},
+          campaigns: campaignsList,
+          products: productList,
         })
       );
     } catch (error) {
+      alert(error)
       return dispatch(getFailed());
     }
   };
@@ -150,7 +146,7 @@ const createCampaign = (record) => {
 
 const updateCampaign = (record) => {
   return async (dispatch) => {
-    console.log(record);
+    //console.log(record);
 
     Axios({
       url: `/campaigns/${record.id}`,
@@ -190,25 +186,27 @@ const updateCampaign = (record) => {
 
 const deleteCampaign = (id) => {
   return async (dispatch) => {
-    let deleteResponse,
-      campaigns,
-      products,
-      order = {};
-    dispatch(getRequest());
-    [deleteResponse] = await Promise.all([
-      Axios({
-        url: `/campaigns/${id}`,
-        method: "DELETE",
-        withCredentials: true,
-      }),
-    ]);
-
-    dispatch(
-      getSuccess({
-        campaigns: [],
-      })
-    );
-    return <Redirect to="/discount/campaigns" />;
+    try {
+      let deleteResponse = {};
+      dispatch(getRequest());
+      [deleteResponse] = await Promise.all([
+        Axios({
+          url: `/campaigns/${id}`,
+          method: "DELETE",
+          withCredentials: true,
+        }),
+      ]);
+      dispatch(
+        getSuccess({
+          campaigns: [],
+        })
+      );
+      return <Redirect to="/discount/campaigns" />;
+    }
+    catch (error) {
+      alert(error)
+      return dispatch(getFailed());
+    }
   };
 };
 
@@ -236,7 +234,6 @@ const startCampaignBeforeHand = (id) => {
           campaigns: [],
         })
       );
-      // return <Redirect to="/discount/campaigns" />;
     } catch (error) {
       return dispatch(getFailed());
     }
@@ -263,22 +260,9 @@ const doneCampaignBeforeHand = (id) => {
           campaigns: [],
         })
       );
-      // return <Redirect to="/discount/campaigns" />;
     } catch (error) {
       return dispatch(getFailed());
     }
-  };
-};
-
-const storeCampaign = (record) => {
-  return async (dispatch) => {
-    console.log(record);
-    dispatch(
-      storeRecord({
-        record: record,
-      })
-    );
-    return <Redirect to="/discount/orders-in-campaign" />;
   };
 };
 
@@ -311,7 +295,6 @@ const getCampaignById = (id) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      console.log(campaign.data.data.campaign);
       //  Get all product with available quantity >= 10
       let availableProducts = products.data.data.filter((p) => {
         let max = 0;
@@ -350,11 +333,11 @@ const getCampaignById = (id) => {
           orders:
             orders !== {}
               ? orders.data?.data.map((item) => {
-                  return {
-                    key: item.id,
-                    ...item,
-                  };
-                })
+                return {
+                  key: item.id,
+                  ...item,
+                };
+              })
               : {},
         })
       );
@@ -371,6 +354,7 @@ const getRequest = () => {
 };
 
 const getSuccess = (data) => {
+  //console.log(data)
   return {
     type: GET_DATA_SUCCESS,
     payload: data,
@@ -391,13 +375,6 @@ const storeRecord = (data) => {
   };
 };
 
-const creatingErr = (data) => {
-  return {
-    type: STORE_CREATING_ERR,
-    payload: data,
-  };
-};
-
 const action = {
   getCampaign,
   createCampaign,
@@ -405,7 +382,6 @@ const action = {
   deleteCampaign,
   startCampaignBeforeHand,
   doneCampaignBeforeHand,
-  storeCampaign,
   getCampaignById,
 };
 

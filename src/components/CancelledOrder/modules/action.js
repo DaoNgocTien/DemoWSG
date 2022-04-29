@@ -1,8 +1,7 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 
 const getOrder = () => {
-  const statusz = "cancelled";
   return async (dispatch) => {
     try {
       dispatch(getRequest());
@@ -50,8 +49,8 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => { })
-          .catch((err) => {
+          .then(() => { })
+          .catch(() => {
             return dispatch(getFailed());
           });
 
@@ -64,8 +63,8 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => { })
-          .catch((err) => {
+          .then(() => { })
+          .catch(() => {
             return dispatch(getFailed());
           });
 
@@ -85,7 +84,7 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof, requester) => {
     imageProof: imageProof,
     cancellingRequester: requester,
   }
-//  console.log(reject);
+//  //console.log(reject);
   return async (dispatch) => {
     dispatch(getRequest());
     try {

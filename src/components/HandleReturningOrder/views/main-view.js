@@ -229,14 +229,14 @@ class HandleReturningOrderUI extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    console.log(this.props.data);
+    //console.log(this.props.data);
     let handledBySupplier = 0;
     data.orderHistories?.statushistory?.map((item) => {
       if (item.statushistory === "returning") {
         handledBySupplier++;
       }
     });
-    console.log(handledBySupplier > 1);
+    //console.log(handledBySupplier > 1);
     return (
       <>
         <Form id="rejectReturnOrderForm" onFinish={this.handleRejectAndClose}>

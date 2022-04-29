@@ -21,7 +21,7 @@ const getProfile = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      console.log(profile);
+      //console.log(profile);
       if (profile.status === 200) {
         // if(profile.data.data.user.rolename ==="Supplier")
         let user = profile.data.data.user.rolename === "Supplier" ? {
@@ -31,7 +31,7 @@ const getProfile = () => {
           rolename: profile.data.data.user.rolename,
           ...profile.data.data.systemProfileData[0],
         };
-        console.log(user);
+        //console.log(user);
         localStorage.setItem("user", JSON.stringify(user));
         return dispatch(getSuccess(user));
       }
@@ -128,7 +128,7 @@ const checkingPhoneNumber = (message) => {
 };
 
 const updateProfile = (user) => {
-  console.log(user);
+  //console.log(user);
   return async (dispatch) => {
     try {
       dispatch(getRequest());

@@ -31,7 +31,7 @@ class OrderDetail extends Component {
   formRef = React.createRef();
 
   componentDidMount() {
-    // console.log(this.props);
+    // //console.log(this.props);
   }
 
   handleEditAndClose = (data) => {

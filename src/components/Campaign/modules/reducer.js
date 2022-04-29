@@ -38,7 +38,6 @@ const campaignReducer = (state = initialState, action) => {
     case GET_DATA_FAIL:
       state.loading = false;
       state.data = [];
-      // state.err = action.payload;
       return { ...state };
     default:
       return { ...state };

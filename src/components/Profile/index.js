@@ -39,18 +39,18 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getProfile: async () => {
-      // console.log("get campaign");
+      // //console.log("get campaign");
       await dispatch(action.getProfile());
     },
 
     getOrdersInCampaign: async (campaignID) => {
-      // console.log("getOrdersInCampaign final");
-      // console.log(campaignID);
+      // //console.log("getOrdersInCampaign final");
+      // //console.log(campaignID);
     },
 
     createCampaign: async (record) => {
-      // console.log("createProduct final");
-      // console.log(record);
+      // //console.log("createProduct final");
+      // //console.log(record);
       await dispatch(action.createCampaign(record));
       // await dispatch(action.getCampaign());
     },

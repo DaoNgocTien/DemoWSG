@@ -55,7 +55,7 @@ class DeleteModal extends Component {
   componentDidMount() { }
 
   handleDeleteAndClose = (data) => {
-    //console.log(data);
+    ////console.log(data);
     this.props.disableLoyalCustomer(this.props.record?.id);
     this.props.closeModal();
   };
@@ -69,7 +69,7 @@ class DeleteModal extends Component {
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    // console.log(record);
+    // //console.log(record);
     if (this.props.loading || !this.props.record || !productList) {
       return <></>;
     }

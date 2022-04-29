@@ -11,7 +11,7 @@ class OrderReturning extends Component {
 
   componentDidMount() {
     this.props.getOrder();
-    // console.log(this.props);
+    // //console.log(this.props);
   }
 
   render() {

@@ -44,7 +44,7 @@ const actLoginApi = (user, history) => {
         }
       })
       .catch((err) => {
-        //  console.log(err);
+        //  //console.log(err);
         return dispatch(getFailed("Invalid username or password!"));
       });
   };
@@ -56,7 +56,7 @@ const googleOAuth2 = (googleResponse) => {
     if (typeof googleResponse === "undefined") {
       googleResponse = [];
     }
-    // console.log(googleResponse)
+    // //console.log(googleResponse)
     if (googleResponse && !googleResponse.error) {
       Axios({
         url: `/users/login/google`,
@@ -99,7 +99,7 @@ const googleOAuth2 = (googleResponse) => {
 };
 
 const phoneNumberValidation = (phone) => {
-  //  console.log((phone));
+  //  //console.log((phone));
   return async (dispatch) => {
     if ((phone + "").length > 11 || (phone + "").length < 10) {
       return dispatch(
@@ -134,7 +134,7 @@ const checkPhoneNumber = (phone) => {
         }),
       ]);
 
-      //  console.log(phoneValidation.data.data[0]);
+      //  //console.log(phoneValidation.data.data[0]);
       const exist = phoneValidation.data.data[0] ? true : false;
       if (exist) {
         return dispatch(
@@ -160,7 +160,7 @@ const checkPhoneNumber = (phone) => {
       //   })
       // );
     } catch (error) {
-      // console.log(error);
+      // //console.log(error);
       return dispatch(getFailed(error));
     }
   };
@@ -180,7 +180,7 @@ const checkPhoneNumberForgotPassword = (phone) => {
         }),
       ]);
 
-      //  console.log(phoneValidation.data.data[0]);
+      //  //console.log(phoneValidation.data.data[0]);
       const exist = phoneValidation.data.data[0] ? true : false;
       if (exist) {
         return dispatch(
@@ -207,7 +207,7 @@ const checkPhoneNumberForgotPassword = (phone) => {
       //   })
       // );
     } catch (error) {
-      // console.log(error);
+      // //console.log(error);
       return dispatch(getFailed(error));
     }
   };
@@ -227,16 +227,20 @@ const registration = (data) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      //console.log(registrationResponse)
+      if (registrationResponse.status == 200) {
+        dispatch(
+          storeProfile({
+            profile: registrationResponse.data.data,
+          })
+        );
+        return (<Redirect to="/" />);
+        // window.location.replace("/");
+      }
 
-      //  console.log(registrationResponse);
-      dispatch(
-        storeProfile({
-          profile: registrationResponse.data.data,
-        })
-      );
     } catch (error) {
-      // console.log(error);
-      return dispatch(getFailed(error));
+      //console.log(error);
+      return dispatch(getFailed());
     }
   };
 };
@@ -245,7 +249,7 @@ const getProfile = () => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      // console.log("test");
+      // //console.log("test");
       const [profile] = await Promise.all([
         Axios({
           url: `/users/profile/me`,
@@ -346,7 +350,7 @@ const storeProfile = (data) => {
 };
 
 const changePasswordMessage = (data) => {
-  // console.log(data);
+  // //console.log(data);
   return {
     type: GET_DATA_SUCCESS,
     payload: data,

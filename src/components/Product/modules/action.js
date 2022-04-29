@@ -13,8 +13,8 @@ const getAllProduct = (category) => {
     })
       .then((result) => {
         if (result.status === 200) {
-          // console.log("getAllProduct: ");
-          // console.log(result.data.data);
+          // //console.log("getAllProduct: ");
+          // //console.log(result.data.data);
           const data = (result.data.data).map(product => {
             return {
               key: product.id,
@@ -41,12 +41,12 @@ const createProduct = record => {
       withCredentials: true,
     }).then((response) => {
       if (response.status === 200) {
-        // console.log(response.data.data);
+        // //console.log(response.data.data);
       }
     })
       .catch(() => {
-        // // console.log(err);
-        // // console.log(typeof (err));
+        // // //console.log(err);
+        // // //console.log(typeof (err));
         return dispatch(getFailed());
       })
       .finally(() => {
@@ -55,7 +55,7 @@ const createProduct = record => {
 }
 
 const updateProduct = (record) => {
-  // console.log(record);
+  // //console.log(record);
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -71,15 +71,15 @@ const updateProduct = (record) => {
       },
       withCredentials: true,
     }).then((response) => {
-      // console.log(response);
+      // //console.log(response);
       if (response.status === 200) {
-        // // console.log(response);
+        // // //console.log(response);
         // return window.location.reload();
-        // console.log(response.data.data);
+        // //console.log(response.data.data);
       }
     }).catch(() => {
-      // console.log(err);
-      // console.log(typeof (err));
+      // //console.log(err);
+      // //console.log(typeof (err));
       return dispatch(getFailed());
     });
   };
@@ -93,14 +93,14 @@ const deleteProduct = id => {
       method: "DELETE",
       withCredentials: true,
     }).then((response) => {
-      // console.log(response);
+      // //console.log(response);
       if (response.status === 200) {
-        // console.log(response);
+        // //console.log(response);
         // return window.location.reload();
       }
     }).catch(() => {
-      // console.log(err);
-      // console.log(typeof (err));
+      // //console.log(err);
+      // //console.log(typeof (err));
       return dispatch(getFailed());
     });
   };

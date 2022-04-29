@@ -19,12 +19,12 @@ class ProductPage extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props);
+    //console.log(this.props);
     this.props.getOneProduct(this.props.match.params.id);
   }
 
   render() {
-    console.log(this.props.data);
+    //console.log(this.props.data);
     const { loading, data } = this.props;
     if (loading) return <Loader />;
     return (

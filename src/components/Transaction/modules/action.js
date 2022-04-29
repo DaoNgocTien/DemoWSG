@@ -40,12 +40,12 @@ const updateTransaction = (transaction) => {
     })
       .then((response) => {
         if (response.status === 200) {
-          // console.log(response.data.data);
+          // //console.log(response.data.data);
         }
       })
       .catch((err) => {
-        // // console.log(err);
-        // // console.log(typeof (err));
+        // // //console.log(err);
+        // // //console.log(typeof (err));
         return dispatch(getFailed());
       })
       .finally(() => {});

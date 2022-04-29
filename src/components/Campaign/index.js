@@ -1,8 +1,6 @@
-import React, { Component, memo } from "react";
-// import {default as productAction} from "../Product/modules/action";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import action from "./modules/action";
-import { default as orderAction } from "../Orders/modules/action";
 import CampaignUI from "./views/main-view";
 
 class Campaign extends Component {
@@ -15,7 +13,6 @@ class Campaign extends Component {
   }
 
   render() {
-    console.log(this.props.data)
     return (
       <CampaignUI
         data={this.props.data.campaigns}
@@ -40,29 +37,20 @@ const mapStateToProps = (state) => {
     data: state.campaignReducer.data,
     error: state.campaignReducer.err,
     record: state.campaignReducer.record,
-
-    // productList: state.productReducer.data,
-    // orderList: state.orderReducer.data.orders,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     getCampaign: async (campaignId) => {
-      // console.log("get campaign");
       await dispatch(action.getCampaign(campaignId));
-      // await dispatch(orderAction.getOrder());
     },
 
     getCampaignById: async (campaignId) => {
-      // console.log("get campaign");
       await dispatch(action.getCampaignById(campaignId));
-      // await dispatch(orderAction.getOrder());
     },
 
     createCampaign: async (record) => {
-      // console.log("createProduct final");
-      // console.log(record);
       await dispatch(action.createCampaign(record));
       await dispatch(action.getCampaign());
     },
@@ -77,28 +65,12 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.getCampaign());
     },
 
-
     startCampaignBeforeHand: async (id) => {
       await dispatch(action.startCampaignBeforeHand(id));
       await dispatch(action.getCampaign());
     },
 
-    
-    storeCampaign: async (record) => {
-      await dispatch(action.storeCampaign(record));
-      await dispatch(action.getCampaign());
-    },
-    // rejectOrder: async (orderCode, reasonForCancel, imageProof, requester) => {
-    //   await dispatch(orderAction.rejectOrder(orderCode, reasonForCancel, imageProof, requester));
-    //   await dispatch(orderAction.getOrder());
-    // },
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Campaign);
-// const arePropsEqual = (prevProps, nextProps) => {
-//   return prevProps === nextProps;
-// };
-
-// Wrap component using `React.memo()` and pass `arePropsEqual`
-// export default memo(connect(mapStateToProps, mapDispatchToProps)(Campaign), arePropsEqual);

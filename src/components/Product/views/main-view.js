@@ -93,7 +93,7 @@ class ProductUI extends Component {
   };
 
   onSelectChange = (record) => {
-    // console.log('selectedRowKeys changed: ', selectedRowKeys);
+    // //console.log('selectedRowKeys changed: ', selectedRowKeys);
     let campaignList = this.props.campaignList?.length
       ? this.props.campaignList.filter((c) => c.productid === record.id)
       : [];
@@ -261,10 +261,10 @@ class ProductUI extends Component {
 
   onChangeHandler = (e) => {
     let { data } = this.props;
-    // console.log(data);
+    // //console.log(data);
     let searchString = e.target.value.toUpperCase();
     let searchList = data.filter((item) => {
-      // console.log(item);
+      // //console.log(item);
       return (
         item?.name?.toUpperCase().includes(searchString) ||
         // item?.categoryname?.toUpperCase().includes(searchString) ||

@@ -75,8 +75,8 @@ class PasswordTab extends Component {
   onChangePhoneNumber = e => {
     const phone = e.target.value;
     // const checkPhoneMessage = this.props.phoneValidation.checkPhoneMessage;
-    // // console.log(phone);
-    // // console.log(this.props.phoneValidation.checkPhoneMessage);
+    // // //console.log(phone);
+    // // //console.log(this.props.phoneValidation.checkPhoneMessage);
 
     // if (phone.length > 11 || phone.length < 10) {
     //   return this.setState({
@@ -99,22 +99,22 @@ class PasswordTab extends Component {
   }
 
   updatePhone = (values) => {
-    // console.log(values.target.value);
+    // //console.log(values.target.value);
     let phone = this.state.phone;
-    // console.log(phone);
+    // //console.log(phone);
     this.props.checkPhoneNumber(phone);
   }
 
   checkOTP = e => {
     const value = e.target.value;
-    //  console.log(JSON.parse(localStorage.getItem("user")));
+    //  //console.log(JSON.parse(localStorage.getItem("user")));
     if (value === this.props.phoneValidation.phoneOTP && this.state.phone === this.props.phoneValidation.phone) {
       this.setState({
         phoneAvailable: true,
         OTPMessage: null,
       });
       let data = this.props.data;
-      console.log(this.props.data);
+      //console.log(this.props.data);
       const user = {
         phone:  "0" + String(this.state.phone),
         avatar: JSON.parse(data.avt),
@@ -139,7 +139,7 @@ class PasswordTab extends Component {
   }
 
   updateIdentifcation = (values) => {
-    // console.log(values);
+    // //console.log(values);
 
     values.identificationimage =
       this.state.fileList.length === 0 && this.props.record
@@ -174,9 +174,9 @@ class PasswordTab extends Component {
   };
 
   handleChange = ({ fileList }) => {
-    console.log(fileList);
+    //console.log(fileList);
     // this.props.onChangeUpdateProfile();
-    console.log(fileList);
+    //console.log(fileList);
     fileList = fileList.map((file) => {
       if (file.response) {
         file.url = file.response[0].url;
@@ -216,7 +216,7 @@ class PasswordTab extends Component {
     const {
       changePasswordMessage,
     } = data;
-    // console.log(checkPhoneMessage);
+    // //console.log(checkPhoneMessage);
     return (
       <>
         <Title style={{ textAlign: "center", marginTop: "30px" }} level={3}>MANAGE PASSWORD</Title>
@@ -333,7 +333,7 @@ class PasswordTab extends Component {
                   //       // if (getFieldValue("phoneMessage").length > 0) {
                   //       //   return Promise.reject(new Error(`${getFieldValue("phoneMessage")}`));
                   //       // }
-                  //       // console.log(phoneValidation);
+                  //       // //console.log(phoneValidation);
                   //       if (value && !checkPhoneMessage) {
                   //         return Promise.resolve();
                   //       }
@@ -595,11 +595,11 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     getProfile: async () => {
-      // // console.log("get campaign");
+      // // //console.log("get campaign");
       await dispatch(action.getProfile());
     },
     checkingPhoneNumber: async (message) => {
-      // // console.log("get campaign");
+      // // //console.log("get campaign");
       await dispatch(action.checkingPhoneNumber(message));
       // await dispatch(action.getProfile());
     },

@@ -27,7 +27,7 @@ const getData = (orderCode) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      //  console.log(order);
+      //  //console.log(order);
       return dispatch(
         getSuccess({
           orderHistories: orderHistories.data.data.map((orderHistory) => {
@@ -73,8 +73,8 @@ const rejectRequest = (data) => {
 };
 
 const storeComplainRecord = (record) => {
-  //  console.log("storeComplainRecord action");
-  //  console.log(record);
+  //  //console.log("storeComplainRecord action");
+  //  //console.log(record);
   return async (dispatch) => {
     try {
       return dispatch(getComplainRecord({ complainRecord: record }));
@@ -136,7 +136,7 @@ const rejectOrder = (
     supplierId: user.id,
     cancelLinkRequestor: requester,
   };
-  console.log(reject);
+  //console.log(reject);
 
   return async (dispatch) => {
     dispatch(getRequest());

@@ -37,9 +37,9 @@ class EditModal extends Component {
     formRef = React.createRef();
 
     componentDidMount() {
-        // console.log("EditModal Didmount");
+        // //console.log("EditModal Didmount");
 
-        // console.log(this.props);
+        // //console.log(this.props);
         this.formRef.current.setFieldsValue({
             id: this.props.record?.id,
             categoryname: this.props.record?.categoryname,

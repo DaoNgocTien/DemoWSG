@@ -1,39 +1,38 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_RECORD } from "./constant";
 import Axios from "axios";
 
-const getDiscountCode = () => {
+const getDiscountCode = (id) => {
   return async (dispatch) => {
     dispatch(getRequest());
     try {
-      const [discountCodes, products] = await Promise.all([
+      const [discountCodes] = await Promise.all([
         Axios({
           url: `/discountcode/supplier`,
           method: "GET",
           withCredentials: true,
         }),
-        Axios({
-          url: `/products/All`,
-          method: "GET",
-          withCredentials: true,
-        }),
       ]);
-
-      return dispatch(
-        getSuccess({
-          discountCodes: discountCodes.data.data.map((item) => {
-            return {
-              key: item.id,
-              ...item,
-            };
-          }),
-          products: products.data.data.map((item) => {
-            return {
-              key: item.id,
-              ...item,
-            };
-          }),
-        })
-      );
+      if (discountCodes.status === 200) {
+        let record = id ? discountCodes.data.data.find((item) => {
+          return item.id === id;
+        }) : {};
+        dispatch(storeRecord({
+          record: id ? {
+            key: record.id,
+            ...record,
+          } : {}
+        }));
+        return dispatch(
+          getSuccess({
+            discountCodes: discountCodes.data.data.map((item) => {
+              return {
+                key: item.id,
+                ...item,
+              };
+            })
+          })
+        );
+      }
     } catch (error) {
       return dispatch(getFailed(error));
     }
@@ -66,11 +65,11 @@ const createDiscountCode = (record) => {
   };
 };
 
-const updateDiscountCode = (record, id) => {
+const updateDiscountCode = (record) => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/discountcode/${id}`,
+      url: `/discountcode/${record.id}`,
       method: "PUT",
       data: record,
       withCredentials: true,
@@ -96,7 +95,7 @@ const deleteDiscountCode = (id) => {
   return async (dispatch) => {
     dispatch(getRequest());
     try {
-      const [deleteResponse, discountCodes, products] = await Promise.all([
+      const [deleteResponse, discountCodes] = await Promise.all([
         Axios({
           url: `/discountcode/${id}`,
           method: "DELETE",
@@ -104,11 +103,6 @@ const deleteDiscountCode = (id) => {
         }),
         Axios({
           url: `/discountcode/supplier`,
-          method: "GET",
-          withCredentials: true,
-        }),
-        Axios({
-          url: `/products/All`,
           method: "GET",
           withCredentials: true,
         }),
@@ -122,12 +116,6 @@ const deleteDiscountCode = (id) => {
               ...item,
             };
           }),
-          products: products.data.data.map((item) => {
-            return {
-              key: item.id,
-              ...item,
-            };
-          }),
         })
       );
     } catch (error) {
@@ -136,6 +124,10 @@ const deleteDiscountCode = (id) => {
   };
 };
 
+const getDiscountCodeById = id => {
+
+}
+
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -143,7 +135,6 @@ const getRequest = () => {
 };
 
 const getSuccess = (data) => {
-  // console.log(data);
   return {
     type: GET_DATA_SUCCESS,
     payload: data,
@@ -157,11 +148,19 @@ const getFailed = (err) => {
   };
 };
 
+const storeRecord = (data) => {
+  return {
+    type: STORE_RECORD,
+    payload: data,
+  };
+};
+
 const action = {
   getDiscountCode,
   createDiscountCode,
   updateDiscountCode,
   deleteDiscountCode,
+  getDiscountCodeById,
 };
 
 export default action;

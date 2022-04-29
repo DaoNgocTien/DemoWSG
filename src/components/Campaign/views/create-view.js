@@ -1,4 +1,9 @@
 import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  UndoOutlined
+} from "@ant-design/icons";
+import {
   Button,
   DatePicker,
   Descriptions,
@@ -6,44 +11,16 @@ import {
   Input,
   InputNumber,
   Modal,
-  Select,
-  Switch,
-  Upload,
-  Tooltip,
-  Space,
-  Typography,
+  Select, Space, Switch, Typography, Upload
 } from "antd";
 import moment from "moment";
-import PropTypes from "prop-types";
-import React, { Component, memo, createRef } from "react";
+import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
-import {
-  MinusCircleOutlined,
-  PlusOutlined,
-  UndoOutlined,
-} from "@ant-design/icons";
-import TimelineItem from "antd/lib/timeline/TimelineItem";
 
 const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
 
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  createCampaign: PropTypes.func,
-  openModal: PropTypes.bool,
-  productList: PropTypes.array,
-};
-
-const propsDefault = {
-  closeModal: () => {},
-  createCampaign: () => {},
-  openModal: false,
-  productList: [],
-};
-
 class CreatModal extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
@@ -84,60 +61,18 @@ class CreatModal extends Component {
   }
 
   handleCreateAndClose = (data) => {
-    console.log(data);
-
-    const productSelected =
-      this.state.productSelected === {} || !this.state.productSelected
-        ? this.props.productList[0]
-        : this.state.productSelected;
-
     let newCampaign = {};
     if (this.state.switchState) {
       //  Sort array
       data.quantities.sort(function (a, b) {
         return b.quantity - a.quantity;
       });
-      //  Remove duplicate quantity
-      // data.quantities = data.quantities.filter(
-      //   (value, index, self) =>
-      //     index ===
-      //     self.findIndex(
-      //       (t) => t.quantity === value.quantity && t.price <= value.price
-      //     )
-      // );
 
       const datas = this.uniqByKeepFirst(data.quantities, (it) => it.quantity);
       data.quantities.sort(function (a, b) {
         return a.quantity - b.quantity;
       });
-      console.log(datas);
-      console.log(data.quantities);
-      // let errArr = [];
-      // let compareArr = [];
-      // data.quantities.map((item) => {
-      //   data.quantities.map((item2) => {
-      //     if (item.quantity != item2.quantity) {
-      //       if (item.quantity > item2.quantity && item.price > item2.price) {
-      //         errArr.push(item);
-      //         // compareArr.push(item2);
-      //       }
-      //     }
-      //   })
 
-      // })
-
-      //  Remove item to make valid final array
-      // let datas = data.quantities.filter(item => {
-      //   console.log(!errArr.includes(item));
-      //   return !errArr.includes(item);
-      // })
-
-      // //  Change % price to numeric price
-      // datas.map(item => {
-      //   return item.price = item.price * data.wholesalePrice / 100;
-      // })
-
-      //  Set new record
       newCampaign = {
         productId: data.productId,
         fromDate: data.date[0],
@@ -156,21 +91,6 @@ class CreatModal extends Component {
 
       //  Close modal
       this.props.closeModal();
-      // data.quantities.filter(item => {
-      //   console.log(!errArr.includes(item));
-      //   return !errArr.includes(item);
-      //   // else {
-      //   //   return item;
-      //   // }
-      // })
-      // console.log(errArr);
-      // console.log(datas);
-      // this.setState({
-      //   errStepArr: {
-      //     errArr: errArr,
-      //     compareArr: compareArr
-      //   }
-      // })
     } else {
       newCampaign = {
         productId: data.productId,
@@ -195,26 +115,9 @@ class CreatModal extends Component {
   };
 
   onSelectProduct = (value) => {
-    // this.formRef.current.resetFields();
-
     let productSelected = this.props.productList?.find(
       (element) => element.id === value
     );
-
-    // let campaignListOfSelectedProduct = [];
-    // let campaignList = this.props.campaingList ? this.props.campaingList : [];
-    // campaignListOfSelectedProduct = campaignList.filter((camp) => {
-    //   return (
-    //     camp.productid === value &&
-    //     (camp.status === "ready" || camp.status === "active")
-    //   );
-    // });
-
-    // let productQuantityOfExistCampaign = 0;
-    // campaignListOfSelectedProduct.map(
-    //   (camp) => (productQuantityOfExistCampaign += Number(camp.maxquantity))
-    // );
-
     this.setState({
       productSelected: productSelected,
       availableQuantity: productSelected.quantity - productSelected.maxquantity,
@@ -223,8 +126,6 @@ class CreatModal extends Component {
       maxQuantity: "10",
     });
     this.formRef.current.setFieldsValue({
-      // description: 'ABCDEF',
-      // price:productSelected.retailprice,
       wholesalePrice: productSelected.retailprice,
       quantity: this.state.switchState ? "1" : "10",
       maxQuantity: "10",
@@ -257,6 +158,7 @@ class CreatModal extends Component {
         break;
     }
   };
+
   onChangeAdvancePercent = (value) => {
     if (isNaN(value)) {
       return;
@@ -265,9 +167,11 @@ class CreatModal extends Component {
       advancePercent: value,
     });
   };
+
   disabledDate = (current) => {
     return current && current < moment().endOf("day");
   };
+
   toggleSwitch = () => {
     this.setState({
       switchState: !this.state.switchState,
@@ -293,7 +197,7 @@ class CreatModal extends Component {
       formListErrMessage,
       errStepArr,
     } = this.state;
-    console.log(productList);
+
     return (
       <>
         <Modal
@@ -336,7 +240,7 @@ class CreatModal extends Component {
                   },
                   () => ({
                     validator(_, value) {
-                      console.log(value);
+                      //console.log(value);
                       if (value.length > 0 && value.length <= 50) {
                         return Promise.resolve();
                       }
@@ -389,7 +293,6 @@ class CreatModal extends Component {
               <Form.Item
                 name="productId"
                 label="Product"
-                // initialValue={productList[0]?.id}
                 rules={[
                   {
                     required: true,
@@ -398,7 +301,7 @@ class CreatModal extends Component {
                     validator(_, value) {
                       if (
                         Number(productSelected?.retailprice) *
-                          Number(availableQuantity) <
+                        Number(availableQuantity) <
                         5000
                       ) {
                         return Promise.reject(
@@ -417,8 +320,8 @@ class CreatModal extends Component {
                   {productList.map((item) => {
                     if (
                       [item.quantity - item.maxquantity] *
-                        Number(item.retailprice) >
-                        5000 &&
+                      Number(item.retailprice) >
+                      5000 &&
                       item.status !== "deactivated"
                     )
                       return (
@@ -442,20 +345,8 @@ class CreatModal extends Component {
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      // const quantity = getFieldValue("quantity");
-                      // const advancePercent = getFieldValue("advancePercent");
                       const range =
                         Number(productSelected?.retailprice) ?? 999999999999;
-
-                      // if (value * quantity * advancePercent < 500000) {
-                      //   return Promise.reject(
-                      //     new Error(
-                      //       "Advance payment has to be >= 5000 VND, at least " +
-                      //       (500000 / (value * quantity) + 1).toFixed() +
-                      //       " %"
-                      //     )
-                      //   );
-                      // }
                       if (value >= 0 && value <= range) {
                         return Promise.resolve();
                       }
@@ -495,8 +386,6 @@ class CreatModal extends Component {
                     validator(_, value) {
                       const min = switchState ? 0 : 9;
                       const maxQuantity = getFieldValue("maxQuantity");
-                      // const wholesalePrice = getFieldValue('wholesalePrice');
-                      // const advancePercent = getFieldValue('advancePercent');
                       if (maxQuantity < value) {
                         return Promise.reject(
                           new Error(
@@ -504,19 +393,6 @@ class CreatModal extends Component {
                           )
                         );
                       }
-
-                      // if (value * wholesalePrice * advancePercent < 500000) {
-                      //   return Promise.reject(
-                      //     new Error(
-                      //       "Advance payment has to be >= 5000 VND, at least " +
-                      //       (
-                      //         500000 / (value * wholesalePrice) +
-                      //         1
-                      //       ).toFixed() +
-                      //       " %"
-                      //     )
-                      //   );
-                      // }
                       if (value > min) {
                         return Promise.resolve();
                       }
@@ -595,22 +471,6 @@ class CreatModal extends Component {
                   },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
-                      // const range = Number(productSelected?.retailprice) ?? 999999999999;
-                      // const quantity = getFieldValue('quantity');
-                      // const wholesalePrice = getFieldValue('wholesalePrice');
-                      // const advancePercent = getFieldValue('advancePercent');
-                      // if (wholesalePrice * quantity * value <= 500000) {
-                      //   return Promise.reject(
-                      //     new Error(
-                      //       "Advance percent to be > 5000, at least " +
-                      //       (
-                      //         500000 / (minWholesalePrice * maxQuantity) +
-                      //         1
-                      //       ).toFixed() +
-                      //       " %"
-                      //     )
-                      //   );
-                      // }
                       return Promise.resolve();
                     },
                   }),
@@ -669,7 +529,7 @@ class CreatModal extends Component {
                 <Form.List
                   name="quantities"
                   onChange={(record) => {
-                    console.log(record);
+                    //console.log(record);
                   }}
                 >
                   {(fields, { add, remove }) => {
@@ -728,38 +588,6 @@ class CreatModal extends Component {
                                 },
                                 ({ getFieldValue }) => ({
                                   validator(_, value) {
-                                    // const quantity = getFieldValue("quantity");
-                                    // const wholesalePrice =
-                                    //   getFieldValue("wholesalePrice");
-                                    // const advancePercent =
-                                    //   getFieldValue("advancePercent");
-                                    // const range = getFieldValue("quantities").sort(
-                                    //   (a, b) => a.quantity - b.quantity
-                                    // );
-                                    // const index = _.field.match(/\d/g);
-                                    // c
-                                    // console.log(_);
-                                    // if (
-                                    //   quantity *
-                                    //   advancePercent *
-                                    //   wholesalePrice *
-                                    //   value <
-                                    //   5000 * 100 * 100
-                                    // ) {
-                                    //   return Promise.reject(
-                                    //     new Error(
-                                    //       "Wholesale price percent in this step is invalid due to advance percent < 5000, at least " +
-                                    //       (
-                                    //         50000000 /
-                                    //         (quantity *
-                                    //           wholesalePrice *
-                                    //           value) +
-                                    //         1
-                                    //       ).toFixed() +
-                                    //       " %"
-                                    //     )
-                                    //   );
-                                    // }
                                     return Promise.resolve();
                                   },
                                 }),
@@ -795,7 +623,6 @@ class CreatModal extends Component {
 
                           <Form.Item>
                             <Button
-                              // type="dashed"
                               onClick={() => add()}
                               block
                               icon={<PlusOutlined />}

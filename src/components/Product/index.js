@@ -20,7 +20,7 @@ class ProductPage extends Component {
   componentDidMount() {
     const search = this.props.location.search;
     const category = new URLSearchParams(search).get("category");
-    console.log(category);
+    //console.log(category);
     this.props.getAllProduct(category);
   }
 

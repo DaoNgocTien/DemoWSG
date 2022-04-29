@@ -20,7 +20,7 @@ class AuthPage extends Component {
   };
 
   onFinish = (e) => {
-    // console.log(e);
+    // //console.log(e);
     this.props.login(e, this.props.history);
   };
 
@@ -45,7 +45,7 @@ class AuthPage extends Component {
 
     const { loading, error } = this.props;
     if (loading) return <Loader />;
-    //  console.log(this.props);
+    //  //console.log(this.props);
     if (!localStorage.getItem("user")) {
       return (
         <div className="main_form_body">
