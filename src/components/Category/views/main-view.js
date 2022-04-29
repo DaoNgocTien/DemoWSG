@@ -75,7 +75,7 @@ class CategoryUI extends Component {
 
   onSelectChange = (record) => {
     // const selectedRowKeys = [];
-    console.log(record);
+    //console.log(record);
     let isExisted = false;
     this.props.productList.map((p) => {
       if (p.categoryid === record.id) {

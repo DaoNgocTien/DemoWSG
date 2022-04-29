@@ -1,24 +1,8 @@
 import { Button, Descriptions, Form, Modal, Table } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-
 import NumberFormat from "react-number-format";
 
-//  prototype
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  record: PropTypes.object,
-  openModal: PropTypes.bool,
-};
-
-//  default props
-const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
-  record: {},
-  openModal: false,
-};
 
 class EditModal extends Component {
   constructor(props) {
@@ -27,13 +11,7 @@ class EditModal extends Component {
       record: {},
     };
   }
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   formRef = React.createRef();
-
-  componentDidMount() {
-    // console.log(this.props);
-  }
 
   handleEditAndClose = (data) => {
     if (data.status === "created" || data.status === "advanced") {
@@ -48,7 +26,6 @@ class EditModal extends Component {
   };
 
   handleCancel = () => {
-    // this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -117,7 +94,7 @@ class EditModal extends Component {
     {
       title: "Price",
       dataIndex: "price",
-       width: 200,
+      width: 200,
       key: "price",
     },
     {
@@ -134,7 +111,7 @@ class EditModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-      fix:"right"
+      fix: "right"
     }
   ];
 
@@ -160,14 +137,6 @@ class EditModal extends Component {
             onCancel={this.handleCancel}
             footer={[
               <Button onClick={this.handleCancel}>Cancel</Button>,
-              // <Button
-              //   type="primary"
-              //   form="editForm"
-              //   key="submit"
-              //   htmlType="submit"
-              // >
-              //   Submit
-              // </Button>,
             ]}
           >
             <Descriptions
@@ -181,7 +150,7 @@ class EditModal extends Component {
               </Descriptions.Item>
               <Descriptions.Item label="Total Price">
                 <NumberFormat
-                  value=  {this.state.record?.totalprice}
+                  value={this.state.record?.totalprice}
                   thousandSeparator={true}
                   suffix={" VND"}
                   decimalScale={0}

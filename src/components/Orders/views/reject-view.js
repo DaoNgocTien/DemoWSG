@@ -46,8 +46,8 @@ class RejectModal extends Component {
   componentDidMount() {}
 
   handleRejectAndClose = (data) => {
-    console.log(this.state.requester);
-    console.log(this.props.record);
+    //console.log(this.state.requester);
+    //console.log(this.props.record);
     this.props.record.campaignid != null
       ? this.props.rejectOrder(
           this.props.record.ordercode,

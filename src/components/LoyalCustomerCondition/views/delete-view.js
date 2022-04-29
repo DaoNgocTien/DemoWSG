@@ -68,7 +68,7 @@ class DeleteModal extends Component {
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    // console.log(record);
+    // //console.log(record);
     if (this.props.loading || !this.props.record || !productList) {
       return <></>;
     }

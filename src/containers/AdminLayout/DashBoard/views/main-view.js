@@ -243,15 +243,15 @@ class DashboardUI extends Component {
 
     const { productList, createCampaign, updateCampaign, deleteCampaign, data } =
       this.props;
-    // console.log(data);
+    // //console.log(data);
     // const hasSelected = selectedRowKeys.length > 0;
-    const arrayLocation = window.location.pathname.split("/");
+    const arrayLocation = window.location.pathname.split("/"); 
     return (
       <Layout>
         <Content>
           <PageHeader
             // onBack={() => window.history.back()}
-            title={`Hello, ${JSON.parse(localStorage.getItem('user') ?? '{name: ""}').name}`}
+            title={`Hello, ${JSON.parse(localStorage.getItem('user'))?.name ?? ""}`}
             // subTitle={`This is a ${arrayLocation[2]} page`}
             footer={
               <Row>
@@ -394,10 +394,10 @@ class DashboardUI extends Component {
           breakpoint="lg"
           collapsedWidth="0"
           onBreakpoint={broken => {
-          //  console.log(broken);
+          //  //console.log(broken);
           }}
           onCollapse={(collapsed, type) => {
-          //  console.log(collapsed, type);
+          //  //console.log(collapsed, type);
           }}
         >
           <Menu theme="light">

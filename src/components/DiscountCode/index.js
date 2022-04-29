@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
 import action from "./modules/action";
 import DiscountCodeUI from "./views/main-view";
@@ -14,17 +13,12 @@ class DiscountCode extends Component {
   }
 
   render() {
-    // console.log(this.props);
     return (
       <DiscountCodeUI
         data={this.props.data.discountCodes}
         loading={this.props.loading}
         getDiscountCode={this.props.getDiscountCode}
-        ordersInCampaign={this.props.data.order}
-        productList={this.props.data.products}
         createDiscountCode={this.props.createDiscountCode}
-        updateDiscountCode={this.props.updateDiscountCode}
-        deleteDiscountCode={this.props.deleteDiscountCode}
       />
     );
   }
@@ -35,8 +29,6 @@ const mapStateToProps = (state) => {
     loading: state.discountReducer.loading,
     data: state.discountReducer.data,
     error: state.discountReducer.err,
-    // productList: state.productReducer.data,
-    // orderList: [],
   };
 };
 
@@ -47,19 +39,8 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     createDiscountCode: async (record) => {
-      // console.log(record);
       await dispatch(action.createDiscountCode(record));
       await dispatch(action.getDiscountCode());
-    },
-
-    updateDiscountCode: async (record, id) => {
-      // console.log(record);
-      await dispatch(action.updateDiscountCode(record, id));
-      await dispatch(action.getDiscountCode());
-    },
-
-    deleteDiscountCode: async (id) => {
-      await dispatch(action.deleteDiscountCode(id));
     },
   };
 };

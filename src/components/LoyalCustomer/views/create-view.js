@@ -35,8 +35,8 @@ class CreatModal extends Component {
   componentDidMount() {}
 
   handleCreateAndClose = (data) => {
-    // console.log("DiscountCode create");
-    // console.log(data);
+    // //console.log("DiscountCode create");
+    // //console.log(data);
     let newLoyalCustomerCondition = {
       minOrder: data.minOrder,
       minProduct: data.minProduct,
@@ -58,7 +58,7 @@ class CreatModal extends Component {
     const { productList } = this.props;
     const { productSelected = this.props.productList[0], price = 0 } =
       this.state;
-    // console.log(productSelected);
+    // //console.log(productSelected);
     return (
       <>
         <Form

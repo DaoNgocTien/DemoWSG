@@ -66,7 +66,7 @@ class UpdateModal extends Component {
   formRef = React.createRef();
 
   componentDidMount() {
-    // console.log(this.props);
+    // //console.log(this.props);
   }
 
   handleUpdateAndClose = (data) => {
@@ -80,7 +80,7 @@ class UpdateModal extends Component {
       this.state.fileList?.length === 0 && this.props.record
         ? JSON.parse(this.props.record?.image)
         : this.state.fileList;
-    // console.log(data);
+    // //console.log(data);
     this.props.updateProduct(data);
     // break;
 
@@ -126,7 +126,7 @@ class UpdateModal extends Component {
 
   handleChange = ({ fileList }) => {
     // fileList = fileList.slice(-2);
-    // console.log(fileList);
+    // //console.log(fileList);
     // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
@@ -169,7 +169,7 @@ class UpdateModal extends Component {
       // title: "Quantity",
       // render: (object) => {
       //   // let disabled = object.status === "created" ? "false" : "true";
-      //   // console.log(object);
+      //   // //console.log(object);
       //   return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
 
 
@@ -193,7 +193,7 @@ class UpdateModal extends Component {
       // title: "Quantity",
       // render: (object) => {
       //   // let disabled = object.status === "created" ? "false" : "true";
-      //   // console.log(object);
+      //   // //console.log(object);
       //   return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
 
 

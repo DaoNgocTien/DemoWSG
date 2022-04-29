@@ -7,26 +7,7 @@ import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
 const { RangePicker } = DatePicker;
-
-//  prototype
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  createDiscountCode: PropTypes.func,
-  openModal: PropTypes.bool,
-  productList: PropTypes.array,
-};
-
-//  default props
-const propsDefault = {
-  closeModal: () => {},
-  createDiscountCode: () => {},
-  openModal: false,
-  productList: [],
-};
-
 class CreatModal extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
@@ -35,8 +16,6 @@ class CreatModal extends Component {
     price: 0,
   };
   formRef = React.createRef();
-
-  componentDidMount() {}
 
   handleCreateAndClose = (data) => {
     let newDiscountCode = {
@@ -58,7 +37,6 @@ class CreatModal extends Component {
   };
 
   onSelectProduct = (value) => {
-    // console.log(value);
     this.setState({
       productSelected: this.props.productList?.find(
         (element) => element.id === value
@@ -72,7 +50,6 @@ class CreatModal extends Component {
     const { productList } = this.props;
     const { productSelected = this.props.productList[0], price = 0 } =
       this.state;
-    // console.log(productSelected);
     return (
       <>
 
@@ -132,15 +109,8 @@ class CreatModal extends Component {
                   onChange={this.onChange}
                 />
               </Form.Item>
-              {/* </Descriptions.Item>
-
-              <Descriptions.Item label="Code"> */}
               <Form.Item name="code" label="Code"
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Name is required!',
-                  // },
                   () => ({
                     validator(_, value) {
 
@@ -159,21 +129,7 @@ class CreatModal extends Component {
             <Space size={30}>
               <Form.Item name="discountPrice" initialValue={1000} label="Discount price"
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Name is required!',
-                  // },
                   () => ({
-                    // validator(_, value) {
-
-                    //   if (listName.includes(value)) {
-                    //     return Promise.reject(new Error('Product Name exists!'));
-                    //   }
-                    //   if (value.length >= 0 && value.length <= 20) {
-                    //     return Promise.resolve();
-                    //   }
-
-                    //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
                     validator(_, value) {
                       if (Number(value) > 0) {
                         return Promise.resolve();
@@ -187,26 +143,10 @@ class CreatModal extends Component {
               >
                 <InputNumber min={1000} max={999999999999} style={{ width: "60vh" }} />
               </Form.Item>
-              {/* </Descriptions.Item>
-
-          <Descriptions.Item label="Minimun price"> */}
+            
               <Form.Item name="minimunPrice" initialValue={1000} label="Minimun price"
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Name is required!',
-                  // },
                   () => ({
-                    // validator(_, value) {
-
-                    //   if (listName.includes(value)) {
-                    //     return Promise.reject(new Error('Product Name exists!'));
-                    //   }
-                    //   if (value.length >= 0 && value.length <= 20) {
-                    //     return Promise.resolve();
-                    //   }
-
-                    //   return Promise.reject(new Error('Product Name is required, length is 1-20 characters!'));
                     validator(_, value) {
                       if (Number(value) > 0) {
                         return Promise.resolve();
@@ -236,7 +176,6 @@ class CreatModal extends Component {
 
 
         </Modal>
-        {/* </Form > */}
       </>
     );
   }

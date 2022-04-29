@@ -1,8 +1,10 @@
 import Campaign from "../components/Campaign";
-import OrdersInCampaign from "../components/Campaign/views/orders-in-campaign-view";
+import OrdersInCampaign from "../components/Campaign/views/detail-view";
 
 import Category from "../components/Category";
 import DiscountCode from "../components/DiscountCode";
+import DiscountCodeDetail from "../components/DiscountCode/views/detail-view";
+
 import HandleReturningOrder from "../components/HandleReturningOrder";
 import LoyalCustomer from "../components/LoyalCustomer";
 import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
@@ -91,6 +93,11 @@ const adminRoutes = [
     exact: true,
     path: "/discount/discount-codes",
     component: DiscountCode,
+  },
+  {
+    exact: true,
+    path: "/discount/discount-codes/:id",
+    component: DiscountCodeDetail,
   },
   {
     exact: true,

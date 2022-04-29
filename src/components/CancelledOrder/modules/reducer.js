@@ -9,7 +9,6 @@ let initialState = {
 const cancelledOrderReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
-
       state.loading = true;
       state.data = [];
       state.err = null;
@@ -24,7 +23,6 @@ const cancelledOrderReducer = (state = initialState, action) => {
     case GET_DATA_FAIL:
       state.loading = false;
       state.data = [];
-      // state.err = action.payload;
       return { ...state };
     default:
       return { ...state };

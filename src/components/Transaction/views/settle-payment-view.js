@@ -46,7 +46,7 @@ class SettlePaymentUI extends Component {
   formRef = React.createRef();
 
   componentDidMount() {
-    // console.log(this.props.record);
+    // //console.log(this.props.record);
   }
 
   handleRejectAndClose = (data) => {
@@ -108,7 +108,7 @@ class SettlePaymentUI extends Component {
     });
 
     this.setState({ fileList });
-    // console.log(this.state.fileList);
+    // //console.log(this.state.fileList);
   };
 
   columns = [
@@ -214,7 +214,7 @@ class SettlePaymentUI extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-  //  console.log(this.props.record);
+  //  //console.log(this.props.record);
     return (
       <>
         <PageHeader
@@ -543,8 +543,8 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     storeComplainRecord: async (record) => {
-    //  console.log("storeComplainRecord");
-    //  console.log(record);
+    //  //console.log("storeComplainRecord");
+    //  //console.log(record);
       await dispatch(action.storeComplainRecord(record));
     }
   };

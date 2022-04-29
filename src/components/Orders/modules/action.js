@@ -2,7 +2,7 @@ import Axios from "axios";
 import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 
 const getOrder = (status) => {
-//  console.log(status)
+//  //console.log(status)
   return async (dispatch) => {
     try {
       dispatch(getRequest());
@@ -27,11 +27,12 @@ const getOrder = (status) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      orders.data?.data.filter (order => order.status !== "notAdvanced");
-
+      const ordersort = orders.data?.data.filter (order => order.status.toUpperCase() !== "NOTADVANCED");
+//console.log(ordersort)
       return dispatch(
         getSuccess({
-          orders: orders.data.data.map((order) => {
+          orders: ordersort.map((order) => {
+            //console.log(order)
             return {
               campaign: campaigns.data.data.filter((camp) => {
                 return camp.id == order.campaignid;
@@ -49,8 +50,8 @@ const getOrder = (status) => {
 };
 
 const updateStatusOrder = (data, image) => {
-//  console.log(data);
-//  console.log(image);
+//  //console.log(data);
+//  //console.log(image);
   return async (dispatch) => {
     dispatch(getRequest());
     switch (data.status) {
@@ -101,7 +102,7 @@ const updateStatusOrder = (data, image) => {
 
 const rejectOrder = (orderCode, type, description, image, orderId, requester) => {
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
+  //console.log(user);
   let reject = {
     orderCode: orderCode,
     type: type,
@@ -111,7 +112,7 @@ const rejectOrder = (orderCode, type, description, image, orderId, requester) =>
     supplierId: user.id,
     cancelLinkRequestor: requester
   };
-  console.log(reject);
+  //console.log(reject);
 
   return async (dispatch) => {
     dispatch(getRequest());
@@ -165,11 +166,11 @@ const getOrderByCampaignId = (id) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      orders.data?.data.filter (order => order.status !== "notAdvanced");
-      const orderInCampaign = orders.data.data.filter(order => {
+      const ordersort =   orders.data?.data.filter (order => order.status !== "notAdvanced");
+      const orderInCampaign = ordersort.data.data.filter(order => {
         return id === order.campaignid;
       });
-     console.log(id);
+     //console.log(id);
       return dispatch(
         getSuccess({
           orders: orderInCampaign.map((order) => {

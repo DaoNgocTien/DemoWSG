@@ -25,23 +25,7 @@ import {
 const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
 
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  createCampaign: PropTypes.func,
-  openModal: PropTypes.bool,
-  productList: PropTypes.array,
-};
-
-const propsDefault = {
-  closeModal: () => {},
-  createCampaign: () => {},
-  openModal: false,
-  productList: [],
-};
-
 class EdilModal extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
@@ -67,8 +51,6 @@ class EdilModal extends Component {
   switchmRef = React.createRef();
   quantityRef = React.createRef();
 
-  componentDidMount() {}
-
   uniqByKeepFirst(a, key) {
     let seen = new Set();
     return a.filter((item) => {
@@ -78,13 +60,6 @@ class EdilModal extends Component {
   }
 
   handleEditAndClose = (data) => {
-    console.log(data);
-
-    const productSelected =
-      this.state.productSelected === {} || !this.state.productSelected
-        ? this.props.productList[0]
-        : this.state.productSelected;
-
     let newCampaign = {};
     if (this.state.switchState) {
       data.quantities.sort(function (a, b) {
@@ -137,9 +112,6 @@ class EdilModal extends Component {
     let productSelected = this.props.productList?.find(
       (element) => element.id === value
     );
-
-    console.log(productSelected);
-
     this.setState({
       productSelected: productSelected,
       availableQuantity: productSelected.quantity - productSelected.maxquantity,
@@ -180,6 +152,7 @@ class EdilModal extends Component {
         break;
     }
   };
+
   onChangeAdvancePercent = (value) => {
     if (isNaN(value)) {
       return;
@@ -188,9 +161,11 @@ class EdilModal extends Component {
       advancePercent: value,
     });
   };
+
   disabledDate = (current) => {
     return current && current < moment().endOf("day");
   };
+
   toggleSwitch = () => {
     this.setState({
       switchState: !this.state.switchState,
@@ -218,9 +193,6 @@ class EdilModal extends Component {
     productSelected = productSelected
       ? productSelected
       : productList.find((p) => p.id === record.productid);
-    console.log(typeof record?.range);
-    console.log(record?.range);
-
     return (
       <>
         <Modal
@@ -329,7 +301,7 @@ class EdilModal extends Component {
                     validator(_, value) {
                       if (
                         Number(productSelected?.retailprice) *
-                          Number(availableQuantity) <
+                        Number(availableQuantity) <
                         5000
                       ) {
                         return Promise.reject(
@@ -348,8 +320,8 @@ class EdilModal extends Component {
                   {productList.map((item) => {
                     if (
                       [item.quantity - item.maxquantity] *
-                        Number(item.retailprice) >
-                        5000 &&
+                      Number(item.retailprice) >
+                      5000 &&
                       item.status !== "deactivated"
                     )
                       return (
@@ -376,7 +348,7 @@ class EdilModal extends Component {
                       const range =
                         Number(productSelected?.retailprice) || 99999999;
 
-                      console.log(productSelected);
+                      //console.log(productSelected);
                       if (value >= 0 && value <= range) {
                         return Promise.resolve();
                       }
@@ -561,7 +533,7 @@ class EdilModal extends Component {
               <>
                 <Form.List
                   name="quantities"
-                  onChange={(record) => {}}
+                  onChange={(record) => { }}
                   initialValue={record?.range ? JSON.parse(record?.range) : []}
                 >
                   {(fields, { add, remove }) => {
@@ -744,8 +716,8 @@ class EdilModal extends Component {
                     productSelected?.image
                       ? JSON.parse(productSelected?.image)
                       : defaultProduct?.image
-                      ? JSON.parse(defaultProduct?.image)
-                      : []
+                        ? JSON.parse(defaultProduct?.image)
+                        : []
                   }
                 ></Upload>
               </Descriptions.Item>

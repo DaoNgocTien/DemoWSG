@@ -14,7 +14,7 @@ class Transaction extends Component {
   }
 
   render() {
-  //  console.log(this.props.data);
+  //  //console.log(this.props.data);
     return (
       <TransactionUI
         data={this.props.data.transactions}
@@ -41,23 +41,23 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getTransaction: async () => {
-      // console.log("get Transaction");
+      // //console.log("get Transaction");
       await dispatch(action.getTransaction());
     },
 
     // storeSettlingPaymentList: async (list) => {
-    //   // console.log("get Transaction");
+    //   // //console.log("get Transaction");
     //   await dispatch(action.storeSettlingPaymentList(list));
     // },
 
     // getOrdersInTransaction: async (TransactionID) => {
-    //   // console.log("getOrdersInTransaction final");
-    //   // console.log(TransactionID);
+    //   // //console.log("getOrdersInTransaction final");
+    //   // //console.log(TransactionID);
     // },
 
     // createTransaction: async (record) => {
-    //   // console.log("createProduct final");
-    //   // console.log(record);
+    //   // //console.log("createProduct final");
+    //   // //console.log(record);
     //   await dispatch(action.createTransaction(record));
     //   await dispatch(action.getTransaction());
     // },

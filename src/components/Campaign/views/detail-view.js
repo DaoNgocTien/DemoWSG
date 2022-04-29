@@ -2,32 +2,22 @@ import {
   Button,
   Col,
   Descriptions,
-  Form,
-  Input,
-  PageHeader,
-  Row,
+  Form, Image, Input,
+  PageHeader, Popover, Row,
   Space,
   Table,
-  Tag,
-  Popconfirm,
-  Image,
-  Tooltip,
-  Popover,
+  Tag
 } from "antd";
-import { OpenInNew, PlayCircleFilledOutlined } from "@material-ui/icons";
-
 import moment from "moment";
-import action from "../../Orders/modules/action";
-
-import { default as campaignAction } from "./../modules/action";
-
-import { connect } from "react-redux";
-import React, { memo } from "react";
-import RejectModal from "../../Orders/views/reject-view";
+import React from "react";
 import NumberFormat from "react-number-format";
-
+import { connect } from "react-redux";
+import action from "../../Orders/modules/action";
+import RejectModal from "../../Orders/views/reject-view";
+import { default as campaignAction } from "../modules/action";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
+
 class OrdersInCampaign extends React.Component {
   state = {
     loading: false,
@@ -46,14 +36,7 @@ class OrdersInCampaign extends React.Component {
   };
 
   componentDidMount() {
-    // console.log(this.props);
-    // console.log(this.state);
-    // this.props.getOrder(this.props.record.id);
-    // this.props.getOrder(this.props.match.params.id);
     this.props.getCampaignById(this.props.match.params.id);
-    // this.setState({
-    //   record: this.props.record,
-    // });
   }
 
   onSelectChange = (record) => {
@@ -229,9 +212,9 @@ class OrdersInCampaign extends React.Component {
   };
 
   handleCancel = () => {
-    console.log("Clicked cancel button");
     this.setState({ visiblePop: false });
   };
+
   hide = () => {
     this.setState({
       stepVisible: false,
@@ -303,7 +286,6 @@ class OrdersInCampaign extends React.Component {
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-    console.log(this.props);
     return (
       <>
         <PageHeader
@@ -312,13 +294,6 @@ class OrdersInCampaign extends React.Component {
           title="CAMPAIGN DETAILS"
           subTitle={`This is a campaign detail page`}
           extra={[
-            // <Popconfirm
-            //   title="Update campaign start day to today and modify exist campaigns: stop ready campaigns, finish active campaigns"
-            //   visible={this.state.visiblePop}
-            //   onConfirm={this.handleOk}
-            //   okButtonProps={{ loading: this.state.confirmLoading }}
-            //   onCancel={this.handleCancel}
-            // >
             <Button
               type="primary"
               onClick={() => this.props.startCampaignBeforeHand(record?.id)}
@@ -335,9 +310,6 @@ class OrdersInCampaign extends React.Component {
                   Start Campaign
                 </Popover>
               )}
-              {/* // <Popover content={isStartAbleMessage} title="Reason campaign can not be started!">
-                //   Start Campaign
-                // </Popover> */}
             </Button>,
             <Button
               onClick={() => this.props.doneCampaignBeforeHand(record?.id)}
@@ -371,7 +343,6 @@ class OrdersInCampaign extends React.Component {
                 defaultProduct={record?.product}
                 productList={productList}
                 record={record}
-                // selectedRowKeys={selectedRowKeys[0]}
               />
               <EditModal
                 loading={this.props.loading}
@@ -381,7 +352,6 @@ class OrdersInCampaign extends React.Component {
                 defaultProduct={record?.product}
                 productList={productList}
                 record={record}
-                // selectedRowKeys={selectedRowKeys[0]}
               />
               <RejectModal
                 openModal={openRejectModal}
@@ -427,8 +397,8 @@ class OrdersInCampaign extends React.Component {
                 dataSource={
                   displayData.length === 0 && searchData === ""
                     ? orderList.filter(
-                        (order) => order.status.toUpperCase() !== "NOTADVANCED"
-                      )
+                      (order) => order.status.toUpperCase() !== "NOTADVANCED"
+                    )
                     : displayData
                 }
                 scroll={{ y: 350 }}
@@ -462,7 +432,6 @@ class OrdersInCampaign extends React.Component {
                         dataSource={
                           record?.range ? JSON.parse(record?.range) : []
                         }
-                        // scroll={{ y: 350 }}
                       />
                     </>
                   }
@@ -482,10 +451,10 @@ class OrdersInCampaign extends React.Component {
                     record?.status === "ready"
                       ? "blue"
                       : record?.status === "active"
-                      ? "red"
-                      : record?.status === "done"
-                      ? "green"
-                      : "grey"
+                        ? "red"
+                        : record?.status === "done"
+                          ? "green"
+                          : "grey"
                   }
                 >
                   {(record?.status ?? "").toUpperCase()}
@@ -571,9 +540,6 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(campaignAction.getCampaignById(id));
     },
 
-    getOrder: async (id) => {
-      // await dispatch(action.getOrderByCampaignId(id));
-    },
     rejectOrder: async (
       orderCode,
       type,
@@ -595,6 +561,7 @@ const mapDispatchToProps = (dispatch) => {
       );
       await dispatch(action.getOrderByCampaignId(campaignId));
     },
+
     startCampaignBeforeHand: async (id) => {
       await dispatch(campaignAction.startCampaignBeforeHand(id));
       await dispatch(campaignAction.getCampaignById(id));

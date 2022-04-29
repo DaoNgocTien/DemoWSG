@@ -205,7 +205,6 @@ class OrderManagement extends Component {
                 icon={<OpenInNew />}
                 type="default"
                 shape="circle"
-                onClick={() => console.log("123")}
                 style={{
                   border: "none",
                   boxShadow: "none",

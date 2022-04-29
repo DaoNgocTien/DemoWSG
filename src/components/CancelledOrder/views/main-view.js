@@ -5,34 +5,13 @@ import {
   PageHeader,
   Radio,
   Row,
-  Select,
   Table,
-  Tag,
+  Tag
 } from "antd";
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-import EditModal from "./edit-view";
-import RejectModal from "./reject-view";
 import NumberFormat from "react-number-format";
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  defaultCampaign: PropTypes.object,
-  rejectOrder: PropTypes.func,
-  updateStatusOrder: PropTypes.func,
-  getOrder: PropTypes.func,
-};
-
-const propsDefault = {
-  index: 1,
-  data: [],
-  products: [],
-  defaultCampaign: {},
-  rejectOrder: () => {},
-  updateStatusOrder: () => {},
-  getOrder: (status) => {},
-};
+import EditModal from "./edit-view";
 
 class CancelledOrderUI extends Component {
   static propTypes = propsProTypes;
@@ -48,8 +27,6 @@ class CancelledOrderUI extends Component {
     editButton: true,
     viewButton: true,
   };
-
-  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -100,9 +77,7 @@ class CancelledOrderUI extends Component {
       });
     }
   };
-  // handleChange = (data) => {
-  //   this.props.getOrder(data);
-  // };
+
   columns = [
     {
       title: "No.",
@@ -130,17 +105,6 @@ class CancelledOrderUI extends Component {
       fixed: "left",
       width: 120,
     },
-    // {
-    //   title: "Product",
-    //   dataIndex: "details",
-    //   key: "details",
-    //   render: (text, object) => {
-    //     return object.details?.length > 0 ? object.details[0]?.productname : "";
-    //   },
-
-    //   width: 130,
-    // },
-
     {
       title: "Total Price",
       dataIndex: "totalprice",
@@ -235,7 +199,6 @@ class CancelledOrderUI extends Component {
   };
 
   onRadioChange = (e) => {
-    //  console.log(e);
     let { data } = this.props;
     let searchValue = e.target.value || e;
     let searchData = [];

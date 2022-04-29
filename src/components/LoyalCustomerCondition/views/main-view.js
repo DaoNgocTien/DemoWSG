@@ -143,8 +143,8 @@ class DiscountCodeUI extends Component {
   };
 
   onSelectChange = (record) => {
-    // console.log("selectedRowKeys changed: ", selectedRowKeys);
-    // console.log(this.props.data);
+    // //console.log("selectedRowKeys changed: ", selectedRowKeys);
+    // //console.log(this.props.data);
 
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({

@@ -14,7 +14,7 @@ class LoyalCustomer extends Component {
   }
 
   render() {
-    // console.log(this.props);
+    // //console.log(this.props);
     return (
       <LoyalCustomerUI
         data={this.props.data.LoyalCustomers}
@@ -47,19 +47,19 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     createLoyalCustomer: async (record) => {
-      // console.log(record);
+      // //console.log(record);
       await dispatch(action.createLoyalCustomer(record));
       await dispatch(action.getLoyalCustomer());
     },
 
     disableLoyalCustomer: async (id) => {
-      // console.log(record);
+      // //console.log(record);
       await dispatch(action.disableLoyalCustomer(id));
       await dispatch(action.getLoyalCustomer());
     },
 
     updateLoyalCustomer: async (record, id) => {
-      // console.log(record);
+      // //console.log(record);
       await dispatch(action.updateLoyalCustomer(record, id));
       await dispatch(action.getLoyalCustomer());
     },
