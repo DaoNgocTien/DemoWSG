@@ -172,7 +172,7 @@ class DiscountCodeUI extends Component {
               createDiscountCode={createDiscountCode}
             />
             <div style={{ marginBottom: 16 }}>
-              <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+              <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
                 <Col flex="auto">
                   <Space size={3}>
                     <Button

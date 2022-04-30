@@ -1,7 +1,7 @@
 import {
   GET_DATA_FAIL,
   GET_DATA_REQUEST,
-  GET_DATA_SUCCESS,
+  GET_DATA_SUCCESS
 } from "./constant";
 
 let initialState = {

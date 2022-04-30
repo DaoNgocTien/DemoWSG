@@ -5,62 +5,16 @@ import {
   Input,
   InputNumber,
   Modal,
-  Select,
-  Upload,
-  Space,
+  Select, Space, Upload
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-
-//  prototype
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateProduct: PropTypes.func,
-  defaultProduct: PropTypes.object,
-  openModal: PropTypes.bool,
-  categoryList: PropTypes.array,
-};
-
-//  default props
-const propsDefault = {
-  closeModal: () => {},
-  updateProduct: () => {},
-  defaultProduct: {
-    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    name: "test222 again Product",
-    supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    retailprice: "5.00",
-    quantity: 11,
-    description: "testttttt",
-    image: "",
-    categoryid: null,
-    status: "active",
-    typeofproduct: "",
-    createdat: "2022-01-07T14:08:02.994Z",
-    updatedat: "2022-01-13T16:34:09.908Z",
-    categoryname: null,
-  },
-  openModal: false,
-  categoryList: [],
-};
-
 class DeleteModal extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
     previewTitle: "",
     fileList: undefined,
-    displayData: [],
-    searchKey: "",
   };
-
-  componentDidMount() {
-    // //console.log(this.props);
-  }
-
   handleUpdateAndClose = (data) => {
     switch (this.props.record?.status) {
       case "incampaign":
@@ -72,7 +26,6 @@ class DeleteModal extends Component {
           this.state.fileList?.length === 0 && this.props.record
             ? JSON.parse(this.props.record?.image)
             : this.state.fileList;
-        // //console.log(data);
         this.props.updateProduct(data);
         break;
     }
@@ -115,8 +68,6 @@ class DeleteModal extends Component {
   };
 
   handleChange = ({ fileList }) => {
-    // fileList = fileList.slice(-2);
-    // //console.log(fileList);
     // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
@@ -139,12 +90,6 @@ class DeleteModal extends Component {
         String(item.status)
           .toUpperCase()
           .includes(searchString.toUpperCase()) ||
-        // String(item.fromdate)
-        //   .toUpperCase()
-        //   .includes(searchString.toUpperCase()) ||
-        // String(item.todate)
-        //   .toUpperCase()
-        //   .includes(searchString.toUpperCase()) ||
         String(item.description)
           .toUpperCase()
           .includes(searchString.toUpperCase()) ||
@@ -170,7 +115,6 @@ class DeleteModal extends Component {
   };
 
   handleDeleteAndClose = (data) => {
-    // //console.log(data);
     switch (this.props.record?.status) {
       case "incampaign":
         alert("This product in campaign cannot delete");
@@ -183,29 +127,24 @@ class DeleteModal extends Component {
     this.props.closeModal();
   };
   render() {
-    const { openModal, record, availableQuantity } = this.props;
-
-    const { data, categoryList, campaignList } = this.props;
+    const { openModal, record, data = [], categoryList } = this.props;
     const {
       load,
       fileList = JSON.parse(record?.image || "[]"),
-      displayData,
-      searchKey,
     } = this.state;
-    // this.state.fileList =
-    //   this.props.record && this.state.fileList !== 0
-    //     ? JSON.parse(this.props.record?.image)
-    //     : [];
+
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+
     let listName = [];
     data.map((item) => {
       if (item.name !== record?.name) listName.push(item.name);
     });
+
     return (
       <>
         <Modal
@@ -243,7 +182,6 @@ class DeleteModal extends Component {
             >
               <Input
                 placeholder="Product ID"
-                // defaultValue=={record?.id}
                 disabled={true}
                 hidden={true}
               />
@@ -254,10 +192,6 @@ class DeleteModal extends Component {
                 label="Product Name"
                 initialValue={record?.name}
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Name is required!',
-                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (listName.includes(value)) {
@@ -293,15 +227,6 @@ class DeleteModal extends Component {
                     required: true,
                     message: "Category is required!",
                   },
-                  // ({ getFieldValue }) => ({
-                  //   validator(_, value) {
-                  //     if (value.length >= 0 && value.length <= 50) {
-                  //       return Promise.resolve();
-                  //     }
-
-                  //     return Promise.reject(new Error('Category Name length is 1-20 characters!'));
-                  //   },
-                  // }),
                 ]}
               >
                 <Select style={{ width: "60vh" }} disabled="true">
@@ -320,10 +245,6 @@ class DeleteModal extends Component {
                 label="Quantity"
                 initialValue={record?.quantity}
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Quantity is required!',
-                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (Number(value) > 0) {
@@ -350,10 +271,6 @@ class DeleteModal extends Component {
                 name="retailPrice"
                 initialValue={record?.retailprice}
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Price is required!',
-                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (Number(value) > 0) {

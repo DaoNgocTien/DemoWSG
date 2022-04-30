@@ -3,43 +3,12 @@ import {
     Form,
     Input, Modal
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-
-//  prototype
-const propsProTypes = {
-    closeModal: PropTypes.func,
-    updateCategory: PropTypes.func,
-    record: PropTypes.object,
-    openModal: PropTypes.bool
-};
-
-//  default props
-const propsDefault = {
-    closeModal: () => { },
-    updateCategory: () => { },
-    // record: {
-    //     key: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    //     id: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    //     categoryname: "Ipad",
-    //     supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    //     isdeleted: false,
-    //     createdat: "2022-01-23T12:03:11.309Z",
-    //     updatedat: "2022-01-23T12:03:11.309Z"
-    // },
-    openModal: false,
-};
-
 class EditModal extends Component {
-    static propTypes = propsProTypes;
-    static defaultProps = propsDefault;
     state = { record: this.props.record };
     formRef = React.createRef();
 
     componentDidMount() {
-        // //console.log("EditModal Didmount");
-
-        // //console.log(this.props);
         this.formRef.current.setFieldsValue({
             id: this.props.record?.id,
             categoryname: this.props.record?.categoryname,
@@ -53,7 +22,6 @@ class EditModal extends Component {
     };
 
     handleCancel = () => {
-    //   this.formRef.current.resetFields();
         this.props.closeModal();
     };
 
@@ -102,10 +70,6 @@ class EditModal extends Component {
                             name="categoryName"
                             initialValue={record?.categoryname}
                             rules={[
-                                // {
-                                //   required: true,
-                                //   message: 'Name is required!',
-                                // },
                                 () => ({
                                   validator(_, value) {
                                     if (value.length > 0 && value.length <= 20) {

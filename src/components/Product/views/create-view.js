@@ -1,46 +1,11 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
-  Button, Descriptions, Form,
-  Input, InputNumber, Modal, Select, Upload, Space
+  Button, Form,
+  Input, InputNumber, Modal, Select, Space, Upload
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-//  prototype
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  createProduct: PropTypes.func,
-  defaultProduct: PropTypes.object,
-  openModal: PropTypes.bool,
-  categoryList: PropTypes.array,
-};
-
-//  default props
-const propsDefault = {
-  closeModal: () => { },
-  createProduct: () => { },
-  defaultProduct: {
-    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    name: "test222 again Product",
-    supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    retailprice: "5.00",
-    quantity: 11,
-    description: "testttttt",
-    image: "",
-    categoryid: null,
-    status: "active",
-    typeofproduct: "",
-    createdat: "2022-01-07T14:08:02.994Z",
-    updatedat: "2022-01-13T16:34:09.908Z",
-    categoryname: null,
-  },
-  openModal: false,
-  categoryList: [],
-};
 
 class CreatModal extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
@@ -48,10 +13,6 @@ class CreatModal extends Component {
     fileList: [],
   };
   formRef = React.createRef();
-
-
-  componentDidMount() {
-  }
 
   handleCreateAndClose = (data) => {
     data.image = this.state.fileList;
@@ -61,7 +22,6 @@ class CreatModal extends Component {
   };
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -90,9 +50,6 @@ class CreatModal extends Component {
   };
 
   handleChange = ({ fileList, file, event }) => {
-    //  //console.log(fileList);
-    // fileList = fileList.slice(-2);
-
     // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
@@ -105,7 +62,6 @@ class CreatModal extends Component {
     });
 
     this.setState({ fileList });
-    // //console.log(this.state.fileList);
   };
 
   render() {
@@ -124,7 +80,6 @@ class CreatModal extends Component {
 
     return (
       <>
-
         <Modal
           width={window.innerWidth * 0.7}
           heigh={window.innerHeight * 0.5}
@@ -157,10 +112,6 @@ class CreatModal extends Component {
             <Space size={30}>
               <Form.Item name="name" label="Product Name"
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Name is required!',
-                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
 
@@ -184,15 +135,6 @@ class CreatModal extends Component {
                     required: true,
                     message: 'Category is required!',
                   },
-                  // ({ getFieldValue }) => ({
-                  //   validator(_, value) {
-                  //     if (value.length >= 0 && value.length <= 50) {
-                  //       return Promise.resolve();
-                  //     }
-
-                  //     return Promise.reject(new Error('Category Name length is 1-20 characters!'));
-                  //   },
-                  // }),
                 ]}
               >
                 <Select style={{ width: "60vh" }}>
@@ -208,10 +150,6 @@ class CreatModal extends Component {
             <Space size={30}>
               <Form.Item name="quantity" initialValue={0} label="Quantity"
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Quantity is required!',
-                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (Number(value) > 0) {
@@ -230,10 +168,6 @@ class CreatModal extends Component {
                 name="retailPrice"
                 initialValue={0}
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Price is required!',
-                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (Number(value) > 0) {
@@ -302,8 +236,6 @@ class CreatModal extends Component {
                 </>
               </Form.Item>
             </Space>
-
-
           </Form>
         </Modal>
       </>

@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import action from "./modules/action";
-import { default as campaignAction } from "../Campaign/modules/action";
-import { default as orderAction } from "../Orders/modules/action";
 import Loader from "../../components/Loader";
-
+import { default as campaignAction } from "../Campaign/modules/action";
+import action from "./modules/action";
 import ProductUI from "./views/main-view";
+
 
 class ProductPage extends Component {
   constructor(props) {
@@ -19,19 +18,16 @@ class ProductPage extends Component {
   }
 
   componentDidMount() {
-    //console.log(this.props);
     this.props.getOneProduct(this.props.match.params.id);
   }
 
   render() {
-    //console.log(this.props.data);
     const { loading, data } = this.props;
     if (loading) return <Loader />;
     return (
       <>
         <ProductUI
           record={this.props.data}
-          // data={this.props.data}
           loading={this.props.loading}
           activeProduct={this.props.activeProduct}
           updateProduct={this.props.updateProduct}
@@ -40,8 +36,6 @@ class ProductPage extends Component {
           campaignList={this.props.campaignList.campaigns?.filter(
             (element) => element.productid === data.id
           )}
-          // orderList={this.props.orderList.orders}
-          // url={this.props.location.search}
         />
       </>
     );
@@ -66,16 +60,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateProduct: async (record) => {
       await dispatch(action.updateProduct(record));
+      await dispatch(action.getOneProduct(record.id));
     },
     deleteProduct: async (id) => {
       await dispatch(action.deleteProduct(id));
-      // await dispatch(action.getOneProduct(id));
-      // await dispatch(campaignAction.getCampaign());
+      await dispatch(action.getOneProduct(id));
     },
     activeProduct: async (id) => {
       await dispatch(action.activeProduct(id));
-      // await dispatch(action.getOneProduct(id));
-      // await dispatch(campaignAction.getCampaign());
+      await dispatch(action.getOneProduct(id));
     },
   };
 };

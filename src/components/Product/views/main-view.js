@@ -1,64 +1,17 @@
-import { Button, Col, Input, PageHeader, Row, Space, Table, Tag } from "antd";
-import moment from "moment";
-import PropTypes from "prop-types";
-import React, { Component, memo } from "react";
-import CreateModal from "./create-view";
-import DeleteModal from "./delete-view";
-import EditModal from "./edit-view";
-import NumberFormat from "react-number-format";
-import { Link, Redirect } from "react-router-dom";
 import { SearchOutlined } from "@ant-design/icons";
 import { OpenInNew } from "@material-ui/icons";
-
-//  prototype
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  defaultProduct: PropTypes.object,
-  createProduct: PropTypes.func,
-  updateProduct: PropTypes.func,
-  deleteProduct: PropTypes.func,
-};
-
-//  default props
-const propsDefault = {
-  index: 1,
-  data: [],
-  defaultProduct: {
-    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    name: "test222 again Product",
-    supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    retailprice: "5.00",
-    quantity: 11,
-    description: "testttttt",
-    image: "",
-    categoryid: null,
-    status: "active",
-    typeofproduct: "",
-    createdat: "2022-01-07T14:08:02.994Z",
-    updatedat: "2022-01-13T16:34:09.908Z",
-    categoryname: null,
-  },
-  createCategory: () => {},
-  updateCategory: () => {},
-  deleteProduct: () => {},
-};
+import { Button, Col, Input, PageHeader, Row, Table, Tag } from "antd";
+import moment from "moment";
+import React, { Component, memo } from "react";
+import NumberFormat from "react-number-format";
+import { Link } from "react-router-dom";
+import CreateModal from "./create-view";
 
 class ProductUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     loading: false,
-    selectedRowKeys: [], // Check here to configure the default column
-    loadingActionButton: false,
-    editButton: false,
-    deleteButton: false,
     addNewButton: true,
     openCreateModal: false,
-    openDeleteModal: false,
-    openEditModal: false,
-    viewDetailButton: false,
     displayData: [],
     searchKey: "",
     category: null,
@@ -72,69 +25,17 @@ class ProductUI extends Component {
     });
   }
 
-  start = (openModal) => {
-    switch (openModal) {
-      case "openCreateModal":
-        this.setState({ loadingActionButton: true, openCreateModal: true });
-        break;
-
-      case "openDeleteModal":
-        this.setState({ loadingActionButton: true, openDeleteModal: true });
-
-        break;
-
-      case "openEditModal":
-        this.setState({ loadingActionButton: true, openEditModal: true });
-
-        break;
-      default:
-        break;
-    }
-  };
-
-  onSelectChange = (record) => {
-    // //console.log('selectedRowKeys changed: ', selectedRowKeys);
-    let campaignList = this.props.campaignList?.length
-      ? this.props.campaignList.filter((c) => c.productid === record.id)
-      : [];
-    if (this.state.selectedRowKeys[0] !== record.key) {
-      this.setState({
-        selectedRowKeys: [record.key],
-        record: record,
-        editButton: true,
-        deleteButton: campaignList.length === 0,
-        addNewButton: false,
-        viewDetailButton: true,
-      });
-    } else {
-      this.setState({
-        selectedRowKeys: [],
-        record: {},
-        editButton: false,
-        deleteButton: false,
-        addNewButton: true,
-        viewDetailButton: false,
-      });
-    }
+  start = () => {
+    this.setState({ loadingActionButton: true, openCreateModal: true });
   };
 
   closeModal = () => {
     this.setState({
       openCreateModal: false,
-      openDeleteModal: false,
-      openEditModal: false,
     });
   };
 
   columns = [
-    // {
-    //   title: "No.",
-    //   dataIndex: "No.",
-    //   key: "No.",
-    //   width: 60,
-    //   render: (text, object, index) => index + 1,
-    //   fixed: "left",
-    // },
     {
       title: "Image",
       dataIndex: "image",
@@ -163,12 +64,6 @@ class ProductUI extends Component {
 
       fixed: "left",
     },
-    // {
-    //   title: "Category",
-    //   dataIndex: "categoryname",
-    //   width: 100,
-    //   key: "categoryname",
-    // },
     {
       title: "Retail Price",
       dataIndex: "retailprice",
@@ -208,12 +103,6 @@ class ProductUI extends Component {
       sorter: (a, b) => a.createdat.localeCompare(b.createdat),
       render: (data) => moment(data).format("DD-MM-YYYY"),
     },
-    // {
-    //   title: "Description",
-    //   dataIndex: "description",
-    //   key: "description",
-    //   width: 1000,
-    // },
     {
       title: "Status",
       dataIndex: "status",
@@ -261,18 +150,14 @@ class ProductUI extends Component {
 
   onChangeHandler = (e) => {
     let { data } = this.props;
-    // //console.log(data);
     let searchString = e.target.value.toUpperCase();
     let searchList = data.filter((item) => {
-      // //console.log(item);
       return (
-        item?.name?.toUpperCase().includes(searchString) ||
-        // item?.categoryname?.toUpperCase().includes(searchString) ||
-        item?.retailprice?.toString().toUpperCase().includes(searchString) ||
-        item?.quantity?.toString().toUpperCase().includes(searchString) ||
-        item?.createdat?.toUpperCase().includes(searchString) ||
-        // item?.description?.toUpperCase().includes(searchString) ||
-        item?.status?.toUpperCase().includes(searchString)
+        String(item?.name)?.toUpperCase().includes(searchString) ||
+        String(item?.retailprice)?.toString().toUpperCase().includes(searchString) ||
+        String(item?.quantity)?.toString().toUpperCase().includes(searchString) ||
+        String(item?.createdat)?.toUpperCase().includes(searchString) ||
+        String(item?.status)?.toUpperCase().includes(searchString)
       );
     });
     this.setState({
@@ -283,32 +168,15 @@ class ProductUI extends Component {
 
   render() {
     const {
-      selectedRowKeys,
-      deleteButton,
-      editButton,
-      addNewButton,
       openCreateModal,
-      openDeleteModal,
-      openEditModal,
       displayData,
       searchKey,
-      viewDetailButton,
     } = this.state;
 
     const {
       categoryList = [],
       createProduct,
-      updateProduct,
-      deleteProduct,
-      campaignList = [],
     } = this.props;
-
-    const rowSelection = {
-      selectedRowKeys,
-      onSelect: this.onSelectChange,
-      hideSelectAll: true,
-    };
-    // const hasSelected = selectedRowKeys.length > 0;
 
     const arrayLocation = window.location.pathname.split("/");
     return (
@@ -319,10 +187,9 @@ class ProductUI extends Component {
           !this.state.category
             ? arrayLocation[2].toUpperCase()
             : categoryList
-                .find((element) => element.id === this.state.category)
-                ?.categoryname.toUpperCase()
+              .find((element) => element.id === this.state.category)
+              ?.categoryname.toUpperCase()
         }
-        // subTitle={`This is a ${arrayLocation[2]} page`}
         footer={
           <div>
             <CreateModal
@@ -332,50 +199,7 @@ class ProductUI extends Component {
               createProduct={createProduct}
               data={this.props.data}
             />
-            <DeleteModal
-              loading={this.props.loading}
-              openModal={openDeleteModal}
-              closeModal={this.closeModal}
-              categoryList={categoryList}
-              deleteProduct={deleteProduct}
-              record={this.state.record}
-              campaignList={
-                this.state.record
-                  ? campaignList.filter(
-                      (c) => c.productid === this.state.record.id
-                    )
-                  : []
-              }
-              availableQuantity={
-                this.state.record?.quantity - this.state.record?.maxquantity ??
-                0
-              }
-              selectedRowKeys={selectedRowKeys[0]}
-              data={this.props.data}
-            />
-            <EditModal
-              loading={this.props.loading}
-              openModal={openEditModal}
-              closeModal={this.closeModal}
-              categoryList={categoryList}
-              updateProduct={updateProduct}
-              record={this.state.record}
-              campaignList={
-                this.state.record
-                  ? campaignList.filter(
-                      (c) => c.productid === this.state.record.id
-                    )
-                  : []
-              }
-              orderList={this.props.orderList}
-              availableQuantity={
-                this.state.record?.quantity - this.state.record?.maxquantity ??
-                0
-              }
-              selectedRowKeys={selectedRowKeys[0]}
-              data={this.props.data}
-            />
-            <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+            <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
               <Col span={12}>
                 <Input
                   prefix={<SearchOutlined />}
@@ -384,59 +208,19 @@ class ProductUI extends Component {
                   placeholder="Search for products..."
                 />
               </Col>
-              <Col>
-                {" "}
-                <Space size={3}>
-                  <Button
-                    type="primary"
-                    onClick={() => this.start("openCreateModal")}
-                    disabled={!addNewButton}
-                  >
-                    Add New
-                  </Button>
-                  {/* <Link to={`/product/${selectedRowKeys[0]}`}>
-                    <Button type="primary" disabled={!viewDetailButton}>
-                      View Detail
-                    </Button>
-                  </Link>
-                  <Button
-                    type="primary"
-                    onClick={() => this.start("openEditModal")}
-                    disabled={!editButton}
-                    style={{ width: 90 }}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    type="danger"
-                    onClick={() => this.start("openDeleteModal")}
-                    disabled={!deleteButton}
-                    style={{ width: 90 }}
-                  >
-                    Delete
-                  </Button>
-                  <span style={{ marginLeft: 8 }}>
-                    {selectedRowKeys.length > 0
-                      ? `Selected ${selectedRowKeys.length} items`
-                      : ""}
-                  </span> */}
-                </Space>
+              <Col span={3} offset={9}>
+                <Button
+                  type="primary"
+                  onClick={() => this.start("openCreateModal")}
+                  block
+                >
+                  Add New
+                </Button>
               </Col>
             </Row>
-            {/* <div style={{ marginBottom: 16 }}>
-              <Row>
-                <Col flex="auto"></Col>
-                <Col flex="300px">
-                  <Input
-                    onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search data"
-                  />
-                </Col>
-              </Row>
-            </div> */}
+
             <Table
               loading={this.props.loading}
-              // rowSelection={rowSelection}
               columns={this.columns}
               dataSource={
                 displayData.length === 0 && searchKey === ""

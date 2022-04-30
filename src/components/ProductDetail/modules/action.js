@@ -33,10 +33,7 @@ const createProduct = (record) => {
       data: record,
       withCredentials: true,
     })
-      .then((response) => {
-        if (response.status === 200) {
-          //
-        }
+      .then(() => {
       })
       .catch(() => {
         return dispatch(getFailed());
@@ -63,7 +60,7 @@ const updateProduct = (record) => {
     })
       .then((response) => {
         if (response.status === 200) {
-          return window.location.reload();
+          // return window.location.reload();
         }
       })
       .catch(() => {
@@ -82,7 +79,7 @@ const deleteProduct = (id) => {
     })
       .then((response) => {
         if (response.status === 200) {
-          return window.location.reload();
+          // return window.location.reload();
         }
       })
       .catch(() => {
@@ -104,7 +101,7 @@ const activeProduct = (id) => {
     })
       .then((response) => {
         if (response.status === 200) {
-          return window.location.reload();
+          // return window.location.reload();
         }
       })
       .catch(() => {

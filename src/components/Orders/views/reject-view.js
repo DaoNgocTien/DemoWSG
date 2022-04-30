@@ -7,24 +7,9 @@ import {
   Modal,
   Switch,
   Table,
-  Upload,
+  Upload
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  record: PropTypes.object,
-  openModal: PropTypes.bool,
-};
-
-const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
-  record: {},
-  openModal: false,
-};
 
 class RejectModal extends Component {
   constructor(props) {
@@ -39,15 +24,9 @@ class RejectModal extends Component {
       requester: "Customer",
     };
   }
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   formRef = React.createRef();
 
-  componentDidMount() {}
-
   handleRejectAndClose = (data) => {
-    //console.log(this.state.requester);
-    //console.log(this.props.record);
     this.props.record.campaignid != null
       ? this.props.rejectOrder(
           this.props.record.ordercode,

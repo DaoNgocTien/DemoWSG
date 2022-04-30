@@ -225,7 +225,7 @@ class CampaignUI extends Component {
               campaingList={data}
             />
 
-            <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+            <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
               <Col span={12}>
                 <Input
                   prefix={<SearchOutlined />}

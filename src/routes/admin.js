@@ -44,6 +44,11 @@ const adminRoutes = [
   },
   {
     exact: true,
+    path: "/products/categories/:id",
+    component: Category,
+  },
+  {
+    exact: true,
     path: "/products/catalog",
     component: Product,
   },

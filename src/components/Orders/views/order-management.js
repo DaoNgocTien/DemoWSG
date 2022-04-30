@@ -1,56 +1,29 @@
 import {
   LoadingOutlined,
   PlusOutlined,
-  SearchOutlined,
+  SearchOutlined
 } from "@ant-design/icons";
 import {
-  OpenInNew,
-  PlayCircleOutline,
-  LocalShipping,
+  LocalShipping, OpenInNew,
+  PlayCircleOutline
 } from "@material-ui/icons";
 import {
   Button,
   Col,
   Form,
   Input,
-  Menu,
   Modal,
-  PageHeader,
-  Radio,
-  Row,
+  PageHeader, Row,
   Select,
-  Table,
-  Tag,
-  Upload,
+  Table, Tabs, Tag,
+  Upload
 } from "antd";
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
 import { Link } from "react-router-dom";
-
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  defaultCampaign: PropTypes.object,
-  rejectOrder: PropTypes.func,
-  updateStatusOrder: PropTypes.func,
-  getOrder: PropTypes.func,
-};
-
-const propsDefault = {
-  index: 1,
-  data: [],
-  products: [],
-  defaultCampaign: {},
-  rejectOrder: () => {},
-  updateStatusOrder: () => {},
-  getOrder: (status) => {},
-};
-
+const { TabPane } = Tabs;
 class OrderManagement extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     selectedRowKeys: [],
     loading: false,
@@ -72,8 +45,6 @@ class OrderManagement extends Component {
   radioSelf = React.createRef();
   searchSelf = React.createRef();
   selectSelf = React.createRef();
-
-  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -112,27 +83,6 @@ class OrderManagement extends Component {
       openRejectModal: false,
       openEditModal: false,
     });
-  };
-
-  onSelectChange = (record) => {
-    if (this.state.selectedRowKeys[0] !== record.key) {
-      this.setState({
-        selectedRowKeys: [record.key],
-        record: record,
-        editButton: true,
-        rejectButton: record?.status === "created",
-
-        addNewButton: false,
-      });
-    } else {
-      this.setState({
-        selectedRowKeys: [],
-        record: {},
-        editButton: false,
-        rejectButton: false,
-        addNewButton: true,
-      });
-    }
   };
 
   handleChangeInSelect = (data) => {
@@ -247,14 +197,14 @@ class OrderManagement extends Component {
     let { data } = this.props;
     let searchData = data.filter((item) => {
       return (
-        item.customerfirstname
-          .toUpperCase()
+        String(item.customerfirstname)?.toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
-        item.customerlastname
-          .toUpperCase()
+        String(item.customerlastname)?.toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
-        item.ordercode.includes(e.target.value) ||
-        item.createdat.includes(e.target.value)
+        String(item.ordercode)?.toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
+        String(item.createdat)?.toUpperCase()
+          .includes(e.target.value.toUpperCase())
       );
     });
     this.setState({
@@ -263,39 +213,9 @@ class OrderManagement extends Component {
     });
   };
 
-  onRadioChange = (e) => {
-    let { data } = this.props;
-    let searchValue = e.target.value || e;
-    let searchData = [];
-    switch (searchValue) {
-      case "retail":
-        searchData = data.filter((item) => {
-          return item.campaign.length === 0;
-        });
-        break;
-
-      case "wholesale":
-        searchData = data.filter((item) => {
-          return item.campaign.length > 0;
-        });
-        break;
-
-      default:
-        searchValue = "";
-        break;
-    }
-
-    this.setState({
-      displayData: searchData,
-      searchKey: searchValue,
-    });
-  };
-
   onClickOrderTab = (searchValue) => {
     let { data } = this.props;
-
     let searchData = [];
-
     switch (searchValue) {
       case "retail":
         searchData = data.filter((item) => {
@@ -379,15 +299,14 @@ class OrderManagement extends Component {
 
   render() {
     const {
-      selectedRowKeys,
       displayData,
       searchKey,
-
       openUploadModal,
+      load,
+      fileList
     } = this.state;
 
     const arrayLocation = window.location.pathname.split("/");
-    const { load, fileList } = this.state;
 
     const uploadButton = (
       <div>
@@ -395,6 +314,7 @@ class OrderManagement extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+
     return (
       <PageHeader
         className="site-page-header-responsive"
@@ -467,30 +387,37 @@ class OrderManagement extends Component {
               </Modal>
             </Form>
             <div>
-              <Menu mode="horizontal" defaultSelectedKeys={["allOrders"]}>
-                <Menu.Item
-                  key="allOrders"
-                  onClick={() => this.onClickOrderTab("all")}
-                >
-                  All orders
-                </Menu.Item>
+              <Tabs defaultActiveKey="all" >
+                <TabPane
+                  tab={
+                    <span onClick={() => this.onClickOrderTab("all")}>
+                      All Orders
+                    </span>
+                  }
+                  key="profile"
+                  style={{ background: "#ffffff" }}
+                />
+                <TabPane
+                  tab={
+                    <span onClick={() => this.onClickOrderTab("retail")}>
+                      Retail orders
+                    </span>
+                  }
+                  key="retail"
+                  style={{ background: "#ffffff" }}
+                />
+                <TabPane
+                  tab={
+                    <span onClick={() => this.onClickOrderTab("wholesale")}>
+                      Wholesale Order
+                    </span>
+                  }
+                  key="wholesale"
+                  style={{ background: "#ffffff" }}
+                />
+              </Tabs>
 
-                <Menu.Item
-                  key="retailOrders"
-                  onClick={() => this.onClickOrderTab("retail")}
-                >
-                  Retail orders
-                </Menu.Item>
-
-                <Menu.Item
-                  key="wholesaleOrders"
-                  onClick={() => this.onClickOrderTab("wholesale")}
-                >
-                  Wholesale orders
-                </Menu.Item>
-              </Menu>
-
-              <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+              <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
                 <Col span={12}>
                   <Input
                     prefix={<SearchOutlined />}
@@ -515,8 +442,9 @@ class OrderManagement extends Component {
                     <Select.Option value="delivering">Delivering</Select.Option>
                     <Select.Option value="delivered">Delivered</Select.Option>
                     <Select.Option value="cancelled">Cancelled</Select.Option>
+                    <Select.Option value="returning">Returning</Select.Option>
+                    <Select.Option value="returned">Returned</Select.Option>                    
                     <Select.Option value="completed">Completed</Select.Option>
-                    <Select.Option value="returned">returned</Select.Option>
                   </Select>
                 </Col>
               </Row>

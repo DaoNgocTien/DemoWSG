@@ -13,8 +13,6 @@ const getAllProduct = (category) => {
     })
       .then((result) => {
         if (result.status === 200) {
-          // //console.log("getAllProduct: ");
-          // //console.log(result.data.data);
           const data = (result.data.data).map(product => {
             return {
               key: product.id,
@@ -41,21 +39,16 @@ const createProduct = record => {
       withCredentials: true,
     }).then((response) => {
       if (response.status === 200) {
-        // //console.log(response.data.data);
+        dispatch(getSuccess([]));
       }
     })
       .catch(() => {
-        // // //console.log(err);
-        // // //console.log(typeof (err));
         return dispatch(getFailed());
       })
-      .finally(() => {
-      });
   };
 }
 
 const updateProduct = (record) => {
-  // //console.log(record);
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -71,15 +64,10 @@ const updateProduct = (record) => {
       },
       withCredentials: true,
     }).then((response) => {
-      // //console.log(response);
       if (response.status === 200) {
-        // // //console.log(response);
-        // return window.location.reload();
-        // //console.log(response.data.data);
+        dispatch(getSuccess([]));
       }
     }).catch(() => {
-      // //console.log(err);
-      // //console.log(typeof (err));
       return dispatch(getFailed());
     });
   };
@@ -93,14 +81,10 @@ const deleteProduct = id => {
       method: "DELETE",
       withCredentials: true,
     }).then((response) => {
-      // //console.log(response);
       if (response.status === 200) {
-        // //console.log(response);
-        // return window.location.reload();
+        dispatch(getSuccess([]));
       }
     }).catch(() => {
-      // //console.log(err);
-      // //console.log(typeof (err));
       return dispatch(getFailed());
     });
   };
