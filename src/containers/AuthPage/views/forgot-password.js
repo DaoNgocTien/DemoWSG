@@ -113,20 +113,8 @@ class ForgotPassword extends Component {
     }
 
     onFinish = (values) => {
-        // //console.log('Received values of form: ', values);
-        // let record = {
-        //     username: values.username,
-        //     password: values.password,
-        //     firstName: values.firstname,
-        //     lastName: values.lastname,
-        //     phone: this.phoneRef.current.value,
-        //     email: values.email,
-        //     roleName: "Supplier"
-        // };
         this.props.changePassword(this.props.profile.id, values.password);
         this.resetFields();
-        // this.formRef.current.resetFields();
-        // this.props.closeModal();
     };
 
     onCheckPhoneNumber = () => {
@@ -167,8 +155,6 @@ class ForgotPassword extends Component {
     };
 
     handleChange = ({ fileList, file, event }) => {
-        // fileList = fileList.slice(-2);
-        // //console.log(fileList);
         // 2. Read from response and show file link
         fileList = fileList.map((file) => {
             if (file.response) {
@@ -188,9 +174,6 @@ class ForgotPassword extends Component {
             OTPValue: e.target.value,
         })
         const value = e.target.value;
-        //  //console.log(this.props.phone);
-        //  //console.log(this.phoneRef.current.value);
-        //  //console.log(this.props.OTP);
 
         if (value === this.props.OTP && this.phoneRef.current.value === this.props.phone) {
             this.setState({
@@ -251,8 +234,6 @@ class ForgotPassword extends Component {
             </div>
         );
         const { loading, profile, phone, OTP, message, openModal, changePasswordMessage } = this.props;
-        //  //console.log(this.props);
-        // if (loading) return <Loader />;
         return (
             <>
 

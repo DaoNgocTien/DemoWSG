@@ -1,31 +1,11 @@
 import {
   Button, DatePicker, Descriptions, Form, InputNumber, Modal, Input
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import moment from "moment";
 
 const { RangePicker } = DatePicker;
-
-//  prototype
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  createLoyalCustomerCondition: PropTypes.func,
-  openModal: PropTypes.bool,
-  productList: PropTypes.array,
-};
-
-//  default props
-const propsDefault = {
-  closeModal: () => { },
-  createLoyalCustomerCondition: () => { },
-  openModal: false,
-  productList: [],
-};
-
 class CreatModal extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
@@ -35,11 +15,7 @@ class CreatModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() { }
-
   handleCreateAndClose = (data) => {
-    // //console.log("DiscountCode create");
-    // //console.log(data);
     let newLoyalCustomerCondition = {
       minOrder: data.minOrder,
       minProduct: data.minProduct,
@@ -61,7 +37,6 @@ class CreatModal extends Component {
     const { productList } = this.props;
     const { productSelected = this.props.productList[0], price = 0 } =
       this.state;
-    // //console.log(productSelected);
     return (
       <>
         <Form

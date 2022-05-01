@@ -32,7 +32,6 @@ class DeleteModal extends Component {
           this.state.fileList?.length === 0 && this.props.record
             ? JSON.parse(this.props.record?.image)
             : this.state.fileList;
-        // //console.log(data);
         this.props.updateProduct(data);
         break;
     }

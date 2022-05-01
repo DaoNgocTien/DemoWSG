@@ -1,48 +1,17 @@
-import { ArrowDownOutlined, ArrowUpOutlined, DownloadOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import {
-  Button, Card, Col, Drawer, Input, Layout,
-  Menu, PageHeader, Radio, Row, Space, Statistic, Table, Typography
+  Card, Col, Layout,
+  PageHeader, Row, Space, Statistic, Typography
 } from "antd";
-import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-import { Link, Redirect, Route } from "react-router-dom";
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  PieChart,
-  Pie,
-  Sector,
+  CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis,
+  YAxis
 } from "recharts";
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Text, Title } = Typography;
-//  prototype
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  defaultCampaign: PropTypes.object,
-  createCampaign: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  deleteCampaign: PropTypes.func,
-};
-
-//  default props
-const propsDefault = {
-  index: 1,
-  data: [],
-  products: [],
-  defaultCampaign: {},
-};
-
 class DashboardUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     loading: false,
     selectedRowKeys: [], // Check here to configure the default column
@@ -243,16 +212,12 @@ class DashboardUI extends Component {
 
     const { productList, createCampaign, updateCampaign, deleteCampaign, data } =
       this.props;
-    // //console.log(data);
-    // const hasSelected = selectedRowKeys.length > 0;
     const arrayLocation = window.location.pathname.split("/"); 
     return (
       <Layout>
         <Content>
           <PageHeader
-            // onBack={() => window.history.back()}
             title={`Hello, ${JSON.parse(localStorage.getItem('user'))?.name ?? ""}`}
-            // subTitle={`This is a ${arrayLocation[2]} page`}
             footer={
               <Row>
                 <Col>
@@ -385,36 +350,7 @@ class DashboardUI extends Component {
             </Row>
           </PageHeader >
         </Content >
-        {/* <Sider
-          style={{
-            background: "#fff",
-            // overflow: 'auto',
-            // height: '100vh',
-          }}
-          breakpoint="lg"
-          collapsedWidth="0"
-          onBreakpoint={broken => {
-          //  //console.log(broken);
-          }}
-          onCollapse={(collapsed, type) => {
-          //  //console.log(collapsed, type);
-          }}
-        >
-          <Menu theme="light">
-            <Menu.Item key="1" icon={<DownloadOutlined />} style={{ textAlign: "center" }}>
-              Report 01/2022
-            </Menu.Item>
-            <Menu.Item key="2" icon={<DownloadOutlined />} style={{ textAlign: "center" }}>
-              Report 01/2022
-            </Menu.Item>
-            <Menu.Item key="3" icon={<DownloadOutlined />} style={{ textAlign: "center" }}>
-              Report 01/2022
-            </Menu.Item>
-            <Menu.Item key="4" icon={<DownloadOutlined />} style={{ textAlign: "center" }}>
-              Report 01/2022
-            </Menu.Item>
-          </Menu>
-        </Sider> */}
+       
       </Layout >
     );
   }

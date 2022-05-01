@@ -62,7 +62,6 @@ class PasswordTab extends Component {
   }
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -74,20 +73,6 @@ class PasswordTab extends Component {
 
   onChangePhoneNumber = e => {
     const phone = e.target.value;
-    // const checkPhoneMessage = this.props.phoneValidation.checkPhoneMessage;
-    // // //console.log(phone);
-    // // //console.log(this.props.phoneValidation.checkPhoneMessage);
-
-    // if (phone.length > 11 || phone.length < 10) {
-    //   return this.setState({
-    //     phoneMessage: "Phone is required, 10-11 numbers!!",
-    //   })
-    // }
-    // if (checkPhoneMessage?.length > 0) {
-    //   return this.setState({
-    //     phoneMessage: checkPhoneMessage,
-    //   })
-    // }
     if (phone.length > 11 || phone.length < 10) {
       return this.props.checkingPhoneNumber("Phone is required, 10-11 numbers!!");
     }
@@ -99,22 +84,18 @@ class PasswordTab extends Component {
   }
 
   updatePhone = (values) => {
-    // //console.log(values.target.value);
     let phone = this.state.phone;
-    // //console.log(phone);
     this.props.checkPhoneNumber(phone);
   }
 
   checkOTP = e => {
     const value = e.target.value;
-    //  //console.log(JSON.parse(localStorage.getItem("user")));
     if (value === this.props.phoneValidation.phoneOTP && this.state.phone === this.props.phoneValidation.phone) {
       this.setState({
         phoneAvailable: true,
         OTPMessage: null,
       });
       let data = this.props.data;
-      //console.log(this.props.data);
       const user = {
         phone:  "0" + String(this.state.phone),
         avatar: JSON.parse(data.avt),
@@ -139,7 +120,6 @@ class PasswordTab extends Component {
   }
 
   updateIdentifcation = (values) => {
-    // //console.log(values);
 
     values.identificationimage =
       this.state.fileList.length === 0 && this.props.record
@@ -174,9 +154,6 @@ class PasswordTab extends Component {
   };
 
   handleChange = ({ fileList }) => {
-    //console.log(fileList);
-    // this.props.onChangeUpdateProfile();
-    //console.log(fileList);
     fileList = fileList.map((file) => {
       if (file.response) {
         file.url = file.response[0].url;
@@ -216,7 +193,6 @@ class PasswordTab extends Component {
     const {
       changePasswordMessage,
     } = data;
-    // //console.log(checkPhoneMessage);
     return (
       <>
         <Title style={{ textAlign: "center", marginTop: "30px" }} level={3}>MANAGE PASSWORD</Title>
@@ -317,36 +293,9 @@ class PasswordTab extends Component {
 
                 <Form.Item
                   name="phone"
-                  // label="Phone Number"
                   hasFeedback
                   tooltip={"We make sure phone number is available!"}
-                  // rules={[
-                  //   // {
-                  //   //   required: true,
-                  //   //   message: 'Please enter your new phone',
-                  //   // },
-                  //   ({ getFieldValue }) => ({
-                  //     validator(_, value) {
-                  //       if ((value + "").length > 11 || (value + "").length < 10) {
-                  //         return Promise.reject(new Error(`Phone number is between 10-11 characters`));
-                  //       }
-                  //       // if (getFieldValue("phoneMessage").length > 0) {
-                  //       //   return Promise.reject(new Error(`${getFieldValue("phoneMessage")}`));
-                  //       // }
-                  //       // //console.log(phoneValidation);
-                  //       if (value && !checkPhoneMessage) {
-                  //         return Promise.resolve();
-                  //       }
-                  //       return Promise.reject(new Error(`${checkPhoneMessage}`));
-
-                  //     },
-                  //   }),
-                  //   // {
-                  //   //   pattern: /[0-9]{10,11}/,
-                  //   //   message: 'Phone number is between 10-12 characters',
-                  //   // }
-                  // ]}
-
+                  
                   initialValue={this.state.phone}
                   validateStatus={checkPhoneMessage == null ? "success" : "error"}
                   help={checkPhoneMessage == null ? "We make sure phone number is available!" : checkPhoneMessage}
@@ -354,10 +303,8 @@ class PasswordTab extends Component {
                   <Input
                     type="number"
                     addonBefore="+84"
-                    // disabled={data.phoneOTP?? "false"}
                     onChange={(e) => this.onChangePhoneNumber(e)}
                     ref={this.phoneRef}
-                    // addonBefore={this.prefixSelector}
                     style={{ width: "100%" }}
                     placeholder="10-11 characters"
                   />
@@ -370,7 +317,6 @@ class PasswordTab extends Component {
                   type="primary"
                   form="updatePhoneNumber"
                   onClick={this.updatePhone}
-                //   disabled={phoneAvailable}
                 >
                   Send OTP
                 </Button>
@@ -383,7 +329,7 @@ class PasswordTab extends Component {
             label="OTP"
             validateStatus={OTPMessage === null ? "success" : "error"}
             help={OTPMessage === null ? "Correct OTP Token will let you fill the rest of registration form!" : OTPMessage}
-          // hidden={phoneOTP ? "false" : "true"}
+         
           >
             <Input
               onChange={e => this.checkOTP(e)}
@@ -392,15 +338,6 @@ class PasswordTab extends Component {
             />
 
           </Form.Item>
-          {/* 
-          <Form.Item
-            wrapperCol={{
-              span: 12,
-              offset: 6,
-            }}
-          >
-            
-          </Form.Item> */}
 
         </Form>
 
@@ -451,10 +388,6 @@ class PasswordTab extends Component {
             name="identificationimage"
             label="Identification Image"
             rules={[
-              // {
-              //   required: true,
-              //   message: 'Please confirm your password!',
-              // },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (fileList.length >= 1) {
@@ -468,7 +401,6 @@ class PasswordTab extends Component {
           >
             <>
               <Upload
-                //JSON.parse(data?.avt || "[]")
                 name="file"
                 action="/files/upload"
                 listType="picture-card"
@@ -495,50 +427,6 @@ class PasswordTab extends Component {
           </Form.Item>
 
 
-          {/* <Form.Item
-            name="identificationcard"
-            label="Identification Card"
-            rules={[{ required: true, message: 'Please input your Identification Card!' }]}
-          >
-            <Input type="number" style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item
-            name="identificationimage"
-            label="Identification Image"
-            rules={[{ required: true, message: 'Please input your Identification Image!' }]}
-          >
-            <>
-              <Upload
-                name="file"
-                action="/files/upload"
-                listType="picture-card"
-                // fileList={
-                //   this.state.fileList.length === 0 && data
-                //     ? JSON.parse(data.avt)
-                //     : this.state.fileList
-                // }
-                fileList={this.props.record ? fileList : []}
-                onPreview={this.handlePreview}
-                onChange={this.handleChange}
-                style={{ width: "60vh" }}
-              >
-                {this.state.fileList.length >= 8 ? null : uploadButton}
-              </Upload>
-              <Modal
-                visible={this.state.previewVisible}
-                title={this.state.previewTitle}
-                footer={null}
-                onCancel={this.handleCancelUploadImage}
-              >
-                <img
-                  alt="example"
-                  style={{ width: "100%" }}
-                  src={this.state.previewImage}
-                />
-              </Modal>
-            </>
-          </Form.Item> */}
           <Form.Item
             wrapperCol={{
               span: 12,
@@ -566,8 +454,6 @@ const mapStateToProps = (state) => {
     error: state.profileReducer.err,
     phoneValidation: state.profileReducer.phoneValidation,
     identificationValidation: state.profileReducer.identificationValidation,
-    // productList: state.productReducer.data,
-    // orderList: [],
   };
 };
 
@@ -595,13 +481,10 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     getProfile: async () => {
-      // // //console.log("get campaign");
       await dispatch(action.getProfile());
     },
     checkingPhoneNumber: async (message) => {
-      // // //console.log("get campaign");
       await dispatch(action.checkingPhoneNumber(message));
-      // await dispatch(action.getProfile());
     },
   };
 };

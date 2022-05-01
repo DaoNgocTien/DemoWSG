@@ -46,7 +46,7 @@ class DeleteModal extends Component {
     this.props.closeModal();
   };
 
-  handleDeleteAndClose = (data) => {
+  handleDeleteAndClose = () => {
     this.props.deleteCampaign(this.props.record?.id);
     this.formRef.current.resetFields();
     this.props.closeModal();
@@ -278,22 +278,11 @@ class DeleteModal extends Component {
 
                 <Form.List
                   name="quantities"
-                  onChange={(record) => {
+                  onChange={() => {
                   }}
                   initialValue={record?.range ?? []}
                 >
-                  {(fields, { add, remove }) => {
-                    const reset = () => {
-                      fields.forEach(field => {
-                        remove(field.name)
-                      });
-                      fields.forEach(field => {
-                        remove(field.name)
-                      });
-                      fields.forEach(field => {
-                        remove(field.name)
-                      });
-                    };
+                  {(fields, { remove }) => {
                     return (
                       <>
                         {fields.map((field) => (

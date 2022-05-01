@@ -205,7 +205,7 @@ class ProductUI extends Component {
                   prefix={<SearchOutlined />}
                   ref={this.searchSelf}
                   onChange={(e) => this.onChangeHandler(e)}
-                  placeholder="Search for products..."
+                  placeholder="Search data"
                 />
               </Col>
               <Col span={3} offset={9}>

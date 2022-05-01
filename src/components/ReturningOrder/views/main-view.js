@@ -64,7 +64,6 @@ class OrderReturningUI extends Component {
     let record = this.props.data?.filter((item) => {
       return selectedRowKeys.includes(item.id);
     })[0];
-    //  //console.log(record);
     let handledBySupplier = 0;
     record?.orderstatushistory?.map((item) => {
       if (item.statushistory === "returning") {
@@ -231,7 +230,6 @@ class OrderReturningUI extends Component {
   };
 
   confirmReceivedRequest = (object) => {
-    //  //console.log(object);
     this.props.confirmReceived(
       object.ordercode,
       object.campaignid ? "campaign" : "retail",
@@ -242,14 +240,10 @@ class OrderReturningUI extends Component {
   render() {
     const { handleOrder, updateStatusOrder, data, storeComplainRecord } =
       this.props;
-    //  //console.log(data);
     const {
       selectedRowKeys,
       displayData,
       searchKey,
-      // openDetailModal,
-      // viewButton,
-      // openHandleModal,
       actionButton,
     } = this.state;
 

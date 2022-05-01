@@ -85,12 +85,10 @@ class ProfileTab extends Component {
   }
 
   handleCancel = () => {
-    //   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
   onFinish = (values) => {
-    //console.log(values);
     values.avatar =
       this.state.fileList?.length === 0 && this.props.record
         ? JSON.parse(this.props.record?.avt)
@@ -132,9 +130,7 @@ class ProfileTab extends Component {
   };
 
   handleChange = ({ fileList }) => {
-    //console.log(fileList);
     this.props.onChangeUpdateProfile();
-    //console.log(fileList);
     fileList = fileList.map((file) => {
       if (file.response) {
         file.url = file.response[0].url;
@@ -160,7 +156,6 @@ class ProfileTab extends Component {
       </div>
     );
     let storedUser = data;
-    //console.log(this.props);
     return (
       <>
         <Title style={{ textAlign: "center", padding: "30px" }} level={3}>

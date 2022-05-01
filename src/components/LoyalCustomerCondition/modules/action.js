@@ -184,7 +184,6 @@ const getRequest = () => {
 };
 
 const getSuccess = (data) => {
-  // //console.log(data);
   return {
     type: GET_DATA_SUCCESS,
     payload: data,

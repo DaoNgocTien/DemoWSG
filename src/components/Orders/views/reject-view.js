@@ -189,9 +189,9 @@ class RejectModal extends Component {
           <Modal
             width={window.innerWidth * 0.7}
             title={`Order of ${
-              this.state.record.customerfirstname +
+              this.state.record?.customerfirstname +
               " " +
-              this.state.record.customerlastname
+              this.state.record?.customerlastname
             }`}
             visible={openModal}
             onCancel={this.handleCancel}
@@ -236,7 +236,7 @@ class RejectModal extends Component {
             </Descriptions>
             <Table
               columns={this.columns}
-              dataSource={this.state.record.details}
+              dataSource={this.state.record?.details}
               scroll={{ y: 350, x: 1000 }}
             />
 

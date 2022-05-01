@@ -217,7 +217,7 @@ class CategoryUI extends Component {
                     prefix={<SearchOutlined />}
                     ref={this.searchSelf}
                     onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search for categories..."
+                    placeholder="Search data"
                   />
                 </Col>
                 <Col span={3} offset={3}>

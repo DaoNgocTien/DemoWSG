@@ -25,9 +25,7 @@ const transactionReducer = (state = initialState, action) => {
       return { ...state };
 
     case STORE_SETTLING_PAYMENT:
-      
-    //  //console.log(action);
-      state.loading = false;
+          state.loading = false;
       state.settlingPaymentList = { ...action.payload };
       state.err = null;
       return { ...state };
@@ -35,7 +33,6 @@ const transactionReducer = (state = initialState, action) => {
     case GET_DATA_FAIL:
       state.loading = false;
       state.data = [];
-      // state.err = action.payload;
       return { ...state };
     default:
       return { ...state };

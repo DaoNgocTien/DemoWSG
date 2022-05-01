@@ -68,7 +68,6 @@ class AdminRender extends Component {
       });
       onValue(ref(realtime, `message/${user.accountid}`), (snapshot) => {
         if (snapshot.val()) {
-          //console.log(snapshot.val());
           this.setState({
             userMessages: Object.keys(snapshot.val()),
             messages: snapshot.val(),
@@ -83,14 +82,12 @@ class AdminRender extends Component {
       this.getNotif();
       axios.get(`/notif/getNotiForLoginUser`).then((res) => {
         const notif = res.data.data;
-        //console.log(notif)
         this.setState({ notif });
       });
     }
   };
 
   getNotif = async () => {
-    // //console.log(get(ref(realtime, "notif")));
     onValue(
       ref(realtime, `notif/${JSON.parse(localStorage.getItem("user")).id}`),
       (snapshot) => {
@@ -121,7 +118,6 @@ class AdminRender extends Component {
   };
 
   showNotificationDrawer = () => {
-    // //console.log("showNotificationDrawer");
     this.setState({
       visible: true,
       chatVisible: false,
@@ -147,7 +143,6 @@ class AdminRender extends Component {
     });
   };
   setMessageInputValue = (data) => {
-    //  //console.log(this.state);
     set(ref(realtime, "chat-message"), {
       to: this.state.to,
       from: this.state.from,
@@ -156,7 +151,6 @@ class AdminRender extends Component {
   };
   onSendFile = (info) => {
     if (info.file.status === "done") {
-      //  //console.log(this.state);
 
       if (this.state.from && this.state.to) {
         set(ref(realtime, "chat-message"), {
@@ -182,7 +176,6 @@ class AdminRender extends Component {
 
   render() {
     const { collapsed, messages } = this.state;
-    //console.log(this.state.notif);
     return (
       <Layout>
         <Header
@@ -352,7 +345,6 @@ class AdminRender extends Component {
                   <Sidebar position="left" scrollable={false}>
                     <ConversationList>
                       {this.state.userMessages.map((element, index) => {
-                        // //console.log(messages[element])
                         return (
                           <Conversation
                             name={

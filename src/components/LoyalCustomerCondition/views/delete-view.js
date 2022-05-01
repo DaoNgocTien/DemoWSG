@@ -60,7 +60,6 @@ class DeleteModal extends Component {
   };
 
   handleCancel = () => {
-    //   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -68,7 +67,6 @@ class DeleteModal extends Component {
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    // //console.log(record);
     if (this.props.loading || !this.props.record || !productList) {
       return <></>;
     }

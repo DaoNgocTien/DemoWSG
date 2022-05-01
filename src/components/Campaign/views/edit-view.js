@@ -1,4 +1,9 @@
 import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  UndoOutlined
+} from "@ant-design/icons";
+import {
   Button,
   DatePicker,
   Descriptions,
@@ -6,21 +11,11 @@ import {
   Input,
   InputNumber,
   Modal,
-  Select,
-  Switch,
-  Upload,
-  Space,
-  Typography,
+  Select, Space, Switch, Typography, Upload
 } from "antd";
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
-import {
-  MinusCircleOutlined,
-  PlusOutlined,
-  UndoOutlined,
-} from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;
@@ -347,8 +342,6 @@ class EdilModal extends Component {
                     validator(_, value) {
                       const range =
                         Number(productSelected?.retailprice) || 99999999;
-
-                      //console.log(productSelected);
                       if (value >= 0 && value <= range) {
                         return Promise.resolve();
                       }

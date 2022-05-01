@@ -6,7 +6,6 @@ import {
   Input,
   PageHeader,
   Row,
-  Space,
   Table,
   Tag
 } from "antd";
@@ -231,18 +230,17 @@ class CampaignUI extends Component {
                   prefix={<SearchOutlined />}
                   ref={this.searchSelf}
                   onChange={(e) => this.onChangeHandler(e)}
-                  placeholder="Search for campaigns..."
+                  placeholder="Search data"
                 />
               </Col>
-              <Col>
-                <Space size={3}>
-                  <Button
-                    type="primary"
-                    onClick={() => this.start()}
-                  >
-                    Add New
-                  </Button>
-                </Space>
+              <Col span={3} offset={9}>
+                <Button
+                  type="primary"
+                  onClick={() => this.start()}
+                  block
+                >
+                  Add New
+                </Button>
               </Col>
             </Row>
             <Table

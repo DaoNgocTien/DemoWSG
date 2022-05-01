@@ -163,7 +163,6 @@ const mapDispatchToProps = (dispatch) => {
 
 
     getProfile: async () => {
-      // //console.log("get campaign");
       await dispatch(action.getProfile());
     },
   };

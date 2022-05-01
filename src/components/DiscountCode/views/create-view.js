@@ -1,9 +1,8 @@
 import {
-  Button, DatePicker, Descriptions, Form,
-  Input, InputNumber, Modal, Select, Space
+  Button, DatePicker, Form,
+  Input, InputNumber, Modal, Space
 } from "antd";
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
 const { RangePicker } = DatePicker;
@@ -36,20 +35,8 @@ class CreatModal extends Component {
     this.props.closeModal();
   };
 
-  onSelectProduct = (value) => {
-    this.setState({
-      productSelected: this.props.productList?.find(
-        (element) => element.id === value
-      ),
-    });
-  };
-
   render() {
     const { openModal } = this.props;
-
-    const { productList } = this.props;
-    const { productSelected = this.props.productList[0], price = 0 } =
-      this.state;
     return (
       <>
 
@@ -143,7 +130,7 @@ class CreatModal extends Component {
               >
                 <InputNumber min={1000} max={999999999999} style={{ width: "60vh" }} />
               </Form.Item>
-            
+
               <Form.Item name="minimunPrice" initialValue={1000} label="Minimun price"
                 rules={[
                   () => ({
@@ -163,18 +150,13 @@ class CreatModal extends Component {
               </Form.Item>
             </Space>
 
-
-
             <Space size={30}>
               <Form.Item name="description" label="Description"
-
               >
                 <Input.TextArea style={{ width: "60vh" }} />
               </Form.Item>
             </Space>
           </Form >
-
-
         </Modal>
       </>
     );

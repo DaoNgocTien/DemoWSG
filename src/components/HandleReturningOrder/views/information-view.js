@@ -133,7 +133,6 @@ class InformationModal extends Component {
 
   render() {
     this.state.record = this.props.record;
-  //  //console.log(this.props.record);
 
     return (
       <>

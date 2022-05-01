@@ -32,7 +32,6 @@ const getOrder = () => {
       ]);
       const orders = [];
       orders.push(...returning.data.data, ...returned.data.data);
-    //  //console.log(orders);
       return dispatch(
         getSuccess({
           orders: orders.map((order) => {
@@ -47,7 +46,6 @@ const getOrder = () => {
         })
       );
     } catch (error) {
-    //  //console.log(error);
       return dispatch(getFailed());
     }
   };
@@ -172,8 +170,6 @@ const confirmReceived = (orderCode, type, orderId) => {
 };
 
 const storeComplainRecord = (record) => {
-//  //console.log("storeComplainRecord action");
-//  //console.log(record);
   return async (dispatch) => {
     try {
       return dispatch(getComplainRecord({ complainRecord: record }));

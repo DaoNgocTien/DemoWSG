@@ -58,7 +58,6 @@ class BusinessConditionUI extends Component {
   }
 
   onFinish = (data) => {
-  //  //console.log(data);
     this.props.updateBusinessCondition({
       email: data.email,
       ewalletcode: data.ewalletcode,
@@ -70,20 +69,6 @@ class BusinessConditionUI extends Component {
     this.setState({
       visible: true,
     });
-  };
-
-  handleOk = () => {
-    // this.setState({ loading: true });
-    // setTimeout(() => {
-    //   this.setState({ loading: false, visible: false });
-    // }, 3000);
-
-  //  //console.log("handleOk");
-  };
-
-  handleCancel = () => {
-  //  //console.log("handleCancel");
-    // this.setState({ visible: false });
   };
 
   render() {
@@ -232,7 +217,6 @@ const mapDispatchToProps = (dispatch) => {
 
 
     getProfile: async () => {
-      // //console.log("get campaign");
       await dispatch(action.getProfile());
     },
   };

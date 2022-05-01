@@ -112,7 +112,6 @@ class Registration extends Component {
     }
 
     onFinish = (values) => {
-        //  //console.log('Received values of form: ', values);
         let record = {
             username: values.username,
             password: values.password,
@@ -127,7 +126,6 @@ class Registration extends Component {
 
     onCheckPhoneNumber = () => {
         const value = this.phoneRef.current.value;
-        //  //console.log(value);
         this.props.checkPhoneNumber(this.phoneRef.current.value);
         let profile = this.props.profile;
         return this.setState({
@@ -164,8 +162,6 @@ class Registration extends Component {
     };
 
     handleChange = ({ fileList, file, event }) => {
-        // fileList = fileList.slice(-2);
-        // //console.log(fileList);
         // 2. Read from response and show file link
         fileList = fileList.map((file) => {
             if (file.response) {
@@ -198,8 +194,6 @@ class Registration extends Component {
 
     changePhoneNumber = (e) => {
         const value = this.phoneRef.current.value;
-        //  //console.log(value);
-        // //console.log(this.OTPRef.current.value);
         this.props.phoneNumberValidation(value);
 
         if (this.OTPRef.current.value === this.props.OTP && value === this.props.phone) {
@@ -235,8 +229,6 @@ class Registration extends Component {
             </div>
         );
         const { loading, profile, phone, OTP, message } = this.props;
-        //  //console.log(this.props);
-        // if (loading) return <Loader />;
         return (
             <>
                 <div className="main_form_body">
@@ -330,34 +322,15 @@ class Registration extends Component {
                                                 if ((value + "").length > 11 || (value + "").length < 10) {
                                                     return Promise.reject(new Error(`Phone number is between 10-11 characters`));
                                                 }
-                                                // if (getFieldValue("phoneMessage").length > 0) {
-                                                //   return Promise.reject(new Error(`${getFieldValue("phoneMessage")}`));
-                                                // }
-                                                // //console.log(phoneValidation);
-                                                //   if (value && !checkPhoneMessage) {
                                                 return Promise.resolve();
-                                                //   }
-                                                //   return Promise.reject(new Error(`${checkPhoneMessage}`));
 
                                             },
                                         }),
-                                        // {
-                                        //   pattern: /[0-9]{10,11}/,
-                                        //   message: 'Phone number is between 10-12 characters',
-                                        // }
-                                    ]}
-
-                                // initialValue={this.state.phone}
-                                // validateStatus={checkPhoneMessage == null ? "success" : "error"}
-                                // help={checkPhoneMessage == null ? "We make sure phone number is available!" : checkPhoneMessage}
-                                >
+                                    ]}  >
                                     <Input
                                         type="number"
                                         addonBefore="+84"
-                                        // disabled={data.phoneOTP?? "false"}
-                                        // onChange={(e) => this.onChangePhoneNumber(e)}
                                         ref={this.phoneRef}
-                                        // addonBefore={this.prefixSelector}
                                         style={{ width: "100%" }}
                                         placeholder="10-11 characters"
                                     />
@@ -371,10 +344,6 @@ class Registration extends Component {
                                     rules={[
                                         ({ getFieldValue }) => ({
                                             validator(_, value) {
-
-                                                //   if (listName.includes(value)) {
-                                                //     return Promise.reject(new Error('Product Name exists!'));
-                                                //   }
                                                 if (value.length > 0 && value.length <= 50) {
                                                     return Promise.resolve();
                                                 }
@@ -397,9 +366,6 @@ class Registration extends Component {
                                         ({ getFieldValue }) => ({
                                             validator(_, value) {
 
-                                                //   if (listName.includes(value)) {
-                                                //     return Promise.reject(new Error('Product Name exists!'));
-                                                //   }
                                                 if (value.length > 0 && value.length <= 50) {
                                                     return Promise.resolve();
                                                 }
@@ -566,7 +532,6 @@ const mapDispatchToProps = (dispatch) => {
 
         registration: async (data, history) => {
             await dispatch(action.registration(data));
-            // await dispatch(action.actLoginApi({ username: data.username, password: data.password }, history));
         }
     };
 };

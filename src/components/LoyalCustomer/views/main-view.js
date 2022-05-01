@@ -1,83 +1,13 @@
-import { Button, Col, Input, PageHeader, Row, Space, Table, Tag } from "antd";
-import PropTypes from "prop-types";
+import { Lock, LockOpenTwoTone } from "@material-ui/icons";
+import { Button, Col, Input, PageHeader, Row, Table, Tag } from "antd";
 import React, { Component, memo } from "react";
-
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  defaultDiscountCode: PropTypes.object,
-  createLoyalCustomer: PropTypes.func,
-  updateLoyalCustomer: PropTypes.func,
-  disableLoyalCustomer: PropTypes.func,
-};
-
-const propsDefault = {
-  index: 1,
-  data: [],
-  products: [],
-  defaultDiscountCode: {},
-  updateLoyalCustomer: () => {},
-};
+import NumberFormat from "react-number-format";
 
 class LoyalCustomerUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     loading: false,
-    selectedRowKeys: [],
-    loadingActionButton: false,
-    activateButton: false,
-    deactivateButton: false,
-
-    openCreateModal: false,
-    openDeleteModal: false,
-    openEditModal: false,
     displayData: [],
     searchKey: "",
-    openDrawer: false,
-    record: {},
-    orderList: [],
-  };
-
-  componentDidMount() {}
-
-  start = (openModal) => {
-    let selectedRowKeys = this.state.selectedRowKeys;
-    let data = this.props.data;
-
-    let recordToEdit = data.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-
-    switch (openModal) {
-      case "openCreateModal":
-        this.setState({ loadingActionButton: true, openCreateModal: true });
-        break;
-
-      case "openDeleteModal":
-        this.setState({ loadingActionButton: true, openDeleteModal: true });
-
-        break;
-
-      case "openEditModal":
-        this.setState({
-          loadingActionButton: true,
-          openEditModal: true,
-          record: recordToEdit,
-        });
-
-        break;
-      default:
-        break;
-    }
-  };
-
-  closeModal = () => {
-    this.setState({
-      openCreateModal: false,
-      openDeleteModal: false,
-      openEditModal: false,
-    });
   };
 
   columns = [
@@ -88,7 +18,7 @@ class LoyalCustomerUI extends Component {
       render: (_text, _object, index) => {
         return index + 1;
       },
-      width: 100,
+      width: 70,
       fixed: "left",
     },
     {
@@ -115,11 +45,25 @@ class LoyalCustomerUI extends Component {
       title: "Num Of Order",
       dataIndex: "numoforder",
       key: "numoforder",
+      render: data =>
+        <NumberFormat
+          value={data ?? ""}
+          thousandSeparator={true}
+          decimalScale={0}
+          displayType="text"
+        />,
     },
     {
       title: "Num Of Product",
       dataIndex: "numofproduct",
       key: "numofproduct",
+      render: data =>
+        <NumberFormat
+          value={data ?? ""}
+          thousandSeparator={true}
+          decimalScale={0}
+          displayType="text"
+        />,
     },
     {
       title: "Discount Percent",
@@ -135,6 +79,30 @@ class LoyalCustomerUI extends Component {
         return <Tag>{data.toUpperCase()}</Tag>;
       },
     },
+    {
+      title: "",
+      key: "",
+      render: (object) => {
+        return (
+          <Button icon={object.status === "active" ? <Lock /> : <LockOpenTwoTone />}
+            onClick={() => this.props.updateLoyalCustomer(
+              {
+                ...object,
+                status: object.status === "active" ? "deactive" : "active"
+              },
+              object.id)
+            }
+            type="default"
+            shape="circle"
+            style={{
+              border: "none",
+              boxShadow: "none",
+              background: "none",
+            }} />)
+      },
+      fixed: "right",
+      width: 100,
+    },
   ];
 
   onChangeHandler = (e) => {
@@ -142,17 +110,19 @@ class LoyalCustomerUI extends Component {
     let searchString = e.target.value;
     let searchList = data.filter((item) => {
       return (
-        item.customerfirstname
-          .toUpperCase()
+        String(item.customerfirstname)?.toUpperCase()
           .includes(searchString.toUpperCase()) ||
-        item.customerlastname
-          .toUpperCase()
+        String(item.customerlastname)?.toUpperCase()
           .includes(searchString.toUpperCase()) ||
-        item.numoforder.includes(searchString) ||
-        item.numofproduct.includes(searchString) ||
-        item.discountpercent.includes(searchString) ||
-        item.status.includes(searchString)
-      );
+        String(item.numoforder)?.toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.numofproduct)?.toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.discountpercent)?.toUpperCase()
+          .includes(searchString.toUpperCase()) ||
+        String(item.status)?.toUpperCase()
+          .includes(searchString).toUpperCase())
+        ;
     });
     this.setState({
       displayData: searchList,
@@ -160,95 +130,24 @@ class LoyalCustomerUI extends Component {
     });
   };
 
-  onSelectChange = (record) => {
-    if (this.state.selectedRowKeys[0] !== record.key) {
-      this.setState({
-        selectedRowKeys: [record.key],
-        record: record,
-        activateButton: true && record?.status === "deactive",
-        deactivateButton: true && record?.status === "active",
-        addNewButton: false,
-      });
-    } else {
-      this.setState({
-        selectedRowKeys: [],
-        record: {},
-        activateButton: false,
-        deactivateButton: false,
-        addNewButton: true,
-      });
-    }
-  };
-
-  manageLoyalCustomerPosition = (position) => {
-    let record = {
-      ...(this.state.record ?? this.state.record),
-      status: position,
-    };
-    //  //console.log(record);
-    this.props.updateLoyalCustomer(record, this.state.record?.id);
-  };
 
   render() {
     const {
-      selectedRowKeys,
-      deactivateButton,
-      activateButton,
       displayData,
       searchKey,
     } = this.state;
 
-    const {
-      productList,
-      createLoyalCustomer,
-      updateLoyalCustomer,
-      disableLoyalCustomer,
-    } = this.props;
-
-    const rowSelection = {
-      selectedRowKeys,
-      onSelect: this.onSelectChange,
-      hideSelectAll: true,
-    };
-
-    const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        subTitle={`This is a ${arrayLocation[2]} page`}
+        title="LOYAL CUSTOMER"
+        subTitle={`This is a loyal customer page`}
         footer={
           <div>
             <div style={{ marginBottom: 16 }}>
               <Row>
-                <Col flex="auto">
-                  <Space size={4}>
-                    <Button
-                      type="primary"
-                      onClick={() => this.manageLoyalCustomerPosition("active")}
-                      disabled={!activateButton}
-                      style={{ width: 90 }}
-                    >
-                      Activate
-                    </Button>
-                    <Button
-                      type="danger"
-                      onClick={() =>
-                        this.manageLoyalCustomerPosition("deactive")
-                      }
-                      disabled={!deactivateButton}
-                      style={{ width: 90 }}
-                    >
-                      Deactivate
-                    </Button>
-                    <span style={{ marginLeft: 8 }}>
-                      {selectedRowKeys.length > 0
-                        ? `Selected ${selectedRowKeys.length} items`
-                        : ""}
-                    </span>
-                  </Space>
-                </Col>
-                <Col flex="300px">
+                <Col span={12}>
                   <Input
                     onChange={(e) => this.onChangeHandler(e)}
                     placeholder="Search data"
@@ -258,7 +157,6 @@ class LoyalCustomerUI extends Component {
             </div>
             <Table
               loading={this.props.loading}
-              rowSelection={rowSelection}
               columns={this.columns}
               dataSource={
                 displayData.length === 0 && searchKey === ""

@@ -1,29 +1,13 @@
 import { IdcardTwoTone, LoadingOutlined, PlusOutlined, SafetyCertificateTwoTone } from "@ant-design/icons";
 import { Button, Descriptions, Form, Image, Input, Modal, Switch, Table, Tabs, Timeline, Typography, Upload } from "antd";
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
 import NumberFormat from "react-number-format";
 
 const { TabPane } = Tabs;
-const {Title} = Typography;
+const { Title } = Typography;
 
-//  prototype
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  record: PropTypes.object,
-  openModal: PropTypes.bool,
-};
-
-//  default props
-const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
-  record: {},
-  openModal: false,
-};
 
 class RejectModal extends Component {
   constructor(props) {
@@ -38,24 +22,15 @@ class RejectModal extends Component {
       requester: "Customer",
     };
   }
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   formRef = React.createRef();
 
-  componentDidMount() {
-    // //console.log(this.props);
-  }
-
   handleRejectAndClose = (data) => {
-    // //console.log(data);
-    // data.image = this.state.fileList;
     this.props.rejectOrder(this.props.record.ordercode, data.reason, JSON.stringify(this.state.fileList), this.state.requester);
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
   handleCancel = () => {
-   //   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -106,7 +81,6 @@ class RejectModal extends Component {
     });
 
     this.setState({ fileList });
-    // //console.log(this.state.fileList);
   };
 
   columns = [
@@ -150,11 +124,11 @@ class RejectModal extends Component {
     {
       title: "Price",
       dataIndex: "price",
-       width: 200,
+      width: 200,
       key: "price",
       render: (_text, object) => {
         return <NumberFormat
-          value={object.totalprice }
+          value={object.totalprice}
           thousandSeparator={true}
           suffix={" VND"}
           decimalScale={0}
@@ -174,7 +148,7 @@ class RejectModal extends Component {
       key: "totalprice",
       render: (_text, object) => {
         return <NumberFormat
-          value={object.totalprice }
+          value={object.totalprice}
           thousandSeparator={true}
           suffix={" VND"}
           decimalScale={0}
@@ -187,12 +161,11 @@ class RejectModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-      fix:"right"
+      fix: "right"
     }
   ];
 
   getRequester = checked => {
-  //  //console.log(checked)
     this.setState({
       requester: checked ? "Customer" : "Supplier"
     })
@@ -208,7 +181,6 @@ class RejectModal extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-  //  //console.log(record);
     return (
       <>
         <Form

@@ -191,11 +191,7 @@ class CreatModal extends Component {
       maxQuantity,
       minWholesalePrice,
       advancePercent,
-      minSharedAdvancedPercent,
-      minSharedQuantityStep,
       switchState,
-      formListErrMessage,
-      errStepArr,
     } = this.state;
 
     return (
@@ -240,7 +236,6 @@ class CreatModal extends Component {
                   },
                   () => ({
                     validator(_, value) {
-                      //console.log(value);
                       if (value.length > 0 && value.length <= 50) {
                         return Promise.resolve();
                       }
@@ -529,7 +524,6 @@ class CreatModal extends Component {
                 <Form.List
                   name="quantities"
                   onChange={(record) => {
-                    //console.log(record);
                   }}
                 >
                   {(fields, { add, remove }) => {

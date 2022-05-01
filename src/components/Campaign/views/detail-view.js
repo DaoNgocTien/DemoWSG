@@ -364,30 +364,24 @@ class OrdersInCampaign extends React.Component {
               />
               <div style={{ marginBottom: 16 }}>
                 <Row>
-                  <Col flex="auto">
-                    <Space size={3}>
-                      <Button
-                        type="danger"
-                        onClick={() => this.openModal()}
-                        disabled={!rejectButton}
-                        hidden={record?.status !== "active"}
-                        style={{ width: 90 }}
-                      >
-                        Reject
-                      </Button>
-                      <span style={{ marginLeft: 8 }}>
-                        {selectedRowKeys.length > 0
-                          ? `Selected ${selectedRowKeys.length} items`
-                          : ""}
-                      </span>
-                    </Space>
-                  </Col>
-                  <Col flex="300px">
+                <Col span={12}>
                     <Input
                       onChange={(e) => this.onChangeHandler(e)}
                       placeholder="Search data"
                     />
                   </Col>
+                  <Col span={3} offset={9}>
+                      <Button
+                        type="danger"
+                        onClick={() => this.openModal()}
+                        disabled={!rejectButton}
+                        hidden={record?.status !== "active"}
+                        block
+                      >
+                        Reject
+                      </Button>
+                  </Col>
+                  
                 </Row>
               </div>
               <Table

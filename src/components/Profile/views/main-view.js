@@ -70,9 +70,6 @@ class ProfileUI extends Component {
     const { productList,  } =
       this.props;
 
-  //  //console.log(this.props.data);
-  //  //console.log(user);
-
     const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader

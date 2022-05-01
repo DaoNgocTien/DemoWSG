@@ -28,8 +28,6 @@ const handleReturningOrderReducer = (state = initialState, action) => {
       return { ...state };
 
     case STORE_COMPLAIN_ORDER:
-    //  //console.log("storeComplainRecord reducer");
-    //  //console.log(action);
       state.loading = false;
       state.complainRecord = action.payload;
       state.err = null;
@@ -38,7 +36,6 @@ const handleReturningOrderReducer = (state = initialState, action) => {
     case GET_DATA_FAIL:
       state.loading = false;
       state.data = [];
-      // state.err = action.payload;
       return { ...state };
 
     default:

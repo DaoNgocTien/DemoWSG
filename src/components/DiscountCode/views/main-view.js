@@ -1,5 +1,5 @@
 import { OpenInNew } from "@material-ui/icons";
-import { Button, Col, Input, PageHeader, Row, Space, Table, Tag } from "antd";
+import { Button, Col, Input, PageHeader, Row, Table, Tag } from "antd";
 import moment from "moment";
 import React, { Component, memo } from "react";
 import { Link } from "react-router-dom";
@@ -8,13 +8,9 @@ import CreateModal from "./create-view";
 class DiscountCodeUI extends Component {
   state = {
     loading: false,
-    selectedRowKeys: [], // Check here to configure the default column
-    addNewButton: true,
     openCreateModal: false,
     displayData: [],
     searchKey: "",
-    record: {},
-    orderList: [],
   };
 
   start = () => {
@@ -116,44 +112,15 @@ class DiscountCodeUI extends Component {
     });
   };
 
-  onSelectChange = (record) => {
-    if (this.state.selectedRowKeys[0] !== record.key) {
-      this.setState({
-        selectedRowKeys: [record.key],
-        record: record,
-        editButton: true && record?.status !== "deactivated",
-        deleteButton: true && record?.status !== "deactivated",
-        addNewButton: false,
-      });
-    } else {
-      this.setState({
-        selectedRowKeys: [],
-        record: {},
-        editButton: false,
-        deleteButton: false,
-        addNewButton: true,
-      });
-    }
-  };
-
   render() {
     const {
-      selectedRowKeys,
-      deleteButton,
-      editButton,
-      addNewButton,
       openCreateModal,
-      openDeleteModal,
-      openEditModal,
       displayData,
       searchKey,
     } = this.state;
 
     const {
-      productList,
       createDiscountCode,
-      updateDiscountCode,
-      deleteDiscountCode,
     } = this.props;
 
     const arrayLocation = window.location.pathname.split("/");
@@ -172,23 +139,21 @@ class DiscountCodeUI extends Component {
               createDiscountCode={createDiscountCode}
             />
             <div style={{ marginBottom: 16 }}>
-              <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
-                <Col flex="auto">
-                  <Space size={3}>
-                    <Button
-                      type="primary"
-                      onClick={() => this.start("openCreateModal")}
-                      disabled={!addNewButton}
-                    >
-                      Add New
-                    </Button>
-                  </Space>
-                </Col>
+              <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
                 <Col span={12}>
                   <Input
                     onChange={(e) => this.onChangeHandler(e)}
                     placeholder="Search data"
                   />
+                </Col>
+                <Col span={3} offset={9}>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start()}
+                    block
+                  >
+                    Add New
+                  </Button>
                 </Col>
               </Row>
             </div>

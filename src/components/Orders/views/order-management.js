@@ -423,7 +423,7 @@ class OrderManagement extends Component {
                     prefix={<SearchOutlined />}
                     ref={this.searchSelf}
                     onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search for orders..."
+                    placeholder="Search data"
                   />
                 </Col>
                 <Col>

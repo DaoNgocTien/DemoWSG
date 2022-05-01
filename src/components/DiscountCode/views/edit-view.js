@@ -37,7 +37,7 @@ class UpdateModal extends Component {
   render() {
     const { RangePicker } = DatePicker;
     const { openModal, closeModal, record } = this.props;
-    if (this.props.loading || !this.props.record) {
+    if (this.props.loading || !record) {
       return <></>;
     }
     return (
@@ -74,8 +74,8 @@ class UpdateModal extends Component {
                 label="Discount Code duration"
                 name="date"
                 initialValue={
-                  [moment(this.props.record?.startdate),
-                  moment(this.props.record?.enddate),]
+                  [moment(record?.startdate),
+                  moment(record?.enddate),]
                 }
                 rules={[
                   {
@@ -101,7 +101,7 @@ class UpdateModal extends Component {
                   onChange={this.onChange}
                 />
               </Form.Item>
-              <Form.Item name="code" label="Code" initialValue={this.props.record?.code}
+              <Form.Item name="code" label="Code" initialValue={record?.code}
                 rules={[
                   () => ({
                     validator(_, value) {
@@ -119,7 +119,7 @@ class UpdateModal extends Component {
               </Form.Item>
             </Space>
             <Space size={30}>
-              <Form.Item name="discountPrice" initialValue={this.props.record?.discountprice} label="Discount price"
+              <Form.Item name="discountPrice" initialValue={record?.discountprice} label="Discount price"
                 rules={[
                   () => ({
                     validator(_, value) {
@@ -135,7 +135,7 @@ class UpdateModal extends Component {
               >
                 <InputNumber min={1000} max={999999999999} style={{ width: "60vh" }} />
               </Form.Item>
-              <Form.Item name="minimunPrice" initialValue={this.props.record?.minimunpricecondition} label="Minimun price"
+              <Form.Item name="minimunPrice" initialValue={record?.minimunpricecondition} label="Minimun price"
                 rules={[
                   () => ({
                     validator(_, value) {
@@ -157,7 +157,7 @@ class UpdateModal extends Component {
               <Form.Item
                 name="description"
                 label="Description"
-                initialValue={this.props.record?.description}
+                initialValue={record?.description}
               >
                 <Input.TextArea style={{ width: "60vh" }} />
               </Form.Item>
