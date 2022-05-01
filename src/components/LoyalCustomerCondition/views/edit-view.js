@@ -22,10 +22,10 @@ class UpdateModal extends Component {
       minProduct: data.minProduct,
       discountPercent: data.discountPercent,
     };
-
+    console.log(data)
     this.props.updateLoyalCustomerCondition(
       newLoyalCustomerCondition,
-      this.props.record?.id
+      data.id
     );
     this.props.closeModal();
   };
@@ -38,7 +38,7 @@ class UpdateModal extends Component {
     const { openModal } = this.props;
 
     const { productList, record } = this.props;
-    if (this.props.loading || !this.props.record || !productList) {
+    if (this.props.loading || !record) {
       return <></>;
     }
     return (
@@ -69,27 +69,32 @@ class UpdateModal extends Component {
               </Button>,
             ]}
           >
+            <Form.Item name="id" initialValue={record?.id} hidden="true">
+              <Input hidden="true" style={{ width: "60vh" }} />
+            </Form.Item>
             <Descriptions layout="vertical" column={2}>
+
+
               <Descriptions.Item label="Condition Name">
-                <Form.Item name="name" initialValue={"CONDITION " + moment(this.props.record?.startdate).format("MM/DD/YYYY")}>
+                <Form.Item name="name" initialValue={"CONDITION " + moment(record?.startdate).format("MM/DD/YYYY")}>
                   <Input disabled="true" style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Min Order">
-                <Form.Item name="minOrder" initialValue={this.props.record?.minorder}>
+                <Form.Item name="minOrder" initialValue={record?.minorder}>
                   <InputNumber style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Min Product">
-                <Form.Item name="minProduct" initialValue={this.props.record?.minproduct}>
+                <Form.Item name="minProduct" initialValue={record?.minproduct}>
                   <InputNumber style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Discount Percent">
-                <Form.Item name="discountPercent" initialValue={this.props.record?.discountpercent}>
+                <Form.Item name="discountPercent" initialValue={record?.discountpercent}>
                   <InputNumber
                     min="0"
                     max="100"

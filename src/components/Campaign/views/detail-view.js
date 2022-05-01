@@ -363,7 +363,7 @@ class OrdersInCampaign extends React.Component {
                 campaignId={record?.id}
               />
               <div style={{ marginBottom: 16 }}>
-                <Row>
+              <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
                 <Col span={12}>
                     <Input
                       onChange={(e) => this.onChangeHandler(e)}

@@ -1,21 +1,16 @@
 import Axios from "axios";
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_LOYAL_CUSTOMER_CONDITION } from "./constant";
 
 const getLoyalCustomerCondition = () => {
   return async (dispatch) => {
     dispatch(getRequest());
     try {
-      const [LoyalCustomers, products] = await Promise.all([
+      const [LoyalCustomers] = await Promise.all([
         Axios({
           url: `/loyalCustomer`,
           method: "GET",
           withCredentials: true,
-        }),
-        Axios({
-          url: `/products/All`,
-          method: "GET",
-          withCredentials: true,
-        }),
+        })
       ]);
 
       return dispatch(
@@ -26,16 +21,35 @@ const getLoyalCustomerCondition = () => {
               ...item,
             };
           }),
-          products: products.data.data.map((item) => {
-            return {
-              key: item.id,
-              ...item,
-            };
-          }),
+          
         })
       );
     } catch (error) {
       return dispatch(getFailed(error));
+    }
+  };
+};
+
+const getLoyalCustomerConditionById = id => {
+
+  return async (dispatch) => {
+    dispatch(getRequest());
+    try {
+      const [LoyalCustomers] = await Promise.all([
+        Axios({
+          url: `/loyalCustomer`,
+          method: "GET",
+          withCredentials: true,
+        })
+      ]);
+
+      return dispatch(
+        storeRecord({
+          record: LoyalCustomers.data.data?.find(l => l.id === id)
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed());
     }
   };
 };
@@ -197,11 +211,20 @@ const getFailed = (err) => {
   };
 };
 
+const storeRecord = (data) => {
+  return {
+    type: STORE_LOYAL_CUSTOMER_CONDITION,
+    payload: data,
+  };
+};
+
+
 const action = {
   getLoyalCustomerCondition,
   createLoyalCustomerCondition,
   updateLoyalCustomerCondition,
   deleteLoyalCustomerCondition,
+  getLoyalCustomerConditionById,
 };
 
 export default action;

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
 import action from "./modules/action";
 import LoyalCustomerUI from "./views/main-view";
@@ -18,9 +17,6 @@ class LoyalCustomerCondition extends Component {
       <LoyalCustomerUI
         data={this.props.data.LoyalCustomers}
         loading={this.props.loading}
-        getLoyalCustomerCondition={this.props.getLoyalCustomerCondition}
-        ordersInCampaign={this.props.data.order}
-        productList={this.props.data.products}
         createLoyalCustomerCondition={this.props.createLoyalCustomerCondition}
         updateLoyalCustomerCondition={this.props.updateLoyalCustomerCondition}
         deleteLoyalCustomerCondition={this.props.deleteLoyalCustomerCondition}
@@ -34,8 +30,6 @@ const mapStateToProps = (state) => {
     loading: state.loyalCustomerConditionReducer.loading,
     data: state.loyalCustomerConditionReducer.data,
     error: state.loyalCustomerConditionReducer.err,
-    // productList: state.productReducer.data,
-    // orderList: [],
   };
 };
 

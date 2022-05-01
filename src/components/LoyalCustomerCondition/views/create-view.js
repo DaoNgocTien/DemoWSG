@@ -4,7 +4,6 @@ import {
 import React, { Component, memo } from "react";
 import moment from "moment";
 
-const { RangePicker } = DatePicker;
 class CreatModal extends Component {
   state = {
     previewVisible: false,
@@ -33,10 +32,6 @@ class CreatModal extends Component {
 
   render() {
     const { openModal } = this.props;
-
-    const { productList } = this.props;
-    const { productSelected = this.props.productList[0], price = 0 } =
-      this.state;
     return (
       <>
         <Form

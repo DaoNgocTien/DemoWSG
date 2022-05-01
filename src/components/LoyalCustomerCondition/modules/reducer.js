@@ -1,16 +1,17 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_LOYAL_CUSTOMER_CONDITION } from "./constant";
 
 let initialState = {
   loading: true,
-  data: {},
+  data: [],
   err: null,
+  record: {},
 };
 
 const loyalCustomerConditionReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
       state.loading = true;
-      state.data = {};
+      state.data = [];
       state.err = null;
       return { ...state };
 
@@ -22,8 +23,13 @@ const loyalCustomerConditionReducer = (state = initialState, action) => {
 
     case GET_DATA_FAIL:
       state.loading = false;
-      state.data = {};
-      // state.err = action.payload;
+      state.data = [];
+      return { ...state };
+
+    case STORE_LOYAL_CUSTOMER_CONDITION:
+      state.loading = false;
+      state.record =  action.payload.record;
+      state.err = null;
       return { ...state };
     default:
       return { ...state };

@@ -47,12 +47,9 @@ class DeleteModal extends Component {
     previewImage: "",
     previewTitle: "",
     fileList: [],
-    // productSelected: null,
-    // price: 1,
   };
   formRef = React.createRef();
 
-  componentDidMount() { }
 
   handleDeleteAndClose = (data) => {
     this.props.deleteLoyalCustomerCondition(this.props.record?.id);
@@ -64,10 +61,8 @@ class DeleteModal extends Component {
   };
 
   render() {
-    const { openModal } = this.props;
-
-    const { productList, record } = this.props;
-    if (this.props.loading || !this.props.record || !productList) {
+    const { openModal, record } = this.props;
+    if (this.props.loading || !record ) {
       return <></>;
     }
     return (
@@ -100,25 +95,25 @@ class DeleteModal extends Component {
           >
             <Descriptions layout="vertical" column={2}>
               <Descriptions.Item label="Condition Name">
-                <Form.Item name="name" initialValue={"CONDITION " + moment(this.props.record?.startdate).format("MM/DD/YYYY")}>
+                <Form.Item name="name" initialValue={"CONDITION " + moment(record?.startdate).format("MM/DD/YYYY")}>
                   <Input disabled="true" style={{ width: "60vh" }} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Min Order">
-                <Form.Item name="minOrder" initialValue={this.props.record?.minorder}>
+                <Form.Item name="minOrder" initialValue={record?.minorder}>
                   <InputNumber style={{ width: "60vh" }} disabled={true} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Min Product">
-                <Form.Item name="minProduct" initialValue={this.props.record?.minproduct}>
+                <Form.Item name="minProduct" initialValue={record?.minproduct}>
                   <InputNumber style={{ width: "60vh" }} disabled={true} />
                 </Form.Item>
               </Descriptions.Item>
 
               <Descriptions.Item label="Discount Percent">
-                <Form.Item name="discountPercent" initialValue={this.props.record?.discountpercent}>
+                <Form.Item name="discountPercent" initialValue={record?.discountpercent}>
                   <InputNumber
                     min="0"
                     max="100"
