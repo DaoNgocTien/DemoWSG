@@ -1,20 +1,6 @@
 import { Descriptions, Table } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  record: PropTypes.object,
-  openModal: PropTypes.bool,
-};
-
-const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
-  record: {},
-  openModal: false,
-};
 
 class InformationModal extends Component {
   constructor(props) {
@@ -23,11 +9,7 @@ class InformationModal extends Component {
       record: {},
     };
   }
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   formRef = React.createRef();
-
-  componentDidMount() { }
 
   checkCancelledOrder = () => {
     const record = this.props.record;
@@ -59,7 +41,7 @@ class InformationModal extends Component {
       title: "No.",
       dataIndex: "No.",
       key: "No.",
-      render: (text, object, index) => {
+      render: (_text, _object, index) => {
         return index + 1;
       },
       width: 100,

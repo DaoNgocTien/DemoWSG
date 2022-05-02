@@ -1,40 +1,23 @@
-import { InboxOutlined, LoadingOutlined, PlusOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {
-  Avatar, Button, Checkbox, Col, DatePicker, Descriptions, Form, Input, InputNumber, Modal, PageHeader, Radio, Rate, Row, Select, Slider, Space, Statistic, Switch, Table, Tag, Typography, Upload
+  Button, Col, Form, Input, Modal, Row, Typography, Upload
 } from "antd";
-import moment from "moment";
-import PropTypes from "prop-types";
-import React, { Component, memo } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import action from "../modules/action";
 import Loader from "./../../../components/Loader";
 
-
-const { Title, Text } = Typography;
-const { RangePicker } = DatePicker;
-const { Option } = Select;
-const { uuid } = require('uuidv4');
+const { Title } = Typography;
 const formItemLayout = {
   labelCol: {
-    span: 6,
+    span: 6
   },
   wrapperCol: {
     span: 14,
   },
 };
-//  prototype
-const propsProTypes = {
-  createCampaign: PropTypes.func,
-};
-
-//  default props
-const propsDefault = {
-  createCampaign: () => { },
-};
 
 class PasswordTab extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     user: null,
     previewVisible: false,
@@ -209,21 +192,6 @@ class PasswordTab extends Component {
             rate: 3.5,
           }}
         >
-
-          {/* <Form.Item
-            name="oldPassword"
-            label="Old Password"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your password!',
-              },
-            ]}
-            hasFeedback
-          >
-            <Input.Password placeholder="1-255 characters" />
-          </Form.Item> */}
-
           <Form.Item
             name="password"
             label="New Password"
@@ -281,7 +249,6 @@ class PasswordTab extends Component {
         <Title type="success" style={{ textAlign: "center", }} level={3}> {changePhoneMessage ? `${changePhoneMessage}` : ""}</Title>
 
         <Form
-          // key={uuid()}
           id="updatePhoneNumber"
           ref={this.formRef}
           onFinish={this.updatePhone}

@@ -1,18 +1,13 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {
-    Button, Col, DatePicker, Form, Input, InputNumber, Layout, Row, Select, Space, Tag, Tooltip, Typography, Modal
+    Button, Col, Form, Input, Modal, Row, Typography
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import action from "../modules/action";
 import { default as profileAction } from "../../../components/Profile/modules/action";
+import action from "../modules/action";
 
-
-const { RangePicker } = DatePicker;
 const { Title } = Typography;
-const { Option } = Select;
-const { Header, Footer, Sider, Content } = Layout;
 const formItemLayout = {
     labelCol: {
         span: 6,
@@ -22,72 +17,7 @@ const formItemLayout = {
     },
 };
 
-const residences = [
-    {
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-];
-const tailFormItemLayout = {
-    wrapperCol: {
-        xs: {
-            span: 24,
-            offset: 0,
-        },
-        sm: {
-            span: 16,
-            offset: 8,
-        },
-    },
-};
-
-//  prototype
-const propsProTypes = {
-    closeModal: PropTypes.func,
-    createCampaign: PropTypes.func,
-    openModal: PropTypes.bool,
-    productList: PropTypes.array,
-};
-
-//  default props
-const propsDefault = {
-    closeModal: () => { },
-    createCampaign: () => { },
-    openModal: false,
-    productList: [],
-};
-
 class ForgotPassword extends Component {
-    static propTypes = propsProTypes;
-    static defaultProps = propsDefault;
     state = {
         previewVisible: false,
         previewImage: "",
@@ -109,16 +39,12 @@ class ForgotPassword extends Component {
     phoneRef = React.createRef();
     OTPRef = React.createRef();
 
-    componentDidMount() {
-    }
-
     onFinish = (values) => {
         this.props.changePassword(this.props.profile.id, values.password);
         this.resetFields();
     };
 
     onCheckPhoneNumber = () => {
-        const value = this.phoneRef.current.value;
         this.props.checkPhoneNumber(this.phoneRef.current.value);
         let profile = this.props.profile;
         return this.setState({
@@ -154,7 +80,7 @@ class ForgotPassword extends Component {
         });
     };
 
-    handleChange = ({ fileList, file, event }) => {
+    handleChange = ({ fileList }) => {
         // 2. Read from response and show file link
         fileList = fileList.map((file) => {
             if (file.response) {
@@ -190,7 +116,6 @@ class ForgotPassword extends Component {
     }
 
     changePhoneNumber = () => {
-        const value = this.phoneRef.current.value;
         this.props.phoneNumberValidation(this.phoneRef.current.value);
 
         if (this.OTPRef.current.value === this.props.OTP && this.phoneRef.current.value === this.props.phone) {
@@ -207,13 +132,12 @@ class ForgotPassword extends Component {
         }
     }
 
-    handleEditAndClose = (data) => {
+    handleEditAndClose = () => {
         this.formRef.current.resetFields();
         this.props.closeModal();
     };
 
     handleCancel = () => {
-     //   this.formRef.current.resetFields();
         this.props.closeModal();
     };
     resetFields = () => {
@@ -226,21 +150,14 @@ class ForgotPassword extends Component {
         this.props.resetFields();
     }
     render() {
-        const { load, imageUrl, checkedProfile, OTPMessage, phoneAvailable } = this.state;
-        const uploadButton = (
-            <div>
-                {load ? <LoadingOutlined /> : <PlusOutlined />}
-                <div style={{ marginTop: 8 }}>Upload</div>
-            </div>
-        );
-        const { loading, profile, phone, OTP, message, openModal, changePasswordMessage } = this.props;
+        const { load, OTPMessage } = this.state;
+        const { phone, OTP, message, openModal, changePasswordMessage } = this.props;
         return (
             <>
 
 
                 <Form
                     {...formItemLayout}
-                    // form={form}
                     name="forgotPasswordForm"
                     onFinish={this.onFinish}
                     initialValues={{
@@ -271,17 +188,6 @@ class ForgotPassword extends Component {
                     >
                         <Title type="success" style={{ textAlign: "center", }} level={3}> {changePasswordMessage ? `${changePasswordMessage}` : ""}</Title>
 
-                        {/* <Form.Item {...tailFormItemLayout}>
-                                    <Button type="primary" onClick={this.onCheckPhoneNumber}>
-                                        Change
-                                    </Button>
-
-                                </Form.Item>
-
-                                <Form.Item {...tailFormItemLayout}>
-
-
-                                </Form.Item> */}
                         <Form.Item label="Phone Number">
                             <Row >
                                 <Col flex={4}>
@@ -368,17 +274,6 @@ class ForgotPassword extends Component {
                         >
                             <Input.Password placeholder="1-255 characters" />
                         </Form.Item>
-                        {/* <Form.Item {...tailFormItemLayout} disabled={!phoneAvailable}
-                        >
-                            <Space>
-                                <Button htmlType="submit">
-                                    Reset
-                                </Button>
-                                <Button type="primary" htmlType="submit">
-                                    Register
-                                </Button>
-                            </Space>
-                        </Form.Item> */}
                     </Modal>
                 </Form>
             </>

@@ -11,16 +11,10 @@ import orderReducer from "../../components/Orders/modules/reducer";
 import productReducer from "../../components/Product/modules/reducer";
 import productDetailReducer from "../../components/ProductDetail/modules/reducer";
 import profileReducer from "../../components/Profile/modules/reducer";
-import { default as complainOrder, default as ReturningOrderReducer } from "../../components/ReturningOrder/modules/reducer";
+import returningReducer, { default as complainOrder, default as ReturningOrderReducer } from "../../components/ReturningOrder/modules/reducer";
 import transactionReducer from "../../components/Transaction/modules/reducer";
-// import ReturningOrder from "../../components/ReturningOrder/modules/reducer";
 import dashboardReducer from "../../containers/AdminLayout/DashBoard/modules/reducer";
 import authReducer from "../../containers/AuthPage/modules/reducer";
-
-
-
-
-
 
 //Create rootReducer to use in store. This manages CHILD REDUCERS in the project
 const rootReducer = combineReducers({
@@ -40,7 +34,8 @@ const rootReducer = combineReducers({
   handleReturningOrderReducer,
   complainOrder,
   cancelledOrderReducer,
-  productDetailReducer
+  productDetailReducer,
+  returningReducer
 });
 
 export default rootReducer;

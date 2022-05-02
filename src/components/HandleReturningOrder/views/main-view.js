@@ -10,37 +10,18 @@ import {
   Tabs,
   Timeline,
   Typography,
-  Upload,
+  Upload
 } from "antd";
-
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
+import NumberFormat from "react-number-format";
 import Loader from "../../../components/Loader";
 import InformationModal from "./information-view";
-import NumberFormat from "react-number-format";
 import RejectModal from "./reject-view";
+
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
-
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  record: PropTypes.object,
-  openModal: PropTypes.bool,
-  rejectOrder: PropTypes.func,
-  acceptRequest: PropTypes.func,
-};
-
-const propsDefault = {
-  closeModal: () => {},
-  updateCampaign: () => {},
-  rejectOrder: () => {},
-  acceptRequest: () => {},
-  record: {},
-  openModal: false,
-};
 
 class HandleReturningOrderUI extends Component {
   constructor(props) {
@@ -56,10 +37,7 @@ class HandleReturningOrderUI extends Component {
       openRejectModal: false,
     };
   }
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
 
-  componentDidMount() {}
   showModal = () => {
     this.setState({ isModalVisible: true });
   };
@@ -121,7 +99,6 @@ class HandleReturningOrderUI extends Component {
       image: this.state.fileList || [],
     });
     this.handleCancel();
-    // window.history.back();
   };
 
   handleAcceptAndClose = () => {

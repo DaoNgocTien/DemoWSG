@@ -88,7 +88,7 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof, requester) => {
   return async (dispatch) => {
     dispatch(getRequest());
     try {
-      const [rejectResponse, orders, campaigns] = await Promise.all([
+      const [, orders, campaigns] = await Promise.all([
         Axios({
           url: `/order/supplier/cancel`,
           method: "PUT",

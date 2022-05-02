@@ -3,26 +3,27 @@ import {
   GET_DATA_FAIL,
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
-  STORE_COMPLAIN_ORDER
+  STORE_RECORD
 } from "./constant";
 
-const getOrder = () => {
+const getOrder = (status) => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
-      const [returning, returned, campaigns] = await Promise.all([
-        Axios({
-          url: `/order/supplier/status?status=returning`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
-        Axios({
-          url: `/order/supplier/status?status=returned`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
+      const [orders, campaigns] = await Promise.all([
+        !status
+          ? Axios({
+            url: `/order/supplier`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          })
+          : Axios({
+            url: `/order/supplier/status?status=${status}`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
         Axios({
           url: `/campaigns/All`,
           method: "GET",
@@ -30,8 +31,7 @@ const getOrder = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      const orders = [];
-      orders.push(...returning.data.data, ...returned.data.data);
+      //  Sort order to get returning order only
       return dispatch(
         getSuccess({
           orders: orders.map((order) => {
@@ -46,7 +46,7 @@ const getOrder = () => {
         })
       );
     } catch (error) {
-      return dispatch(getFailed());
+      return dispatch(getFailed(error));
     }
   };
 };
@@ -62,8 +62,8 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => { })
-          .catch((err) => {
+          .then(() => { })
+          .catch(() => {
             return dispatch(getFailed());
           });
 
@@ -76,8 +76,8 @@ const updateStatusOrder = (data) => {
           data: { orderCode: data.ordercode },
           withCredentials: true,
         })
-          .then((response) => { })
-          .catch((err) => {
+          .then(() => { })
+          .catch(() => {
             return dispatch(getFailed());
           });
 
@@ -138,7 +138,6 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof) => {
 };
 
 const confirmReceived = (orderCode, type, orderId) => {
-  const user = JSON.parse(localStorage.getItem("user"));
 
   let body = {
     orderCode: orderCode,
@@ -169,12 +168,28 @@ const confirmReceived = (orderCode, type, orderId) => {
   };
 };
 
-const storeComplainRecord = (record) => {
+const getOrderById = id => {
   return async (dispatch) => {
     try {
-      return dispatch(getComplainRecord({ complainRecord: record }));
+      dispatch(getRequest());
+      const [orders] = await Promise.all([
+        Axios({
+          url: `/order/supplier`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+      ]);
+      //  Remove order in notAdvanced
+      const record = orders.data?.data?.find(o => o.status.toUpperCase() !== "NOTADVANCED" && o.id === id) ?? {};
+
+      return dispatch(
+        storeRecord({
+          record: record
+        })
+      );
     } catch (error) {
-      return dispatch(getFailed());
+      return dispatch(getFailed(error));
     }
   };
 };
@@ -192,9 +207,9 @@ const getSuccess = (data) => {
   };
 };
 
-const getComplainRecord = (record) => {
+const storeRecord = (record) => {
   return {
-    type: STORE_COMPLAIN_ORDER,
+    type: STORE_RECORD,
     payload: record,
   };
 };
@@ -207,10 +222,11 @@ const getFailed = (err) => {
 };
 
 const action = {
+  storeRecord,
   getOrder,
+  getOrderById,
   updateStatusOrder,
-  rejectOrder,
-  storeComplainRecord,
+  rejectOrder,  
   confirmReceived,
 };
 

@@ -1,86 +1,27 @@
-import { Button, Col, Input, PageHeader, Radio, Row, Table, Tag } from "antd";
+import {
+  SearchOutlined
+} from "@ant-design/icons";
+import {
+  LocalShipping, OpenInNew
+} from "@material-ui/icons";
+import {
+  Button,
+  Col,
+  Input,
+  PageHeader, Row,
+  Table, Tag
+} from "antd";
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-import { Link } from "react-router-dom";
 import NumberFormat from "react-number-format";
-import { OpenInNew } from "@material-ui/icons";
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  defaultCampaign: PropTypes.object,
-  handleOrder: PropTypes.func,
-  updateStatusOrder: PropTypes.func,
-};
-
-const propsDefault = {
-  index: 1,
-  data: [],
-  products: [],
-  defaultCampaign: {},
-  handleOrder: () => {},
-  updateStatusOrder: () => {},
-};
+import { Link } from "react-router-dom";
 
 class OrderReturningUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
-    selectedRowKeys: [],
     loading: false,
-    addNewButton: true,
     displayData: [],
     searchKey: "",
-    openDetailModal: false,
-    openHandleModal: false,
-    viewButton: true,
-    actionButton: true,
     record: {},
-    buttonTitle: "Handle Returning Request",
-  };
-
-  componentDidMount() {}
-
-  start = (openModal) => {
-    switch (openModal) {
-      case "openHandleModal":
-        this.setState({ openHandleModal: true });
-        break;
-
-      case "openDetailModal":
-        this.setState({ openDetailModal: true });
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  changeStatus = (data) => {
-    this.props.updateStatusOrder(data);
-  };
-
-  onSelectChange = (selectedRowKeys) => {
-    let record = this.props.data?.filter((item) => {
-      return selectedRowKeys.includes(item.id);
-    })[0];
-    let handledBySupplier = 0;
-    record?.orderstatushistory?.map((item) => {
-      if (item.statushistory === "returning") {
-        handledBySupplier++;
-      }
-    });
-    this.setState({
-      selectedRowKeys,
-      viewButton: selectedRowKeys.length === 1 && record?.status != "returned",
-      actionButton: selectedRowKeys.length === 1,
-      addNewButton: selectedRowKeys.length === 0,
-      record: record,
-      buttonTitle:
-        record?.status === "returned" || handledBySupplier > 0
-          ? "View Details"
-          : "Handle Returning Request",
-    });
   };
 
   columns = [
@@ -129,15 +70,22 @@ class OrderReturningUI extends Component {
       },
     },
     {
+      title: "Type",
+      key: "type",
+      render: (object) => {
+        return object.campaign.length === 0 ?
+          <Tag color={"green"}>RETAIL</Tag>
+          :
+          <Tag color={"bule"}>WHOLESALE</Tag>
+      },
+      width: 100,
+    },
+    {
       title: "Status",
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        return data === "returned" ? (
-          <Tag color="blue">{data.toUpperCase()}</Tag>
-        ) : (
-          <Tag color="red">{data.toUpperCase()}</Tag>
-        );
+        return <Tag>{data.toUpperCase()}</Tag>;
       },
       width: 100,
     },
@@ -155,6 +103,13 @@ class OrderReturningUI extends Component {
         return showButton ? (
           <Button
             type="primary"
+            icon={<LocalShipping />}
+            shape="circle"
+            style={{
+              border: "none",
+              boxShadow: "none",
+              background: "none",
+            }}
             onClick={() => this.confirmReceivedRequest(object)}
           >
             Confirm Received
@@ -179,56 +134,6 @@ class OrderReturningUI extends Component {
     },
   ];
 
-  onChangeHandler = (e) => {
-    let { data } = this.props;
-    let searchData = data.filter((item) => {
-      return (
-        item.customerfirstname
-          .toUpperCase()
-          .includes(e.target.value.toUpperCase()) ||
-        item.customerlastname
-          .toUpperCase()
-          .includes(e.target.value.toUpperCase()) ||
-        item.totalprice.includes(e.target.value) ||
-        item.discountprice.includes(e.target.value) ||
-        item.createdat.includes(e.target.value) ||
-        item.status.includes(e.target.value)
-      );
-    });
-    this.setState({
-      displayData: searchData,
-      searchKey: e.target.value,
-    });
-  };
-
-  onRadioChange = (e) => {
-    let { data } = this.props;
-    let searchValue = e.target.value;
-    let searchData = [];
-    switch (searchValue) {
-      case "retail":
-        searchData = data.filter((item) => {
-          return item.campaign.length === 0;
-        });
-        break;
-
-      case "wholesale":
-        searchData = data.filter((item) => {
-          return item.campaign.length > 0;
-        });
-        break;
-
-      default:
-        searchValue = "";
-        break;
-    }
-
-    this.setState({
-      displayData: searchData,
-      searchKey: searchValue,
-    });
-  };
-
   confirmReceivedRequest = (object) => {
     this.props.confirmReceived(
       object.ordercode,
@@ -237,99 +142,59 @@ class OrderReturningUI extends Component {
     );
   };
 
+  onChangeHandler = (e) => {
+    let { data } = this.props;
+    let searchData = data.filter((item) => {
+      return (
+        String(item.customerfirstname)?.toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
+        String(item.customerlastname)?.toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
+        String(item.ordercode)?.toUpperCase()
+          .includes(e.target.value.toUpperCase()) ||
+        String(item.createdat)?.toUpperCase()
+          .includes(e.target.value.toUpperCase())
+      );
+    });
+    this.setState({
+      displayData: searchData,
+      searchKey: e.target.value,
+    });
+  };
+
   render() {
-    const { handleOrder, updateStatusOrder, data, storeComplainRecord } =
-      this.props;
     const {
-      selectedRowKeys,
       displayData,
       searchKey,
-      actionButton,
     } = this.state;
 
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-      hideSelectAll: true,
-    };
-
-    const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        title="ORDER RETURNING"
-        subTitle={`This is a order returning page`}
+        title={"RETURNING REQUEST"}
+        subTitle={"Returning requests are handled in this page"}
         footer={
           <div>
-            <div style={{ marginBottom: 16 }}>
-              <Row>
-                <Col flex={3}>
-                  <Button
-                    type="primary"
-                    onClick={() => storeComplainRecord(this.state.record)}
-                    disabled={
-                      !actionButton || this.state.selectedRowKeys.length === 0
-                        ? true
-                        : false
-                    }
-                    style={{ marginLeft: 3 }}
-                  >
-                    <Link
-                      className="LinkDecorations"
-                      to={
-                        "/order/handle/returning/" +
-                        this.state.record?.ordercode
-                      }
-                    >
-                      {this.state.buttonTitle}
-                    </Link>
-                  </Button>
-                </Col>
-                <Col flex={3}>
-                  <span style={{ marginLeft: 8 }}>
-                    {selectedRowKeys.length > 0
-                      ? `Selected ${selectedRowKeys.length} items`
-                      : ""}
-                  </span>
-                </Col>
+            <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
+              <Col span={12}>
+                <Input
+                  prefix={<SearchOutlined />}
+                  ref={this.searchSelf}
+                  onChange={(e) => this.onChangeHandler(e)}
+                  placeholder="Search data"
+                />
+              </Col>
 
-                <Col flex={4}>
-                  <Input
-                    onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search data"
-                  />
-                </Col>
-              </Row>
-              <Row style={{ marginTop: "10px" }}>
-                <Col flex={6}>
-                  <Radio.Group
-                    onChange={(e) => this.onRadioChange(e)}
-                    defaultValue="all"
-                  >
-                    <Radio value="all">All Orders</Radio>
-                    <Radio value="retail">Retail Orders</Radio>
-                    <Radio value="wholesale">Wholesale Orders</Radio>
-                  </Radio.Group>
-                </Col>
-                <Col flex={4}>
-                  {/* <Input
-                    onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search data"
-                  /> */}
-                </Col>
-              </Row>
-            </div>
+            </Row>
             <Table
               loading={this.props.loading}
-              // rowSelection={rowSelection}
               columns={this.columns}
               dataSource={
                 displayData.length === 0 && searchKey === ""
                   ? this.props.data
                   : displayData
               }
-              scroll={{ y: 350 }}
             />
           </div>
         }

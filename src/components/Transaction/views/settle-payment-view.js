@@ -166,13 +166,9 @@ class SettlePaymentUI extends Component {
 
     this.state.record = this.props.record;
     const {
-      openModal,
-      closeModal,
-      updateStatusOrder,
       record,
-      selectedRowKeys,
     } = this.props;
-    const { isReasonable, load, imageUrl, fileList } = this.state;
+    const {  load, fileList } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
@@ -414,11 +410,7 @@ class SettlePaymentUI extends Component {
                   <> <Title style={{ textAlign: "center", padding: "30px" }} level={3}>ORDER INFORMATION</Title>
 
                     <InformationModal
-                      // openModal={openModal}
-                      // closeModal={closeModal}
-                      // updateStatusOrder={updateStatusOrder}
                       record={record}
-                    // selectedRowKeys={selectedRowKeys}
                     />
                   </>
                 </TabPane>
@@ -459,27 +451,6 @@ class SettlePaymentUI extends Component {
             scroll={{ y: 100 }}
           />
         </PageHeader>
-        {/* <Form
-          id="rejectOrderForm"
-          key={this.state.record?.key}
-          ref={this.formRef}
-          onFinish={this.handleRejectAndClose}
-        >
-          <Modal
-            width={window.innerWidth * 0.7}
-            title={`Order of ${this.state.record.customerfirstname +
-              " " +
-              this.state.record.customerlastname
-              }`}
-            visible={openModal}
-            onCancel={this.handleCancel}
-            footer={
-
-            }
-          >
-
-          </Modal>
-        </Form> */}
       </>
     );
   }
@@ -513,10 +484,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettlePaymentUI);
-
-// const arePropsEqual = (prevProps, nextProps) => {
-//   return prevProps === nextProps;
-// };
-
-// // Wrap component using `React.memo()` and pass `arePropsEqual`
-// export default memo(SettlePaymentUI, arePropsEqual);

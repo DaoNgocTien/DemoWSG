@@ -1,25 +1,20 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   Button,
-  DatePicker,
   Form,
   Input,
   Modal,
-  Select,
   Tag,
   Tooltip,
   Typography,
-  Upload,
+  Upload
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Loader from "./../../../components/Loader";
 import action from "./../modules/action";
 
-const { RangePicker } = DatePicker;
 const { Title } = Typography;
-const { Option } = Select;
 const formItemLayout = {
   labelCol: {
     span: 6,
@@ -42,23 +37,7 @@ const tailFormItemLayout = {
   },
 };
 
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  createCampaign: PropTypes.func,
-  openModal: PropTypes.bool,
-  productList: PropTypes.array,
-};
-
-const propsDefault = {
-  closeModal: () => { },
-  createCampaign: () => { },
-  openModal: false,
-  productList: [],
-};
-
 class ProfileTab extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     user: {
       username: "",
@@ -155,7 +134,6 @@ class ProfileTab extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-    let storedUser = data;
     return (
       <>
         <Title style={{ textAlign: "center", padding: "30px" }} level={3}>

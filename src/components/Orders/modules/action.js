@@ -1,5 +1,5 @@
 import Axios from "axios";
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_ORDER } from "./constant";
 
 const getOrder = (status) => {
   return async (dispatch) => {
@@ -62,7 +62,7 @@ const updateStatusOrder = (data, image) => {
           },
           withCredentials: true,
         })
-          .then((response) => { })
+          .then(() => { })
           .catch((err) => {
             return dispatch(getFailed(err));
           });
@@ -81,7 +81,7 @@ const updateStatusOrder = (data, image) => {
           },
           withCredentials: true,
         })
-          .then((response) => { })
+          .then(() => { })
           .catch((err) => {
             return dispatch(getFailed(err));
           });
@@ -169,6 +169,32 @@ const getOrderByCampaignId = (campaignId) => {
   };
 };
 
+const getOrderById = id => {
+  return async (dispatch) => {
+    try {
+      dispatch(getRequest());
+      const [orders] = await Promise.all([
+        Axios({
+          url: `/order/supplier`,
+          method: "GET",
+          withCredentials: true,
+          exposedHeaders: ["set-cookie"],
+        }),
+      ]);
+      //  Remove order in notAdvanced
+      const record = orders.data?.data?.find(o => o.status.toUpperCase() !== "NOTADVANCED" && o.id === id) ?? {};
+
+      return dispatch(
+        storeRecord({
+          record: record
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed(error));
+    }
+  };
+};
+
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -189,11 +215,19 @@ const getFailed = (err) => {
   };
 };
 
+const storeRecord = (data) => {
+  return {
+    type: STORE_ORDER,
+    payload: data,
+  };
+};
+
 const action = {
   getOrder,
   updateStatusOrder,
   rejectOrder,
   getOrderByCampaignId,
+  getOrderById,
 };
 
 export default action;

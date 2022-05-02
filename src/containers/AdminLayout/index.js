@@ -1,39 +1,23 @@
-import React, { Component } from "react";
-import { Route, Link } from "react-router-dom";
-import { Layout, Menu, Drawer, notification, Upload, Image, List } from "antd";
-import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
-  ReconciliationTwoTone,
-  RedEnvelopeTwoTone,
-  ContactsTwoTone,
-  HomeTwoTone,
-  DollarCircleTwoTone,
-  GoldTwoTone,
-  InteractionTwoTone,
+  ContactsTwoTone, DollarCircleTwoTone,
+  GoldTwoTone, HomeTwoTone, InteractionTwoTone, ReconciliationTwoTone,
+  RedEnvelopeTwoTone
 } from "@ant-design/icons";
 import {
-  MainContainer,
-  ChatContainer,
-  MessageList,
-  Message,
-  MessageInput,
-  Sidebar,
-  ConversationList,
-  Conversation,
-  Avatar,
-  ConversationHeader,
-  EllipsisButton,
-  AttachmentButton,
-  InputToolbox,
+  AttachmentButton, Avatar, ChatContainer, Conversation, ConversationHeader, ConversationList, EllipsisButton, InputToolbox, MainContainer, Message,
+  MessageInput, MessageList, Sidebar
 } from "@chatscope/chat-ui-kit-react";
+import { Drawer, Image, Layout, List, Menu, notification, Upload } from "antd";
 import axios from "axios";
-
+import { onValue, ref, remove, set } from "firebase/database";
+import React, { Component } from "react";
+import { Link, Route } from "react-router-dom";
 import NavbarAdmin from "../../components/NavbarAdmin";
 import Notification from "../../components/Notification";
-
-import { ref, onValue, set, remove } from "firebase/database";
-import { realtime } from "../../services/firebase";
 import { adminRoutePaths } from "../../routes/admin";
+import { realtime } from "../../services/firebase";
+
+
 
 const { SubMenu } = Menu;
 const { Header, Sider, Content } = Layout;
@@ -307,27 +291,16 @@ class AdminRender extends Component {
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                {/* {this.getDrawerContent()} */}
                 <List
                   className="demo-loadmore-list"
-                  // loading={initLoading}
                   itemLayout="horizontal"
-                  // loadMore={loadMore}
                   dataSource={this.state.notif}
                   renderItem={(item) => (
                     <List.Item>
-                      {/* <Skeleton
-                        avatar
-                        title={false}
-                        loading={item.loading}
-                        active
-                      > */}
                       <List.Item.Meta
-                        // avatar={<Avatar src={item.picture.large} />}
                         title={<Link to={`/orders/${item.link}`}>{item.link}</Link>}
                         description={item.message}
                       />
-                      {/* </Skeleton> */}
                     </List.Item>
                   )}
                 />
@@ -366,7 +339,6 @@ class AdminRender extends Component {
                   <ChatContainer>
                     <ConversationHeader>
                       <ConversationHeader.Back />
-                      {/* <Avatar src={zoeIco} name="Zoe" /> */}
                       <ConversationHeader.Content
                         userName={
                           (this.state.messageDetails.userinfo?.firstname ||
@@ -472,7 +444,6 @@ class AdminRender extends Component {
     );
   }
 }
-// }
 
 export default function AdminLayout({ Component, ...props }) {
   return (

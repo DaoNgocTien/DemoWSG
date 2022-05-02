@@ -3,16 +3,12 @@ import {
   SafetyCertificateTwoTone,
   WalletTwoTone
 } from "@ant-design/icons";
-import { PageHeader, Select, Tabs, Tag } from "antd";
-import moment from "moment";
+import { PageHeader, Tabs, Tag } from "antd";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-import { Link } from "react-router-dom";
 import EWalletTab from "./e-wallet-view";
 import ProfileTab from "./profile-view";
 import PasswordTab from "./security-view";
-
-const { Option } = Select;
 const { TabPane } = Tabs;
 
 const propsProTypes = {
@@ -65,10 +61,7 @@ class ProfileUI extends Component {
   }
 
   render() {
-    const { selectedRowKeys, user } = this.state;
-
-    const { productList,  } =
-      this.props;
+    const { user } = this.state;
 
     const arrayLocation = window.location.pathname.split("/");
     return (

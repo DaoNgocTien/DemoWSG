@@ -64,16 +64,10 @@ class AuthPage extends Component {
                 className="login-form"
                 initialValues={{ remember: true }}
                 onFinish={this.onFinish}
-                // validateStatus={error === null ? "success" : "error"}
-                // help={error ?? ""}
               >
                 <Form.Item
                   name="username"
                   rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Please enter your new phone',
-                    // },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (
@@ -84,35 +78,19 @@ class AuthPage extends Component {
                             new Error(`Username is between 1-50 characters!`)
                           );
                         }
-                        // if (error) {
-                        //   return Promise.reject(new Error(`Username or password is not correct!`));
-                        // }
-                        // if (!value || !checkPhoneMessage) {
                         return Promise.resolve();
-                        // }
-
-                        // return Promise.reject(new Error(`${checkPhoneMessage}`));
                       },
                     }),
-                    // {
-                    //   pattern: /[0-9]{10,11}/,
-                    //   message: 'Phone number is between 10-12 characters',
-                    // }
                   ]}
                 >
                   <Input
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     placeholder="Username is between 1-50 characters"
-                    // onChange={this.props.onLogin}
                   />
                 </Form.Item>
                 <Form.Item
                   name="password"
                   rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Please enter your new phone',
-                    // },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (
@@ -123,27 +101,15 @@ class AuthPage extends Component {
                             new Error(`Password is between 1-50 characters!`)
                           );
                         }
-                        // if (error) {
-                        //   return Promise.reject(new Error(`Username or password is not correct!`));
-                        // }
-                        // if (!value || !checkPhoneMessage) {
                         return Promise.resolve();
-                        // }
-
-                        // return Promise.reject(new Error(`${checkPhoneMessage}`));
                       },
                     }),
-                    // {
-                    //   pattern: /[0-9]{10,11}/,
-                    //   message: 'Phone number is between 10-12 characters',
-                    // }
                   ]}
                 >
                   <Input
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
                     placeholder="Password is between 1-50 characters!"
-                    // onChange={this.props.onLogin}
                   />
                 </Form.Item>
                 <Form.Item>

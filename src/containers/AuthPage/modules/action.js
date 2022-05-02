@@ -1,14 +1,14 @@
 import Axios from "axios";
 import { Redirect } from "react-router";
+import { GET_DATA_SUCCESS } from "../../../components/Profile/modules/constant";
 import {
   AUTH_PAGE_FAILED,
   AUTH_PAGE_REQUEST,
   AUTH_PAGE_SUCCESS,
   GOOGLE_OAUTH2,
   PROFILE,
-  REGISTRATION,
+  REGISTRATION
 } from "./constant";
-import { GET_DATA_SUCCESS } from "../../../components/Profile/modules/constant";
 const onLogin = () => {
   return async (dispatch) => {
     dispatch(getFailed(null));
@@ -43,7 +43,7 @@ const actLoginApi = (user, history) => {
           }
         }
       })
-      .catch((err) => {
+      .catch(() => {
         return dispatch(getFailed("Invalid username or password!"));
       });
   };
@@ -67,7 +67,6 @@ const googleOAuth2 = (googleResponse) => {
           googleId: googleResponse.googleId,
           lastName: googleResponse.profileObj.name,
           email: googleResponse.profileObj.email,
-          // phone: "0",
           roleName: "Supplier",
         },
         withCredentials: true,
@@ -267,26 +266,13 @@ const resetFields = () => {
   };
 };
 
-const updateBusinessCondition = (data) => {
+const updateBusinessCondition = () => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
 
-      // const [response] = await Promise.all([
-      //   Axios({
-      //     url: `/users/register`,
-      //     method: "POST",
-      //     data: data,
-      //     withCredentials: true,
-      //     exposedHeaders: ["set-cookie"],
-      //   }),
-
-      // ]);
-
-      // if (response.status === 200) {
       dispatch(getSuccess({ profile: {} }));
       return <Redirect to="/" />;
-      // }
     } catch (error) {
       return dispatch(getFailed(error));
     }

@@ -1,18 +1,11 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {
-    Button, Col, DatePicker, Form, Input, InputNumber, Layout, Row, Select, Space, Tag, Tooltip, Typography
-} from "antd";
-import PropTypes from "prop-types";
+    Button, Form, Input, Space, Tag, Tooltip} from "antd";
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import action from "../modules/action";
-import { Link, Redirect, Route } from "react-router-dom";
 
-
-const { RangePicker } = DatePicker;
-const { Title } = Typography;
-const { Option } = Select;
-const { Header, Footer, Sider, Content } = Layout;
 const formItemLayout = {
     labelCol: {
         span: 6,
@@ -22,40 +15,6 @@ const formItemLayout = {
     },
 };
 
-const residences = [
-    {
-        value: 'zhejiang',
-        label: 'Zhejiang',
-        children: [
-            {
-                value: 'hangzhou',
-                label: 'Hangzhou',
-                children: [
-                    {
-                        value: 'xihu',
-                        label: 'West Lake',
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        value: 'jiangsu',
-        label: 'Jiangsu',
-        children: [
-            {
-                value: 'nanjing',
-                label: 'Nanjing',
-                children: [
-                    {
-                        value: 'zhonghuamen',
-                        label: 'Zhong Hua Men',
-                    },
-                ],
-            },
-        ],
-    },
-];
 const tailFormItemLayout = {
     wrapperCol: {
         xs: {
@@ -68,26 +27,7 @@ const tailFormItemLayout = {
         },
     },
 };
-
-//  prototype
-const propsProTypes = {
-    closeModal: PropTypes.func,
-    createCampaign: PropTypes.func,
-    openModal: PropTypes.bool,
-    productList: PropTypes.array,
-};
-
-//  default props
-const propsDefault = {
-    closeModal: () => { },
-    createCampaign: () => { },
-    openModal: false,
-    productList: [],
-};
-
 class Registration extends Component {
-    static propTypes = propsProTypes;
-    static defaultProps = propsDefault;
     state = {
         previewVisible: false,
         previewImage: "",
@@ -108,9 +48,6 @@ class Registration extends Component {
     phoneRef = React.createRef();
     OTPRef = React.createRef();
 
-    componentDidMount() {
-    }
-
     onFinish = (values) => {
         let record = {
             username: values.username,
@@ -123,19 +60,6 @@ class Registration extends Component {
         };
         this.props.registration(record, this.props.history);
     };
-
-    onCheckPhoneNumber = () => {
-        const value = this.phoneRef.current.value;
-        this.props.checkPhoneNumber(this.phoneRef.current.value);
-        let profile = this.props.profile;
-        return this.setState({
-            checkedProfile: {
-                validateStatus: profile === null ? "success" : "error",
-                errorMsg: profile === null ? null : "Phone number exist",
-            }
-        });
-
-    }
 
     getBase64(file) {
         return new Promise((resolve, reject) => {
@@ -176,50 +100,6 @@ class Registration extends Component {
         this.setState({ fileList });
     };
 
-    checkOTP = e => {
-        const value = e.target.value;
-        if (value === this.props.OTP && this.phoneRef.current.value === this.props.phone) {
-            this.setState({
-                phoneAvailable: true,
-                OTPMessage: null,
-            });
-        }
-        else {
-            this.setState({
-                phoneAvailable: false,
-                OTPMessage: "OTP token is not correct!",
-            });
-        }
-    }
-
-    changePhoneNumber = (e) => {
-        const value = this.phoneRef.current.value;
-        this.props.phoneNumberValidation(value);
-
-        if (this.OTPRef.current.value === this.props.OTP && value === this.props.phone) {
-            this.setState({
-                phoneAvailable: true,
-                OTPMessage: null,
-            });
-        }
-        else {
-            this.setState({
-                phoneAvailable: false,
-                OTPMessage: "OTP token is not correct!",
-            });
-        }
-    }
-    onChangePhoneNumber = e => {
-        const phone = e.target.value;
-        if (phone.length > 11 || phone.length < 10) {
-            return this.props.checkingPhoneNumber("Phone is required, 10-11 numbers!!");
-        }
-        this.setState({
-            phone: e.target.value,
-            phoneMessage: "",
-        })
-        this.props.checkingPhoneNumber(null);
-    }
     render() {
         const { load, imageUrl, checkedProfile, OTPMessage, phoneAvailable } = this.state;
         const uploadButton = (
@@ -237,7 +117,6 @@ class Registration extends Component {
                             <h2 style={{ textAlign: "center" }}>REGISTRATION</h2>
                             <Form
                                 {...formItemLayout}
-                                // form={form}
                                 name="registrationForm"
                                 onFinish={this.onFinish}
                                 initialValues={{
@@ -246,74 +125,12 @@ class Registration extends Component {
                                 }}
                                 scrollToFirstError
                             >
-
-
-
-                                {/* <Form.Item {...tailFormItemLayout}>
-                                    <Button type="primary" onClick={this.onCheckPhoneNumber}>
-                                        Change
-                                    </Button>
-
-                                </Form.Item>
-
-                                <Form.Item {...tailFormItemLayout}>
-
-
-                                </Form.Item> */}
-                                {/* <Form.Item label="Phone Number">
-                                    <Row >
-                                        <Col flex={4}>
-                                            <Form.Item
-                                                name="phone"
-                                                // initialValue={phone}
-                                                validateStatus={message === null ? "success" : "error"}
-                                                help={message === null ? "We make sure phone number is available!" : message}
-                                            >
-                                                <InputNumber
-                                                    // type="number"
-                                                    addonBefore="+84"
-                                                    disabled={phoneAvailable}
-                                                    onChange={(e) => this.changePhoneNumber(e)}
-                                                    ref={this.phoneRef}
-                                                    style={{ width: "60vh" }}
-                                                    placeholder="9-11 characters"
-                                                />
-
-                                            </Form.Item>
-                                        </Col>
-                                        <Col flex={2}>
-                                            <Button type="primary" onClick={this.onCheckPhoneNumber} disabled={phoneAvailable}>
-                                                {phone !== null && OTP !== null ? "Re-sent OTP" : "Send OTP"}
-                                            </Button>
-                                        </Col>
-                                    </Row>
-
-                                </Form.Item>
-
-                                <Form.Item
-                                    label="OTP"
-                                    validateStatus={OTPMessage === null ? "success" : "error"}
-                                    help={OTPMessage === null ? "Correct OTP Token will let you fill the rest of registration form!" : OTPMessage}
-                                    disabled={phone === null || OTP === null}
-
-                                >
-                                    <Input
-                                        onChange={e => this.checkOTP(e)}
-                                        ref={this.OTPRef}
-                                        disable={phoneAvailable}
-                                    />
-
-                                </Form.Item> */}
                                 <Form.Item
                                     name="phone"
                                     label="Phone Number"
                                     hasFeedback
                                     tooltip={"Phone number is unique!"}
                                     rules={[
-                                        // {
-                                        //   required: true,
-                                        //   message: 'Please enter your new phone',
-                                        // },
                                         ({ getFieldValue }) => ({
                                             validator(_, value) {
                                                 if (!Number(value) < 0) {

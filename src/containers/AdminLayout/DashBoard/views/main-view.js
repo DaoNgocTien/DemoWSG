@@ -9,7 +9,7 @@ import {
   YAxis
 } from "recharts";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content } = Layout;
 const { Text, Title } = Typography;
 class DashboardUI extends Component {
   state = {
@@ -212,7 +212,6 @@ class DashboardUI extends Component {
 
     const { productList, createCampaign, updateCampaign, deleteCampaign, data } =
       this.props;
-    const arrayLocation = window.location.pathname.split("/"); 
     return (
       <Layout>
         <Content>
@@ -284,9 +283,6 @@ class DashboardUI extends Component {
                   <Statistic
                     title="Sales"
                     value={40000000}
-
-
-                    // precision={2}
                     valueStyle={{ color: '#3f8600' }}
                     prefix="đ"
                   />
@@ -302,9 +298,7 @@ class DashboardUI extends Component {
                   <Statistic
                     title="Orders"
                     value="150"
-                    // precision={2}
                     valueStyle={{ color: '#3f8600' }}
-                    // prefix=""
                     suffix="Orders"
                   />
                   <Space>
