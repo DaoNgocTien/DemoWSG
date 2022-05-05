@@ -1,9 +1,10 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_ORDER } from "./constant";
 
 let initialState = {
   loading: true,
   data: [],
   err: null,
+  record: {},
 };
 
 const orderReducer = (state = initialState, action) => {
@@ -24,8 +25,14 @@ const orderReducer = (state = initialState, action) => {
     case GET_DATA_FAIL:
       state.loading = false;
       state.data = [];
-      // state.err = action.payload;
       return { ...state };
+
+    case STORE_ORDER:
+      state.loading = false;
+      state.record = action.payload.record;
+      state.err = null;
+      return { ...state };
+
     default:
       return { ...state };
   }

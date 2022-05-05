@@ -1,60 +1,14 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
-  Button,
-  Descriptions,
-  Form,
+  Button, Col, Form,
   Input,
   InputNumber,
-  Modal,
-  Select,
-  Upload,
-  Space,
-  Tag,
-  PageHeader,
-  Row,
-  Col,
-  Table,
+  Modal, PageHeader,
+  Row, Select, Space, Table, Tag, Upload
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
-import NumberFormat from "react-number-format";
-//  prototype
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateProduct: PropTypes.func,
-  defaultProduct: PropTypes.object,
-  openModal: PropTypes.bool,
-  categoryList: PropTypes.array,
-};
-
-//  default props
-const propsDefault = {
-  closeModal: () => { },
-  updateProduct: () => { },
-  defaultProduct: {
-    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    name: "test222 again Product",
-    supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    retailprice: "5.00",
-    quantity: 11,
-    description: "testttttt",
-    image: "",
-    categoryid: null,
-    status: "active",
-    typeofproduct: "",
-    createdat: "2022-01-07T14:08:02.994Z",
-    updatedat: "2022-01-13T16:34:09.908Z",
-    categoryname: null,
-  },
-  openModal: false,
-  categoryList: [],
-};
-
 class UpdateModal extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
@@ -65,26 +19,12 @@ class UpdateModal extends Component {
   };
   formRef = React.createRef();
 
-  componentDidMount() {
-    // //console.log(this.props);
-  }
-
   handleUpdateAndClose = (data) => {
-    // switch (this.props.record?.status) {
-    //   case "incampaign":
-    //     alert("This product in campaign cannot update");
-    //     break;
-
-    //   default:
     data.image =
       this.state.fileList?.length === 0 && this.props.record
         ? JSON.parse(this.props.record?.image)
         : this.state.fileList;
-    // //console.log(data);
     this.props.updateProduct(data);
-    // break;
-
-
     this.formRef.current.resetFields();
     this.setState({
       fileList: [],
@@ -93,7 +33,6 @@ class UpdateModal extends Component {
   };
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
     this.setState({
       fileList: undefined,
     });
@@ -125,8 +64,6 @@ class UpdateModal extends Component {
   };
 
   handleChange = ({ fileList }) => {
-    // fileList = fileList.slice(-2);
-    // //console.log(fileList);
     // 2. Read from response and show file link
     fileList = fileList.map((file) => {
       if (file.response) {
@@ -166,22 +103,6 @@ class UpdateModal extends Component {
       key: "numorder",
       width: 120,
       fix: "left",
-      // title: "Quantity",
-      // render: (object) => {
-      //   // let disabled = object.status === "created" ? "false" : "true";
-      //   // //console.log(object);
-      //   return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
-
-
-      //   // if (object.status === "processing") {
-      //   //   return (
-      //   //     <Button onClick={() => this.openUploadModal(object)} type="primary">
-      //   //       Deliver Order
-      //   //     </Button>
-      //   //   );
-      //   // }
-      // },
-      // key: "quantity",
     },
     {
       title: "Quantity",
@@ -190,22 +111,6 @@ class UpdateModal extends Component {
       sorter: (a, b) => a.quantity - b.quantity,
       width: 120,
       fix: "left",
-      // title: "Quantity",
-      // render: (object) => {
-      //   // let disabled = object.status === "created" ? "false" : "true";
-      //   // //console.log(object);
-      //   return <Tag color={!object.isshare ? "blue" : "green"}>{!object.isshare ? "SINGLE" : "SHARED"}</Tag>;
-
-
-      //   // if (object.status === "processing") {
-      //   //   return (
-      //   //     <Button onClick={() => this.openUploadModal(object)} type="primary">
-      //   //       Deliver Order
-      //   //     </Button>
-      //   //   );
-      //   // }
-      // },
-      // key: "quantity",
     },
     {
       title: "Max Quantity",
@@ -247,12 +152,6 @@ class UpdateModal extends Component {
         String(item.status)
           .toUpperCase()
           .includes(searchString.toUpperCase()) ||
-        // String(item.fromdate)
-        //   .toUpperCase()
-        //   .includes(searchString.toUpperCase()) ||
-        // String(item.todate)
-        //   .toUpperCase()
-        //   .includes(searchString.toUpperCase()) ||
         String(item.description)
           .toUpperCase()
           .includes(searchString.toUpperCase()) ||
@@ -286,10 +185,6 @@ class UpdateModal extends Component {
       fileList = JSON.parse(record?.image || "[]"),
       displayData,
       searchKey, } = this.state;
-    // this.state.fileList =
-    //   this.props.record && this.state.fileList !== 0
-    //     ? JSON.parse(this.props.record?.image)
-    //     : [];
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
@@ -348,10 +243,6 @@ class UpdateModal extends Component {
               <Form.Item name="name" label="Product Name"
                 initialValue={record?.name}
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Name is required!',
-                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
 
@@ -376,15 +267,6 @@ class UpdateModal extends Component {
                     required: true,
                     message: 'Category is required!',
                   },
-                  // ({ getFieldValue }) => ({
-                  //   validator(_, value) {
-                  //     if (value.length >= 0 && value.length <= 50) {
-                  //       return Promise.resolve();
-                  //     }
-
-                  //     return Promise.reject(new Error('Category Name length is 1-20 characters!'));
-                  //   },
-                  // }),
                 ]}
               >
                 <Select style={{ width: "60vh" }}>
@@ -404,10 +286,6 @@ class UpdateModal extends Component {
                 tooltip="Minimum quantity = total quantity in stock - total quantity in active campaigns"
                 initialValue={record?.quantity}
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Quantity is required!',
-                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (Number(value) > 0) {
@@ -431,10 +309,6 @@ class UpdateModal extends Component {
                 name="retailPrice"
                 initialValue={record?.retailprice}
                 rules={[
-                  // {
-                  //   required: true,
-                  //   message: 'Price is required!',
-                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (Number(value) > 0) {
@@ -553,248 +427,7 @@ class UpdateModal extends Component {
           </PageHeader>
         </Modal>
       </>
-      //   <Form
-      //     key={record?.id}
-      //     id="updateProductForm"
-      //     ref={this.formRef}
-      //     onFinish={this.handleUpdateAndClose}
-      //   >
-      //     <Modal
-      //       width={window.innerWidth * 0.7}
-      //       heigh={window.innerHeight * 0.5}
-      //       style={{
-      //         top: 10,
-      //       }}
-      //       title="Edit a record"
-      //       visible={openModal}
-      //       onCancel={this.handleCancel}
-      //       footer={[
-      //         <Button onClick={this.handleCancel}>Cancel</Button>,
-      //         <Button
-      //           type="primary"
-      //           form="updateProductForm"
-      //           key="submit"
-      //           htmlType="submit"
-      //         >
-      //           Submit
-      //         </Button>,
-      //       ]}
-      //     >
-      //       <Form.Item
-      //         label="Product ID"
-      //         name="id"
-      //         initialValue={record?.id}
-      //         hidden="true"
-      //       >
-      //         <Input
-      //           placeholder="Product ID"
-      //           // defaultValue=={record?.id}
-      //           disabled={true}
-      //           hidden={true}
-      //         />
-      //       </Form.Item>
-
-      //       {/* <Descriptions layout="vertical" column={2}>
-      //         <Descriptions.Item label="Name">
-      //           <Form.Item
-      //             name="name"
-      //             initialValue={record?.name}
-      //             rules={[
-      //               // {
-      //               //   required: true,
-      //               //   message: 'Name is required!',
-      //               // },
-      //               () => ({
-      //                 validator(_, value) {
-      //                   if (listName.includes(value)) {
-      //                     return Promise.reject(
-      //                       new Error("Product Name exists!")
-      //                     );
-      //                   }
-      //                   if (value.length >= 0 && value.length <= 50) {
-      //                     return Promise.resolve();
-      //                   }
-
-      //                   return Promise.reject(
-      //                     new Error(
-      //                       "Product Name is required, length is 1-50 characters!"
-      //                     )
-      //                   );
-      //                 },
-      //               }),
-      //             ]}
-      //           >
-      //             <Input
-      //               style={{ width: "60vh" }}
-      //               // defaultValue=={record?.name}
-      //               placeholder="Name is required, length is 1-20 characters"
-      //             />
-      //           </Form.Item>
-      //         </Descriptions.Item>
-
-      //         <Descriptions.Item label="Category">
-      //           <Form.Item
-      //             name="categoryId"
-      //             initialValue={record?.categoryid}
-      //             rules={[
-      //               {
-      //                 required: true,
-      //                 message: "Category is required!",
-      //               },
-      //               // ({ getFieldValue }) => ({
-      //               //   validator(_, value) {
-      //               //     if (value.length >= 0 && value.length <= 50) {
-      //               //       return Promise.resolve();
-      //               //     }
-
-      //               //     return Promise.reject(new Error('Category Name length is 1-20 characters!'));
-      //               //   },
-      //               // }),
-      //             ]}
-      //           >
-      //             <Select
-      //               style={{ width: "60vh" }}
-      //             // defaultValue=={record?.categoryid}
-      //             >
-      //               {categoryList.map((item) => (
-      //                 <Select.Option key={item.key} value={item.id}>
-      //                   {item.categoryname}
-      //                 </Select.Option>
-      //               ))}
-      //             </Select>
-      //           </Form.Item>
-      //         </Descriptions.Item>
-
-      //         <Descriptions.Item label="Quantity">
-      //           <Form.Item
-      //             name="quantity"
-      //             initialValue={record?.quantity}
-      //             rules={[
-      //               // {
-      //               //   required: true,
-      //               //   message: 'Quantity is required!',
-      //               // },
-      //               () => ({
-      //                 validator(_, value) {
-      //                   if (Number(value) > 0) {
-      //                     return Promise.resolve();
-      //                   }
-
-      //                   return Promise.reject(
-      //                     new Error("Quantity is positive number!")
-      //                   );
-      //                 },
-      //               }),
-      //             ]}
-      //           >
-      //             <InputNumber
-      //               min={record?.maxquantity + 1}
-      //               max={999999999999}
-      //               style={{ width: "60vh" }}
-      //             // defaultValue=={record?.quantity}
-      //             />
-      //           </Form.Item>
-      //         </Descriptions.Item>
-
-      //         <Descriptions.Item label="Retail Price">
-      //           <Form.Item
-      //             name="retailPrice"
-      //             initialValue={record?.retailprice}
-      //             rules={[
-      //               // {
-      //               //   required: true,
-      //               //   message: 'Price is required!',
-      //               // },
-      //               () => ({
-      //                 validator(_, value) {
-      //                   if (Number(value) > 0) {
-      //                     return Promise.resolve();
-      //                   }
-
-      //                   return Promise.reject(
-      //                     new Error("Price is positive number!")
-      //                   );
-      //                 },
-      //               }),
-      //             ]}
-      //           >
-      //             <InputNumber
-      //               min={0}
-      //               max={999999999999}
-      //               // defaultValue=={record?.retailprice}
-      //               style={{ width: "60vh" }}
-      //             />
-      //           </Form.Item>
-      //         </Descriptions.Item>
-
-      //         <Descriptions.Item label="Description">
-      //           <Form.Item
-      //             name="description"
-      //             initialValue={record?.description}
-      //             rules={[
-      //               {
-      //                 required: true,
-      //                 message: "Description is required!",
-      //               },
-      //             ]}
-      //           >
-      //             <Input.TextArea
-      //               placeholder="Description is required!"
-      //               autoSize={{ minRows: 3, maxRows: 5 }}
-      //               style={{ width: "60vh" }}
-      //             // defaultValue=={record?.description}
-      //             />
-      //           </Form.Item>
-      //         </Descriptions.Item>
-
-      //         <Descriptions.Item label="Image">
-      //           <Form.Item
-      //             name="image"
-      //             rules={[
-      //               () => ({
-      //                 validator(_) {
-      //                   if (fileList.length >= 1) {
-      //                     return Promise.resolve();
-      //                   }
-
-      //                   return Promise.reject(
-      //                     new Error("Product Image is required!!")
-      //                   );
-      //                 },
-      //               }),
-      //             ]}
-      //           >
-      //             <>
-      //               <Upload
-      //                 name="file"
-      //                 action="/files/upload"
-      //                 listType="picture-card"
-      //                 fileList={this.props.record ? fileList : []}
-      //                 onPreview={this.handlePreview}
-      //                 onChange={this.handleChange}
-      //                 style={{ width: "60vh" }}
-      //               >
-      //                 {fileList.length >= 8 ? null : uploadButton}
-      //               </Upload>
-      //               <Modal
-      //                 visible={this.state.previewVisible}
-      //                 title={this.state.previewTitle}
-      //                 footer={null}
-      //                 onCancel={this.handleCancelUploadImage}
-      //               >
-      //                 <img
-      //                   alt="example"
-      //                   style={{ width: "100%" }}
-      //                   src={this.state.previewImage}
-      //                 />
-      //               </Modal>
-      //             </>
-      //           </Form.Item>
-      //         </Descriptions.Item>
-      //       </Descriptions> */}
-      //     </Modal>
-      //   </Form>
-      // </>
+      
     );
   }
 }

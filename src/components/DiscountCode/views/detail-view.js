@@ -11,7 +11,6 @@ import EditModal from "./edit-view";
 
 class DiscountCodeDetail extends Component {
     state = {
-
         openDeleteModal: false,
         openEditModal: false,
     };
@@ -23,7 +22,6 @@ class DiscountCodeDetail extends Component {
 
     start = (openModal) => {
         switch (openModal) {
-
             case "openDeleteModal":
                 this.setState({
                     openDeleteModal: true
@@ -34,8 +32,8 @@ class DiscountCodeDetail extends Component {
                 this.setState({
                     openEditModal: true,
                 });
-
                 break;
+
             default:
                 break;
         }
@@ -66,16 +64,26 @@ class DiscountCodeDetail extends Component {
                 title={"Discount Code Detail"}
                 extra={[
                     <Button
+                        hidden={(record?.status)?.toUpperCase() === "DEACTIVATED"}
                         onClick={() => this.start("openEditModal")}
                         type="primary"
                     >
                         Edit Discount Code
                     </Button>,
+
                     <Button
+                        hidden={(record?.status)?.toUpperCase() === "DEACTIVATED"}
                         onClick={() => this.start("openDeleteModal")}
                         type="danger"
                     >
                         Delete Discount Code
+                    </Button>,
+
+                    <Button
+                        hidden={(record?.status)?.toUpperCase() !== "DEACTIVATED"}
+                        onClick={() => window.history.back()}
+                    >
+                        Back
                     </Button>,
                 ]}
                 footer={

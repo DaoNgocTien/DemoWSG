@@ -4,45 +4,27 @@ import {
   LoadingOutlined,
   PlusOutlined,
   SafetyCertificateTwoTone,
-  WalletTwoTone,
+  WalletTwoTone
 } from "@ant-design/icons";
 import {
   Button,
-  Col,
   Descriptions,
   Form,
   Input,
   Modal,
   PageHeader,
-  Row,
-  Table,
   Tabs,
   Timeline,
   Typography,
-  Upload,
+  Upload
 } from "antd";
-import PropTypes from "prop-types";
-import React, { Component, memo } from "react";
+import React, { Component } from "react";
+import NumberFormat from "react-number-format";
 import { connect } from "react-redux";
 import action from "../modules/action";
 import InformationModal from "./information-view";
-import NumberFormat from "react-number-format";
 const { Title } = Typography;
 const { TabPane } = Tabs;
-
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  record: PropTypes.object,
-  openModal: PropTypes.bool,
-};
-
-const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
-  record: {},
-  openModal: false,
-};
 
 class HandleUI extends Component {
   constructor(props) {
@@ -56,11 +38,7 @@ class HandleUI extends Component {
       fileList: [],
     };
   }
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   formRef = React.createRef();
-
-  componentDidMount() { }
 
   handleRejectAndClose = (data) => {
     this.props.rejectOrder(
@@ -73,7 +51,6 @@ class HandleUI extends Component {
   };
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -611,8 +588,6 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     storeComplainRecord: async (record) => {
-    //  //console.log("storeComplainRecord");
-    //  //console.log(record);
       await dispatch(action.storeComplainRecord(record));
     },
   };

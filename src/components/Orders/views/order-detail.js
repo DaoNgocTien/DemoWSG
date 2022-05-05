@@ -1,38 +1,15 @@
-import { Button, Descriptions, Form, Modal, Select, Table } from "antd";
-import PropTypes from "prop-types";
+import { Button, Descriptions, Form, Modal, Table } from "antd";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
-//  prototype
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  record: PropTypes.object,
-  openModal: PropTypes.bool,
-};
-
-//  default props
-const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
-  record: {},
-  openModal: false,
-};
 
 class OrderDetail extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       record: {},
     };
   }
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   formRef = React.createRef();
-
-  componentDidMount() {
-    // //console.log(this.props);
-  }
 
   handleEditAndClose = (data) => {
     if (data.status === "created" || data.status === "advanced") {
@@ -47,7 +24,6 @@ class OrderDetail extends Component {
   };
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -179,14 +155,6 @@ class OrderDetail extends Component {
             onCancel={this.handleCancel}
             footer={[
               <Button onClick={this.handleCancel}>Cancel</Button>,
-              // <Button
-              //   type="primary"
-              //   form="editForm"
-              //   key="submit"
-              //   htmlType="submit"
-              // >
-              //   Submit
-              // </Button>,
             ]}
           >
             <Descriptions

@@ -5,7 +5,7 @@ import {
   GET_DATA_SUCCESS,
   GET_EWALLET_VALIDATION,
   GET_IDENFICATION_VALIDATION,
-  GET_PHONE_VALIDATION,
+  GET_PHONE_VALIDATION
 } from "./constant";
 
 const getProfile = () => {
@@ -21,9 +21,7 @@ const getProfile = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      //console.log(profile);
       if (profile.status === 200) {
-        // if(profile.data.data.user.rolename ==="Supplier")
         let user = profile.data.data.user.rolename === "Supplier" ? {
           rolename: profile.data.data.user.rolename,
           ...profile.data.data.supplierData[0],
@@ -31,7 +29,6 @@ const getProfile = () => {
           rolename: profile.data.data.user.rolename,
           ...profile.data.data.systemProfileData[0],
         };
-        //console.log(user);
         localStorage.setItem("user", JSON.stringify(user));
         return dispatch(getSuccess(user));
       }
@@ -128,7 +125,6 @@ const checkingPhoneNumber = (message) => {
 };
 
 const updateProfile = (user) => {
-  //console.log(user);
   return async (dispatch) => {
     try {
       dispatch(getRequest());
@@ -149,15 +145,6 @@ const updateProfile = (user) => {
             changeProfileMessage: "Profile changed successfully!",
           })
         );
-        // return dispatch(
-        //   getSuccess({
-        //     username: updateResponse.data.data.account.username,
-        //     password: updateResponse.data.data.account.password,
-        //     googleid: updateResponse.data.data.account.googleid,
-        //     phone: updateResponse.data.data.account.phone,
-        //     ...updateResponse.data.data.profile,
-        //   })
-        // );
       }
       return dispatch(getFailed());
     } catch (error) {

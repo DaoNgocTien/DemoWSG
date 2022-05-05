@@ -5,7 +5,6 @@ import {
 import {
   Button, Col, Descriptions, Form, Input, Modal, PageHeader, Row, Table, Tabs, Tag, Timeline, Typography, Upload
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import { connect } from "react-redux";
 import InformationModal from "../../HandleReturningOrder/views/information-view";
@@ -13,22 +12,6 @@ import action from "../modules/action";
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
-//  prototype
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  record: PropTypes.object,
-  openModal: PropTypes.bool,
-};
-
-//  default props
-const propsDefault = {
-  closeModal: () => { },
-  updateCampaign: () => { },
-  record: {},
-  openModal: false,
-};
-
 class SettlePaymentUI extends Component {
   constructor(props) {
     super(props);
@@ -41,23 +24,15 @@ class SettlePaymentUI extends Component {
       fileList: [],
     };
   }
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   formRef = React.createRef();
 
-  componentDidMount() {
-    // //console.log(this.props.record);
-  }
-
   handleRejectAndClose = (data) => {
-    // data.image = this.state.fileList;
     this.props.rejectOrder(this.props.record.ordercode, data.reason, JSON.stringify(this.state.fileList));
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
   handleCancel = () => {
-//   this.formRef.current.resetFields();
     this.props.closeModal();
   };
 
@@ -108,19 +83,9 @@ class SettlePaymentUI extends Component {
     });
 
     this.setState({ fileList });
-    // //console.log(this.state.fileList);
   };
 
   columns = [
-    // {
-    //   title: "No.",
-    //   dataIndex: "No.",
-    //   key: "No.",
-    //   render: (text, object, index) => {
-    //     return index + 1;
-    //   },
-    //   width: 100,
-    // },
     {
       title: "Order Code",
       dataIndex: "ordercode",
@@ -201,20 +166,15 @@ class SettlePaymentUI extends Component {
 
     this.state.record = this.props.record;
     const {
-      openModal,
-      closeModal,
-      updateStatusOrder,
       record,
-      selectedRowKeys,
     } = this.props;
-    const { isReasonable, load, imageUrl, fileList } = this.state;
+    const {  load, fileList } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
-  //  //console.log(this.props.record);
     return (
       <>
         <PageHeader
@@ -450,11 +410,7 @@ class SettlePaymentUI extends Component {
                   <> <Title style={{ textAlign: "center", padding: "30px" }} level={3}>ORDER INFORMATION</Title>
 
                     <InformationModal
-                      // openModal={openModal}
-                      // closeModal={closeModal}
-                      // updateStatusOrder={updateStatusOrder}
                       record={record}
-                    // selectedRowKeys={selectedRowKeys}
                     />
                   </>
                 </TabPane>
@@ -495,27 +451,6 @@ class SettlePaymentUI extends Component {
             scroll={{ y: 100 }}
           />
         </PageHeader>
-        {/* <Form
-          id="rejectOrderForm"
-          key={this.state.record?.key}
-          ref={this.formRef}
-          onFinish={this.handleRejectAndClose}
-        >
-          <Modal
-            width={window.innerWidth * 0.7}
-            title={`Order of ${this.state.record.customerfirstname +
-              " " +
-              this.state.record.customerlastname
-              }`}
-            visible={openModal}
-            onCancel={this.handleCancel}
-            footer={
-
-            }
-          >
-
-          </Modal>
-        </Form> */}
       </>
     );
   }
@@ -543,18 +478,9 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     storeComplainRecord: async (record) => {
-    //  //console.log("storeComplainRecord");
-    //  //console.log(record);
       await dispatch(action.storeComplainRecord(record));
     }
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettlePaymentUI);
-
-// const arePropsEqual = (prevProps, nextProps) => {
-//   return prevProps === nextProps;
-// };
-
-// // Wrap component using `React.memo()` and pass `arePropsEqual`
-// export default memo(SettlePaymentUI, arePropsEqual);

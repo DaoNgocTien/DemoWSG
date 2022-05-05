@@ -1,32 +1,11 @@
 import { AndroidOutlined, AppleOutlined, ClockCircleTwoTone, ContactsTwoTone } from '@ant-design/icons';
 import {
-  Avatar, Button, Descriptions, Input, List,
-  Space, Table, Tabs
+  Avatar, Button, Descriptions, List,
+  Space, Tabs
 } from "antd";
-import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
 const { TabPane } = Tabs;
-//  prototype
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  defaultCampaign: PropTypes.object,
-  createCampaign: PropTypes.func,
-  updateCampaign: PropTypes.func,
-  deleteCampaign: PropTypes.func,
-};
-
-//  default props
-const propsDefault = {
-  index: 1,
-  data: [],
-  products: [],
-  defaultCampaign: {},
-};
-
-
 const listData = [];
 for (let i = 0; i < 23; i++) {
   listData.push({
@@ -51,18 +30,10 @@ const IconText = ({ time, owner }) => (
         {owner}
       </Descriptions.Item>
     </Descriptions>
-    {/* <Space>
-      <ClockCircleTwoTone />
-      {time}
-      <ContactsTwoTone />
-      {owner}
-    </Space> */}
   </>
 );
 
 class NotificationUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     current: "",
   };
@@ -90,7 +61,6 @@ class NotificationUI extends Component {
             size="small"
             pagination={{
               onChange: page => {
-                // //console.log(page);
               },
               pageSize: 10,
             }}
@@ -145,7 +115,6 @@ class NotificationUI extends Component {
             size="small"
             pagination={{
               onChange: page => {
-                // //console.log(page);
               },
               pageSize: 10,
             }}

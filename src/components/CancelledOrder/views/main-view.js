@@ -14,8 +14,6 @@ import NumberFormat from "react-number-format";
 import EditModal from "./edit-view";
 
 class CancelledOrderUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     selectedRowKeys: [],
     loading: false,
@@ -28,20 +26,9 @@ class CancelledOrderUI extends Component {
     viewButton: true,
   };
 
-  start = (openModal) => {
-    switch (openModal) {
-      case "openRejectModal":
-        this.setState({ openRejectModal: true });
-        break;
-
-      case "openEditModal":
+  start = () => {
         this.setState({ openEditModal: true });
-        break;
-
-      default:
-        break;
-    }
-  };
+         };
 
   changeStatus = (data) => {
     this.props.updateStatusOrder(data);
@@ -83,7 +70,7 @@ class CancelledOrderUI extends Component {
       title: "No.",
       dataIndex: "No.",
       key: "No.",
-      render: (text, object, index) => {
+      render: (_text, _object, index) => {
         return index + 1;
       },
       fixed: "left",
@@ -227,15 +214,13 @@ class CancelledOrderUI extends Component {
   };
 
   render() {
-    const { rejectOrder, updateStatusOrder, data } = this.props;
+    const { updateStatusOrder, data } = this.props;
 
     const {
       selectedRowKeys,
       displayData,
       searchKey,
       openEditModal,
-      editButton,
-      openRejectModal,
       viewButton,
     } = this.state;
 
@@ -244,8 +229,7 @@ class CancelledOrderUI extends Component {
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-
-    const arrayLocation = window.location.pathname.split("/");
+    
     return (
       <PageHeader
         className="site-page-header-responsive"

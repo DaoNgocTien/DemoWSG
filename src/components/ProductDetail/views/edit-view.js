@@ -1,78 +1,27 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
-  Button,
-  Descriptions,
-  Form,
+  Button, Form,
   Input,
   InputNumber,
-  Modal,
-  Select,
-  Upload,
-  Space,
-  Tag,
-  PageHeader,
-  Row,
-  Col,
-  Table,
+  Modal, Select, Space, Upload
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 
-import NumberFormat from "react-number-format";
-
-const propsProTypes = {
-  closeModal: PropTypes.func,
-  updateProduct: PropTypes.func,
-  defaultProduct: PropTypes.object,
-  openModal: PropTypes.bool,
-  categoryList: PropTypes.array,
-};
-
-const propsDefault = {
-  closeModal: () => {},
-  updateProduct: () => {},
-  defaultProduct: {
-    key: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    id: "e5d02fef-987d-4ecd-b3b2-890eb00fe2cc",
-    name: "test222 again Product",
-    supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    retailprice: "5.00",
-    quantity: 11,
-    description: "testttttt",
-    image: "",
-    categoryid: null,
-    status: "active",
-    typeofproduct: "",
-    createdat: "2022-01-07T14:08:02.994Z",
-    updatedat: "2022-01-13T16:34:09.908Z",
-    categoryname: null,
-  },
-  openModal: false,
-  categoryList: [],
-};
 
 class UpdateModal extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
     previewTitle: "",
     fileList: undefined,
-    displayData: [],
-    searchKey: "",
   };
-
-  componentDidMount() {}
 
   handleUpdateAndClose = (data) => {
     data.image =
       this.state.fileList?.length === 0 && this.props.record
         ? JSON.parse(this.props.record?.image)
         : this.state.fileList;
-
     this.props.updateProduct(data);
-
     this.setState({
       fileList: [],
     });
@@ -156,14 +105,10 @@ class UpdateModal extends Component {
   };
 
   render() {
-    const { openModal, record, availableQuantity } = this.props;
-
-    const { data, categoryList, campaignList } = this.props;
+    const { openModal, record, data = [], categoryList } = this.props;
     const {
       load,
       fileList = JSON.parse(record?.image || "[]"),
-      displayData,
-      searchKey,
     } = this.state;
 
     const uploadButton = (
@@ -213,6 +158,7 @@ class UpdateModal extends Component {
             >
               <Input placeholder="Product ID" disabled={true} hidden={true} />
             </Form.Item>
+
             <Space size={30}>
               <Form.Item
                 name="name"
@@ -244,6 +190,7 @@ class UpdateModal extends Component {
                   placeholder="Name is required, length is 1-50 characters"
                 />
               </Form.Item>
+
               <Form.Item
                 name="categoryId"
                 label="Category"
@@ -295,6 +242,7 @@ class UpdateModal extends Component {
                   style={{ width: "60vh" }}
                 />
               </Form.Item>
+
               <Form.Item
                 label="Retail Price"
                 name="retailPrice"
@@ -340,6 +288,7 @@ class UpdateModal extends Component {
                   placeholder="Description is required!"
                 />
               </Form.Item>
+
               <Form.Item
                 name="image"
                 label="Image"

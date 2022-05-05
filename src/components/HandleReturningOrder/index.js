@@ -11,7 +11,6 @@ class HandleReturningOrder extends Component {
 
   componentDidMount() {
     const orderCode = this.props.match.params.orderCode;
-
     this.props.getReturningOrder(orderCode);
   }
 
@@ -73,7 +72,6 @@ const mapDispatchToProps = (dispatch) => {
           requester
         )
       );
-      // await dispatch(action.getOrder());
     },
   };
 };

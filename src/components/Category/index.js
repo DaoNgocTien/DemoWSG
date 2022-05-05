@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import action from "./modules/action";
 import { default as productAction } from "../Product/modules/action";
+import action from "./modules/action";
 import CategoryUI from "./views/main-view";
 
 class CategoryPage extends Component {

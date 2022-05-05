@@ -1,18 +1,10 @@
-import { InboxOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import {
-  Avatar, Button, Checkbox, Col, DatePicker, Descriptions, Form, Input, InputNumber, PageHeader, Radio, Rate, Row, Select, Slider, Space, Statistic, Switch, Table, Tag, Typography, Upload
-} from "antd";
-import moment from "moment";
-import PropTypes from "prop-types";
-import React, { Component, memo } from "react";
+  Button, Form, Input, Typography} from "antd";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import action from "../modules/action";
 
-
-
 const { Title } = Typography;
-const { RangePicker } = DatePicker;
-const { Option } = Select;
 const formItemLayout = {
   labelCol: {
     span: 6,
@@ -21,19 +13,8 @@ const formItemLayout = {
     span: 14,
   },
 };
-//  prototype
-const propsProTypes = {
-  createCampaign: PropTypes.func,
-};
-
-//  default props
-const propsDefault = {
-  createCampaign: () => { },
-};
 
 class EWalletTab extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
@@ -127,8 +108,6 @@ const mapStateToProps = (state) => {
     data: state.profileReducer.data,
     error: state.profileReducer.err,
     eWalletValidation: state.profileReducer.eWalletValidation,
-    // productList: state.productReducer.data,
-    // orderList: [],
   };
 };
 
@@ -154,16 +133,13 @@ const mapDispatchToProps = (dispatch) => {
 
     },
 
-
     updateEWallet: async card => {
       await dispatch(action.updateEWallet(card));
       await dispatch(action.getProfile());
 
     },
 
-
     getProfile: async () => {
-      // //console.log("get campaign");
       await dispatch(action.getProfile());
     },
   };

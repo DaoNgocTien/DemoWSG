@@ -8,6 +8,7 @@ import DiscountCodeDetail from "../components/DiscountCode/views/detail-view";
 import HandleReturningOrder from "../components/HandleReturningOrder";
 import LoyalCustomer from "../components/LoyalCustomer";
 import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
+import LoyalCustomerConditionDetail from "../components/LoyalCustomerCondition/views/detail-view";
 import Orders from "../components/Orders";
 import OrderDetail from "../components/Orders/views/order-detail";
 import Product from "../components/Product";
@@ -40,6 +41,11 @@ const adminRoutes = [
   {
     exact: true,
     path: "/products/categories",
+    component: Category,
+  },
+  {
+    exact: true,
+    path: "/products/categories/:id",
     component: Category,
   },
   {
@@ -83,7 +89,7 @@ const adminRoutes = [
     path: "/discount/campaigns",
     component: Campaign,
   },
-  
+
   {
     exact: true,
     path: "/discount/campaign/:id",
@@ -103,6 +109,11 @@ const adminRoutes = [
     exact: true,
     path: "/loyal-customer/conditon",
     component: LoyalCustomerCondition,
+  },
+  {
+    exact: true,
+    path: "/loyal-customer/conditon/:id",
+    component: LoyalCustomerConditionDetail,
   },
   {
     exact: true,

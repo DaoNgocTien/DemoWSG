@@ -1,42 +1,15 @@
+import { SearchOutlined } from "@ant-design/icons";
+import { OpenInNew } from "@material-ui/icons";
 import { Button, Col, Input, PageHeader, Row, Space, Table } from "antd";
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
+import { Link } from "react-router-dom";
 import CreateModal from "./create-view";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
-import { Link } from "react-router-dom";
-import { SearchOutlined } from "@ant-design/icons";
-
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  defaultCategory: PropTypes.object,
-  createCategory: PropTypes.func,
-  updateCategory: PropTypes.func,
-  deleteCategory: PropTypes.func,
-};
-
-const propsDefault = {
-  index: 1,
-  data: [],
-  defaultCategory: {
-    key: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    id: "b95685d6-e12e-4ea0-8fdf-47ec84af6912",
-    categoryname: "Ipad",
-    supplierid: "99ba5ad1-612c-493f-8cdb-2c2af92ae95a",
-    isdeleted: false,
-    createdat: "2022-01-23T12:03:11.309Z",
-    updatedat: "2022-01-23T12:03:11.309Z",
-  },
-  createCategory: () => {},
-  updateCategory: () => {},
-  deleteCategory: () => {},
-};
 
 class CategoryUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     selectedRowKeys: [],
     editButton: false,
@@ -50,8 +23,6 @@ class CategoryUI extends Component {
     record: {},
     viewDetailButton: false,
   };
-
-  componentDidMount() {}
 
   start = (openModal) => {
     switch (openModal) {
@@ -74,8 +45,6 @@ class CategoryUI extends Component {
   };
 
   onSelectChange = (record) => {
-    // const selectedRowKeys = [];
-    //console.log(record);
     let isExisted = false;
     this.props.productList.map((p) => {
       if (p.categoryid === record.id) {
@@ -113,16 +82,6 @@ class CategoryUI extends Component {
   };
 
   columns = [
-    // {
-    //   title: "No.",
-    //   dataIndex: "No.",
-    //   key: "No.",
-    //   render: (_text, _object, index) => {
-    //     return index + 1;
-    //   },
-    //   width: 100,
-    // },
-
     {
       title: "Name",
       dataIndex: "categoryname",
@@ -144,6 +103,40 @@ class CategoryUI extends Component {
       sorter: (a, b) => a.createdat.length - b.createdat.length,
       render: (data) => moment(data).format("DD-MM-YYYY"),
       width: 200,
+    },
+    {
+      title: "",
+      key: "",
+      render: (object) => {
+        if (object.status === "ready") {
+          return (<>
+
+            <Link to={`/products/categories/${object.id}`}>
+              <Button icon={<OpenInNew />}
+                type="default"
+                shape="circle"
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  background: "none",
+                }} />
+            </Link>
+          </>
+          );
+        } else {
+          return <Button icon={<OpenInNew />}
+            type="default"
+            shape="circle"
+            onClick={() => this.start("openEditModal")}
+            style={{
+              border: "none",
+              boxShadow: "none",
+              background: "none",
+            }} />
+        }
+      },
+      fixed: "right",
+      width: 150,
     },
   ];
 
@@ -168,7 +161,6 @@ class CategoryUI extends Component {
     const {
       selectedRowKeys,
       deleteButton,
-      editButton,
       addNewButton,
       openCreateModal,
       openDeleteModal,
@@ -219,53 +211,43 @@ class CategoryUI extends Component {
             />
 
             <div style={{ marginBottom: 16 }}>
-              <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+              <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
                 <Col span={12}>
                   <Input
                     prefix={<SearchOutlined />}
                     ref={this.searchSelf}
                     onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search for categories..."
+                    placeholder="Search data"
                   />
                 </Col>
-                <Col>
-                  <Space size={3}>
-                    <Button
-                      type="primary"
-                      onClick={() => this.start("openCreateModal")}
-                      disabled={!addNewButton}
-                    >
-                      Add New
+                <Col span={3} offset={3}>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openCreateModal")}
+                    disabled={!addNewButton}
+                    block
+                  >
+                    Add New
+                  </Button>
+                </Col>
+                <Col span={3}>
+                  <Link
+                    to={`/products/catalog?category=${selectedRowKeys[0]}`}
+                  >
+                    <Button type="primary" disabled={!viewDetailButton}>
+                      View Products
                     </Button>
-                    <Link
-                      to={`/products/catalog?category=${selectedRowKeys[0]}`}
-                    >
-                      <Button type="primary" disabled={!viewDetailButton}>
-                        View Products
-                      </Button>
-                    </Link>
-                    <Button
-                      type="primary"
-                      onClick={() => this.start("openEditModal")}
-                      disabled={!editButton}
-                      style={{ width: 90 }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      type="danger"
-                      onClick={() => this.start("openDeleteModal")}
-                      disabled={!deleteButton}
-                      style={{ width: 90 }}
-                    >
-                      Delete
-                    </Button>
-                    {/* <span style={{ marginLeft: 8 }}>
-                      {selectedRowKeys.length > 0
-                        ? `Selected ${selectedRowKeys.length} items`
-                        : ""}
-                    </span> */}
-                  </Space>
+                  </Link>
+                </Col>
+                <Col span={3}>
+                  <Button
+                    type="danger"
+                    onClick={() => this.start("openDeleteModal")}
+                    disabled={!deleteButton}
+                    block
+                  >
+                    Delete
+                  </Button>
                 </Col>
               </Row>
             </div>
@@ -280,7 +262,7 @@ class CategoryUI extends Component {
               }
               scroll={{ y: 350 }}
             />
-          </div>
+          </ div>
         }
       ></PageHeader>
     );

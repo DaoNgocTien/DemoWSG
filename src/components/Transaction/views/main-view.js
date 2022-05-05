@@ -7,29 +7,12 @@ import {
   Row,
   Space,
   Table,
-  Tag,
+  Tag
 } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
 
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  createTransaction: PropTypes.func,
-  updateTransaction: PropTypes.func,
-  deleteTransaction: PropTypes.func,
-};
-
-const propsDefault = {
-  index: 1,
-  data: [],
-  products: [],
-};
-
 class TransactionUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     loading: false,
     selectedRowKeys: [],
@@ -47,10 +30,7 @@ class TransactionUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() {}
-
   onOKWithdraw = (data) => {
-    //  //console.log(data);
     const newData = {
       amount: parseInt(data.amount),
       ordercode: data.ordercode,
@@ -241,7 +221,6 @@ class TransactionUI extends Component {
     {
       title: "Action",
       render: (object) => {
-        //  //console.log(object.iswithdrawable);
         if (object.type === "income" && object.iswithdrawable) {
           return (
             <Popconfirm
@@ -279,7 +258,6 @@ class TransactionUI extends Component {
         searchValue = "";
         break;
     }
-    //  //console.log(searchData);
 
     this.setState({
       displayData: searchData,
@@ -290,13 +268,11 @@ class TransactionUI extends Component {
   render() {
     const { data } = this.props;
     const { displayData = data.income } = this.state;
-
-    const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
         onBack={() => window.history.back()}
         title="TRANSACTION PAGE"
-        subTitle={`This is a ${arrayLocation[2]} page`}
+        subTitle={`Supplier's transactions are settled in this page`}
         footer={
           <div
             className="site-layout-background"

@@ -1,5 +1,4 @@
 import { Button, Descriptions, Form, Modal, Table } from "antd";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
 

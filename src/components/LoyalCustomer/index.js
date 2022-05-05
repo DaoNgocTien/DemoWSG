@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
 import action from "./modules/action";
 import LoyalCustomerUI from "./views/main-view";
@@ -14,17 +13,11 @@ class LoyalCustomer extends Component {
   }
 
   render() {
-    // //console.log(this.props);
     return (
       <LoyalCustomerUI
         data={this.props.data.LoyalCustomers}
         loading={this.props.loading}
-        getLoyalCustomer={this.props.getLoyalCustomer}
-        ordersInCampaign={this.props.data.order}
-        productList={this.props.data.products}
-        createLoyalCustomer={this.props.createLoyalCustomer}
         updateLoyalCustomer={this.props.updateLoyalCustomer}
-        disableLoyalCustomer={this.props.disableLoyalCustomer}
       />
     );
   }
@@ -35,8 +28,6 @@ const mapStateToProps = (state) => {
     loading: state.loyalCustomerReducer.loading,
     data: state.loyalCustomerReducer.data,
     error: state.loyalCustomerReducer.err,
-    // productList: state.productReducer.data,
-    // orderList: [],
   };
 };
 
@@ -46,20 +37,7 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.getLoyalCustomer());
     },
 
-    createLoyalCustomer: async (record) => {
-      // //console.log(record);
-      await dispatch(action.createLoyalCustomer(record));
-      await dispatch(action.getLoyalCustomer());
-    },
-
-    disableLoyalCustomer: async (id) => {
-      // //console.log(record);
-      await dispatch(action.disableLoyalCustomer(id));
-      await dispatch(action.getLoyalCustomer());
-    },
-
     updateLoyalCustomer: async (record, id) => {
-      // //console.log(record);
       await dispatch(action.updateLoyalCustomer(record, id));
       await dispatch(action.getLoyalCustomer());
     },

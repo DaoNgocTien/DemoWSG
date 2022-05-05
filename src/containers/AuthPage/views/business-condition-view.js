@@ -1,18 +1,7 @@
-import { InboxOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
-import {
-  Modal, Button, Checkbox, Col, DatePicker, Descriptions, Form, Input, InputNumber, PageHeader, Radio, Rate, Row, Select, Slider, Space, Statistic, Switch, Table, Tag, Typography, Upload
-} from "antd";
-import moment from "moment";
-import PropTypes from "prop-types";
-import React, { Component, memo } from "react";
+import { Button, Form, Input, Modal } from "antd";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import action from "../modules/action";
-
-
-
-const { Title } = Typography;
-const { RangePicker } = DatePicker;
-const { Option } = Select;
 const formItemLayout = {
   labelCol: {
     span: 6,
@@ -21,19 +10,7 @@ const formItemLayout = {
     span: 14,
   },
 };
-//  prototype
-const propsProTypes = {
-  createCampaign: PropTypes.func,
-};
-
-//  default props
-const propsDefault = {
-  createCampaign: () => { },
-};
-
 class BusinessConditionUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {
     previewVisible: false,
     previewImage: "",
@@ -58,7 +35,6 @@ class BusinessConditionUI extends Component {
   }
 
   onFinish = (data) => {
-  //  //console.log(data);
     this.props.updateBusinessCondition({
       email: data.email,
       ewalletcode: data.ewalletcode,
@@ -70,20 +46,6 @@ class BusinessConditionUI extends Component {
     this.setState({
       visible: true,
     });
-  };
-
-  handleOk = () => {
-    // this.setState({ loading: true });
-    // setTimeout(() => {
-    //   this.setState({ loading: false, visible: false });
-    // }, 3000);
-
-  //  //console.log("handleOk");
-  };
-
-  handleCancel = () => {
-  //  //console.log("handleCancel");
-    // this.setState({ visible: false });
   };
 
   render() {
@@ -106,11 +68,7 @@ class BusinessConditionUI extends Component {
             visible={visible}
             title="Business Requirement"
             onOk={this.handleOk}
-            // onCancel={this.handleCancel}
             footer={[
-              // <Button key="back" onClick={this.handleCancel}>
-              //   Return
-              // </Button>,
               <Button
                 type="primary"
                 form="updateBusinessConditionForm"
@@ -196,43 +154,18 @@ const mapStateToProps = (state) => {
     data: state.authReducer.data?.profile ?? {},
     error: state.authReducer.err,
     eWalletValidation: state.profileReducer.eWalletValidation,
-    // productList: state.productReducer.data,
-    // orderList: [],
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changePassword: async (id, password) => {
-      // await dispatch(action.changePassword(id, password));
-    },
-
-    checkPhoneNumber: async phone => {
-      // await dispatch(action.checkPhoneNumber(phone));
-    },
-
-    updateProfile: async profile => {
-      // await dispatch(action.updateProfile(profile));
-      // await dispatch(action.getProfile());
-
-    },
-
-    updateIdentifcation: async card => {
-      // await dispatch(action.updateIdentifcation(card));
-      // await dispatch(action.getProfile());
-
-    },
-
-
     updateBusinessCondition: async data => {
       await dispatch(action.updateBusinessCondition(data));
       await dispatch(action.getProfile());
 
     },
 
-
     getProfile: async () => {
-      // //console.log("get campaign");
       await dispatch(action.getProfile());
     },
   };

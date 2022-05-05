@@ -1,7 +1,6 @@
 import Axios from "axios";
 import {
-  GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS, STORE_SETTLING_PAYMENT
-} from "./constant";
+  GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS} from "./constant";
 
 const getOrder = () => {
   return async (dispatch) => {
@@ -21,9 +20,6 @@ const getOrder = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      // const completedOrder = orders.data.data.filter(order => {
-      //   return order.status === "completed" || order.status === "returned" || order.status === "cancelled";
-      // });
       return dispatch(
         getSuccess({
           orders: orders.map((order) => {
@@ -60,13 +56,6 @@ const getFailed = (err) => {
   return {
     type: GET_DATA_FAIL,
     payload: err,
-  };
-};
-
-const storePaymentList = (data) => {
-  return {
-    type: STORE_SETTLING_PAYMENT,
-    payload: data,
   };
 };
 

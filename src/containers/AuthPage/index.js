@@ -20,7 +20,6 @@ class AuthPage extends Component {
   };
 
   onFinish = (e) => {
-    // //console.log(e);
     this.props.login(e, this.props.history);
   };
 
@@ -45,116 +44,63 @@ class AuthPage extends Component {
 
     const { loading, error } = this.props;
     if (loading) return <Loader />;
-    //  //console.log(this.props);
     if (!localStorage.getItem("user")) {
       return (
+
         <div className="main_form_body">
+          <h2>Welcome back!</h2>
+          <p className="create_account_title">Do not have an account yet?
+            <a href="/registration" className="create_account_navigation">Create account</a>
+          </p>
           <div className="form__wrapper">
             <div className="form__container">
-              <h2 style={{ textAlign: "center" }}>LOGIN</h2>
-              <Text type="danger" style={{ textAlign: "center" }}>
-                {" "}
-                {error}
-              </Text>
-
-              <ForgotPassword
-                openModal={openForgotPasswordModal}
-                closeModal={this.closeModal}
-              />
               <Form
                 name="normal_login"
                 className="login-form"
                 initialValues={{ remember: true }}
                 onFinish={this.onFinish}
-                // validateStatus={error === null ? "success" : "error"}
-                // help={error ?? ""}
               >
+                <p className="form-item-title">
+                  Username <p className="red_asterik">*</p>
+                </p>
                 <Form.Item
+
                   name="username"
                   rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Please enter your new phone',
-                    // },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (
-                          (value + "").length > 50 ||
-                          (value + "").length < 1
-                        ) {
-                          return Promise.reject(
-                            new Error(`Username is between 1-50 characters!`)
-                          );
-                        }
-                        // if (error) {
-                        //   return Promise.reject(new Error(`Username or password is not correct!`));
-                        // }
-                        // if (!value || !checkPhoneMessage) {
-                        return Promise.resolve();
-                        // }
-
-                        // return Promise.reject(new Error(`${checkPhoneMessage}`));
-                      },
-                    }),
-                    // {
-                    //   pattern: /[0-9]{10,11}/,
-                    //   message: 'Phone number is between 10-12 characters',
-                    // }
+                    { required: true, message: "Please input your Username!" },
                   ]}
                 >
                   <Input
+                    className="form-item-input"
                     prefix={<UserOutlined className="site-form-item-icon" />}
-                    placeholder="Username is between 1-50 characters"
-                    // onChange={this.props.onLogin}
+                    placeholder="Username"
                   />
                 </Form.Item>
+                <p className="form-item-title">
+                  Password <p className="red_asterik">*</p>
+                </p>
                 <Form.Item
                   name="password"
                   rules={[
-                    // {
-                    //   required: true,
-                    //   message: 'Please enter your new phone',
-                    // },
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (
-                          (value + "").length > 50 ||
-                          (value + "").length < 1
-                        ) {
-                          return Promise.reject(
-                            new Error(`Password is between 1-50 characters!`)
-                          );
-                        }
-                        // if (error) {
-                        //   return Promise.reject(new Error(`Username or password is not correct!`));
-                        // }
-                        // if (!value || !checkPhoneMessage) {
-                        return Promise.resolve();
-                        // }
-
-                        // return Promise.reject(new Error(`${checkPhoneMessage}`));
-                      },
-                    }),
-                    // {
-                    //   pattern: /[0-9]{10,11}/,
-                    //   message: 'Phone number is between 10-12 characters',
-                    // }
+                    { required: true, message: "Please input your Password!" },
                   ]}
                 >
                   <Input
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
-                    placeholder="Password is between 1-50 characters!"
-                    // onChange={this.props.onLogin}
+                    placeholder="Password"
                   />
                 </Form.Item>
                 <Form.Item>
                   <a
+                    style={{
+                      textDecoration: "none",
+                      float: "right" 
+                    }}
                     className="login-form-forgot"
                     href="/#"
-                    style={{ float: "right" }}
                   >
-                    Forgot password
+                    <p className="forgot-password">Forgot Password ?</p>
                   </a>
                 </Form.Item>
                 <Form.Item>
@@ -174,10 +120,6 @@ class AuthPage extends Component {
                   cookiePolicy={"single_host_origin"}
                   className="google-button"
                 />
-                <br />
-                <a href="/registration" style={{ float: "right" }}>
-                  Register now!
-                </a>
               </Form>
             </div>
           </div>

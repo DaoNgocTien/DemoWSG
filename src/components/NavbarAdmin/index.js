@@ -8,12 +8,12 @@ import React, { Component, memo } from "react";
 import { Link } from "react-router-dom";
 
 class NavbarAdmin extends Component {
-  handleLogOut = (e) => {
+  handleLogOut = () => {
     Axios({
       url: `/users/logout`,
       method: "POST",
       withCredentials: true,
-    }).then((result) => {
+    }).then(() => {
       localStorage.clear();
       localStorage.removeItem("user");
       return window.location.reload();
@@ -33,7 +33,6 @@ class NavbarAdmin extends Component {
     } = this.props;
     return (
       <Row>
-        {/* <Space size={1}> */}
         <Col flex="195px">
           <Button
             type="primary"
@@ -102,10 +101,8 @@ class NavbarAdmin extends Component {
                 Logout
               </Menu.Item>
             </Menu.SubMenu>
-            {/* </Space> */}
           </Menu>
         </Col>
-        {/* </Space> */}
       </Row>
     );
   }

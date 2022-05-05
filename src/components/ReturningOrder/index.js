@@ -11,7 +11,6 @@ class OrderReturning extends Component {
 
   componentDidMount() {
     this.props.getOrder();
-    // //console.log(this.props);
   }
 
   render() {
@@ -23,17 +22,18 @@ class OrderReturning extends Component {
         createCampaign={this.props.createCampaign}
         rejectOrder={this.props.rejectOrder}
         confirmReceived={this.props.confirmReceived}
-        storeComplainRecord={this.props.storeComplainRecord}
+        storeRecord={this.props.storeRecord}
       />
     );
   }
 }
 
 const mapStateToProps = (state) => {
+  console.log(state)
   return {
-    loading: state.ReturningOrderReducer.loading,
-    data: state.ReturningOrderReducer.data,
-    error: state.ReturningOrderReducer.err,
+    loading: state.returningReducer.loading,
+    data: state.returningReducer.data,
+    error: state.returningReducer.err,
   };
 };
 
@@ -48,8 +48,8 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.rejectOrder(orderCode, reasonForCancel, imageProof));
       await dispatch(action.getOrder());
     },
-    storeComplainRecord: async (record) => {
-      await dispatch(action.storeComplainRecord(record));
+    storeRecord: async (record) => {
+      await dispatch(action.storeRecord(record));
       await dispatch(action.getOrder());
     },
 

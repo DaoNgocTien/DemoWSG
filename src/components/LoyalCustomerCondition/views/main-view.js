@@ -1,4 +1,6 @@
 import { Button, Col, Input, PageHeader, Row, Space, Table } from "antd";
+import { OpenInNew } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 import moment from "moment";
 import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
@@ -43,8 +45,6 @@ class DiscountCodeUI extends Component {
     orderList: [],
   };
 
-  componentDidMount() {}
-
   start = (openModal) => {
     let selectedRowKeys = this.state.selectedRowKeys;
     let data = this.props.data;
@@ -55,21 +55,23 @@ class DiscountCodeUI extends Component {
 
     switch (openModal) {
       case "openCreateModal":
-        this.setState({ loadingActionButton: true, openCreateModal: true });
+        this.setState({
+          openCreateModal: true
+        });
         break;
 
       case "openDeleteModal":
-        this.setState({ loadingActionButton: true, openDeleteModal: true });
-
+        this.setState({
+          record: recordToEdit,
+          openDeleteModal: true
+        });
         break;
 
       case "openEditModal":
         this.setState({
-          loadingActionButton: true,
-          openEditModal: true,
           record: recordToEdit,
+          openEditModal: true,
         });
-
         break;
       default:
         break;
@@ -99,7 +101,7 @@ class DiscountCodeUI extends Component {
       title: "Condition Name",
       dataIndex: "startdate",
       key: "startdate",
-      render: (data) => ("Condition " +  moment(data).format("MM/DD/YYYY")).toUpperCase(),
+      render: (data) => ("Condition " + moment(data).format("MM/DD/YYYY")).toUpperCase(),
     },
     {
       title: "Min Order",
@@ -123,6 +125,41 @@ class DiscountCodeUI extends Component {
       key: "startdate",
       render: (data) => moment(data).format("MM/DD/YYYY"),
     },
+    {
+      title: "",
+      key: "",
+      render: (object) => {
+        if (object.status === "ready") {
+          return (<>
+
+            <Link to={`/loyal-customer/conditon/${object.id}`}>
+              <Button icon={<OpenInNew />}
+                type="default"
+                shape="circle"
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  background: "none",
+                }} />
+            </Link>
+          </>
+          );
+        } else {
+          return <Link to={`/loyal-customer/conditon/${object.id}`}>
+            <Button icon={<OpenInNew />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }} />
+          </Link>
+        }
+      },
+      fixed: "right",
+      width: 150,
+    },
   ];
 
   onChangeHandler = (e) => {
@@ -143,9 +180,6 @@ class DiscountCodeUI extends Component {
   };
 
   onSelectChange = (record) => {
-    // //console.log("selectedRowKeys changed: ", selectedRowKeys);
-    // //console.log(this.props.data);
-
     if (this.state.selectedRowKeys[0] !== record.key) {
       this.setState({
         selectedRowKeys: [record.key],
@@ -179,7 +213,6 @@ class DiscountCodeUI extends Component {
     } = this.state;
 
     const {
-      productList,
       createLoyalCustomerCondition,
       updateLoyalCustomerCondition,
       deleteLoyalCustomerCondition,
@@ -190,79 +223,61 @@ class DiscountCodeUI extends Component {
       onSelect: this.onSelectChange,
       hideSelectAll: true,
     };
-    // const hasSelected = selectedRowKeys.length > 0;
-    const arrayLocation = window.location.pathname.split("/");
     return (
       <PageHeader
         className="site-page-header-responsive"
         onBack={() => window.history.back()}
-        // title={arrayLocation[2].toUpperCase()}
-        subTitle={`This is a ${arrayLocation[2]} page`}
+        title={"LOYAL CUSTOMER CONDITION"}
+        subTitle={`This is a loyal customer condition page`}
         footer={
           <div>
             <CreateModal
+              loading={this.props.loading}
               openModal={openCreateModal}
               closeModal={this.closeModal}
               createLoyalCustomerCondition={createLoyalCustomerCondition}
-              productList={productList}
             />
-            <DeleteModal
-              openModal={openDeleteModal}
-              closeModal={this.closeModal}
-              productList={productList}
-              deleteLoyalCustomerCondition={deleteLoyalCustomerCondition}
-              record={this.state.record}
-              selectedRowKeys={selectedRowKeys[0]}
-            />
-            <EditModal
-              loading={this.props.loading}
-              openModal={openEditModal}
-              closeModal={this.closeModal}
-              productList={productList}
-              updateLoyalCustomerCondition={updateLoyalCustomerCondition}
-              record={this.state.record}
-              selectedRowKeys={selectedRowKeys[0]}
-            />
+           
             <div style={{ marginBottom: 16 }}>
-              <Row>
-                <Col flex="auto">
-                  <Space size={4}>
-                    <Button
-                      type="primary"
-                      onClick={() => this.start("openCreateModal")}
-                      disabled={!addNewButton}
-                    >
-                      Add New
-                    </Button>
-                    <Button
-                      type="primary"
-                      onClick={() => this.start("openEditModal")}
-                      disabled={!editButton}
-                      style={{ width: 90 }}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      type="danger"
-                      onClick={() => this.start("openDeleteModal")}
-                      disabled={!deleteButton}
-                      style={{ width: 90 }}
-                    >
-                      Delete
-                    </Button>
-                    <span style={{ marginLeft: 8 }}>
-                      {selectedRowKeys.length > 0
-                        ? `Selected ${selectedRowKeys.length} items`
-                        : ""}
-                    </span>
-                  </Space>
-                </Col>
-                <Col flex="300px">
+              <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
+                <Col span={12}>
                   <Input
                     onChange={(e) => this.onChangeHandler(e)}
                     placeholder="Search data"
                   />
                 </Col>
+                <Col span={2} offset={6}>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openCreateModal")}
+                    disabled={!addNewButton}
+                    block
+                  >
+                    Add New
+                  </Button>
+                </Col>
+                <Col span={2}>
+                  <Button
+                    type="primary"
+                    onClick={() => this.start("openEditModal")}
+                    disabled={!editButton}
+                    block
+
+                  >
+                    Edit
+                  </Button>
+                </Col>
+                <Col span={2}>
+                  <Button
+                    type="danger"
+                    onClick={() => this.start("openDeleteModal")}
+                    disabled={!deleteButton}
+                    block
+                  >
+                    Delete
+                  </Button>
+                </Col>
+
               </Row>
             </div>
             <Table

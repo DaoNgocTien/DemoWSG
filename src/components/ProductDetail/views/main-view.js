@@ -1,66 +1,29 @@
+import { OpenInNew } from "@material-ui/icons";
 import {
   Button,
-  Col,
   Descriptions,
   Image,
   Input,
   PageHeader,
-  Row,
-  Space,
   Table,
-  Tag,
+  Tag
 } from "antd";
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
-// import CreateModal from "./create-view";
+import NumberFormat from "react-number-format";
+import { Link } from "react-router-dom";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
-import NumberFormat from "react-number-format";
-
-const propsProTypes = {
-  index: PropTypes.number,
-  data: PropTypes.array,
-  defaultProduct: PropTypes.object,
-  createProduct: PropTypes.func,
-  updateProduct: PropTypes.func,
-  deleteProduct: PropTypes.func,
-  activeProduct: PropTypes.func,
-};
-
-const propsDefault = {
-  index: 1,
-  data: [],
-  defaultProduct: {},
-  createCategory: () => {},
-  updateCategory: () => {},
-  deleteProduct: () => {},
-  activeProduct: () => {},
-};
 
 class ProductUI extends Component {
-  static propTypes = propsProTypes;
-  static defaultProps = propsDefault;
   state = {};
 
-  componentDidMount() {}
-
   campaignColumns = [
-    // {
-    //   title: "No.",
-    //   dataIndex: "No.",
-    //   key: "No.",
-    //   render: (text, object, index) => {
-    //     return index + 1;
-    //   },
-    //   width: 100,
-    //   fixed: "left",
-    // },
     {
-      title: "Product Name",
-      dataIndex: "productname",
-      key: "productname",
-      sorter: (a, b) => a.productname.length - b.productname.length,
+      title: "Campaign Name",
+      dataIndex: "description",
+      key: "description",
+      sorter: (a, b) => a.description.length - b.description.length,
       width: 300,
       fix: "left",
     },
@@ -79,11 +42,20 @@ class ProductUI extends Component {
       width: 120,
     },
     {
-      title: "Created Date",
-      dataIndex: "createdat",
-      key: "createdat",
+      title: "Duration",
+      key: "duration",
       width: 120,
-      render: (data) => moment(data).format("MM/DD/YYYY"),
+      render: (object) => {
+        return (
+          <Tag color="blue">
+            {moment(object.statdate).format("MM/DD/YYYY")}
+          </Tag>
+          -
+          <Tag color="green">
+            {moment(object.enđate).format("MM/DD/YYYY")}
+          </Tag>
+        );
+      },
     },
     {
       title: "Type",
@@ -109,10 +81,10 @@ class ProductUI extends Component {
               data === "ready"
                 ? "blue"
                 : data === "active"
-                ? "red"
-                : data === "done"
-                ? "green"
-                : "grey"
+                  ? "red"
+                  : data === "done"
+                    ? "green"
+                    : "grey"
             }
           >
             {data.toUpperCase() === "DEACTIVATED" ? "STOP" : data.toUpperCase()}
@@ -127,23 +99,40 @@ class ProductUI extends Component {
       key: "",
       render: (object) => {
         if (object.status === "ready") {
-          return (
-            <Button
-              // onClick={() => this.startCampaignBeforeHand(object)}
-              type="primary"
-            >
-              Start Campaign
-            </Button>
+          return (<>
+
+            <Link to={`/discount/campaign/${object.id}`}>
+              <Button icon={<OpenInNew />}
+                type="default"
+                shape="circle"
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  background: "none",
+                }} />
+            </Link>
+          </>
           );
+        } else {
+          return <Link to={`/discount/campaign/${object.id}`}>
+            <Button icon={<OpenInNew />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }} />
+          </Link>
         }
       },
       fixed: "right",
       width: 150,
     },
   ];
+
   closeModal = () => {
     this.setState({
-      openCreateModal: false,
       openDeleteModal: false,
       openEditModal: false,
     });
@@ -152,14 +141,13 @@ class ProductUI extends Component {
   start = (openModal) => {
     switch (openModal) {
       case "openDeleteModal":
-        this.setState({ loadingActionButton: true, openDeleteModal: true });
-
+        this.setState({ openDeleteModal: true });
         break;
 
       case "openEditModal":
-        this.setState({ loadingActionButton: true, openEditModal: true });
-
+        this.setState({ openEditModal: true });
         break;
+
       default:
         break;
     }
@@ -181,7 +169,6 @@ class ProductUI extends Component {
             <Button
               type="danger"
               onClick={() => this.start("openDeleteModal")}
-              // disabled={!deleteButton}
               hidden={record?.status === "deactivated"}
               style={{ width: 90 }}
             >
@@ -190,7 +177,6 @@ class ProductUI extends Component {
             <Button
               type="primary"
               onClick={() => this.activeProduct(record?.id)}
-              // disabled={!deleteButton}
               hidden={record?.status === "active"}
               style={{ width: 90 }}
             >
@@ -199,8 +185,8 @@ class ProductUI extends Component {
             <Button
               type="primary"
               onClick={() => this.start("openEditModal")}
-              // disabled={!this.state.editButton}
               style={{ width: 90 }}
+              hidden={record?.status === "deactivated"}
             >
               Edit
             </Button>,
@@ -235,15 +221,14 @@ class ProductUI extends Component {
           column={2}
           size="small"
           labelStyle={{ width: "10%", fontWeight: "bold" }}
-          // style={{ width: "100%" }}
         >
-          <Descriptions.Item label="Name">{record?.name}</Descriptions.Item>
+          <Descriptions.Item label="Name">
+            {record?.name}
+          </Descriptions.Item>
 
           <Descriptions.Item label="Category">
-            {
-              categoryList?.find((element) => element.id === record?.categoryid)
-                ?.categoryname
-            }
+            {categoryList?.find((element) => element.id === record?.categoryid)
+              ?.categoryname}
           </Descriptions.Item>
 
           <Descriptions.Item label="Quantity">
@@ -311,9 +296,9 @@ class ProductUI extends Component {
             )}
           </Descriptions.Item>
         </Descriptions>
+        
         <Table
           loading={this.props.loading}
-          // rowSelection={rowSelection}
           columns={this.campaignColumns}
           dataSource={campaignList}
           scroll={{ y: 350 }}

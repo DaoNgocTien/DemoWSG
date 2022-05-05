@@ -1,5 +1,5 @@
-import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 import Axios from "axios";
+import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 
 
 const getAllCategory = () => {
@@ -18,15 +18,10 @@ const getAllCategory = () => {
               ...category
             }
           });
-          // if (Array.isArray(data)) {
-          //   data.map((item) => {
-          //     // //console.log(item);
-          //   })
-          // }
           return dispatch(getSuccess(data));
         }
       })
-      .catch((err) => {
+      .catch(() => {
         return dispatch(getFailed());
       });
   };
@@ -42,20 +37,16 @@ const createCategory = record => {
       withCredentials: true,
     }).then((response) => {
       if (response.status === 200) {
-        // //console.log(response);
-        // return window.location.reload();
+        return dispatch(getSuccess([]));
       }
     })
-      .catch((err) => {
+      .catch(() => {
         return dispatch(getFailed());
       })
-      .finally(() => {
-      });
   };
 }
 
 const updateCategory = (record) => {
-  // //console.log(record);
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
@@ -64,13 +55,10 @@ const updateCategory = (record) => {
       data: { categoryName: record.categoryName },
       withCredentials: true,
     }).then((response) => {
-      // //console.log(response);
       if (response.status === 200) {
-        // // //console.log(response);
-        // return window.location.reload();
+        return dispatch(getSuccess([]));
       }
-    }).catch((err) => {
-      // //console.log(err);
+    }).catch(() => {
       return dispatch(getFailed());
     });
   };
@@ -84,13 +72,10 @@ const deleteCategory = id => {
       method: "DELETE",
       withCredentials: true,
     }).then((response) => {
-      // //console.log(response);
       if (response.status === 200) {
-        // //console.log(response);
-        // return window.location.reload();
+        return dispatch(getSuccess([]));
       }
-    }).catch((err) => {
-      // //console.log(err);
+    }).catch(() => {
       return dispatch(getFailed());
     });
   };

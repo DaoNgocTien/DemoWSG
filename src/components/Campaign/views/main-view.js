@@ -1,17 +1,16 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { OpenInNew } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 import {
   Button,
   Col,
   Input,
   PageHeader,
   Row,
-  Space,
   Table,
   Tag
 } from "antd";
 import React, { Component, memo } from "react";
-import { Link } from "react-router-dom";
 import CreateModal from "./create-view";
 
 class CampaignUI extends Component {
@@ -225,24 +224,23 @@ class CampaignUI extends Component {
               campaingList={data}
             />
 
-            <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
+            <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
               <Col span={12}>
                 <Input
                   prefix={<SearchOutlined />}
                   ref={this.searchSelf}
                   onChange={(e) => this.onChangeHandler(e)}
-                  placeholder="Search for campaigns..."
+                  placeholder="Search data"
                 />
               </Col>
-              <Col>
-                <Space size={3}>
-                  <Button
-                    type="primary"
-                    onClick={() => this.start()}
-                  >
-                    Add New
-                  </Button>
-                </Space>
+              <Col span={3} offset={9}>
+                <Button
+                  type="primary"
+                  onClick={() => this.start()}
+                  block
+                >
+                  Add New
+                </Button>
               </Col>
             </Row>
             <Table

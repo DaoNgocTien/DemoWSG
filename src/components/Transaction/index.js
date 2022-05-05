@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import {default as productAction} from "../Product/modules/action";
 import { connect } from "react-redux";
 import action from "./modules/action";
 import TransactionUI from "./views/main-view";
@@ -14,7 +13,6 @@ class Transaction extends Component {
   }
 
   render() {
-  //  //console.log(this.props.data);
     return (
       <TransactionUI
         data={this.props.data.transactions}
@@ -41,35 +39,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getTransaction: async () => {
-      // //console.log("get Transaction");
       await dispatch(action.getTransaction());
     },
 
-    // storeSettlingPaymentList: async (list) => {
-    //   // //console.log("get Transaction");
-    //   await dispatch(action.storeSettlingPaymentList(list));
-    // },
-
-    // getOrdersInTransaction: async (TransactionID) => {
-    //   // //console.log("getOrdersInTransaction final");
-    //   // //console.log(TransactionID);
-    // },
-
-    // createTransaction: async (record) => {
-    //   // //console.log("createProduct final");
-    //   // //console.log(record);
-    //   await dispatch(action.createTransaction(record));
-    //   await dispatch(action.getTransaction());
-    // },
 
     updateTransaction: async (record) => {
       await dispatch(action.updateTransaction(record));
       await dispatch(action.getTransaction());
     },
 
-    // deleteTransaction: async (id) => {
-    //   await dispatch(action.deleteTransaction(id));
-    // }
   };
 };
 

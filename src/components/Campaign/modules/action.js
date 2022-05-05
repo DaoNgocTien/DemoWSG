@@ -5,7 +5,6 @@ import {
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
   STORE_CAMPAIGN,
-  STORE_CREATING_ERR
 } from "./constant";
 
 const getCampaign = (campaignId) => {
@@ -61,7 +60,6 @@ const getCampaign = (campaignId) => {
         return p.quantity - max >= 10;
       });
       const campaignsList = campaigns.data.data.length == 0 ? [] : campaigns.data.data?.map((campaign) => {
-        //console.log(campaign)
         return {
           key: campaign.id,
 
@@ -70,11 +68,9 @@ const getCampaign = (campaignId) => {
         };
       })
       const productList = availableProducts.map((p) => {
-        //console.log(p)
         let max = 0;
         if (campaigns.data.data.length !== 0)
           campaigns.data.data.map((c) => {
-            //console.log(c)
             max += c.productid === p.id ? Number(c.maxquantity) : 0;
           });
         return {
@@ -91,7 +87,6 @@ const getCampaign = (campaignId) => {
         })
       );
     } catch (error) {
-      alert(error)
       return dispatch(getFailed());
     }
   };
@@ -146,8 +141,6 @@ const createCampaign = (record) => {
 
 const updateCampaign = (record) => {
   return async (dispatch) => {
-    //console.log(record);
-
     Axios({
       url: `/campaigns/${record.id}`,
       method: "PUT",
@@ -204,7 +197,6 @@ const deleteCampaign = (id) => {
       return <Redirect to="/discount/campaigns" />;
     }
     catch (error) {
-      alert(error)
       return dispatch(getFailed());
     }
   };
@@ -354,7 +346,6 @@ const getRequest = () => {
 };
 
 const getSuccess = (data) => {
-  //console.log(data)
   return {
     type: GET_DATA_SUCCESS,
     payload: data,

@@ -2,17 +2,17 @@ import {
   GET_DATA_FAIL,
   GET_DATA_REQUEST,
   GET_DATA_SUCCESS,
-  STORE_COMPLAIN_ORDER
+  STORE_RECORD
 } from "./constant";
 
 let initialState = {
   loading: true,
   data: [],
   err: null,
-  complainRecord: {},
+  record: {},
 };
 
-const complainReducer = (state = initialState, action) => {
+const returningReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
 
@@ -27,18 +27,15 @@ const complainReducer = (state = initialState, action) => {
       state.err = null;
       return { ...state };
 
-    case STORE_COMPLAIN_ORDER:
-    //  //console.log("storeComplainRecord reducer");
-    //  //console.log(action);
+    case STORE_RECORD:
       state.loading = false;
-      state.complainRecord = action.payload;
+      state.record = action.payload.record;
       state.err = null;
       return { ...state };
 
     case GET_DATA_FAIL:
       state.loading = false;
       state.data = [];
-      // state.err = action.payload;
       return { ...state };
 
     default:
@@ -46,4 +43,4 @@ const complainReducer = (state = initialState, action) => {
   }
 };
 
-export default complainReducer;
+export default returningReducer;
