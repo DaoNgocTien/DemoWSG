@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { auth } from '../../../services/firebase';
 import action from "../modules/action";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth"
+import Axios from "axios";
+import axios from 'axios';
 
 class Registration extends Component {
     constructor(props) {
@@ -18,7 +20,13 @@ class Registration extends Component {
             phoneNumber: "",
             otp: null,
             verify: null,
-            otpSuccess: false
+            otpSuccess: false,
+            username: "",
+            password: "",
+            firstName: "",
+            email: "",
+            roleName: "Supplier",
+            address: ""
         };
     }
 
@@ -64,7 +72,6 @@ class Registration extends Component {
     }
 
     setPhoneNumber = (data) => {
-        console.log(data.target.value)
         this.setState({
             phoneNumber: `+${data.target.value}`
         })
@@ -95,11 +102,64 @@ class Registration extends Component {
     };
 
 
-    prev = () => {
+    register = () => {
+        Axios({
+            url: `/users/register`,
+            method: "POST",
+            withCredentials: true,
+            data: {
+                username: this.state.username,
+                password: this.state.password,
+                firstName: this.state.firstName,
+                email: this.state.email,
+                address: this.state.address,
+                phone: this.state.phoneNumber,
+                roleName: this.state.roleName,
+
+            }
+        }).then(result => {
+            if (result.status===200 || result.status===204) {
+                return window.location.replace('/login')
+            }
+        }).catch((error)=>{
+            if(error){
+                return alert('Registration Failed')
+            }
+        })
+
+    }
+
+    setUsername = (data) => {
         this.setState({
-            currentStep: (this.state.currentStep - 1) > 0 ? this.state.currentStep - 1 : 0
-        });
-    };
+            username: data.target.value
+        })
+    }
+
+    setPassword = (data) => {
+        this.setState({
+            password: data.target.value
+        })
+    }
+
+    setFirstName = (data) => {
+        this.setState({
+            firstName: data.target.value
+        })
+    }
+
+    setEmail = (data) => {
+        this.setState({
+            email: data.target.value
+        })
+    }
+
+    setAddress = (data) => {
+        this.setState({
+            address: data.target.value
+        })
+    }
+
+
 
     steps = [
         {
@@ -164,8 +224,9 @@ class Registration extends Component {
                             {this.state.currentStep === 1 && (<div className="steps-content">
                                 <Form
                                     {...this.formItemLayout}
+                                    id="registrationForm"
                                     name="registrationForm"
-                                    onFinish={this.onFinish}
+                                    onFinish={this.register}
                                     initialValues={{
                                         residence: ['zhejiang', 'hangzhou', 'xihu'],
                                         prefix: '+084',
@@ -190,7 +251,8 @@ class Registration extends Component {
                                         hasFeedback
                                         required
                                     >
-                                        <Input />
+                                        <Input onChange={this.setUsername} />
+
                                     </Form.Item>
 
                                     <Form.Item
@@ -211,7 +273,7 @@ class Registration extends Component {
                                         hasFeedback
                                         required
                                     >
-                                        <Input.Password placeholder="1-50 characters" />
+                                        <Input.Password onChange={this.setPassword} placeholder="1-50 characters" />
                                     </Form.Item>
 
                                     <Form.Item
@@ -241,23 +303,21 @@ class Registration extends Component {
 
                                     <Form.Item
                                         name="firstname"
-                                        label="Firstname"
-                                        tooltip="What is your firstname?"
-                                        rules={[{ required: true, message: 'Please input your firstname!', whitespace: true }]}
+                                        label="Name"
+                                        tooltip="What is your name?"
+                                        rules={[{ required: true, message: 'Please input your name!', whitespace: true }]}
                                     >
-                                        <Input />
+                                        <Input onChange={this.setFirstName}/>
                                     </Form.Item>
 
                                     <Form.Item
-                                        name="lastname"
-                                        label="Lastname"
-                                        tooltip="What is your lastname?"
-                                        rules={[{ required: true, message: 'Please input your lastname!', whitespace: true }]}
-
+                                        name="address"
+                                        label="Address"
+                                        tooltip="What is your address?"
+                                        rules={[{ required: true, message: 'Please input your address!', whitespace: true }]}
                                     >
-                                        <Input />
-                                    </Form.Item>
-
+                                        <Input onChange={this.setAddress}/>
+                                    </Form.Item >
 
                                     <Form.Item
                                         name="email"
@@ -273,19 +333,21 @@ class Registration extends Component {
                                             },
                                         ]}
                                     >
-                                        <Input />
+                                        <Input onChange={this.setEmail}/>
                                     </Form.Item>
                                 </Form>
                             </div>)}
                             {this.state.currentStep === 2 && (<div className="steps-content">3</div>)}
 
                             <div className="steps-action">
-                                <Button style={{ margin: '0 8px' }} onClick={this.prev}>
-                                    Previous
-                                </Button>
-                                <Button type="primary" onClick={this.next}>
+
+                                {this.state.currentStep === 0 && <Button type="primary" onClick={this.next} disabled={!this.state.otpSuccess}>
                                     Next
-                                </Button>
+                                </Button>}
+                                {this.state.currentStep === 1 && <Button type="primary" form='registrationForm' htmlType='submit' disabled={!this.state.otpSuccess}>
+                                    Submit
+                                </Button>}
+
                             </div>
                         </div>
                     </div>
