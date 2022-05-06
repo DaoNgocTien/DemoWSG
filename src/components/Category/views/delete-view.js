@@ -3,6 +3,7 @@ import {
     Form,
     Input, Modal
 } from "antd";
+import axios from "axios";
 import React, { Component, memo } from "react";
 
 class DeleteModel extends Component {
@@ -16,8 +17,22 @@ class DeleteModel extends Component {
         });
     }
 
+    deleteCategory = id => {
+        axios({
+            url: `/categories/${id}`,
+            method: "DELETE",
+            withCredentials: true,
+        }).then((response) => {
+            if (response.status === 200) {
+                return this.props.deleteCategory();
+            }
+        }).catch(() => {
+            return this.props.deleteCategory();
+        });
+    }
+
     handleDeleteAndClose = () => {
-        this.props.deleteCategory(this.props.record?.id);
+        this.deleteCategory(this.props.record?.id);
         this.props.closeModal();
     };
 

@@ -50,16 +50,16 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.getAllCategory());
       await dispatch(productAction.getAllProduct());
     },
-    createCategory: async (record) => {
-      await dispatch(action.createCategory(record));
+    createCategory: async () => {
+      // await dispatch(action.createCategory(record));
       await dispatch(action.getAllCategory());
     },
-    updateCategory: async (record) => {
-      await dispatch(action.updateCategory(record));
+    updateCategory: async () => {
+      // await dispatch(action.updateCategory(record));
       await dispatch(action.getAllCategory());
     },
-    deleteCategory: async (id) => {
-      await dispatch(action.deleteCategory(id));
+    deleteCategory: async () => {
+      // await dispatch(action.deleteCategory(id));
       await dispatch(action.getAllCategory());
     },
   };
