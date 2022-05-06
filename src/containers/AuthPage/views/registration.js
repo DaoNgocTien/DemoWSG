@@ -53,27 +53,40 @@ class Registration extends Component {
     };
 
     sendOtpPhone = () => {
-        let verify = this.state.verify || new RecaptchaVerifier('recaptcha-container', {
-            'size': 'invisible'
-        }, auth);
-        this.setState({
-            verify: verify
-        })
-        console.log(this.state.phoneNumber)
         if (this.state.phoneNumber !== "") {
-            signInWithPhoneNumber(auth, this.state.phoneNumber, verify).then((result) => {
-                this.setState({
-                    otpResult: result
-                })
-            }).catch((err) => {
-                alert(err);
-            });
+
+            Axios({
+                url: `/users/${this.state.phoneNumber}`,
+                method: "GET",
+                withCredentials: true,
+            }).then(result => {
+                if (result.data.data.length > 0) {
+                    return alert('This phone number is existed!')
+                } else {
+                    let verify = this.state.verify || new RecaptchaVerifier('recaptcha-container', {
+                        'size': 'invisible'
+                    }, auth);
+                    this.setState({
+                        verify: verify
+                    })
+                    signInWithPhoneNumber(auth, this.state.phoneNumber, verify).then((result) => {
+                        this.setState({
+                            otpResult: result
+                        })
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                }
+            }).catch(error => {
+                console.log(error)
+            })
+
         }
     }
 
     setPhoneNumber = (data) => {
         this.setState({
-            phoneNumber: `+${data.target.value}`
+            phoneNumber: `+84${data.target.value}`
         })
     }
 
@@ -118,11 +131,11 @@ class Registration extends Component {
 
             }
         }).then(result => {
-            if (result.status===200 || result.status===204) {
+            if (result.status === 200 || result.status === 204) {
                 return window.location.replace('/login')
             }
-        }).catch((error)=>{
-            if(error){
+        }).catch((error) => {
+            if (error) {
                 return alert('Registration Failed')
             }
         })
@@ -177,6 +190,9 @@ class Registration extends Component {
             <div className="main_form_body">
                 <div className="main_form_body">
                     <h2>Registration</h2>
+                    <p className="create_account_title">Do not have an account yet?
+                        <a href="/login" className="create_account_navigation">Login</a>
+                    </p>
                     <br />
                     <div id="recaptcha-container">
                     </div>
@@ -194,18 +210,18 @@ class Registration extends Component {
                                             name="phone"
                                             rules={[{
                                                 type: "regexp",
-                                                pattern: /(84[3|5|7|8|9])+([0-9]{8})\b/,
+                                                pattern: /([3|5|7|8|9])+([0-9]{8})\b/,
                                                 message: "Phone number is not valid"
                                             },
                                             ({ getFieldValue }) => ({
                                                 validator(_, value) {
-                                                    if (!value || value.length !== 11) {
+                                                    if (!value || value.length !== 9) {
                                                         return Promise.reject(new Error('Phone number is not valid'));
                                                     }
                                                     return Promise.resolve();
                                                 },
                                             }),]}>
-                                            <Input style={{ width: '250px' }} placeholder="Phone Number" onChange={this.setPhoneNumber} />
+                                            <Input addonBefore="+84" style={{ width: '250px' }} placeholder="Phone Number" onChange={this.setPhoneNumber} />
                                         </Form.Item>
                                         <Button type="primary" htmlType='submit' >
                                             Send OTP
@@ -229,7 +245,6 @@ class Registration extends Component {
                                     onFinish={this.register}
                                     initialValues={{
                                         residence: ['zhejiang', 'hangzhou', 'xihu'],
-                                        prefix: '+084',
                                     }}
                                     scrollToFirstError
                                 >
@@ -307,7 +322,7 @@ class Registration extends Component {
                                         tooltip="What is your name?"
                                         rules={[{ required: true, message: 'Please input your name!', whitespace: true }]}
                                     >
-                                        <Input onChange={this.setFirstName}/>
+                                        <Input onChange={this.setFirstName} />
                                     </Form.Item>
 
                                     <Form.Item
@@ -316,7 +331,7 @@ class Registration extends Component {
                                         tooltip="What is your address?"
                                         rules={[{ required: true, message: 'Please input your address!', whitespace: true }]}
                                     >
-                                        <Input onChange={this.setAddress}/>
+                                        <Input onChange={this.setAddress} />
                                     </Form.Item >
 
                                     <Form.Item
@@ -333,7 +348,7 @@ class Registration extends Component {
                                             },
                                         ]}
                                     >
-                                        <Input onChange={this.setEmail}/>
+                                        <Input onChange={this.setEmail} />
                                     </Form.Item>
                                 </Form>
                             </div>)}

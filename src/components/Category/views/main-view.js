@@ -169,6 +169,7 @@ class CategoryUI extends Component {
       searchData,
       record,
       viewDetailButton,
+      editButton
     } = this.state;
 
     const { createCategory, updateCategory, deleteCategory } = this.props;
@@ -211,43 +212,53 @@ class CategoryUI extends Component {
             />
 
             <div style={{ marginBottom: 16 }}>
-              <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
+              <Row style={{ padding: "20px 0" }} gutter={[16, 0]}>
                 <Col span={12}>
                   <Input
                     prefix={<SearchOutlined />}
                     ref={this.searchSelf}
                     onChange={(e) => this.onChangeHandler(e)}
-                    placeholder="Search data"
+                    placeholder="Search for categories..."
                   />
                 </Col>
-                <Col span={3} offset={3}>
-                  <Button
-                    type="primary"
-                    onClick={() => this.start("openCreateModal")}
-                    disabled={!addNewButton}
-                    block
-                  >
-                    Add New
-                  </Button>
-                </Col>
-                <Col span={3}>
-                  <Link
-                    to={`/products/catalog?category=${selectedRowKeys[0]}`}
-                  >
-                    <Button type="primary" disabled={!viewDetailButton}>
-                      View Products
+                <Col>
+                  <Space size={3}>
+                    <Button
+                      type="primary"
+                      onClick={() => this.start("openCreateModal")}
+                      disabled={!addNewButton}
+                    >
+                      Add New
                     </Button>
-                  </Link>
-                </Col>
-                <Col span={3}>
-                  <Button
-                    type="danger"
-                    onClick={() => this.start("openDeleteModal")}
-                    disabled={!deleteButton}
-                    block
-                  >
-                    Delete
-                  </Button>
+                    <Link
+                      to={`/products/catalog?category=${selectedRowKeys[0]}`}
+                    >
+                      <Button type="primary" disabled={!viewDetailButton}>
+                        View Products
+                      </Button>
+                    </Link>
+                    <Button
+                      type="primary"
+                      onClick={() => this.start("openEditModal")}
+                      disabled={!editButton}
+                      style={{ width: 90 }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      type="danger"
+                      onClick={() => this.start("openDeleteModal")}
+                      disabled={!deleteButton}
+                      style={{ width: 90 }}
+                    >
+                      Delete
+                    </Button>
+                    {/* <span style={{ marginLeft: 8 }}>
+                    {selectedRowKeys.length > 0
+                      ? `Selected ${selectedRowKeys.length} items`
+                      : ""}
+                  </span> */}
+                  </Space>
                 </Col>
               </Row>
             </div>
@@ -262,7 +273,7 @@ class CategoryUI extends Component {
               }
               scroll={{ y: 350 }}
             />
-          </ div>
+          </div>
         }
       ></PageHeader>
     );
