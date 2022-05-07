@@ -54,24 +54,8 @@ const mapDispatchToProps = (dispatch) => {
       return window.location.reload();
     },
 
-    rejectOrder: async (
-      orderCode,
-      type,
-      description,
-      image,
-      orderId,
-      requester
-    ) => {
-      await dispatch(
-        action.rejectOrder(
-          orderCode,
-          type,
-          description,
-          image,
-          orderId,
-          requester
-        )
-      );
+    rejectOrder: async (orderCode) => {
+      await dispatch(action.getData(orderCode))
     },
   };
 };
