@@ -59,15 +59,12 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(campaignAction.getCampaign());
     },
     updateProduct: async (record) => {
-      // await dispatch(action.updateProduct(record));
       await dispatch(action.getOneProduct(record.id));
     },
     deleteProduct: async (id) => {
-      await dispatch(action.deleteProduct(id));
       await dispatch(action.getOneProduct(id));
     },
     activeProduct: async (id) => {
-      await dispatch(action.activeProduct(id));
       await dispatch(action.getOneProduct(id));
     },
   };

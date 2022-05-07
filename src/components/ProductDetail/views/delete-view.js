@@ -7,6 +7,7 @@ import {
   Modal,
   Select, Space, Upload
 } from "antd";
+import axios from "axios";
 import React, { Component, memo } from "react";
 class DeleteModal extends Component {
   state = {
@@ -15,25 +16,24 @@ class DeleteModal extends Component {
     previewTitle: "",
     fileList: undefined,
   };
-  handleUpdateAndClose = (data) => {
-    switch (this.props.record?.status) {
-      case "incampaign":
-        alert("This product in campaign cannot update");
-        break;
+  
 
-      default:
-        data.image =
-          this.state.fileList?.length === 0 && this.props.record
-            ? JSON.parse(this.props.record?.image)
-            : this.state.fileList;
-        this.props.updateProduct(data);
-        break;
-    }
+  deleteProduct = (id) => {
 
-    this.setState({
-      fileList: [],
-    });
-    this.props.closeModal();
+    axios({
+      url: `/products/${id}`,
+      method: "DELETE",
+      withCredentials: true,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return this.props.deleteProduct(id);
+        }
+      })
+      .catch(() => {
+        return this.props.deleteProduct(id);
+      });
+
   };
 
   handleCancel = () => {
@@ -82,38 +82,6 @@ class DeleteModal extends Component {
     this.setState({ fileList });
   };
 
-  onChangeHandler = (e) => {
-    let data = this.props.campaignList;
-    let searchString = e.target.value;
-    let searchList = data.filter((item) => {
-      return (
-        String(item.status)
-          .toUpperCase()
-          .includes(searchString.toUpperCase()) ||
-        String(item.description)
-          .toUpperCase()
-          .includes(searchString.toUpperCase()) ||
-        String(item.quantity)
-          .toUpperCase()
-          .includes(searchString.toUpperCase()) ||
-        String(item.maxquantity)
-          .toUpperCase()
-          .includes(searchString.toUpperCase()) ||
-        String(item.numorder)
-          .toUpperCase()
-          .includes(searchString.toUpperCase()) ||
-        String(item.advancefee)
-          .toUpperCase()
-          .includes(searchString.toUpperCase()) ||
-        String(item.price).toUpperCase().includes(searchString.toUpperCase())
-      );
-    });
-    this.setState({
-      displayData: searchList,
-      searchKey: searchString ?? "",
-    });
-  };
-
   handleDeleteAndClose = (data) => {
     switch (this.props.record?.status) {
       case "incampaign":
@@ -121,7 +89,7 @@ class DeleteModal extends Component {
         break;
 
       default:
-        this.props.deleteProduct(this.props.record?.id);
+        this.deleteProduct(this.props.record?.id);
         break;
     }
     this.props.closeModal();

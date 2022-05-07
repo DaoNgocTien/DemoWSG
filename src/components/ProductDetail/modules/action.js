@@ -24,46 +24,6 @@ const getOneProduct = (id) => {
   };
 };
 
-const deleteProduct = (id) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/products/${id}`,
-      method: "DELETE",
-      withCredentials: true,
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          // return window.location.reload();
-        }
-      })
-      .catch(() => {
-        return dispatch(getFailed());
-      });
-  };
-};
-
-const activeProduct = (id) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/products/active`,
-      method: "PUT",
-      withCredentials: true,
-      data: {
-        productId: id,
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          // return window.location.reload();
-        }
-      })
-      .catch(() => {
-        return dispatch(getFailed());
-      });
-  };
-};
 
 const getRequest = () => {
   return {
@@ -87,8 +47,6 @@ const getFailed = (err) => {
 
 const action = {
   getOneProduct: getOneProduct,
-  deleteProduct: deleteProduct,
-  activeProduct: activeProduct,
 };
 
 export default action;
