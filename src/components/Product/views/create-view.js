@@ -3,6 +3,7 @@ import {
   Button, Form,
   Input, InputNumber, Modal, Select, Space, Upload
 } from "antd";
+import axios from "axios";
 import React, { Component, memo } from "react";
 
 class CreatModal extends Component {
@@ -13,10 +14,25 @@ class CreatModal extends Component {
     fileList: [],
   };
   formRef = React.createRef();
+  createProduct = record => {
+    axios({
+      url: `/products/`,
+      method: "POST",
+      data: record,
+      withCredentials: true,
+    }).then((response) => {
+      if (response.status === 200) {
+        return this.props.createProduct();
+      }
+    })
+      .catch(() => {
+        return this.props.createProduct();
+      })
+  }
 
   handleCreateAndClose = (data) => {
     data.image = this.state.fileList;
-    this.props.createProduct(data);
+    this.createProduct(data);
     this.formRef.current.resetFields();
     this.props.closeModal();
   };
@@ -51,11 +67,12 @@ class CreatModal extends Component {
 
   handleChange = ({ fileList, file, event }) => {
     // 2. Read from response and show file link
+    console.log(fileList)
     fileList = fileList.map((file) => {
       if (file.response) {
         // Component will show file.url as link
-        file.url = file.response[0].url;
-        file.name = file.response[0].name;
+        file.url = file.response.url;
+        file.name = file.response.fileName;
         file.thumbUrl = null;
       }
       return file;

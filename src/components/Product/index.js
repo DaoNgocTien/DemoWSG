@@ -54,8 +54,8 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(action.getAllProduct(category));
       await dispatch(orderAction.getOrder());
     },
-    createProduct: async (record) => {
-      await dispatch(action.createProduct(record));
+    createProduct: async () => {
+      // await dispatch(action.createProduct(record));
       await dispatch(action.getAllProduct());
     },
   };
