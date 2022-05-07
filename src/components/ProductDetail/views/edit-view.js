@@ -5,6 +5,7 @@ import {
   InputNumber,
   Modal, Select, Space, Upload
 } from "antd";
+import axios from "axios";
 import React, { Component, memo } from "react";
 
 
@@ -16,12 +17,36 @@ class UpdateModal extends Component {
     fileList: undefined,
   };
 
+  updateProduct = (record) => {
+    axios({
+      url: `/products/${record.id}`,
+      method: "PUT",
+      data: {
+        name: record.name,
+        retailPrice: record?.retailPrice,
+        quantity: record?.quantity,
+        description: record?.description,
+        categoryId: record?.categoryId,
+        image: record?.image,
+      },
+      withCredentials: true,
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return this.props.updateProduct(record);
+        }
+      })
+      .catch(() => {
+        return this.props.updateProduct(record);
+      });
+  };
+
   handleUpdateAndClose = (data) => {
     data.image =
       this.state.fileList?.length === 0 && this.props.record
         ? JSON.parse(this.props.record?.image)
         : this.state.fileList;
-    this.props.updateProduct(data);
+    this.updateProduct(data);
     this.setState({
       fileList: [],
     });
@@ -62,8 +87,8 @@ class UpdateModal extends Component {
   handleChange = ({ fileList }) => {
     fileList = fileList.map((file) => {
       if (file.response) {
-        file.url = file.response[0].url;
-        file.name = file.response[0].name;
+        file.url = file.response.url;
+        file.name = file.response.fileName;
         file.thumbUrl = null;
       }
       return file;

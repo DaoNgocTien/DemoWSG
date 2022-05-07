@@ -112,8 +112,8 @@ class ProfileTab extends Component {
     this.props.onChangeUpdateProfile();
     fileList = fileList.map((file) => {
       if (file.response) {
-        file.url = file.response[0].url;
-        file.name = file.response[0].name;
+        file.url = file.response.url;
+        file.name = file.response.fileName;
         file.thumbUrl = null;
       }
       return file;

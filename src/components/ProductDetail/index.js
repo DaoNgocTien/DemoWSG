@@ -23,7 +23,7 @@ class ProductPage extends Component {
 
   render() {
     const { loading, data } = this.props;
-    if (loading) return <Loader />;
+    if (loading) return <></>;
     return (
       <>
         <ProductUI
@@ -59,7 +59,7 @@ const mapDispatchToProps = (dispatch) => {
       await dispatch(campaignAction.getCampaign());
     },
     updateProduct: async (record) => {
-      await dispatch(action.updateProduct(record));
+      // await dispatch(action.updateProduct(record));
       await dispatch(action.getOneProduct(record.id));
     },
     deleteProduct: async (id) => {

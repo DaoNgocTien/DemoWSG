@@ -24,51 +24,6 @@ const getOneProduct = (id) => {
   };
 };
 
-const createProduct = (record) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/products/`,
-      method: "POST",
-      data: record,
-      withCredentials: true,
-    })
-      .then(() => {
-      })
-      .catch(() => {
-        return dispatch(getFailed());
-      })
-      .finally(() => {});
-  };
-};
-
-const updateProduct = (record) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/products/${record.id}`,
-      method: "PUT",
-      data: {
-        name: record.name,
-        retailPrice: record?.retailPrice,
-        quantity: record?.quantity,
-        description: record?.description,
-        categoryId: record?.categoryId,
-        image: record?.image,
-      },
-      withCredentials: true,
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          // return window.location.reload();
-        }
-      })
-      .catch(() => {
-        return dispatch(getFailed());
-      });
-  };
-};
-
 const deleteProduct = (id) => {
   return async (dispatch) => {
     dispatch(getRequest());
@@ -132,8 +87,6 @@ const getFailed = (err) => {
 
 const action = {
   getOneProduct: getOneProduct,
-  createProduct: createProduct,
-  updateProduct: updateProduct,
   deleteProduct: deleteProduct,
   activeProduct: activeProduct,
 };

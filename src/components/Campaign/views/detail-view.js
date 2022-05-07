@@ -370,7 +370,7 @@ class OrdersInCampaign extends React.Component {
                       placeholder="Search data"
                     />
                   </Col>
-                  <Col span={3} offset={9}>
+                  <Col span={3}>
                       <Button
                         type="danger"
                         onClick={() => this.openModal()}
