@@ -9,6 +9,7 @@ import {
   Table,
   Upload
 } from "antd";
+import axios from "axios";
 import React, { Component, memo } from "react";
 
 class RejectModal extends Component {
@@ -27,25 +28,60 @@ class RejectModal extends Component {
 
   handleRejectOrderAndClose = (data) => {
     this.props.record.campaignid != null
-      ? this.props.rejectOrder(
-          this.props.record.ordercode,
-          "campaign",
-          data.reason,
-          this.state.fileList,
-          this.props.record.id,
-          this.props.record.campaignid,
-          this.state.requester
-        )
-      : this.props.rejectOrder(
-          this.props.record.ordercode,
-          "retail",
-          data.reason,
-          this.state.fileList,
-          this.props.record.id,
-          this.state.requester
-        );
+      ? this.rejectOrder(
+        this.props.record.ordercode,
+        "campaign",
+        data.reason,
+        this.state.fileList,
+        this.props.record.id,
+        this.props.record.campaignid,
+        this.state.requester
+      )
+      : this.rejectOrder(
+        this.props.record.ordercode,
+        "retail",
+        data.reason,
+        this.state.fileList,
+        this.props.record.id,
+        this.state.requester
+      );
 
     this.props.closeModal();
+  };
+
+  rejectOrder = async (
+    orderCode,
+    type,
+    description,
+    image,
+    orderId,
+    requester
+  ) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    let reject = {
+      orderCode: orderCode,
+      type: type,
+      description:
+        "has been cancelled by " + user.rolename + " for: " + description,
+      image: image,
+      orderId: orderId,
+      supplierId: user.id,
+      cancelLinkRequestor: requester,
+    };
+
+    try {
+      await Promise.all([
+        axios({
+          url: `/order/status/supplier/cancel`,
+          method: "PUT",
+          data: reject,
+          withCredentials: true,
+        }),
+      ]);
+      return this.props.rejectOrder(orderCode)
+    } catch (error) {
+      return this.props.rejectOrder(orderCode)
+    }
   };
 
   handleCancel = () => {
