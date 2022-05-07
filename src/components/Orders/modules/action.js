@@ -95,40 +95,6 @@ const updateStatusOrder = (data, image) => {
   };
 };
 
-const rejectOrder = (orderCode, type, description, image, orderId, requester) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  let reject = {
-    orderCode: orderCode,
-    type: type,
-    description: "has been cancelled by " + user.rolename + " for: " + description,
-    image: image,
-    orderId: orderId,
-    supplierId: user.id,
-    cancelLinkRequestor: requester
-  };
-
-  return async (dispatch) => {
-    dispatch(getRequest());
-    try {
-      const [rejectResponse, orders, campaigns] = await Promise.all([
-        Axios({
-          url: `/order/status/supplier/cancel`,
-          method: "PUT",
-          data: reject,
-          withCredentials: true,
-        }),
-      ]);
-      return dispatch(
-        getSuccess({
-          orders: [],
-        })
-      );
-    } catch (error) {
-      return dispatch(getFailed(error));
-    }
-  };
-};
-
 const getOrderByCampaignId = (campaignId) => {
   return async (dispatch) => {
     try {
@@ -225,7 +191,6 @@ const storeRecord = (data) => {
 const action = {
   getOrder,
   updateStatusOrder,
-  rejectOrder,
   getOrderByCampaignId,
   getOrderById,
 };

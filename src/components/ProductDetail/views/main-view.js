@@ -8,6 +8,7 @@ import {
   Table,
   Tag
 } from "antd";
+import axios from "axios";
 import moment from "moment";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
@@ -154,7 +155,22 @@ class ProductUI extends Component {
   };
 
   activeProduct = (id) => {
-    return this.props.activeProduct(id);
+    axios({
+      url: `/products/active`,
+      method: "PUT",
+      withCredentials: true,
+      data: {
+        productId: id,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return this.props.activeProduct(id);
+        }
+      })
+      .catch(() => {
+        return this.props.activeProduct(id);
+      });
   };
 
   render() {
