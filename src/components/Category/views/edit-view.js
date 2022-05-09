@@ -6,14 +6,8 @@ import {
 import axios from "axios";
 import React, { Component, memo } from "react";
 class EditModal extends Component {
-    state = { record: this.props.record };
-    formRef = React.createRef();
 
     componentDidMount() {
-        this.formRef.current.setFieldsValue({
-            id: this.props.record?.id,
-            categoryname: this.props.record?.categoryname,
-        });
     }
 
     updateCategory = (record) => {
@@ -33,7 +27,6 @@ class EditModal extends Component {
 
     handleEditAndClose = (data) => {
         this.updateCategory(data);
-        this.formRef.current.resetFields();
         this.props.closeModal();
     };
 
@@ -42,13 +35,12 @@ class EditModal extends Component {
     };
 
     render() {
-        const { openModal, record, } = this.props;
+        const { openModal, record } = this.props;
         return (
             <>
                 <Form
                     key={record?.key}
                     id="editCategoryForm"
-                    ref={this.formRef}
                     onFinish={this.handleEditAndClose}
                     layout="vertical"
                 >

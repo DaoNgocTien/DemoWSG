@@ -5,22 +5,31 @@ import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 const getOneProduct = (id) => {
   return async (dispatch) => {
     dispatch(getRequest());
-    Axios({
-      url: `/products/${id}`,
-      method: "GET",
-      withCredentials: true,
-      exposedHeaders: ["set-cookie"],
-    })
-      .then((result) => {
-        if (result.status === 200) {
-          const data = result.data.data;
-          dispatch(categoryAction.getAllCategory());
-          return dispatch(getSuccess(data));
-        }
-      })
-      .catch((err) => {
-        return dispatch(getFailed(err));
-      });
+    try {
+      const [product, campaigns, categories] = await Promise.all([Axios({
+        url: `/products/${id}`,
+        method: "GET",
+        withCredentials: true,
+        exposedHeaders: ["set-cookie"],
+      }), Axios({
+        url: `/campaigns/All?productId=${id}`,
+        method: "GET",
+        withCredentials: true,
+        exposedHeaders: ["set-cookie"],
+      }), Axios({
+        url: `/categories/All`,
+        method: "GET",
+        withCredentials: true,
+      })])
+
+
+      return dispatch(getSuccess({
+        product: product.data.data, campaigns: campaigns.data.data, categories: categories.data.data
+      }));
+
+    } catch (error) {
+      return dispatch(getFailed(error));
+    }
   };
 };
 

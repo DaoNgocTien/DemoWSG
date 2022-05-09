@@ -1,3 +1,4 @@
+import { LocalShipping, OpenInNew, PlayCircleOutline } from "@material-ui/icons";
 import {
   Button,
   Col,
@@ -12,6 +13,7 @@ import moment from "moment";
 import React from "react";
 import NumberFormat from "react-number-format";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import action from "../../Orders/modules/action";
 import RejectModal from "../../Orders/views/reject-view";
 import { default as campaignAction } from "../modules/action";
@@ -169,11 +171,51 @@ class OrdersInCampaign extends React.Component {
       },
     },
     {
-      title: "Notes",
-      width: 300,
-      render: (_text, object, _index) => {
-        return object.details[0].notes;
+      title: "",
+      width: 130,
+      render: (object) => {
+        return (
+          <>
+            <Link to={`/orders/${object.ordercode}`}>
+              <Button
+                icon={<OpenInNew />}
+                type="default"
+                shape="circle"
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  background: "none",
+                }}
+              />
+            </Link>
+            <Button
+              onClick={() => this.changeStatus(object, [])}
+              icon={<PlayCircleOutline />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+              hidden={object.status !== "created"}
+            />
+            <Button
+              onClick={() => this.openUploadModal(object)}
+              icon={<LocalShipping />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+              hidden={object.status !== "processing"}
+            />
+          </>
+        );
       },
+      fixed: "right",
     },
   ];
 
@@ -230,11 +272,13 @@ class OrdersInCampaign extends React.Component {
       title: "Products Up To",
       dataIndex: "quantity",
       key: "quantity",
+      width: 50
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      width: 50
     },
   ];
 
@@ -363,25 +407,25 @@ class OrdersInCampaign extends React.Component {
                 campaignId={record?.id}
               />
               <div style={{ marginBottom: 16 }}>
-              <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
-                <Col span={12}>
+                <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
+                  <Col span={12}>
                     <Input
                       onChange={(e) => this.onChangeHandler(e)}
                       placeholder="Search data"
                     />
                   </Col>
                   <Col span={3}>
-                      <Button
-                        type="danger"
-                        onClick={() => this.openModal()}
-                        disabled={!rejectButton}
-                        hidden={record?.status !== "active"}
-                        block
-                      >
-                        Reject
-                      </Button>
+                    <Button
+                      type="danger"
+                      onClick={() => this.openModal()}
+                      disabled={!rejectButton}
+                      hidden={record?.status !== "active"}
+                      block
+                    >
+                      Reject
+                    </Button>
                   </Col>
-                  
+
                 </Row>
               </div>
               <Table
@@ -418,25 +462,9 @@ class OrdersInCampaign extends React.Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Type">
-                <Popover
-                  content={
-                    <>
-                      <Table
-                        columns={this.stepCloumns}
-                        dataSource={
-                          record?.range ? JSON.parse(record?.range) : []
-                        }
-                      />
-                    </>
-                  }
-                  trigger="click"
-                  visible={this.state.stepVisible}
-                  onVisibleChange={this.handleVisibleChange}
-                >
-                  <Tag color={!record?.isshare ? "blue" : "green"}>
-                    {!record?.isshare ? "SINGLE" : "SHARED"}
-                  </Tag>
-                </Popover>
+                <Tag color={!record?.isshare ? "blue" : "green"}>
+                  {!record?.isshare ? "SINGLE" : "SHARED"}
+                </Tag>
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Status">
@@ -484,7 +512,16 @@ class OrdersInCampaign extends React.Component {
               <Descriptions.Item label="Number of Order">
                 {record?.numorder}
               </Descriptions.Item>
-
+              {record?.isshare && (<Descriptions.Item label="Range" span={2}>
+                <Table
+                  columns={this.stepCloumns}
+                  dataSource={
+                    record?.range ? JSON.parse(record?.range) : []
+                  }
+                  size="small"
+                  pagination={false}
+                />
+              </Descriptions.Item>)}
               <Descriptions.Item label="Product Image" span={2}>
                 {record?.productimage ? (
                   JSON.parse(record?.productimage)?.map((image) => {
