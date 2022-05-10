@@ -109,7 +109,6 @@ class InformationModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-      fix:"right"
     },
   ];
 

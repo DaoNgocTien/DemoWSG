@@ -373,18 +373,26 @@ class CreatModal extends Component {
                 tooltip="In single campaign, quantity is the minimum amount of products customer has to buy to end campaign successfully.
                 In shared campaign, quantity is the minimum product customer has to order to join the campaign, default 1"
                 rules={[
-                  {
-                    required: true,
-                    message: "Quantity is required!",
-                  },
+                  // {
+                  //   required: true,
+                  //   message: "Quantity is required!",
+                  // },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       const min = switchState ? 0 : 9;
                       const maxQuantity = getFieldValue("maxQuantity");
+                      if (!value || value === "") {
+                        return Promise.reject(
+                          new Error(
+                            "Quantity is required!"
+                          )
+                        );
+                      }
+
                       if (maxQuantity < value) {
                         return Promise.reject(
                           new Error(
-                            "Quantity can not bigger than max quantity!"
+                            "Quantity cannot be more than max quantity!"
                           )
                         );
                       }
@@ -420,16 +428,19 @@ class CreatModal extends Component {
                 initialValue={10}
                 label="Max Quantity"
                 rules={[
-                  {
-                    required: true,
-                    message: "Max quantity is required!",
-                  },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
+                      if (!value || value === "") {
+                        return Promise.reject(
+                          new Error(
+                            "Max quantity is required!"
+                          )
+                        );
+                      }
                       if (getFieldValue("quantity") > value) {
                         return Promise.reject(
                           new Error(
-                            "Maximum quantity can not lesser than quantity!"
+                            "Max quantity cannot be less than quantity!"
                           )
                         );
                       }
