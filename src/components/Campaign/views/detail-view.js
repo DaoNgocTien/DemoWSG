@@ -82,7 +82,7 @@ class OrdersInCampaign extends React.Component {
         return index + 1;
       },
       width: 70,
-      fixed: "left",
+      // fixed: "left",
     },
     {
       title: "Customer Name",
@@ -90,7 +90,7 @@ class OrdersInCampaign extends React.Component {
       render: (_text, object, _index) => {
         return object.customerfirstname + " " + object.customerlastname;
       },
-      fixed: "left",
+      // fixed: "left",
     },
     {
       title: "Status",
@@ -100,7 +100,7 @@ class OrdersInCampaign extends React.Component {
         return <Tag>{data.toUpperCase()}</Tag>;
       },
       width: 100,
-      fixed: "left",
+      // fixed: "left",
     },
     {
       title: "Created At",
@@ -278,7 +278,18 @@ class OrdersInCampaign extends React.Component {
       title: "Price",
       dataIndex: "price",
       key: "price",
-      width: 50
+      width: 50,
+      render: (_text, object) => {
+        return (
+          <NumberFormat
+            value={object.price}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
   ];
 
