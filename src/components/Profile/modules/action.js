@@ -127,7 +127,7 @@ const checkingPhoneNumber = (message) => {
 const updateProfile = (user) => {
   return async (dispatch) => {
     try {
-      dispatch(getRequest());
+      // dispatch(getRequest());
 
       const [updateResponse] = await Promise.all([
         Axios({
@@ -140,15 +140,15 @@ const updateProfile = (user) => {
       ]);
 
       if (updateResponse.status === 200) {
-        return dispatch(
-          getPhoneValidation({
-            changeProfileMessage: "Profile changed successfully!",
-          })
-        );
+        // return dispatch(
+        //   getPhoneValidation({
+        //     changeProfileMessage: "Profile changed successfully!",
+        //   })
+        // );
       }
-      return dispatch(getFailed());
+      // return dispatch(getFailed());
     } catch (error) {
-      return dispatch(getFailed());
+      // return dispatch(getFailed());
     }
   };
 };

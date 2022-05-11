@@ -1,6 +1,10 @@
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import {
-    Button, Form, Input, Space, Tag, Tooltip, Steps
+    Button,
+    Form,
+    Input,
+    Steps,
+    AutoComplete
 } from "antd";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -26,53 +30,68 @@ class Registration extends Component {
             firstName: "",
             email: "",
             roleName: "Supplier",
-            address: ""
+            address: "",
+            addressByDelivery: {}
         };
     }
 
     formItemLayout = {
         labelCol: {
-            span: 6,
+            span: 6
         },
         wrapperCol: {
-            span: 14,
-        },
+            span: 14
+        }
     };
 
     tailFormItemLayout = {
         wrapperCol: {
             xs: {
                 span: 24,
-                offset: 0,
+                offset: 0
             },
             sm: {
                 span: 16,
-                offset: 8,
-            },
-        },
+                offset: 8
+            }
+        }
     };
+
+    componentDidMount() {
+        axios({
+            url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
+            method: 'GET',
+            headers: {
+                token: "73457c0b-d0f5-11ec-ac32-0e0f5adc015a"
+            }
+        }).then(rs => {
+            rs.data.data = rs.data.data.map(element => {
+                return {
+                    value: element.ProvinceName,
+                    ...element
+                }
+            })
+            this.setState({
+                addressByDelivery: {
+                    province: rs.data.data
+                }
+            })
+        })
+    }
 
     sendOtpPhone = () => {
         if (this.state.phoneNumber !== "") {
 
-            Axios({
-                url: `/users/${this.state.phoneNumber}`,
-                method: "GET",
-                withCredentials: true,
-            }).then(result => {
+            Axios({ url: `/users/${this.state.phoneNumber}`, method: "GET", withCredentials: true }).then(result => {
                 if (result.data.data.length > 0) {
                     return alert('This phone number is existed!')
                 } else {
                     let verify = this.state.verify || new RecaptchaVerifier('recaptcha-container', {
                         'size': 'invisible'
                     }, auth);
-                    this.setState({
-                        verify: verify
-                    })
+                    this.setState({ verify: verify })
                     signInWithPhoneNumber(auth, this.state.phoneNumber, verify).then((result) => {
-                        this.setState({
-                            otpResult: result
-                        })
+                        this.setState({ otpResult: result })
                     }).catch((err) => {
                         console.log(err);
                     });
@@ -85,27 +104,26 @@ class Registration extends Component {
     }
 
     setPhoneNumber = (data) => {
-        this.setState({
-            phoneNumber: `+84${data.target.value}`
-        })
+        this.setState({ phoneNumber: `+84${data.target.value}` })
     }
 
     setOtp = (data) => {
-        this.setState({
-            otp: data.target.value
-        })
+        this.setState({ otp: data.target.value })
     }
 
     confirmOtp = () => {
-        this.state.otpResult.confirm(this.state.otp).then((result) => {
-            this.setState({
-                otpSuccess: true
-            });
-            return alert("OTP Success");
-        }).catch((err) => {
-            console.log(err)
-            return alert("Incorrect code");
-        })
+        this
+            .state
+            .otpResult
+            .confirm(this.state.otp)
+            .then((result) => {
+                this.setState({ otpSuccess: true });
+                return alert("OTP Success");
+            })
+            .catch((err) => {
+                console.log(err)
+                return alert("Incorrect code");
+            })
     }
 
     next = () => {
@@ -114,75 +132,150 @@ class Registration extends Component {
         });
     };
 
-
     register = () => {
+        console.log(this.state)
         Axios({
-            url: `/users/register`,
-            method: "POST",
-            withCredentials: true,
-            data: {
-                username: this.state.username,
-                password: this.state.password,
-                firstName: this.state.firstName,
-                email: this.state.email,
-                address: this.state.address,
-                phone: this.state.phoneNumber,
-                roleName: this.state.roleName,
-
-            }
+            url: `/users/register`, method: "POST", withCredentials:
+                true, data: {
+                    username: this.state.username, password:
+                        this.state.password, firstName: this.state.firstName, email:
+                        this.state.email, address: this.state.address, phone:
+                        this.state.phoneNumber, roleName: this.state.roleName,
+                }
         }).then(result => {
             if (result.status === 200 || result.status === 204) {
                 return window.location.replace('/login')
             }
         }).catch((error) => {
-            if (error) {
-                return alert('Registration Failed')
-            }
+            if (error) { return alert('Registration Failed') }
         })
 
     }
 
     setUsername = (data) => {
-        this.setState({
-            username: data.target.value
-        })
+        this.setState({ username: data.target.value })
     }
 
     setPassword = (data) => {
-        this.setState({
-            password: data.target.value
-        })
+        this.setState({ password: data.target.value })
     }
 
     setFirstName = (data) => {
-        this.setState({
-            firstName: data.target.value
-        })
+        this.setState({ firstName: data.target.value })
     }
 
     setEmail = (data) => {
-        this.setState({
-            email: data.target.value
-        })
+        this.setState({ email: data.target.value })
     }
 
-    setAddress = (data) => {
-        this.setState({
-            address: data.target.value
-        })
+    setProvince = (data, _) => {
+        if (_) {
+
+            this.setState({
+                address: {
+                    province: {
+                        provinceId: _.ProvinceID,
+                        provinceName: _.ProvinceName
+                    }
+                }
+            })
+            axios({
+                url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district',
+                method: 'POSt',
+                headers: {
+                    token: "73457c0b-d0f5-11ec-ac32-0e0f5adc015a"
+                },
+                data: {
+                    province_id: parseInt(_.ProvinceID)
+                }
+            }).then(rs => {
+                rs.data.data = rs.data.data.map(element => {
+                    return {
+                        value: element.DistrictName,
+                        ...element
+                    }
+                })
+
+                this.setState({
+                    addressByDelivery: {
+                        ...this.state.addressByDelivery,
+                        district: rs.data.data
+                    }
+                })
+            })
+        }
+    }
+    setDistrict = (data, _) => {
+        if (_) {
+
+            this.setState({
+                address: {
+                    ...this.state.address,
+                    district: {
+                        districtId: _.DistrictID,
+                        districtName: _.DistrictName
+                    }
+                }
+            })
+            axios({
+                url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward',
+                method: 'POSt',
+                headers: {
+                    token: "73457c0b-d0f5-11ec-ac32-0e0f5adc015a"
+                },
+                data: {
+                    district_id: parseInt(_.DistrictID)
+                }
+            }).then(rs => {
+                rs.data.data = rs.data.data.map(element => {
+                    return {
+                        value: element.WardName,
+                        ...element
+                    }
+                })
+
+                this.setState({
+                    addressByDelivery: {
+                        ...this.state.addressByDelivery,
+                        ward: rs.data.data
+                    }
+                })
+            })
+        }
     }
 
+    setWard = (data, _) => {
+        if (_) {
+            this.setState({
+                address: {
+                    ...this.state.address,
+                    ward: {
+                        wardId: _.WardCode,
+                        wardName: _.WardName
+                    }
+                }
+            })
+        }
+    }
 
-
+    setStreet = (data, _) => {
+        this.setState({
+            address: {
+                ...this.state.address,
+                street: {
+                    streetName: data.target.value
+                }
+            }
+        })
+    }
     steps = [
         {
             title: 'Validation Phone',
-            content: 'First-content',
-        },
-        {
-            title: 'Register Infomation',
-            content: 'Second-content',
-        },
+            content: 'First-content'
+        }, {
+            title: 'Register Information',
+            content: 'Second-content'
+        }
     ];
 
     render() {
@@ -194,172 +287,270 @@ class Registration extends Component {
                         <a href="/login" className="create_account_navigation">Login</a>
                     </p>
                     <br />
-                    <div id="recaptcha-container">
-                    </div>
+                    <div id="recaptcha-container"></div>
                     <div className="form__wrapper">
                         <div className="register__form__container">
                             <Steps current={this.state.currentStep} progressDot>
-                                {this.steps.map(item => (
-                                    <Steps.Step key={item.title} title={item.title} />
-                                ))}
+                                {this
+                                    .steps
+                                    .map(item => (<Steps.Step key={item.title} title={item.title} />))}
                             </Steps>
-                            {this.state.currentStep === 0 && (<div className="steps-content">
-                                <Form name="set_phone" onFinish={this.sendOtpPhone}>
-                                    <Input.Group compact>
+                            {this.state.currentStep === 0 && (
+                                <div className="steps-content">
+                                    <Form name="set_phone" onFinish={this.sendOtpPhone}>
+                                        <Input.Group compact>
+                                            <Form.Item
+                                                name="phone"
+                                                rules={[
+                                                    {
+                                                        type: "regexp",
+                                                        pattern: /([3|5|7|8|9])+([0-9]{8})\b/,
+                                                        message: "Phone number is not valid"
+                                                    },
+                                                    ({ getFieldValue }) => ({
+                                                        validator(_, value) {
+                                                            if (!value || value.length !== 9) {
+                                                                return Promise.reject(new Error('Phone number is not valid'));
+                                                            }
+                                                            return Promise.resolve();
+                                                        }
+                                                    })
+                                                ]}>
+                                                <Input
+                                                    addonBefore="+84"
+                                                    style={{
+                                                        width: '250px'
+                                                    }}
+                                                    placeholder="Phone Number"
+                                                    onChange={this.setPhoneNumber} />
+                                            </Form.Item>
+                                            <Button type="primary" htmlType='submit'>
+                                                Send OTP
+                                            </Button>
+                                        </Input.Group>
+
+                                        <Input.Group compact>
+                                            <Input
+                                                style={{
+                                                    width: '230px'
+                                                }}
+                                                placeholder="OTP"
+                                                onChange={this.setOtp} />
+                                            <Button type="primary" onClick={this.confirmOtp}>
+                                                Confirm OTP
+                                            </Button>
+                                        </Input.Group>
+
+                                    </Form>
+                                </div>
+                            )}
+                            {this.state.currentStep === 1 && (
+                                <div className="steps-content">
+                                    <Form
+                                        {...this.formItemLayout}
+                                        id="registrationForm"
+                                        name="registrationForm"
+                                        onFinish={this.register}
+                                        initialValues={{
+                                            residence: ['zhejiang', 'hangzhou', 'xihu']
+                                        }}
+                                        scrollToFirstError>
+
                                         <Form.Item
-                                            name="phone"
-                                            rules={[{
-                                                type: "regexp",
-                                                pattern: /([3|5|7|8|9])+([0-9]{8})\b/,
-                                                message: "Phone number is not valid"
-                                            },
-                                            ({ getFieldValue }) => ({
-                                                validator(_, value) {
-                                                    if (!value || value.length !== 9) {
-                                                        return Promise.reject(new Error('Phone number is not valid'));
-                                                    }
-                                                    return Promise.resolve();
-                                                },
-                                            }),]}>
-                                            <Input addonBefore="+84" style={{ width: '250px' }} placeholder="Phone Number" onChange={this.setPhoneNumber} />
+                                            name="username"
+                                            label="Username"
+                                            rules={[
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+                                                        if (value.length > 0 && value.length <= 50) {
+                                                            return Promise.resolve();
+                                                        }
+
+                                                        return Promise.reject(new Error('Username is required, length is 1-50 characters!'));
+                                                    },
+                                                }),
+                                            ]}
+                                            hasFeedback
+                                            required
+                                        >
+                                            <Input onChange={this.setUsername} />
+
                                         </Form.Item>
-                                        <Button type="primary" htmlType='submit' >
-                                            Send OTP
-                                        </Button>
-                                    </Input.Group>
 
-                                    <Input.Group compact>
-                                        <Input style={{ width: '230px' }} placeholder="OTP" onChange={this.setOtp} />
-                                        <Button type="primary" onClick={this.confirmOtp} >
-                                            Confirm OTP
-                                        </Button>
-                                    </Input.Group>
+                                        <Form.Item
+                                            name="password"
+                                            label="Password"
+                                            rules={[
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
 
-                                </Form>
-                            </div>)}
-                            {this.state.currentStep === 1 && (<div className="steps-content">
-                                <Form
-                                    {...this.formItemLayout}
-                                    id="registrationForm"
-                                    name="registrationForm"
-                                    onFinish={this.register}
-                                    initialValues={{
-                                        residence: ['zhejiang', 'hangzhou', 'xihu'],
-                                    }}
-                                    scrollToFirstError
-                                >
+                                                        if (value.length > 0 && value.length <= 50) {
+                                                            return Promise.resolve();
+                                                        }
 
-                                    <Form.Item
-                                        name="username"
-                                        label="Username"
-                                        rules={[
-                                            ({ getFieldValue }) => ({
-                                                validator(_, value) {
-                                                    if (value.length > 0 && value.length <= 50) {
-                                                        return Promise.resolve();
-                                                    }
+                                                        return Promise.reject(new Error('Password is required, length is 1-50 characters!'));
+                                                    },
+                                                }),
+                                            ]}
+                                            hasFeedback
+                                            required
+                                        >
+                                            <Input.Password onChange={this.setPassword} placeholder="1-50 characters" />
+                                        </Form.Item>
 
-                                                    return Promise.reject(new Error('Username is required, length is 1-50 characters!'));
+                                        <Form.Item
+                                            name="confirm"
+                                            label="Confirm Password"
+                                            dependencies={['password']}
+                                            hasFeedback
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: 'Please confirm your password!',
                                                 },
-                                            }),
-                                        ]}
-                                        hasFeedback
-                                        required
-                                    >
-                                        <Input onChange={this.setUsername} />
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+                                                        if (!value || getFieldValue('password') === value) {
+                                                            return Promise.resolve();
+                                                        }
 
-                                    </Form.Item>
+                                                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                                    },
+                                                }),
+                                            ]}
 
-                                    <Form.Item
-                                        name="password"
-                                        label="Password"
-                                        rules={[
-                                            ({ getFieldValue }) => ({
-                                                validator(_, value) {
+                                        >
+                                            <Input.Password placeholder="1-50 characters" />
+                                        </Form.Item>
 
-                                                    if (value.length > 0 && value.length <= 50) {
-                                                        return Promise.resolve();
-                                                    }
+                                        <Form.Item
+                                            name="firstname"
+                                            label="Name"
+                                            tooltip="What is your name?"
+                                            rules={[{ required: true, message: 'Please input your name!', whitespace: true }]}
+                                        >
+                                            <Input onChange={this.setFirstName} />
+                                        </Form.Item>
 
-                                                    return Promise.reject(new Error('Password is required, length is 1-50 characters!'));
+                                        <Form.Item
+                                            name="email"
+                                            label="E-mail"
+                                            rules={[
+                                                {
+                                                    type: 'email',
+                                                    message: 'The input is not valid E-mail!',
                                                 },
-                                            }),
-                                        ]}
-                                        hasFeedback
-                                        required
-                                    >
-                                        <Input.Password onChange={this.setPassword} placeholder="1-50 characters" />
-                                    </Form.Item>
-
-                                    <Form.Item
-                                        name="confirm"
-                                        label="Confirm Password"
-                                        dependencies={['password']}
-                                        hasFeedback
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Please confirm your password!',
-                                            },
-                                            ({ getFieldValue }) => ({
-                                                validator(_, value) {
-                                                    if (!value || getFieldValue('password') === value) {
-                                                        return Promise.resolve();
-                                                    }
-
-                                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                                {
+                                                    required: true,
+                                                    message: 'Please input your E-mail!',
                                                 },
-                                            }),
-                                        ]}
+                                            ]}
+                                        >
+                                            <Input onChange={this.setEmail} />
+                                        </Form.Item>
 
-                                    >
-                                        <Input.Password placeholder="1-50 characters" />
-                                    </Form.Item>
+                                        <Form.Item
+                                            name="address"
+                                            label="Address"
+                                            tooltip="What is your address?"
+                                        // rules={[{
+                                        //     required: true,
+                                        //     message: 'Please input your address!',
+                                        //     whitespace: true
+                                        // }]}
+                                        >
+                                            <Input.Group >
+                                                <Form.Item
+                                                    name="province"
+                                                    label="Province"
+                                                    // noStyle
+                                                    rules={[{
+                                                        required: true,
+                                                        message: 'Province is required'
+                                                    }]}
+                                                >
+                                                    <AutoComplete
+                                                        style={{ width: 200, float: "right" }}
+                                                        options={this.state.addressByDelivery.province || []}
+                                                        placeholder=""
+                                                        filterOption={(inputValue, option) =>
+                                                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                                        }
+                                                        onChange={this.setProvince}
+                                                    />
+                                                </Form.Item>
 
-                                    <Form.Item
-                                        name="firstname"
-                                        label="Name"
-                                        tooltip="What is your name?"
-                                        rules={[{ required: true, message: 'Please input your name!', whitespace: true }]}
-                                    >
-                                        <Input onChange={this.setFirstName} />
-                                    </Form.Item>
+                                                <Form.Item
+                                                    name="district"
+                                                    label="District"
+                                                    rules={[{
+                                                        required: true,
+                                                        message: 'Province is required'
+                                                    }]}
+                                                >
+                                                    <AutoComplete
+                                                        style={{ width: 200, float: "right" }}
+                                                        options={this.state.addressByDelivery.district || []}
+                                                        placeholder=""
+                                                        filterOption={(inputValue, option) =>
+                                                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                                        }
+                                                        onChange={this.setDistrict}
+                                                    />
+                                                </Form.Item>
 
-                                    <Form.Item
-                                        name="address"
-                                        label="Address"
-                                        tooltip="What is your address?"
-                                        rules={[{ required: true, message: 'Please input your address!', whitespace: true }]}
-                                    >
-                                        <Input onChange={this.setAddress} />
-                                    </Form.Item >
+                                                <Form.Item
+                                                    name="ward"
+                                                    label="Ward"
+                                                    rules={[{
+                                                        required: true,
+                                                        message: 'Province is required'
+                                                    }]}
+                                                >
+                                                    <AutoComplete
+                                                        style={{ width: 200, float: "right" }}
+                                                        options={this.state.addressByDelivery.ward || []}
+                                                        placeholder=""
+                                                        filterOption={(inputValue, option) =>
+                                                            option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                                                        }
+                                                        allowClear
+                                                        onChange={this.setWard}
+                                                    />
+                                                </Form.Item>
 
-                                    <Form.Item
-                                        name="email"
-                                        label="E-mail"
-                                        rules={[
-                                            {
-                                                type: 'email',
-                                                message: 'The input is not valid E-mail!',
-                                            },
-                                            {
-                                                required: true,
-                                                message: 'Please input your E-mail!',
-                                            },
-                                        ]}
-                                    >
-                                        <Input onChange={this.setEmail} />
-                                    </Form.Item>
-                                </Form>
-                            </div>)}
-                            {this.state.currentStep === 2 && (<div className="steps-content">3</div>)}
+                                                <Form.Item
+                                                    name="street"
+                                                    label="Street"
+                                                    rules={[{
+                                                        required: true,
+                                                        message: 'Province is required'
+                                                    }]}
+                                                >
+                                                    <Input
+                                                        style={{ width: 200, float: "right" }}
+                                                        onChange={this.setStreet}
+                                                    />
+                                                </Form.Item>
+                                            </Input.Group>
+                                        </Form.Item >
+                                    </Form>
+                                </div>
+                            )}
+                            {this.state.currentStep === 2 && (
+                                <div className="steps-content">3</div>
+                            )}
 
                             <div className="steps-action">
 
                                 {this.state.currentStep === 0 && <Button type="primary" onClick={this.next} disabled={!this.state.otpSuccess}>
                                     Next
                                 </Button>}
-                                {this.state.currentStep === 1 && <Button type="primary" form='registrationForm' htmlType='submit' disabled={!this.state.otpSuccess}>
+                                {this.state.currentStep === 1 && <Button
+                                    type="primary"
+                                    form='registrationForm'
+                                    htmlType='submit'
+                                    disabled={!this.state.otpSuccess}>
                                     Submit
                                 </Button>}
 
@@ -373,37 +564,20 @@ class Registration extends Component {
 }
 
 const mapStateToProps = (state) => {
-    // return {
-    //     loading: state.authReducer.loading,
-    //     error: state.authReducer.err,
-    //     profile: state.authReducer.profile,
-    //     phone: state.authReducer.phone,
-    //     OTP: state.authReducer.OTP,
-    //     message: state.authReducer.message,
-    // };
+    // return {     loading: state.authReducer.loading,     error:
+    // state.authReducer.err,     profile: state.authReducer.profile,     phone:
+    // state.authReducer.phone,     OTP: state.authReducer.OTP,     message:
+    // state.authReducer.message, };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    // return {
-    //     login: (user, history) => {
-    //         dispatch(action.actLoginApi(user, history));
-    //     },
-    //     googleOAuth2: (googleResponse) => {
-    //         dispatch(action.googleOAuth2(googleResponse));
-    //     },
-
-    //     phoneNumberValidation: async phone => {
-    //         await dispatch(action.phoneNumberValidation(phone));
-    //     },
-
-    //     checkPhoneNumber: async phone => {
-    //         await dispatch(action.checkPhoneNumber(phone));
-    //     },
-
-    //     registration: async (data, history) => {
-    //         await dispatch(action.registration(data));
-    //     }
-    // };
+    // return {     login: (user, history) => { dispatch(action.actLoginApi(user,
+    // history));     },     googleOAuth2: (googleResponse) => {
+    // dispatch(action.googleOAuth2(googleResponse));    }, phoneNumberValidation:
+    // async phone => {         await dispatch(action.phoneNumberValidation(phone));
+    //     },     checkPhoneNumber: async phone => {         await
+    // dispatch(action.checkPhoneNumber(phone)); },   registration: async (data,
+    // history) => {         await dispatch(action.registration(data));     } };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Registration);
