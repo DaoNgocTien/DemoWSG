@@ -188,6 +188,8 @@ class EdilModal extends Component {
     productSelected = productSelected
       ? productSelected
       : productList.find((p) => p.id === record.productid);
+
+    console.log(this.props);
     return (
       <>
         <Modal
@@ -222,14 +224,10 @@ class EdilModal extends Component {
           >
             <Space size={30}>
               <Form.Item
-                initialValue={record?.description}
+                initialValue={record?.description ?? ""}
                 name="description"
                 label="Name"
                 rules={[
-                  {
-                    required: true,
-                    message: "Name is required!",
-                  },
                   () => ({
                     validator(_, value) {
                       if (value.length > 0 && value.length <= 50) {
@@ -330,7 +328,7 @@ class EdilModal extends Component {
 
               <Form.Item
                 name="wholesalePrice"
-                initialValue={record?.price}
+
                 label="Wholsale Price"
                 dependencies={[maxQuantity]}
                 rules={[

@@ -68,8 +68,8 @@ class UpdateModal extends Component {
     fileList = fileList.map((file) => {
       if (file.response) {
         // Component will show file.url as link
-        file.url = file.response[0].url;
-        file.name = file.response[0].name;
+        file.url = file.response.url;
+        file.name = file.response.name;
         file.thumbUrl = null;
       }
       return file;
@@ -411,7 +411,6 @@ class UpdateModal extends Component {
                 <Table
                   key={record?.key}
                   loading={this.props.loading}
-                  // rowSelection={rowSelection}
                   columns={this.columns}
                   dataSource={
                     displayData.length === 0 && searchKey === ""

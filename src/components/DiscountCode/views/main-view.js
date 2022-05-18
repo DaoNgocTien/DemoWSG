@@ -146,7 +146,7 @@ class DiscountCodeUI extends Component {
                     placeholder="Search data"
                   />
                 </Col>
-                <Col span={3} offset={9}>
+                <Col span={2} offset={10}>
                   <Button
                     type="primary"
                     onClick={() => this.start()}

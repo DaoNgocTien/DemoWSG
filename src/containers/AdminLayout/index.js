@@ -140,7 +140,7 @@ class AdminRender extends Component {
         set(ref(realtime, "chat-message"), {
           to: this.state.to,
           from: this.state.from,
-          file: info.file.response[0].url,
+          file: info.file.response.url,
         });
       }
     }

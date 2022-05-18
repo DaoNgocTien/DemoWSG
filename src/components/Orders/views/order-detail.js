@@ -157,49 +157,7 @@ class OrderDetail extends Component {
               <Button onClick={this.handleCancel}>Cancel</Button>,
             ]}
           >
-            <Descriptions
-              bordered
-              title="Order Infomation"
-              column={2}
-              style={{ marginBottom: "10px" }}
-            >
-              <Descriptions.Item label="Order Code">
-                {this.state.record?.ordercode}
-              </Descriptions.Item>
-              <Descriptions.Item label="Total Price">
-                <NumberFormat
-                  value={this.state.record?.totalprice}
-                  thousandSeparator={true}
-                  suffix={" VND"}
-                  decimalScale={0}
-                  displayType="text"
-                />
-              </Descriptions.Item>
-              <Descriptions.Item label="Discount Price">
-                <NumberFormat
-                  value= {this.state.record?.discountprice}
-                  thousandSeparator={true}
-                  suffix={" VND"}
-                  decimalScale={0}
-                  displayType="text"
-                />
-              </Descriptions.Item>
-              <Descriptions.Item label="Final Price">
-                <NumberFormat
-                  value={this.state.record?.totalprice - this.state.record?.discountprice}
-                  thousandSeparator={true}
-                  suffix={" VND"}
-                  decimalScale={0}
-                  displayType="text"
-                />
-              </Descriptions.Item>
-
-              {this.checkCancelledOrder()}
-
-              <Descriptions.Item label="Status">
-                {this.state.record?.status}
-              </Descriptions.Item>
-            </Descriptions>
+           npm 
             <Table
               columns={this.columns}
               dataSource={this.state.record.details}

@@ -220,7 +220,7 @@ class CategoryUI extends Component {
                     placeholder="Search data"
                   />
                 </Col>
-                <Col span={3} offset={3}>
+                <Col span={2} offset={10}>
                   <Button
                     type="primary"
                     onClick={() => this.start("openCreateModal")}
@@ -228,25 +228,6 @@ class CategoryUI extends Component {
                     block
                   >
                     Add New
-                  </Button>
-                </Col>
-                <Col span={3}>
-                  <Link
-                    to={`/products/catalog?category=${selectedRowKeys[0]}`}
-                  >
-                    <Button type="primary" disabled={!viewDetailButton}>
-                      View Products
-                    </Button>
-                  </Link>
-                </Col>
-                <Col span={3}>
-                  <Button
-                    type="danger"
-                    onClick={() => this.start("openDeleteModal")}
-                    disabled={!deleteButton}
-                    block
-                  >
-                    Delete
                   </Button>
                 </Col>
               </Row>

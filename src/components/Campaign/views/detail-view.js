@@ -18,6 +18,9 @@ import { default as campaignAction } from "../modules/action";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 
+import { OpenInNew } from "@material-ui/icons";
+import { Link } from "react-router-dom";
+
 class OrdersInCampaign extends React.Component {
   state = {
     loading: false,
@@ -84,6 +87,7 @@ class OrdersInCampaign extends React.Component {
     },
     {
       title: "Customer Name",
+      key: "customerName",
       width: 150,
       render: (_text, object, _index) => {
         return object.customerfirstname + " " + object.customerlastname;
@@ -112,6 +116,7 @@ class OrdersInCampaign extends React.Component {
 
     {
       title: "Quantity",
+      key: "quantity",
       width: 100,
       render: (_text, object, _index) => {
         return object.details[0].quantity;
@@ -121,7 +126,7 @@ class OrdersInCampaign extends React.Component {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
-      width: 100,
+      width: 200,
       render: (_text, object) => {
         return (
           <NumberFormat
@@ -138,7 +143,7 @@ class OrdersInCampaign extends React.Component {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
-      width: 150,
+      width: 200,
       render: (_text, object) => {
         return (
           <NumberFormat
@@ -155,7 +160,7 @@ class OrdersInCampaign extends React.Component {
       title: "Final Price",
       dataIndex: "finalprice",
       key: "finalprice",
-      width: 100,
+      width: 200,
       render: (_text, object) => {
         return (
           <NumberFormat
@@ -169,11 +174,28 @@ class OrdersInCampaign extends React.Component {
       },
     },
     {
-      title: "Notes",
-      width: 300,
-      render: (_text, object, _index) => {
-        return object.details[0].notes;
+      title: "",
+      key: "action",
+      width: 70,
+      render: (object) => {
+        return (
+          <>
+            <Link to={`/orders/${object.ordercode}`}>
+              <Button
+                icon={<OpenInNew />}
+                type="default"
+                shape="circle"
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  background: "none",
+                }}
+              />
+            </Link>
+          </>
+        );
       },
+      fixed: "right",
     },
   ];
 
@@ -280,12 +302,7 @@ class OrdersInCampaign extends React.Component {
       isStartAble,
       productList,
     } = this.props;
-
-    const rowSelection = {
-      selectedRowKeys,
-      onSelect: this.onSelectChange,
-      hideSelectAll: true,
-    };
+    console.log(this.props);
     return (
       <>
         <PageHeader
@@ -363,30 +380,29 @@ class OrdersInCampaign extends React.Component {
                 campaignId={record?.id}
               />
               <div style={{ marginBottom: 16 }}>
-              <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
-                <Col span={12}>
+                <Row style={{ padding: "20px 0" }} gutter={[8, 0]}>
+                  <Col span={12}>
                     <Input
                       onChange={(e) => this.onChangeHandler(e)}
                       placeholder="Search data"
                     />
                   </Col>
-                  <Col span={3} offset={9}>
-                      <Button
-                        type="danger"
-                        onClick={() => this.openModal()}
-                        disabled={!rejectButton}
-                        hidden={record?.status !== "active"}
-                        block
-                      >
-                        Reject
-                      </Button>
+                  <Col span={2} offset={10}>
+                    <Button
+                      type="danger"
+                      onClick={() => this.openModal()}
+                      disabled={!rejectButton}
+                      hidden={record?.status !== "active"}
+                      block
+                    >
+                      Reject
+                    </Button>
                   </Col>
-                  
+
                 </Row>
               </div>
               <Table
                 loading={loading}
-                rowSelection={rowSelection}
                 columns={this.columns}
                 dataSource={
                   displayData.length === 0 && searchData === ""
@@ -395,7 +411,7 @@ class OrdersInCampaign extends React.Component {
                     )
                     : displayData
                 }
-                scroll={{ y: 350 }}
+                scroll={{ x: 1200, y: 350 }}
               />
             </div>
           }
