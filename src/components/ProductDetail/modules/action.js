@@ -5,110 +5,34 @@ import { GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS } from "./constant";
 const getOneProduct = (id) => {
   return async (dispatch) => {
     dispatch(getRequest());
-    Axios({
-      url: `/products/${id}`,
-      method: "GET",
-      withCredentials: true,
-      exposedHeaders: ["set-cookie"],
-    })
-      .then((result) => {
-        if (result.status === 200) {
-          const data = result.data.data;
-          dispatch(categoryAction.getAllCategory());
-          return dispatch(getSuccess(data));
-        }
-      })
-      .catch((err) => {
-        return dispatch(getFailed(err));
-      });
+    try {
+      const [product, campaigns, categories] = await Promise.all([Axios({
+        url: `/products/${id}`,
+        method: "GET",
+        withCredentials: true,
+        exposedHeaders: ["set-cookie"],
+      }), Axios({
+        url: `/campaigns/All?productId=${id}`,
+        method: "GET",
+        withCredentials: true,
+        exposedHeaders: ["set-cookie"],
+      }), Axios({
+        url: `/categories/All`,
+        method: "GET",
+        withCredentials: true,
+      })])
+
+
+      return dispatch(getSuccess({
+        product: product.data.data, campaigns: campaigns.data.data, categories: categories.data.data
+      }));
+
+    } catch (error) {
+      return dispatch(getFailed(error));
+    }
   };
 };
 
-const createProduct = (record) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/products/`,
-      method: "POST",
-      data: record,
-      withCredentials: true,
-    })
-      .then(() => {
-      })
-      .catch(() => {
-        return dispatch(getFailed());
-      })
-      .finally(() => {});
-  };
-};
-
-const updateProduct = (record) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/products/${record.id}`,
-      method: "PUT",
-      data: {
-        name: record.name,
-        retailPrice: record?.retailPrice,
-        quantity: record?.quantity,
-        description: record?.description,
-        categoryId: record?.categoryId,
-        image: record?.image,
-      },
-      withCredentials: true,
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          // return window.location.reload();
-        }
-      })
-      .catch(() => {
-        return dispatch(getFailed());
-      });
-  };
-};
-
-const deleteProduct = (id) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/products/${id}`,
-      method: "DELETE",
-      withCredentials: true,
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          // return window.location.reload();
-        }
-      })
-      .catch(() => {
-        return dispatch(getFailed());
-      });
-  };
-};
-
-const activeProduct = (id) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/products/active`,
-      method: "PUT",
-      withCredentials: true,
-      data: {
-        productId: id,
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          // return window.location.reload();
-        }
-      })
-      .catch(() => {
-        return dispatch(getFailed());
-      });
-  };
-};
 
 const getRequest = () => {
   return {
@@ -132,10 +56,6 @@ const getFailed = (err) => {
 
 const action = {
   getOneProduct: getOneProduct,
-  createProduct: createProduct,
-  updateProduct: updateProduct,
-  deleteProduct: deleteProduct,
-  activeProduct: activeProduct,
 };
 
 export default action;

@@ -3,21 +3,30 @@ import {
     Form,
     Input, Modal
 } from "antd";
+import axios from "axios";
 import React, { Component, memo } from "react";
 class EditModal extends Component {
-    state = { record: this.props.record };
-    formRef = React.createRef();
 
     componentDidMount() {
-        this.formRef.current.setFieldsValue({
-            id: this.props.record?.id,
-            categoryname: this.props.record?.categoryname,
+    }
+
+    updateCategory = (record) => {
+        axios({
+            url: `/categories/${record.id}`,
+            method: "PUT",
+            data: { categoryName: record.categoryName },
+            withCredentials: true,
+        }).then((response) => {
+            if (response.status === 200) {
+                return this.props.updateCategory();
+            }
+        }).catch(() => {
+            return this.props.updateCategory();
         });
     }
 
     handleEditAndClose = (data) => {
-        this.props.updateCategory(data);
-        this.formRef.current.resetFields();
+        this.updateCategory(data);
         this.props.closeModal();
     };
 
@@ -26,13 +35,12 @@ class EditModal extends Component {
     };
 
     render() {
-        const { openModal, record, } = this.props;
+        const { openModal, record } = this.props;
         return (
             <>
                 <Form
                     key={record?.key}
                     id="editCategoryForm"
-                    ref={this.formRef}
                     onFinish={this.handleEditAndClose}
                     layout="vertical"
                 >
@@ -71,15 +79,15 @@ class EditModal extends Component {
                             initialValue={record?.categoryname}
                             rules={[
                                 () => ({
-                                  validator(_, value) {
-                                    if (value.length > 0 && value.length <= 20) {
-                                      return Promise.resolve();
-                                    }
-                
-                                    return Promise.reject(new Error('Category Name is required, length is 1-20 characters!'));
-                                  },
+                                    validator(_, value) {
+                                        if (value.length > 0 && value.length <= 20) {
+                                            return Promise.resolve();
+                                        }
+
+                                        return Promise.reject(new Error('Category Name is required, length is 1-20 characters!'));
+                                    },
                                 }),
-                              ]}
+                            ]}
                         >
                             <Input
                                 placeholder="Name is required, 1-20 characters!"

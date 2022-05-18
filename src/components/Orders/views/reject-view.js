@@ -9,6 +9,7 @@ import {
   Table,
   Upload
 } from "antd";
+import axios from "axios";
 import React, { Component, memo } from "react";
 
 class RejectModal extends Component {
@@ -28,7 +29,7 @@ class RejectModal extends Component {
 
   handleRejectAndClose = (data) => {
     this.props.record.campaignid != null
-      ? this.props.rejectOrder(
+      ? this.rejectOrder(
           this.props.record.ordercode,
           "campaign",
           data.reason,
@@ -37,7 +38,7 @@ class RejectModal extends Component {
           this.props.record.campaignid,
           this.state.requester
         )
-      : this.props.rejectOrder(
+      : this.rejectOrder(
           this.props.record.ordercode,
           "retail",
           data.reason,
@@ -46,7 +47,33 @@ class RejectModal extends Component {
           this.state.requester
         );
 
-    this.props.closeModal();
+    this.closeModal();
+  };
+
+  rejectOrder =async (orderCode, type, description, image, orderId, requester) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    let reject = {
+      orderCode: orderCode,
+      type: type,
+      description: "has been cancelled by " + user.rolename + " for: " + description,
+      image: image,
+      orderId: orderId,
+      supplierId: user.id,
+      cancelLinkRequestor: requester
+    };
+      try {
+        const [rejectResponse] = await Promise.all([
+          axios({
+            url: `/order/status/supplier/cancel`,
+            method: "PUT",
+            data: reject,
+            withCredentials: true,
+          }),
+        ]);
+        return this.props.rejectOrder();
+      } catch (error) {
+        return this.props.rejectOrder();
+    }
   };
 
   handleCancel = () => {
@@ -91,7 +118,7 @@ class RejectModal extends Component {
     fileList = fileList.map((file) => {
       if (file.response) {
         file.url = file.response.url;
-        file.name = file.response.name;
+        file.name = file.response.fileName;
         file.thumbUrl = null;
       }
       return file;

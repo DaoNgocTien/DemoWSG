@@ -46,79 +46,61 @@ class AuthPage extends Component {
     if (loading) return <Loader />;
     if (!localStorage.getItem("user")) {
       return (
+
         <div className="main_form_body">
+          <h2>Welcome back!</h2>
+          <p className="create_account_title">Do not have an account yet?
+            <a href="/registration" className="create_account_navigation">Create account</a>
+          </p>
           <div className="form__wrapper">
             <div className="form__container">
-              <h2 style={{ textAlign: "center" }}>LOGIN</h2>
-              <Text type="danger" style={{ textAlign: "center" }}>
-                {" "}
-                {error}
-              </Text>
-
-              <ForgotPassword
-                openModal={openForgotPasswordModal}
-                closeModal={this.closeModal}
-              />
               <Form
                 name="normal_login"
                 className="login-form"
                 initialValues={{ remember: true }}
                 onFinish={this.onFinish}
               >
+                <p className="form-item-title">
+                  Username <p className="red_asterik">*</p>
+                </p>
                 <Form.Item
+
                   name="username"
                   rules={[
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (
-                          (value + "").length > 50 ||
-                          (value + "").length < 1
-                        ) {
-                          return Promise.reject(
-                            new Error(`Username is between 1-50 characters!`)
-                          );
-                        }
-                        return Promise.resolve();
-                      },
-                    }),
+                    { required: true, message: "Please input your Username!" },
                   ]}
                 >
                   <Input
+                    className="form-item-input"
                     prefix={<UserOutlined className="site-form-item-icon" />}
-                    placeholder="Username is between 1-50 characters"
+                    placeholder="Username"
                   />
                 </Form.Item>
+                <p className="form-item-title">
+                  Password <p className="red_asterik">*</p>
+                </p>
                 <Form.Item
                   name="password"
                   rules={[
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
-                        if (
-                          (value + "").length > 50 ||
-                          (value + "").length < 1
-                        ) {
-                          return Promise.reject(
-                            new Error(`Password is between 1-50 characters!`)
-                          );
-                        }
-                        return Promise.resolve();
-                      },
-                    }),
+                    { required: true, message: "Please input your Password!" },
                   ]}
                 >
                   <Input
                     prefix={<LockOutlined className="site-form-item-icon" />}
                     type="password"
-                    placeholder="Password is between 1-50 characters!"
+                    placeholder="Password"
                   />
                 </Form.Item>
                 <Form.Item>
                   <a
+                    style={{
+                      textDecoration: "none",
+                      float: "right" 
+                    }}
                     className="login-form-forgot"
                     href="/#"
-                    style={{ float: "right" }}
                   >
-                    Forgot password
+                    <p className="forgot-password">Forgot Password ?</p>
                   </a>
                 </Form.Item>
                 <Form.Item>
@@ -138,10 +120,6 @@ class AuthPage extends Component {
                   cookiePolicy={"single_host_origin"}
                   className="google-button"
                 />
-                <br />
-                <a href="/registration" style={{ float: "right" }}>
-                  Register now!
-                </a>
               </Form>
             </div>
           </div>

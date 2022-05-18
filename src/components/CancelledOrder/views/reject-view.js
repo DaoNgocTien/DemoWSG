@@ -74,7 +74,7 @@ class RejectModal extends Component {
       if (file.response) {
         // Component will show file.url as link
         file.url = file.response.url;
-        file.name = file.response.name;
+        file.name = file.response.fileName;
         file.thumbUrl = null;
       }
       return file;

@@ -27,60 +27,6 @@ const getAllCategory = () => {
   };
 };
 
-const createCategory = record => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/categories/`,
-      method: "POST",
-      data: record,
-      withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        return dispatch(getSuccess([]));
-      }
-    })
-      .catch(() => {
-        return dispatch(getFailed());
-      })
-  };
-}
-
-const updateCategory = (record) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/categories/${record.id}`,
-      method: "PUT",
-      data: { categoryName: record.categoryName },
-      withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        return dispatch(getSuccess([]));
-      }
-    }).catch(() => {
-      return dispatch(getFailed());
-    });
-  };
-}
-
-const deleteCategory = id => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/categories/${id}`,
-      method: "DELETE",
-      withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        return dispatch(getSuccess([]));
-      }
-    }).catch(() => {
-      return dispatch(getFailed());
-    });
-  };
-}
-
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -103,9 +49,6 @@ const getFailed = (err) => {
 
 const action = {
   getAllCategory: getAllCategory,
-  createCategory: createCategory,
-  updateCategory: updateCategory,
-  deleteCategory: deleteCategory
 }
 
 export default action;

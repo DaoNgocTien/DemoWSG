@@ -1,5 +1,6 @@
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import {
+  AutoComplete,
   Button,
   Form,
   Input,
@@ -9,6 +10,7 @@ import {
   Typography,
   Upload
 } from "antd";
+import axios from "axios";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Loader from "./../../../components/Loader";
@@ -52,6 +54,8 @@ class ProfileTab extends Component {
     fileList: undefined,
     price: 0,
     autoCompleteResult: [],
+    address: JSON.parse(this.props.data.address || JSON.stringify({})),
+    addressByDelivery: {}
   };
   formRef = React.createRef();
 
@@ -61,6 +65,26 @@ class ProfileTab extends Component {
     this.setState({
       user: storedUser,
     });
+
+    axios({
+      url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/province',
+      method: 'GET',
+      headers: {
+        token: "73457c0b-d0f5-11ec-ac32-0e0f5adc015a"
+      }
+    }).then(rs => {
+      rs.data.data = rs.data.data.map(element => {
+        return {
+          value: element.ProvinceName,
+          ...element
+        }
+      })
+      this.setState({
+        addressByDelivery: {
+          province: rs.data.data
+        }
+      })
+    })
   }
 
   handleCancel = () => {
@@ -78,7 +102,7 @@ class ProfileTab extends Component {
         avatar: values.avatar,
         name: values.name,
         email: values.email,
-        address: values.address,
+        address: this.state.address,
       },
     });
     this.props.updateProfile(this.state.user);
@@ -113,7 +137,7 @@ class ProfileTab extends Component {
     fileList = fileList.map((file) => {
       if (file.response) {
         file.url = file.response.url;
-        file.name = file.response.name;
+        file.name = file.response.fileName;
         file.thumbUrl = null;
       }
       return file;
@@ -121,6 +145,111 @@ class ProfileTab extends Component {
 
     this.setState({ fileList });
   };
+
+  setProvince = (data, _) => {
+    if (_) {
+      this.setState({
+        address: {
+          ...this.state.address,
+          province: {
+            provinceId: _.ProvinceID,
+            provinceName: _.ProvinceName
+          }
+        }
+      })
+      if (this.state.addressByDelivery.province) {
+        axios({
+          url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/district',
+          method: 'POST',
+          headers: {
+            token: "73457c0b-d0f5-11ec-ac32-0e0f5adc015a"
+          },
+          data: {
+            province_id: parseInt(_.ProvinceID)
+          }
+        }).then(rs => {
+          rs.data.data = rs.data.data.map(element => {
+            return {
+              value: element.DistrictName,
+              ...element
+            }
+          })
+
+          this.setState({
+            addressByDelivery: {
+              ...this.state.addressByDelivery,
+              district: rs.data.data
+            }
+          })
+        })
+      }
+    }
+  }
+  setDistrict = (data, _) => {
+    if (_) {
+      this.setState({
+        address: {
+          ...this.state.address,
+          district: {
+            districtId: _.DistrictID,
+            districtName: _.DistrictName
+          }
+        }
+      })
+      if (this.state.addressByDelivery.district) {
+        axios({
+          url: 'https://online-gateway.ghn.vn/shiip/public-api/master-data/ward',
+          method: 'POSt',
+          headers: {
+            token: "73457c0b-d0f5-11ec-ac32-0e0f5adc015a"
+          },
+          data: {
+            district_id: parseInt(_.DistrictID)
+          }
+        }).then(rs => {
+          rs.data.data = rs.data.data.map(element => {
+            return {
+              value: element.WardName,
+              ...element
+            }
+          })
+
+          this.setState({
+            addressByDelivery: {
+              ...this.state.addressByDelivery,
+              ward: rs.data.data
+            }
+          })
+        })
+      }
+    }
+  }
+
+  setWard = (data, _) => {
+    if (_) {
+      this.setState({
+        address: {
+          ...this.state.address,
+          ward: {
+            wardId: _.WardCode,
+            wardName: _.WardName
+          }
+        }
+      })
+    }
+  }
+
+  setStreet = (data, _) => {
+    this.setState({
+      address: {
+        ...this.state.address,
+        street: {
+          streetName: data.target.value
+        }
+      }
+    })
+  }
+
 
   render() {
     const { loading, changeProfileMessage } = this.props;
@@ -275,9 +404,88 @@ class ProfileTab extends Component {
             }
           </Form.Item>
 
-          <Form.Item name="address" label="Address" initialValue={data.address}>
-            <Input.TextArea showCount maxLength={100} onChange={this.props.onChangeUpdateProfile} />
-          </Form.Item>
+          <Form.Item
+            name="address"
+            label="Address"
+            tooltip="What is your address?"
+          // rules={[{
+          //     required: true,
+          //     message: 'Please input your address!',
+          //     whitespace: true
+          // }]}
+          >
+            <Input.Group >
+              <Form.Item
+                name="province"
+                label="Province"
+                // noStyle
+                rules={[{
+                  required: true,
+                  message: 'Province is required'
+                }]}
+                initialValue={JSON.parse(data.address || JSON.stringify({ province: {} })).province?.provinceName}
+              >
+                <AutoComplete
+                  style={{ width: 200, float: "right" }}
+                  options={this.state.addressByDelivery.province || []}
+                  placeholder=""
+                  value={JSON.parse(data.address || JSON.stringify({ province: {} })).province?.provinceName || ""}
+                  onChange={this.setProvince}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="district"
+                label="District"
+                rules={[{
+                  required: true,
+                  message: 'Province is required'
+                }]}
+                initialValue={JSON.parse(data.address || JSON.stringify({ district: {} })).district?.districtName}
+              >
+                <AutoComplete
+                  style={{ width: 200, float: "right" }}
+                  options={this.state.addressByDelivery.district || []}
+                  placeholder=""
+                  value={JSON.parse(data.address || JSON.stringify({ district: {} })).district?.districtName}
+                  onChange={this.setDistrict}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="ward"
+                label="Ward"
+                rules={[{
+                  required: true,
+                  message: 'Province is required'
+                }]}
+                initialValue={JSON.parse(data.address || JSON.stringify({ ward: {} })).ward?.wardName}
+              >
+                <AutoComplete
+                  style={{ width: 200, float: "right" }}
+                  options={this.state.addressByDelivery.ward || []}
+                  placeholder=""
+                  value={JSON.parse(data.address || JSON.stringify({ ward: {} })).ward?.wardName}
+                  onChange={this.setWard}
+                />
+              </Form.Item>
+
+              <Form.Item
+                name="street"
+                label="Street"
+                rules={[{
+                  required: true,
+                  message: 'Province is required'
+                }]}
+                initialValue={JSON.parse(data.address || JSON.stringify({ street: {} })).street?.streetName}
+              >
+                <Input
+                  style={{ width: 200, float: "right" }}
+                  onChange={this.setStreet}
+                />
+              </Form.Item>
+            </Input.Group>
+          </Form.Item >
 
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">

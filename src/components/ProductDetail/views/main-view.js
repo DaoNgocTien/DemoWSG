@@ -1,3 +1,4 @@
+import { ArrowRightOutlined, MinusOutlined } from "@ant-design/icons";
 import { OpenInNew } from "@material-ui/icons";
 import {
   Button,
@@ -8,6 +9,7 @@ import {
   Table,
   Tag
 } from "antd";
+import axios from "axios";
 import moment from "moment";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
@@ -44,16 +46,17 @@ class ProductUI extends Component {
     {
       title: "Duration",
       key: "duration",
-      width: 120,
+      width: 180,
       render: (object) => {
         return (
-          <Tag color="blue">
-            {moment(object.statdate).format("MM/DD/YYYY")}
-          </Tag>
-          -
-          <Tag color="green">
-            {moment(object.enđate).format("MM/DD/YYYY")}
-          </Tag>
+          <p>
+            <Tag color="blue" style={{ margin: 0 }}>
+              {moment(object.fromdate).format("MM/DD/YYYY").toString()}
+            </Tag><MinusOutlined style={{ margin: 5 }} />
+            <Tag color="green" style={{ margin: 0 }}>
+              {moment(object.todate).format("MM/DD/YYYY").toString()}
+            </Tag>
+          </p>
         );
       },
     },
@@ -127,7 +130,7 @@ class ProductUI extends Component {
         }
       },
       fixed: "right",
-      width: 150,
+      width: 50,
     },
   ];
 
@@ -154,7 +157,22 @@ class ProductUI extends Component {
   };
 
   activeProduct = (id) => {
-    return this.props.activeProduct(id);
+    axios({
+      url: `/products/active`,
+      method: "PUT",
+      withCredentials: true,
+      data: {
+        productId: id,
+      },
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return this.props.activeProduct(id);
+        }
+      })
+      .catch(() => {
+        return this.props.activeProduct(id);
+      });
   };
 
   render() {
@@ -296,7 +314,7 @@ class ProductUI extends Component {
             )}
           </Descriptions.Item>
         </Descriptions>
-        
+
         <Table
           loading={this.props.loading}
           columns={this.campaignColumns}

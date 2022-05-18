@@ -91,7 +91,7 @@ class HandleUI extends Component {
     fileList = fileList.map((file) => {
       if (file.response) {
         file.url = file.response.url;
-        file.name = file.response.name;
+        file.name = file.response.fileName;
         file.thumbUrl = null;
       }
       return file;

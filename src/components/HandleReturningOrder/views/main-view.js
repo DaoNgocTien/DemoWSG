@@ -78,7 +78,7 @@ class HandleReturningOrderUI extends Component {
     fileList = fileList.map((file) => {
       if (file.response) {
         file.url = file.response.url;
-        file.name = file.response.name;
+        file.name = file.response.fileName;
         file.thumbUrl = null;
       }
       return file;
@@ -196,7 +196,7 @@ class HandleReturningOrderUI extends Component {
 
   render() {
     const { loading, data } = this.props;
-    if (loading) return <Loader />;
+    if (loading) return <></>;
     this.state.record = this.props.record;
     const { load, imageUrl } = this.state;
 
@@ -334,7 +334,7 @@ class HandleReturningOrderUI extends Component {
               type="danger"
               onClick={this.showRejectModal}
               style={{ marginLeft: 3 }}
-              hidden={data.order?.status !== "processing" && data.order?.status !== "created"}
+              hidden={data.order?.status !== "processing" && data.order?.status !== "created" && data.order?.status !== "unpaid" && data.order?.status !== "advanced"}
             >
               reject
             </Button>,

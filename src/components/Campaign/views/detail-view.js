@@ -1,10 +1,10 @@
+import { LocalShipping, OpenInNew, PlayCircleOutline } from "@material-ui/icons";
 import {
   Button,
   Col,
   Descriptions,
   Form, Image, Input,
   PageHeader, Popover, Row,
-  Space,
   Table,
   Tag
 } from "antd";
@@ -12,14 +12,13 @@ import moment from "moment";
 import React from "react";
 import NumberFormat from "react-number-format";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import action from "../../Orders/modules/action";
 import RejectModal from "../../Orders/views/reject-view";
 import { default as campaignAction } from "../modules/action";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
 
-import { OpenInNew } from "@material-ui/icons";
-import { Link } from "react-router-dom";
 
 class OrdersInCampaign extends React.Component {
   state = {
@@ -83,7 +82,7 @@ class OrdersInCampaign extends React.Component {
         return index + 1;
       },
       width: 70,
-      fixed: "left",
+      // fixed: "left",
     },
     {
       title: "Customer Name",
@@ -92,7 +91,7 @@ class OrdersInCampaign extends React.Component {
       render: (_text, object, _index) => {
         return object.customerfirstname + " " + object.customerlastname;
       },
-      fixed: "left",
+      // fixed: "left",
     },
     {
       title: "Status",
@@ -102,7 +101,7 @@ class OrdersInCampaign extends React.Component {
         return <Tag>{data.toUpperCase()}</Tag>;
       },
       width: 100,
-      fixed: "left",
+      // fixed: "left",
     },
     {
       title: "Created At",
@@ -175,8 +174,7 @@ class OrdersInCampaign extends React.Component {
     },
     {
       title: "",
-      key: "action",
-      width: 70,
+      width: 130,
       render: (object) => {
         return (
           <>
@@ -192,6 +190,30 @@ class OrdersInCampaign extends React.Component {
                 }}
               />
             </Link>
+            <Button
+              onClick={() => this.changeStatus(object, [])}
+              icon={<PlayCircleOutline />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+              hidden={object.status !== "created"}
+            />
+            <Button
+              onClick={() => this.openUploadModal(object)}
+              icon={<LocalShipping />}
+              type="default"
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+              hidden={object.status !== "processing"}
+            />
           </>
         );
       },
@@ -252,11 +274,24 @@ class OrdersInCampaign extends React.Component {
       title: "Products Up To",
       dataIndex: "quantity",
       key: "quantity",
+      width: 50
     },
     {
       title: "Price",
       dataIndex: "price",
       key: "price",
+      width: 50,
+      render: (_text, object) => {
+        return (
+          <NumberFormat
+            value={object.price}
+            thousandSeparator={true}
+            suffix={" VND"}
+            decimalScale={0}
+            displayType="text"
+          />
+        );
+      },
     },
   ];
 
@@ -291,7 +326,6 @@ class OrdersInCampaign extends React.Component {
     } = this.state;
 
     const {
-      campaign,
       loading,
       rejectOrder,
       deleteCampaign,
@@ -387,7 +421,7 @@ class OrdersInCampaign extends React.Component {
                       placeholder="Search data"
                     />
                   </Col>
-                  <Col span={2} offset={10}>
+                  <Col span={3}>
                     <Button
                       type="danger"
                       onClick={() => this.openModal()}
@@ -434,25 +468,9 @@ class OrdersInCampaign extends React.Component {
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Type">
-                <Popover
-                  content={
-                    <>
-                      <Table
-                        columns={this.stepCloumns}
-                        dataSource={
-                          record?.range ? JSON.parse(record?.range) : []
-                        }
-                      />
-                    </>
-                  }
-                  trigger="click"
-                  visible={this.state.stepVisible}
-                  onVisibleChange={this.handleVisibleChange}
-                >
-                  <Tag color={!record?.isshare ? "blue" : "green"}>
-                    {!record?.isshare ? "SINGLE" : "SHARED"}
-                  </Tag>
-                </Popover>
+                <Tag color={!record?.isshare ? "blue" : "green"}>
+                  {!record?.isshare ? "SINGLE" : "SHARED"}
+                </Tag>
               </Descriptions.Item>
 
               <Descriptions.Item label="Campaign Status">
@@ -500,7 +518,16 @@ class OrdersInCampaign extends React.Component {
               <Descriptions.Item label="Number of Order">
                 {record?.numorder}
               </Descriptions.Item>
-
+              {record?.isshare && (<Descriptions.Item label="Range" span={2}>
+                <Table
+                  columns={this.stepCloumns}
+                  dataSource={
+                    record?.range ? JSON.parse(record?.range) : []
+                  }
+                  size="small"
+                  pagination={false}
+                />
+              </Descriptions.Item>)}
               <Descriptions.Item label="Product Image" span={2}>
                 {record?.productimage ? (
                   JSON.parse(record?.productimage)?.map((image) => {

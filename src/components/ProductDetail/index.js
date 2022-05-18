@@ -1,10 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Loader from "../../components/Loader";
-import { default as campaignAction } from "../Campaign/modules/action";
 import action from "./modules/action";
 import ProductUI from "./views/main-view";
-
 
 class ProductPage extends Component {
   constructor(props) {
@@ -23,7 +20,7 @@ class ProductPage extends Component {
 
   render() {
     const { loading, data } = this.props;
-    if (loading) return <Loader />;
+    if (loading) return <></>;
     return (
       <>
         <ProductUI
@@ -33,9 +30,7 @@ class ProductPage extends Component {
           updateProduct={this.props.updateProduct}
           deleteProduct={this.props.deleteProduct}
           categoryList={this.props.categoryList}
-          campaignList={this.props.campaignList.campaigns?.filter(
-            (element) => element.productid === data.id
-          )}
+          campaignList={this.props.campaignList}
         />
       </>
     );
@@ -45,10 +40,10 @@ class ProductPage extends Component {
 const mapStateToProps = (state) => {
   return {
     loading: state.productDetailReducer.loading,
-    data: state.productDetailReducer.data,
+    data: state.productDetailReducer.data.product,
     error: state.productDetailReducer.err,
-    categoryList: state.categoryReducer.data,
-    campaignList: state.campaignReducer.data,
+    categoryList: state.productDetailReducer.data.categories,
+    campaignList: state.productDetailReducer.data.campaigns,
   };
 };
 
@@ -56,18 +51,15 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getOneProduct: async (id) => {
       await dispatch(action.getOneProduct(id));
-      await dispatch(campaignAction.getCampaign());
+      // await dispatch(campaignAction.getCampaign());
     },
     updateProduct: async (record) => {
-      await dispatch(action.updateProduct(record));
       await dispatch(action.getOneProduct(record.id));
     },
     deleteProduct: async (id) => {
-      await dispatch(action.deleteProduct(id));
       await dispatch(action.getOneProduct(id));
     },
     activeProduct: async (id) => {
-      await dispatch(action.activeProduct(id));
       await dispatch(action.getOneProduct(id));
     },
   };

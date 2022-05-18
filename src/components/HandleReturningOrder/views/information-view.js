@@ -65,9 +65,9 @@ class InformationModal extends Component {
     },
     {
       title: "Product Name",
-      dataIndex: "productname",
-      key: "productname",
-      sorter: (a, b) => a.productname.length - b.productname.length,
+      dataIndex: "productName",
+      key: "productName",
+      sorter: (a, b) => a.productName.length - b.productName.length,
     },
     {
       title: "Price",
@@ -76,7 +76,7 @@ class InformationModal extends Component {
       key: "price",
       render: (_text, object) => {
         return <NumberFormat
-          value={object.totalprice - object.discountprice}
+          value={object.price}
           thousandSeparator={true}
           suffix={" VND"}
           decimalScale={0}
@@ -92,11 +92,11 @@ class InformationModal extends Component {
     },
     {
       title: "Total Price",
-      dataIndex: "totalprice",
-      key: "totalprice",
+      dataIndex: "totalPrice",
+      key: "totalPrice",
       render: (_text, object) => {
         return <NumberFormat
-          value={object.totalprice - object.discountprice}
+          value={object.totalPrice}
           thousandSeparator={true}
           suffix={" VND"}
           decimalScale={0}
@@ -109,7 +109,6 @@ class InformationModal extends Component {
       title: "Note",
       dataIndex: "notes",
       key: "notes",
-      fix:"right"
     },
   ];
 

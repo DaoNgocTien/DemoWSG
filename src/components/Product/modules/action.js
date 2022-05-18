@@ -29,24 +29,7 @@ const getAllProduct = (category) => {
   };
 };
 
-const createProduct = record => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    Axios({
-      url: `/products/`,
-      method: "POST",
-      data: record,
-      withCredentials: true,
-    }).then((response) => {
-      if (response.status === 200) {
-        dispatch(getSuccess([]));
-      }
-    })
-      .catch(() => {
-        return dispatch(getFailed());
-      })
-  };
-}
+// const 
 
 const updateProduct = (record) => {
   return async (dispatch) => {
@@ -112,7 +95,7 @@ const getFailed = (err) => {
 
 const action = {
   getAllProduct: getAllProduct,
-  createProduct: createProduct,
+  // createProduct: createProduct,
   updateProduct: updateProduct,
   deleteProduct: deleteProduct
 }
