@@ -18,6 +18,11 @@ const getTransaction = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      if (transactions.data.redirectUrl) {
+        console.log(transactions.data)
+        localStorage.clear()
+        window.location = transactions.data.redirectUrl
+      }
       return dispatch(
         getSuccess({
           transactions: transactions.data.data,
@@ -33,13 +38,12 @@ const updateTransaction = (transaction) => {
   return async (dispatch) => {
     dispatch(getRequest());
     Axios({
-      url: `/transaction/createWithdrawableRequest/`,
-      method: "POST",
-      data: transaction,
-      withCredentials: true,
-    })
-      .then((response) => {
+        url: `/transaction/createWithdrawableRequest/`,
+        method: "POST",
+        data: transaction,
+        withCredentials: true,
       })
+      .then((response) => {})
       .catch((err) => {
         return dispatch(getFailed());
       })

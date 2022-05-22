@@ -13,6 +13,7 @@ class Transaction extends Component {
   }
 
   render() {
+    if (this.props.loading) return <></>;
     return (
       <TransactionUI
         data={this.props.data.transactions}
@@ -41,8 +42,6 @@ const mapDispatchToProps = (dispatch) => {
     getTransaction: async () => {
       await dispatch(action.getTransaction());
     },
-
-
     updateTransaction: async (record) => {
       await dispatch(action.updateTransaction(record));
       await dispatch(action.getTransaction());
