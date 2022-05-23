@@ -112,14 +112,14 @@ class AuthPage extends Component {
                     Log in
                   </Button>
                 </Form.Item>
-                <GoogleLogin
+                {/* <GoogleLogin
                   clientId="641513059325-n3suicaa1j3fsph5fqaft0okgh57gv2l.apps.googleusercontent.com"
                   buttonText="Sign in with Google"
                   onSuccess={this.props.googleOAuth2}
                   onFailure={this.props.googleOAuth2}
                   cookiePolicy={"single_host_origin"}
                   className="google-button"
-                />
+                /> */}
               </Form>
             </div>
           </div>
@@ -141,9 +141,9 @@ const mapDispatchToProps = (dispatch) => {
     login: (user, history) => {
       dispatch(action.actLoginApi(user, history));
     },
-    googleOAuth2: (googleResponse) => {
-      dispatch(action.googleOAuth2(googleResponse));
-    },
+    // googleOAuth2: (googleResponse) => {
+    //   dispatch(action.googleOAuth2(googleResponse));
+    // },
     onLogin: () => {
       dispatch(action.onLogin());
     },

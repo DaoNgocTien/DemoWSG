@@ -49,51 +49,51 @@ const actLoginApi = (user, history) => {
   };
 };
 
-const googleOAuth2 = (googleResponse) => {
-  return async (dispatch) => {
-    dispatch(getRequest());
-    if (typeof googleResponse === "undefined") {
-      googleResponse = [];
-    }
-    if (googleResponse && !googleResponse.error) {
-      Axios({
-        url: `/users/login/google`,
-        method: "POST",
-        headers: {
-          Authorization: "JWT_TOKEN",
-          "Content-Type": "application/json",
-        },
-        data: {
-          googleId: googleResponse.googleId,
-          lastName: googleResponse.profileObj.name,
-          email: googleResponse.profileObj.email,
-          roleName: "Supplier",
-        },
-        withCredentials: true,
-        exposedHeaders: ["set-cookie"],
-      })
-        .then((response) => {
-          dispatch(getSuccess(response.data));
-          if (response.data.status === "success") {
-            if (response.data.data.user.rolename === "Supplier") {
-              localStorage.setItem(
-                "user",
-                JSON.stringify(response.data.data.user)
-              );
-              return window.location.replace("/");
-            } else {
-              return window.location.replace("/login");
-            }
-          }
-        })
-        .catch((err) => {
-          return dispatch(getFailed(err));
-        });
-    }
+// const googleOAuth2 = (googleResponse) => {
+//   return async (dispatch) => {
+//     dispatch(getRequest());
+//     if (typeof googleResponse === "undefined") {
+//       googleResponse = [];
+//     }
+//     if (googleResponse && !googleResponse.error) {
+//       Axios({
+//         url: `/users/login/google`,
+//         method: "POST",
+//         headers: {
+//           Authorization: "JWT_TOKEN",
+//           "Content-Type": "application/json",
+//         },
+//         data: {
+//           googleId: googleResponse.googleId,
+//           lastName: googleResponse.profileObj.name,
+//           email: googleResponse.profileObj.email,
+//           roleName: "Supplier",
+//         },
+//         withCredentials: true,
+//         exposedHeaders: ["set-cookie"],
+//       })
+//         .then((response) => {
+//           dispatch(getSuccess(response.data));
+//           if (response.data.status === "success") {
+//             if (response.data.data.user.rolename === "Supplier") {
+//               localStorage.setItem(
+//                 "user",
+//                 JSON.stringify(response.data.data.user)
+//               );
+//               return window.location.replace("/");
+//             } else {
+//               return window.location.replace("/login");
+//             }
+//           }
+//         })
+//         .catch((err) => {
+//           return dispatch(getFailed(err));
+//         });
+//     }
 
-    dispatch({ type: GOOGLE_OAUTH2, googleResponse });
-  };
-};
+//     dispatch({ type: GOOGLE_OAUTH2, googleResponse });
+//   };
+// };
 
 const phoneNumberValidation = (phone) => {
   return async (dispatch) => {
@@ -321,7 +321,7 @@ const changePasswordMessage = (data) => {
 };
 
 const action = {
-  googleOAuth2,
+  // googleOAuth2,
   actLoginApi,
   checkPhoneNumber,
   registration,
