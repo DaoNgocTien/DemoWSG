@@ -99,7 +99,6 @@ class CreatModal extends Component {
       if (listDupQuantity.length > 0 || listInvalidQuantity.length > 0) {
         let mes = `Duplicate quantities: ${listDupQuantity}
         Invalid quantities: ${listInvalidQuantity}`;
-        mes += listQuantity[[listQuantity.length - 1].price] * 1 * data.advancePercent < 1000000 ? "Advance fee must have a value greater than 10,000!!!" : "";
         return this.setState({
           listDupQuantity: listDupQuantity,
           listInvalidQuantity: listInvalidQuantity,
@@ -725,7 +724,7 @@ class CreatModal extends Component {
                           </Form.Item>
                         </Space>
                         <Form.Item>
-                          <Text
+                          {/* <Text
                             type={
                               businessRuleErrMessage.length > 0 ? "danger" : "default"
                             }
@@ -734,7 +733,7 @@ class CreatModal extends Component {
                               businessRuleErrMessage.length > 0 ?
                                 businessRuleErrMessage :
                                 ""}
-                          </Text>
+                          </Text> */}
                           <Paragraph >
                             <pre>
                               Share campaign tutorial step by step:<br />
