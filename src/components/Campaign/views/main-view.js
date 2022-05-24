@@ -216,11 +216,7 @@ class CampaignUI extends Component {
               openModal={openCreateModal}
               closeModal={this.closeModal}
               createCampaign={createCampaign}
-              productList={productList.filter((product) => {
-                const availableQuantity =
-                  product.quantity - product.maxquantity;
-                return availableQuantity >= 10;
-              })}
+              productList={productList}
               campaingList={data}
             />
 
