@@ -73,11 +73,13 @@ const getCampaign = (campaignId) => {
           campaigns.data.data.map((c) => {
             max += c.productid === p.id ? Number(c.maxquantity) : 0;
           });
-        return {
-          key: p.id,
-          maxquantity: max,
-          ...p,
-        };
+        if (Number((p.quantity - max)) * Number(p.retailprice) >= 10000 && p.status !== "deactivated") {
+          return {
+            key: p.id,
+            maxquantity: max,
+            ...p,
+          }
+        }
       });
 
       return dispatch(
