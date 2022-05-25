@@ -117,9 +117,9 @@ class DashboardUI extends Component {
     if (Object.keys(statistical).length === 0) {
       return <></>
     }
-    this.orderData.map(item => {
-      const income = statistical.income.find(element => element.month === item.month)
-      const orders = statistical.orders.find(element => element.month === item.month)
+    this.orderData?.map(item => {
+      const income = statistical.income?.find(element => element.month === item.month)
+      const orders = statistical.orders?.find(element => element.month === item.month)
       if(income) {
         item.totalincome = parseFloat(income.totalincome)
       }
@@ -199,7 +199,7 @@ class DashboardUI extends Component {
                 <Card>
                   <Statistic
                     title="Sales"
-                    value={parseFloat(statistical.totalIncomeInThisMonth.sum)}
+                    value={parseFloat(statistical.totalIncomeInThisMonth?.sum)}
                     valueStyle={{ color: '#3f8600' }}
                     prefix="đ"
                   />
@@ -214,7 +214,7 @@ class DashboardUI extends Component {
                 <Card>
                   <Statistic
                     title="Orders"
-                    value={parseFloat(statistical.totalOrderInThisMonth.count)}
+                    value={parseFloat(statistical.totalOrderInThisMonth?.count)}
                     valueStyle={{ color: '#3f8600' }}
                     suffix="Orders"
                   />
