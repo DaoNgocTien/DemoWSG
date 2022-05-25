@@ -65,7 +65,9 @@ class CreatModal extends Component {
     });
   };
 
-  handleChange = ({ fileList, file, event }) => {
+  handleChange = (data) => {
+    let { fileList, file, event } = data;
+    console.log(data)
     // 2. Read from response and show file link
     console.log(fileList)
     fileList = fileList.map((file) => {

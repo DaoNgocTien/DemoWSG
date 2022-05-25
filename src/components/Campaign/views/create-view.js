@@ -18,7 +18,7 @@ import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
 
 const { RangePicker } = DatePicker;
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 class CreatModal extends Component {
   state = {
@@ -41,6 +41,9 @@ class CreatModal extends Component {
       compareArr: [],
     },
     errMes: "",
+    businessRuleErrMessage: "",
+    listDupQuantity: [],
+    listInvalidQuantity: [],
   };
   formRef = React.createRef();
   switchmRef = React.createRef();
@@ -63,49 +66,120 @@ class CreatModal extends Component {
   handleCreateAndClose = (data) => {
     let newCampaign = {};
     if (this.state.switchState) {
+      let minPrice = 0;
+      let listDupQuantity = [];
+      let listInvalidQuantity = [];
+      let listQuantity = data.quantities ?? [];
       //  Sort array
       data.quantities.sort(function (a, b) {
+        minPrice = a.price > b.price ? b.price : a.price;
         return b.quantity - a.quantity;
       });
 
-      const datas = this.uniqByKeepFirst(data.quantities, (it) => it.quantity);
-      data.quantities.sort(function (a, b) {
+      listQuantity.sort(function (a, b) {
+        minPrice = a.price > b.price ? b.price : a.price;
         return a.quantity - b.quantity;
       });
 
-      newCampaign = {
-        productId: data.productId,
-        fromDate: data.date[0],
-        toDate: data.date[1],
-        quantity: 1,
-        price: data.wholesalePrice,
-        maxQuantity: data.maxQuantity,
-        description: data.description,
-        advanceFee: data.advancePercent,
-        isShare: this.state.switchState ? true : false,
-        range: [...datas],
-      };
+      for (let i = listQuantity.length - 1; i >= 1; i--) {
+        if (listQuantity[i].quantity === listQuantity[i - 1].quantity) {
+          listDupQuantity.push(listQuantity[i].quantity)
+        }
+        if (listQuantity[i].price >= listQuantity[i - 1].price) {
+          listInvalidQuantity.push(listQuantity[i].quantity)
+        }
 
-      //  Insert into database
-      this.props.createCampaign(newCampaign);
+      }
 
-      //  Close modal
-      this.props.closeModal();
+
+      console.log(listQuantity)
+      console.log(listDupQuantity)
+      console.log(listInvalidQuantity)
+
+      if (listDupQuantity.length > 0 || listInvalidQuantity.length > 0) {
+        let mes = `Duplicate quantities: ${listDupQuantity}
+        Invalid quantities: ${listInvalidQuantity}`;
+        return this.setState({
+          listDupQuantity: listDupQuantity,
+          listInvalidQuantity: listInvalidQuantity,
+          businessRuleErrMessage: mes
+        })
+      }
+      else if (listQuantity[[listQuantity.length - 1].price] * 1 * data.advancePercent < 1000000) {
+        let mes = "Advance fee must have a value greater than 10,000!!!";
+        return this.setState({
+          businessRuleErrMessage: mes
+        })
+      }
+
+
+      // const datas = this.uniqByKeepFirst(data.quantities, (it) => it.quantity);
+      // data.quantities.sort(function (a, b) {
+      //   return a.quantity - b.quantity;
+      // });
+
+
+
+      // let flag = datas.length - 1;
+      // let comparedData = [datas[flag]];
+      // for (let i = datas.length - 2; i >= 0; i--) {
+      //   if (datas[flag].price > datas[i].price) {
+      //     comparedData.push(datas[i]);
+      //     flag = i;
+      //   }
+      // }
+      // if (comparedData[[0].price] * 1 * data.advancePercent < 100) {
+      //   return this.setState({
+      //     businessRuleErrMessage: "Advance fee must have a value greater than 10,000!!!"
+      //   })
+      // }
+      else {
+        this.setState({
+          businessRuleErrMessage: ""
+        })
+        newCampaign = {
+          productId: data.productId,
+          fromDate: data.date[0],
+          toDate: data.date[1],
+          quantity: 1,
+          price: data.wholesalePrice,
+          maxQuantity: data.maxQuantity,
+          description: data.description,
+          advanceFee: data.advancePercent,
+          isShare: this.state.switchState ? true : false,
+          range: [...listQuantity],
+        };
+
+        //  Insert into database
+        this.props.createCampaign(newCampaign);
+
+        //  Close modal
+        this.props.closeModal();
+      }
+
+
     } else {
-      newCampaign = {
-        productId: data.productId,
-        fromDate: data.date[0],
-        toDate: data.date[1],
-        quantity: data.quantity,
-        price: data.wholesalePrice,
-        maxQuantity: data.maxQuantity,
-        description: data.description,
-        advanceFee: data.advancePercent,
-        isShare: this.state.switchState ? true : false,
-        range: [],
-      };
-      this.props.createCampaign(newCampaign);
-      this.props.closeModal();
+      if (data.wholesalePrice * data.quantity * data.advancePercent < 100) {
+        return this.setState({
+          businessRuleErrMessage: "Advance fee must have a value greater than 10,000!!!"
+        })
+      }
+      else {
+        newCampaign = {
+          productId: data.productId,
+          fromDate: data.date[0],
+          toDate: data.date[1],
+          quantity: data.quantity,
+          price: data.wholesalePrice,
+          maxQuantity: data.maxQuantity,
+          description: data.description,
+          advanceFee: data.advancePercent,
+          isShare: this.state.switchState ? true : false,
+          range: [],
+        };
+        this.props.createCampaign(newCampaign);
+        this.props.closeModal();
+      }
     }
   };
 
@@ -192,6 +266,7 @@ class CreatModal extends Component {
       minWholesalePrice,
       advancePercent,
       switchState,
+      businessRuleErrMessage,
     } = this.state;
 
     return (
@@ -292,20 +367,20 @@ class CreatModal extends Component {
                   {
                     required: true,
                   },
-                  () => ({
-                    validator(_, value) {
-                      if (
-                        Number(productSelected?.retailprice) *
-                        Number(availableQuantity) <
-                        5000
-                      ) {
-                        return Promise.reject(
-                          new Error("Unable to use product")
-                        );
-                      }
-                      return Promise.resolve();
-                    },
-                  }),
+                  // () => ({
+                  //   validator(_, value) {
+                  //     if (
+                  //       Number(productSelected?.retailprice) *
+                  //       Number(availableQuantity) <
+                  //       5000
+                  //     ) {
+                  //       return Promise.reject(
+                  //         new Error("Unable to use product")
+                  //       );
+                  //     }
+                  //     return Promise.resolve();
+                  //   },
+                  // }),
                 ]}
               >
                 <Select
@@ -313,17 +388,12 @@ class CreatModal extends Component {
                   style={{ width: "60vh" }}
                 >
                   {productList.map((item) => {
-                    if (
-                      [item.quantity - item.maxquantity] *
-                      Number(item.retailprice) >
-                      5000 &&
-                      item.status !== "deactivated"
-                    )
-                      return (
-                        <Select.Option key={item.key} value={item.id}>
-                          {item.name}
-                        </Select.Option>
-                      );
+
+                    return (
+                      <Select.Option key={item.key} value={item.id}>
+                        {item.name}
+                      </Select.Option>
+                    );
                   })}
                 </Select>
               </Form.Item>
@@ -515,6 +585,13 @@ class CreatModal extends Component {
                 label="Campaign type"
                 name="isShare"
                 tooltip="In single campaign, a customer buy all products at once and campaign is done. In shared campaign, customers can buy products at any amount and the final price will depend on the campaign steps!!"
+                rules={[
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      return businessRuleErrMessage.length === 0 ? Promise.resolve() : Promise.reject(businessRuleErrMessage);
+                    },
+                  }),
+                ]}
               >
                 <Space style={{ width: "60vh" }} size={20}>
                   <Switch
@@ -578,6 +655,11 @@ class CreatModal extends Component {
                                     max={maxQuantity}
                                     min={1}
                                     style={{ width: "60vh" }}
+                                    onChange={e =>
+                                      this.setState({
+                                        businessRuleErrMessage: ""
+                                      })
+                                    }
                                   />
                                 </Form.Item>
                               )}
@@ -606,6 +688,11 @@ class CreatModal extends Component {
                                   productSelected?.retailprice ?? 999999999999
                                 }
                                 style={{ width: "60vh" }}
+                                onChange={e =>
+                                  this.setState({
+                                    businessRuleErrMessage: ""
+                                  })
+                                }
                               />
                             </Form.Item>
 
@@ -637,22 +724,31 @@ class CreatModal extends Component {
                           </Form.Item>
                         </Space>
                         <Form.Item>
-                          <Input.TextArea
-                            disabled="true"
-                            block
-                            icon={<PlusOutlined />}
-                            rows={5}
-                            value="Share campaign tutorial step by step:
-                          - The higher products customers buy, the better discount price they will get.
-                          - Quantity step - price conflict: the higher quantity will be counted
-                          For eq:
-                            + Quantity 15, price 80
-                            + Quantity 25, price 70
-                            + Quantity 45, price 95
-                            + Quantity 55, price 90
-                            -> Quantity valid: 15-25
-                            -> Quantity invalid: 45-55"
-                          ></Input.TextArea>
+                          {/* <Text
+                            type={
+                              businessRuleErrMessage.length > 0 ? "danger" : "default"
+                            }
+                          >
+                            {
+                              businessRuleErrMessage.length > 0 ?
+                                businessRuleErrMessage :
+                                ""}
+                          </Text> */}
+                          <Paragraph >
+                            <pre>
+                              Share campaign tutorial step by step:<br />
+                              - The higher products customers buy, the better discount price they will get.<br />
+                              - Quantity step - price conflict: the higher quantity will be counted<br />
+                              For eq:<br />
+                              + Quantity 15, price 80<br />
+                              + Quantity 25, price 70<br />
+                              + Quantity 45, price 95<br />
+                              + Quantity 55, price 90<br />
+                              -{">"} Quantity valid: 15-25<br />
+                              -{">"} Quantity invalid: 45-55
+                            </pre>
+                          </Paragraph>
+
                         </Form.Item>
                       </>
                     );

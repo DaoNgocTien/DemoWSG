@@ -5,7 +5,6 @@ import {
   Descriptions,
   Form, Image, Input,
   PageHeader, Popover, Row,
-  Space,
   Table,
   Tag
 } from "antd";
@@ -19,6 +18,7 @@ import RejectModal from "../../Orders/views/reject-view";
 import { default as campaignAction } from "../modules/action";
 import DeleteModal from "./delete-view";
 import EditModal from "./edit-view";
+
 
 class OrdersInCampaign extends React.Component {
   state = {
@@ -86,6 +86,7 @@ class OrdersInCampaign extends React.Component {
     },
     {
       title: "Customer Name",
+      key: "customerName",
       width: 150,
       render: (_text, object, _index) => {
         return object.customerfirstname + " " + object.customerlastname;
@@ -114,6 +115,7 @@ class OrdersInCampaign extends React.Component {
 
     {
       title: "Quantity",
+      key: "quantity",
       width: 100,
       render: (_text, object, _index) => {
         return object.details[0].quantity;
@@ -123,7 +125,7 @@ class OrdersInCampaign extends React.Component {
       title: "Total Price",
       dataIndex: "totalprice",
       key: "totalprice",
-      width: 100,
+      width: 200,
       render: (_text, object) => {
         return (
           <NumberFormat
@@ -140,7 +142,7 @@ class OrdersInCampaign extends React.Component {
       title: "Discount Price",
       dataIndex: "discountprice",
       key: "discountprice",
-      width: 150,
+      width: 200,
       render: (_text, object) => {
         return (
           <NumberFormat
@@ -157,7 +159,7 @@ class OrdersInCampaign extends React.Component {
       title: "Final Price",
       dataIndex: "finalprice",
       key: "finalprice",
-      width: 100,
+      width: 200,
       render: (_text, object) => {
         return (
           <NumberFormat
@@ -324,7 +326,6 @@ class OrdersInCampaign extends React.Component {
     } = this.state;
 
     const {
-      campaign,
       loading,
       rejectOrder,
       deleteCampaign,
@@ -335,12 +336,7 @@ class OrdersInCampaign extends React.Component {
       isStartAble,
       productList,
     } = this.props;
-
-    const rowSelection = {
-      selectedRowKeys,
-      onSelect: this.onSelectChange,
-      hideSelectAll: true,
-    };
+    console.log(this.props);
     return (
       <>
         <PageHeader
@@ -441,7 +437,6 @@ class OrdersInCampaign extends React.Component {
               </div>
               <Table
                 loading={loading}
-                rowSelection={rowSelection}
                 columns={this.columns}
                 dataSource={
                   displayData.length === 0 && searchData === ""
@@ -450,7 +445,7 @@ class OrdersInCampaign extends React.Component {
                     )
                     : displayData
                 }
-                scroll={{ y: 350 }}
+                scroll={{ x: 1200, y: 350 }}
               />
             </div>
           }

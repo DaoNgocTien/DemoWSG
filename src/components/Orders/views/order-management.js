@@ -139,7 +139,6 @@ class OrderManagement extends Component {
       dataIndex: "status",
       key: "status",
       render: (data) => {
-        const status = data.status;
         return <Tag>{data.toUpperCase()}</Tag>;
       },
       width: 100,
@@ -277,7 +276,7 @@ class OrderManagement extends Component {
     });
   };
 
-  handleChange = ({ fileList, file, event }) => {
+  handleChange = ({ fileList }) => {
     fileList = fileList.map((file) => {
       if (file.response) {
         file.url = file.response.url;
@@ -290,7 +289,7 @@ class OrderManagement extends Component {
     this.setState({ fileList });
   };
 
-  uploadImageForDelivering = (data) => {
+  uploadImageForDelivering = () => {
     this.changeStatus(this.state.record, this.state.fileList);
     this.setState({
       openUploadModal: false,
@@ -347,8 +346,8 @@ class OrderManagement extends Component {
                 <Form.Item
                   name="image"
                   rules={[
-                    ({ getFieldValue }) => ({
-                      validator(_, value) {
+                    () => ({
+                      validator(_) {
                         if (fileList.length >= 1) {
                           return Promise.resolve();
                         }
