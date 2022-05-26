@@ -142,6 +142,7 @@ const createCampaign = (record) => {
 };
 
 const updateCampaign = (record) => {
+  console.log(record)
   return async (dispatch) => {
     Axios({
       url: `/campaigns/${record.id}`,
@@ -149,8 +150,8 @@ const updateCampaign = (record) => {
       data: {
         status: "ready",
         productId: record.productId,
-        fromDate: record.fromDate,
-        toDate: record.toDate,
+        fromdate: record.fromDate,
+        todate: record.toDate,
         quantity: record.quantity,
         price: record.price,
         maxQuantity: record.maxQuantity,
