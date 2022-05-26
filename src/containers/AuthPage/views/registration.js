@@ -4,7 +4,9 @@ import {
     Form,
     Input,
     Steps,
-    AutoComplete
+    AutoComplete,
+    Upload,
+    Modal
 } from "antd";
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -31,7 +33,14 @@ class Registration extends Component {
             email: "",
             roleName: "Supplier",
             address: "",
-            addressByDelivery: {}
+            identificationCard: "",
+            addressByDelivery: {},
+            disablePhoneInput: false,
+            fileList: [],
+            load: false,
+            previewVisible: false,
+            previewImage: "",
+            previewTitle: "",
         };
     }
 
@@ -91,7 +100,10 @@ class Registration extends Component {
                     }, auth);
                     this.setState({ verify: verify })
                     signInWithPhoneNumber(auth, this.state.phoneNumber, verify).then((result) => {
-                        this.setState({ otpResult: result })
+                        this.setState({
+                            otpResult: result,
+                            disablePhoneInput: true
+                        })
                     }).catch((err) => {
                         console.log(err);
                     });
@@ -117,7 +129,7 @@ class Registration extends Component {
             .otpResult
             .confirm(this.state.otp)
             .then((result) => {
-                this.setState({ otpSuccess: true });
+                this.setState({ otpSuccess: true, currentStep: this.state.currentStep + 1 });
                 return alert("OTP Success");
             })
             .catch((err) => {
@@ -126,21 +138,20 @@ class Registration extends Component {
             })
     }
 
-    next = () => {
-        this.setState({
-            currentStep: this.state.currentStep + 1
-        });
-    };
-
     register = () => {
         console.log(this.state)
         Axios({
             url: `/users/register`, method: "POST", withCredentials:
                 true, data: {
-                    username: this.state.username, password:
-                        this.state.password, firstName: this.state.firstName, email:
-                        this.state.email, address: this.state.address, phone:
-                        this.state.phoneNumber, roleName: this.state.roleName,
+                    username: this.state.username,
+                    password: this.state.password,
+                    firstName: this.state.firstName,
+                    email: this.state.email,
+                    address: this.state.address,
+                    phone: this.state.phoneNumber,
+                    roleName: this.state.roleName,
+                    identificationCard: this.state.identificationCard,
+                    identificationImage: this.state.fileList
                 }
         }).then(result => {
             if (result.status === 200 || result.status === 204) {
@@ -151,6 +162,35 @@ class Registration extends Component {
         })
 
     }
+
+    handleChange = ({ fileList }) => {
+        fileList = fileList.map((file) => {
+            if (file.response) {
+                file.url = file.response.url;
+                file.name = file.response.fileName;
+                file.thumbUrl = null;
+            }
+            return file;
+        });
+
+        this.setState({ fileList });
+    };
+
+    handleCancelUploadImage = () => this.setState({ previewVisible: false });
+
+    handlePreview = async (file) => {
+        if (!file.url && !file.preview) {
+            file.preview = await this.getBase64(file.originFileObj);
+        }
+
+        this.setState({
+            previewImage: file.url,
+            previewVisible: true,
+            previewTitle:
+                file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
+        });
+    };
+
 
     setUsername = (data) => {
         this.setState({ username: data.target.value })
@@ -268,6 +308,12 @@ class Registration extends Component {
             }
         })
     }
+
+    setIdentificationCard = (data, _) => {
+        this.setState({
+            identificationCard: data.target.value
+        })
+    }
     steps = [
         {
             title: 'Validation Phone',
@@ -279,6 +325,13 @@ class Registration extends Component {
     ];
 
     render() {
+        let { fileList, load } = this.state
+        const uploadButton = (
+            <div>
+                {load ? <LoadingOutlined /> : <PlusOutlined />}
+                <div style={{ marginTop: 8 }}>Upload</div>
+            </div>
+        );
         return (
             <div className="main_form_body">
                 <div className="main_form_body">
@@ -322,6 +375,7 @@ class Registration extends Component {
                                                         width: '250px'
                                                     }}
                                                     placeholder="Phone Number"
+                                                    disabled={this.state.disablePhoneInput}
                                                     onChange={this.setPhoneNumber} />
                                             </Form.Item>
                                             <Button type="primary" htmlType='submit'>
@@ -450,6 +504,77 @@ class Registration extends Component {
                                         </Form.Item>
 
                                         <Form.Item
+                                            name="identificationcard"
+                                            label="Identification Card"
+                                            rules={[
+                                                {
+                                                    required: true,
+                                                    message: "Please input your Identification Card!",
+                                                    whitespace: true,
+                                                },
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+
+                                                        if (String(value).length >= 1 && String(value).length <= 20) {
+                                                            return Promise.resolve();
+                                                        }
+
+                                                        return Promise.reject(
+                                                            new Error(
+                                                                "Identification Number is 1-20 characters"
+                                                            )
+                                                        );
+                                                    },
+                                                }),
+                                            ]}
+                                        >
+                                            <Input type="number" onChange={this.setIdentificationCard} />
+                                        </Form.Item>
+
+                                        <Form.Item
+                                            name="identificationimage"
+                                            label={<><span className="red_asterik">*&nbsp;</span> Identification Image:</>}
+                                            rules={[
+                                                ({ getFieldValue }) => ({
+                                                    validator(_, value) {
+                                                        if (fileList.length >= 1) {
+                                                            return Promise.resolve();
+                                                        }
+
+                                                        return Promise.reject(new Error("Image required!!"));
+                                                    },
+                                                }),
+                                            ]}
+                                        >
+                                            <>
+                                                <Upload
+                                                    name="file"
+                                                    action="/files/upload"
+                                                    listType="picture-card"
+                                                    fileList={fileList}
+                                                    // onPreview={this.handlePreview}
+                                                    onChange={this.handleChange}
+                                                    style={{ width: "60vh" }}
+                                                >
+                                                    {fileList.length >= 2 ? null : uploadButton}
+                                                </Upload>
+                                                <Modal
+                                                    visible={this.state.previewVisible}
+                                                    title={this.state.previewTitle}
+                                                    footer={null}
+                                                    onCancel={this.handleCancelUploadImage}
+                                                >
+                                                    <img
+                                                        alt="example"
+                                                        style={{ width: "100%" }}
+                                                        src={this.state.previewImage}
+                                                    />
+                                                </Modal>
+                                            </>
+                                        </Form.Item>
+
+
+                                        <Form.Item
                                             name="address"
                                             label="Address"
                                             tooltip="What is your address?"
@@ -543,9 +668,9 @@ class Registration extends Component {
 
                             <div className="steps-action">
 
-                                {this.state.currentStep === 0 && <Button type="primary" onClick={this.next} disabled={!this.state.otpSuccess}>
+                                {/* {this.state.currentStep === 0 && <Button type="primary" onClick={this.next} disabled={!this.state.otpSuccess}>
                                     Next
-                                </Button>}
+                                </Button>} */}
                                 {this.state.currentStep === 1 && <Button
                                     type="primary"
                                     form='registrationForm'
