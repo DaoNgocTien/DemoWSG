@@ -203,6 +203,14 @@ class CreatModal extends Component {
             </Space>
 
             <Space size={30}>
+              <Form.Item
+                label="Weight"
+                name="weight"
+                initialValue={0}
+                required
+              >
+                <InputNumber min={0} default={0} style={{ width: "60vh" }} addonAfter="Kg" />
+              </Form.Item>
               <Form.Item name="description" label="Description"
                 rules={[
                   {
@@ -214,6 +222,8 @@ class CreatModal extends Component {
               >
                 <Input.TextArea autoSize={{ minRows: 3, maxRows: 5 }} style={{ width: "60vh" }} placeholder="Description is required!" />
               </Form.Item>
+            </Space>
+            <Space size={30}>
               <Form.Item name="image" label="Image"
                 rules={[
                   ({ getFieldValue }) => ({

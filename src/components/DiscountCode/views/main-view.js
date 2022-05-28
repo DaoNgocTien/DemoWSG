@@ -41,21 +41,15 @@ class DiscountCodeUI extends Component {
       fix: "left",
     },
     {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Start Date",
-      dataIndex: "startdate",
-      key: "startdate",
-      render: (data) => moment(data).format("MM/DD/YYYY"),
-    },
-    {
       title: "End Date",
       dataIndex: "enddate",
       key: "enddate",
       render: (data) => moment(data).format("MM/DD/YYYY"),
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
     },
     {
       title: "Status",

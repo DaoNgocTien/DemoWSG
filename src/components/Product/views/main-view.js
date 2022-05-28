@@ -96,6 +96,15 @@ class ProductUI extends Component {
       width: 100,
     },
     {
+      title: "Weight",
+      dataIndex: "weight",
+      key: "weight",
+      width: 100,
+      render: (_, object) => {
+        return _ + " Kg"
+      }
+    },
+    {
       title: "Created Date",
       dataIndex: "createdat",
       key: "createdat",

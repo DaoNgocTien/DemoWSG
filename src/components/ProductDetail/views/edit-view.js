@@ -28,6 +28,7 @@ class UpdateModal extends Component {
         description: record?.description,
         categoryId: record?.categoryId,
         image: record?.image,
+        weight: record?.weight
       },
       withCredentials: true,
     })
@@ -297,6 +298,15 @@ class UpdateModal extends Component {
 
             <Space size={30}>
               <Form.Item
+                label="Weight"
+                name="weight"
+                initialValue={record?.weight || 0}
+                required
+              >
+                <InputNumber min={0} default={record?.weight || 0} style={{ width: "60vh" }} addonAfter="Kg" />
+              </Form.Item>
+
+              <Form.Item
                 name="description"
                 label="Description"
                 initialValue={record?.description}
@@ -313,7 +323,9 @@ class UpdateModal extends Component {
                   placeholder="Description is required!"
                 />
               </Form.Item>
+            </Space>
 
+            <Space size={30}>
               <Form.Item
                 name="image"
                 label="Image"

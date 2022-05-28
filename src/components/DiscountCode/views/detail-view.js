@@ -112,10 +112,8 @@ class DiscountCodeDetail extends Component {
                         size="small"
                         labelStyle={{ width: "20%", fontWeight: "bold" }}
                     >
-                        <Descriptions.Item label="Discount Code Duration">
-                            {moment(record?.startdate).format("MM/DD/YYYY") +
-                                ` - ` +
-                                moment(record?.enddate).format("MM/DD/YYYY")}
+                        <Descriptions.Item label="End Date">
+                                {moment(record?.enddate).format("MM/DD/YYYY")}
                         </Descriptions.Item>
 
                         <Descriptions.Item label="Code">
