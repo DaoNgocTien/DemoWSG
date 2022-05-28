@@ -1,8 +1,9 @@
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import {
   Card, Col, Layout,
-  PageHeader, Row, Space, Statistic, Typography
+  PageHeader, Result, Row, Space, Statistic, Typography
 } from "antd";
+import axios from 'axios';
 import React, { Component, memo } from "react";
 import {
   CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis,
@@ -27,191 +28,107 @@ class DashboardUI extends Component {
     openDrawer: false,
     record: {},
     orderList: [],
+    statistical: {}
   };
-  data = [
-    {
-      name: "Jan",
-      Earnings: 0,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Earnings: 10000,
-      amt: 2400,
-    },
-    {
-      name: "Mar",
-      Earnings: 5000,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Earnings: 15000,
-      amt: 2400,
-    },
-    {
-      name: "May",
-      Earnings: 10000,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Earnings: 20000,
-      amt: 2400,
-    },
-    {
-      name: "Jul",
-      Earnings: 15000,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Earnings: 25000,
-      amt: 2400,
-    },
-    {
-      name: "Aug",
-      Earnings: 20000,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Earnings: 25000,
-      amt: 2400,
-    },
-    {
-      name: "Sep",
-      Earnings: 20000,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Earnings: 35000,
-      amt: 2400,
-    },
-    {
-      name: "Oct",
-      Earnings: 40000,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Earnings: 42000,
-      amt: 2400,
-    },
-    {
-      name: "Nov",
-      Earnings: 48000,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Earnings: 55000,
-      amt: 2400,
-    },
-    {
-      name: "Dec",
-      Earnings: 62000,
-      amt: 2400,
-    },
-  ];
 
   orderData = [
     {
-      name: "Jan",
-      Orders: 0,
-      amt: 2400,
+      month: "Jan",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "",
-      Orders: 100,
-      amt: 2400,
+      month: "Feb",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "Mar",
-      Orders: 70,
-      amt: 2400,
+      month: "Mar",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "",
-      Orders: 150,
-      amt: 2400,
+      month: "Apr",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "May",
-      Orders: 100,
-      amt: 2400,
+      month: "May",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "",
-      Orders: 200,
-      amt: 2400,
+      month: "Jun",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "Jul",
-      Orders: 150,
-      amt: 2400,
+      month: "Jul",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "",
-      Orders: 250,
-      amt: 2400,
+      month: "Aug",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "Aug",
-      Orders: 200,
-      amt: 2400,
+      month: "Sep",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "",
-      Orders: 250,
-      amt: 2400,
+      month: "Oct",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "Sep",
-      Orders: 200,
-      amt: 2400,
+      month: "Nov",
+      totalincome: 0,
+      totalorders: 0,
     },
     {
-      name: "",
-      Orders: 350,
-      amt: 2400,
-    },
-    {
-      name: "Oct",
-      Orders: 400,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Orders: 420,
-      amt: 2400,
-    },
-    {
-      name: "Nov",
-      Orders: 480,
-      amt: 2400,
-    },
-    {
-      name: "",
-      Orders: 550,
-      amt: 2400,
-    },
-    {
-      name: "Dec",
-      Orders: 620,
-      amt: 2400,
-    },
+      month: "Dec",
+      totalincome: 0,
+      totalorders: 0,
+    }
   ];
-  componentDidMount() { }
+  componentDidMount() {
+    axios({
+      url: `/statistical/supplier`,
+      method: "GET",
+      withCredentials: true,
+      exposedHeaders: ["set-cookie"],
+    }).then(result => {
+      if (result.status === 200) {
+        this.setState({
+          statistical: result.data
+        })
+      }
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
   render() {
     const {
-      selectedRowKeys,
+      statistical,
     } = this.state;
+    if (Object.keys(statistical).length === 0) {
+      return <></>
+    }
+    this.orderData?.map(item => {
+      const income = statistical.income?.find(element => element.month === item.month)
+      const orders = statistical.orders?.find(element => element.month === item.month)
+      if(income) {
+        item.totalincome = parseFloat(income.totalincome)
+      }
+      if(orders) {
+        item.totalorders = parseFloat(orders.totalorders)
+      }
+    })
 
-    const { productList, createCampaign, updateCampaign, deleteCampaign, data } =
-      this.props;
+    console.log(this.orderData)
     return (
       <Layout>
         <Content>
@@ -224,7 +141,7 @@ class DashboardUI extends Component {
                   <LineChart
                     width={500}
                     height={300}
-                    data={this.data}
+                    data={this.orderData}
                     margin={{
                       top: 5,
                       right: 30,
@@ -233,13 +150,13 @@ class DashboardUI extends Component {
                     }}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
+                    <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
                     <Line
                       type="monotone"
-                      dataKey="Earnings"
+                      dataKey="totalincome"
                       stroke="#8884d8"
                       activeDot={{ r: 10 }}
                     />
@@ -260,13 +177,13 @@ class DashboardUI extends Component {
                     }}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
+                    <XAxis dataKey="month" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
                     <Line
                       type="monotone"
-                      dataKey="Orders"
+                      dataKey="totalorders"
                       stroke="#8884d8"
                       activeDot={{ r: 10 }}
                     />
@@ -277,12 +194,12 @@ class DashboardUI extends Component {
             }
           >
             {/* Statistic  */}
-            <Row gutter={16}>
-              <Col span={6}>
+            <Row gutter={12}>
+              <Col span={12}>
                 <Card>
                   <Statistic
                     title="Sales"
-                    value={40000000}
+                    value={parseFloat(statistical.totalIncomeInThisMonth?.sum)}
                     valueStyle={{ color: '#3f8600' }}
                     prefix="đ"
                   />
@@ -293,11 +210,11 @@ class DashboardUI extends Component {
                 </Card>
               </Col>
 
-              <Col span={6}>
+              <Col span={12}>
                 <Card>
                   <Statistic
                     title="Orders"
-                    value="150"
+                    value={parseFloat(statistical.totalOrderInThisMonth?.count)}
                     valueStyle={{ color: '#3f8600' }}
                     suffix="Orders"
                   />
@@ -308,7 +225,7 @@ class DashboardUI extends Component {
                 </Card>
               </Col>
 
-              <Col span={6}>
+              {/* <Col span={6}>
                 <Card>
                   <Statistic
                     title="Conversion Rate"
@@ -340,11 +257,11 @@ class DashboardUI extends Component {
                     <Text type="warning"><ArrowDownOutlined />30%</Text>
                   </Space>
                 </Card>
-              </Col>
+              </Col> */}
             </Row>
           </PageHeader >
         </Content >
-       
+
       </Layout >
     );
   }

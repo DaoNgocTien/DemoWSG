@@ -83,11 +83,6 @@ class EdilModal extends Component {
 
       }
 
-
-      console.log(listQuantity)
-      console.log(listDupQuantity)
-      console.log(listInvalidQuantity)
-
       if (listDupQuantity.length > 0 || listInvalidQuantity.length > 0) {
         let mes = `Duplicate quantities: ${listDupQuantity}
         Invalid quantities: ${listInvalidQuantity}`;
@@ -104,9 +99,14 @@ class EdilModal extends Component {
         })
       }
       else {
+
+        let productSelected = this.state.productSelected
+          ? this.state.productSelected
+          : this.props.productList.find((p) => p.id === this.props.record.productid);
+
         newCampaign = {
           id: this.props.record?.id,
-          productId: this.state.productSelected?.id,
+          productId: productSelected?.id,
           fromDate: data.date[0],
           toDate: data.date[1],
           quantity: 1,
@@ -123,9 +123,12 @@ class EdilModal extends Component {
         this.props.closeModal();
       }
     } else {
+      let productSelected = this.state.productSelected
+        ? this.state.productSelected
+        : this.props.productList.find((p) => p.id === this.props.record.productid);
       newCampaign = {
         id: this.props.record?.id,
-        productId: this.state.productSelected?.id,
+        productId: productSelected?.id,
         fromDate: data.date[0],
         toDate: data.date[1],
         quantity: data.quantity,
@@ -243,7 +246,14 @@ class EdilModal extends Component {
       switchState,
       businessRuleErrMessage
     } = this.state;
-    this.setProduct(record);
+    productSelected = productSelected
+      ? productSelected
+      : productList.find((p) => p.id === record.productid);
+    if (!productSelected) {
+      return <></>
+    }
+    availableQuantity = productSelected.quantity - productSelected.maxquantity
+    console.log(productSelected)
     return (
       <>
         <Modal
@@ -401,6 +411,7 @@ class EdilModal extends Component {
                     },
                   }),
                 ]}
+                initialValue={record?.price}
               >
                 <InputNumber
                   addonAfter=" VND"
