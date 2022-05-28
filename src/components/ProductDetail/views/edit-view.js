@@ -158,7 +158,7 @@ class UpdateModal extends Component {
           visible={openModal}
           onCancel={this.handleCancel}
           footer={[
-            <Button onClick={this.handleCancel}>Cancel</Button>,
+            <Button key="cancel" onClick={this.handleCancel}>Cancel</Button>,
             <Button
               type="primary"
               form="updateProductForm"

@@ -185,6 +185,7 @@ class ProductUI extends Component {
           title={record?.name.toUpperCase()}
           extra={[
             <Button
+              key="disable"
               type="danger"
               onClick={() => this.start("openDeleteModal")}
               hidden={record?.status === "deactivated"}
@@ -193,6 +194,7 @@ class ProductUI extends Component {
               Disable
             </Button>,
             <Button
+              key="active"
               type="primary"
               onClick={() => this.activeProduct(record?.id)}
               hidden={record?.status === "active"}
@@ -201,6 +203,7 @@ class ProductUI extends Component {
               Active
             </Button>,
             <Button
+              key="edit"
               type="primary"
               onClick={() => this.start("openEditModal")}
               style={{ width: 90 }}
@@ -268,6 +271,7 @@ class ProductUI extends Component {
               JSON.parse(record?.image)?.map((image) => {
                 return (
                   <Image
+                    key={image.url}
                     width={100}
                     height={100}
                     src={image.url}

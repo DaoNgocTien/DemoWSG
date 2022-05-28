@@ -165,6 +165,26 @@ class EdilModal extends Component {
     });
   };
 
+  setProduct = (record) => {
+    let productSelected = this.props.productList?.find(
+      (element) => element.id === record.id
+    );
+    this.setState({
+      productSelected: productSelected,
+      availableQuantity: productSelected.quantity - productSelected.maxquantity,
+      switchState: true,
+      price: productSelected.retailprice,
+      maxQuantity: "10",
+    });
+    this.formRef.current.setFieldsValue({
+      wholesalePrice: record.retailprice,
+      quantity: record.quantity,
+      maxQuantity: record.maxquantity,
+      advancePercent: record.advancefee,
+      isShare: record.isshare ? true : false,
+    });
+  };
+
   onChangePrice = (value) => {
     if (isNaN(value)) {
       return;
@@ -223,10 +243,7 @@ class EdilModal extends Component {
       switchState,
       businessRuleErrMessage
     } = this.state;
-    productSelected = productSelected
-      ? productSelected
-      : productList.find((p) => p.id === record.productid);
-
+    this.setProduct(record);
     return (
       <>
         <Modal
@@ -240,7 +257,7 @@ class EdilModal extends Component {
           visible={openModal}
           onCancel={this.handleCancel}
           footer={[
-            <Button onClick={this.handleCancel}>Cancel</Button>,
+            <Button key="cancel" onClick={this.handleCancel}>Cancel</Button>,
             <Button
               type="primary"
               form="updateCampaignForm"

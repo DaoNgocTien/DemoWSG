@@ -168,7 +168,7 @@ class SettlePaymentUI extends Component {
     const {
       record,
     } = this.props;
-    const {  load, fileList } = this.state;
+    const { load, fileList } = this.state;
     const uploadButton = (
       <div>
         {load ? <LoadingOutlined /> : <PlusOutlined />}
@@ -185,6 +185,7 @@ class SettlePaymentUI extends Component {
           extra={[
 
             <Button
+              key="submit"
               type="primary"
               onClick={() => this.start("openHandleModal")}
               style={{ marginLeft: 3 }}

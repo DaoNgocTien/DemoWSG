@@ -332,7 +332,7 @@ class OrderManagement extends Component {
                 visible={openUploadModal}
                 onCancel={this.cancelUploadImage}
                 footer={[
-                  <Button onClick={this.cancelUploadImage}>Cancel</Button>,
+                  <Button key="cancel" onClick={this.cancelUploadImage}>Cancel</Button>,
                   <Button
                     type="primary"
                     form="uploadImageForDeliveringForm"

@@ -419,6 +419,7 @@ class TransactionUI extends Component {
           onConfirm={() => this.onOKWithdraw(data?.account || {})}
           okText="Yes"
           cancelText="No"
+          key="withdraw"
         >
           <Button type="primary">Withdraw</Button>
         </Popconfirm>]}

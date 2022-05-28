@@ -43,6 +43,7 @@ class DeleteModal extends Component {
           onCancel={this.handleCancel}
           footer={[
             <Button
+              key="cancel"
               onClick={this.handleCancel}
             >
               Cancel

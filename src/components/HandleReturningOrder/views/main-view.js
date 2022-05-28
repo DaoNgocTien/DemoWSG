@@ -221,7 +221,7 @@ class HandleReturningOrderUI extends Component {
             width={window.innerWidth * 0.7}
             onCancel={this.handleCancel}
             footer={[
-              <Button onClick={this.handleCancel}>Cancel</Button>,
+              <Button key="cancel" onClick={this.handleCancel}>Cancel</Button>,
               <Button
                 type="danger"
                 form="rejectReturnOrderForm"
@@ -302,6 +302,7 @@ class HandleReturningOrderUI extends Component {
           title="ORDER DETAIL"
           extra={[
             <Button
+              key="reject"
               type="danger"
               onClick={this.showModal}
               style={{ marginLeft: 3 }}
@@ -313,6 +314,7 @@ class HandleReturningOrderUI extends Component {
             </Button>,
 
             <Button
+              key="accept"
               type="primary"
               onClick={this.handleAcceptAndClose}
               style={{ marginLeft: 3 }}
@@ -323,6 +325,7 @@ class HandleReturningOrderUI extends Component {
               Accept Returning Request
             </Button>,
             <Button
+              key="back"
               type="primary"
               onClick={() => window.history.back()}
               style={{ marginLeft: 3 }}
@@ -331,6 +334,7 @@ class HandleReturningOrderUI extends Component {
               Back
             </Button>,
             <Button
+              key="rej"
               type="danger"
               onClick={this.showRejectModal}
               style={{ marginLeft: 3 }}
@@ -356,6 +360,7 @@ class HandleReturningOrderUI extends Component {
                   {data.orderHistories?.map((orderHistory) => {
                     return (
                       <Timeline.Item
+                        key="timeline"
                         label={moment(orderHistory.createdat).format(
                           "MM/DD/YYYY HH:mm:ss"
                         )}
@@ -367,6 +372,7 @@ class HandleReturningOrderUI extends Component {
                             JSON.parse(orderHistory.image)?.map((image) => {
                               return (
                                 <Image
+                                  key={image.url}
                                   width={200}
                                   height={200}
                                   src={image.url}

@@ -262,6 +262,7 @@ class LoyalCustomerConditionDetail extends React.Component {
           subTitle={`This is a loyal customer condition detail page`}
           extra={[
             <Button
+              key="edit"
               onClick={() => this.start("openEditModal")}
               type="primary"
             // hidden={record?.status === "deactivate"}
@@ -269,6 +270,7 @@ class LoyalCustomerConditionDetail extends React.Component {
               Edit Condition
             </Button>,
             <Button
+              key="delete"
               onClick={() => this.start("openDeleteModal")}
               type="danger"
             // hidden={record?.status === "deactivate"}

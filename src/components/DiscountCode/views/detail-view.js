@@ -64,6 +64,7 @@ class DiscountCodeDetail extends Component {
                 title={"Discount Code Detail"}
                 extra={[
                     <Button
+                        key="edit"
                         hidden={(record?.status)?.toUpperCase() === "DEACTIVATED"}
                         onClick={() => this.start("openEditModal")}
                         type="primary"
@@ -72,6 +73,7 @@ class DiscountCodeDetail extends Component {
                     </Button>,
 
                     <Button
+                        key="delete"
                         hidden={(record?.status)?.toUpperCase() === "DEACTIVATED"}
                         onClick={() => this.start("openDeleteModal")}
                         type="danger"
@@ -80,6 +82,7 @@ class DiscountCodeDetail extends Component {
                     </Button>,
 
                     <Button
+                        key="back"
                         hidden={(record?.status)?.toUpperCase() !== "DEACTIVATED"}
                         onClick={() => window.history.back()}
                     >
