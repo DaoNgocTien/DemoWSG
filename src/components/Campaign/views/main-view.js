@@ -37,11 +37,18 @@ class CampaignUI extends Component {
 
   columns = [
     {
+      title: "Name",
+      dataIndex: "description",
+      key: "description",
+      width: 200,
+      fix: "left",
+    },
+    {
       title: "Product Name",
       dataIndex: "productname",
       key: "productname",
       sorter: (a, b) => a.productname.length - b.productname.length,
-      width: 200,
+      width: 150,
       fix: "left",
     },
     {

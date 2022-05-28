@@ -17,11 +17,12 @@ class UpdateModal extends Component {
 
   handleUpdateAndClose = (data) => {
     let newDiscountCode = {
+      id: this.props.record?.id,
       code: data.code,
       description: data.description,
       minimunPriceCondition: data.minimunPrice,
-      startDate: data.date[0],
-      endDate: data.date[1],
+      // startDate: data.date[0],
+      endDate: data.endDate,
       discountPrice: data.discountPrice,
 
     };
@@ -37,6 +38,7 @@ class UpdateModal extends Component {
   render() {
     const { RangePicker } = DatePicker;
     const { openModal, closeModal, record } = this.props;
+    console.log(record)
     if (this.props.loading || !record) {
       return <></>;
     }
@@ -70,35 +72,17 @@ class UpdateModal extends Component {
             layout="vertical"
           >
             <Space size={30}>
-              <Form.Item
-                label="Discount Code duration"
-                name="date"
-                initialValue={
-                  [moment(record?.startdate),
-                  moment(record?.enddate),]
-                }
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+            <Form.Item
+                label="End Date"
+                name="endDate"
+                initialValue={moment(record?.enddate)}
+                required
               >
-                <RangePicker
-                  style={{ width: "60vh" }}
-                  ranges={{
-                    Today: [moment(), moment()],
-                    "This Week": [
-                      moment().startOf("week"),
-                      moment().endOf("week"),
-                    ],
-                    "This Month": [
-                      moment().startOf("month"),
-                      moment().endOf("month"),
-                    ],
-                  }}
-                  defaultValue={[moment(), moment().add(1, "days")]}
+                <DatePicker
                   format="MM/DD/YYYY"
-                  onChange={this.onChange}
+                  defaultValue={moment(record?.enddate, "MM/DD/YYYY")}
+                  disabledDate={(current) => { return current && current < moment().endOf('day') }}
+                  style={{ width: "60vh" }}
                 />
               </Form.Item>
               <Form.Item name="code" label="Code" initialValue={record?.code}
@@ -135,7 +119,7 @@ class UpdateModal extends Component {
               >
                 <InputNumber min={1000} max={999999999999} style={{ width: "60vh" }} />
               </Form.Item>
-              <Form.Item name="minimunPrice" initialValue={record?.minimunpricecondition} label="Minimun price"
+              <Form.Item name="minimunPrice" initialValue={record?.minimumpricecondition} label="Minimun price"
                 rules={[
                   () => ({
                     validator(_, value) {
@@ -150,7 +134,7 @@ class UpdateModal extends Component {
                 help="Minimum price to use discount code is 1000!"
 
               >
-                <InputNumber style={{ width: "60vh" }} min={1000} max={999999999999} />
+                <InputNumber style={{ width: "60vh" }} defaultValue={record?.minimumpricecondition} min={1000} max={999999999999} />
               </Form.Item>
             </Space>
             <Space size={30}>

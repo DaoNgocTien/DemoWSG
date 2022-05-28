@@ -304,6 +304,10 @@ class ProductUI extends Component {
             {moment(record?.updatedat).format("MM/DD/YYYY")}
           </Descriptions.Item>
 
+          <Descriptions.Item label="Weight">
+            {record?.weight + " Kg"}
+          </Descriptions.Item>
+
           <Descriptions.Item label="Status">
             {record?.status === "incampaign" ? (
               <Tag color="green">IN CAMPAIGN</Tag>

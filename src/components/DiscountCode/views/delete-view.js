@@ -68,35 +68,17 @@ class DeleteModal extends Component {
             </Form.Item>
 
             <Space size={30}>
-              <Form.Item
-                label="Discount Code Duration"
-                name="date"
-                initialValue={
-                  [moment(record?.startdate),
-                  moment(record?.enddate),]
-                }
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+            <Form.Item
+                label="End Date"
+                name="endDate"
+                initialValue={moment(record?.enddate)}
               >
-                <RangePicker
-                  disabled={true}
-                  style={{ width: "60vh" }}
-                  ranges={{
-                    Today: [moment(), moment()],
-                    "This Week": [
-                      moment().startOf("week"),
-                      moment().endOf("week"),
-                    ],
-                    "This Month": [
-                      moment().startOf("month"),
-                      moment().endOf("month"),
-                    ],
-                  }}
+                <DatePicker
                   format="MM/DD/YYYY"
-                  onChange={this.onChange}
+                  defaultValue={moment(record?.enddate, "MM/DD/YYYY")}
+                  disabledDate={(current) => { return current && current < moment().endOf('day') }}
+                  style={{ width: "60vh" }}
+                  disabled
                 />
               </Form.Item>
               <Form.Item name="code" label="Code" initialValue={record?.code}
@@ -131,7 +113,7 @@ class DeleteModal extends Component {
               >
                 <InputNumber min={1000} max={999999999999} style={{ width: "60vh" }} disabled={true} />
               </Form.Item>
-              <Form.Item name="minimunPrice" initialValue={record?.minimunpricecondition} label="Minimun price"
+              <Form.Item name="minimunPrice" initialValue={record?.minimumpricecondition} label="Minimun price"
                 rules={[
                   () => ({
                     validator(_, value) {
@@ -145,7 +127,7 @@ class DeleteModal extends Component {
                 help="Minimum price to use discount code is 1000!"
 
               >
-                <InputNumber style={{ width: "60vh" }} min={1000} max={999999999999} disabled={true} />
+                <InputNumber style={{ width: "60vh" }} defaultValue={record?.minimumpricecondition} disabled={true} />
               </Form.Item>
             </Space>
             <Space size={30}>
