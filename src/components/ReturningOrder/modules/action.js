@@ -31,6 +31,14 @@ const getOrder = (status) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+
+      if (campaigns.data.redirectUrl) { 
+        if (campaigns.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = campaigns.data.redirectUrl 
+      }
+
       //  Sort order to get returning order only
       return dispatch(
         getSuccess({
@@ -180,6 +188,12 @@ const getOrderById = id => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      if (orders.data.redirectUrl) { 
+        if (orders.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = orders.data.redirectUrl 
+      }
       //  Remove order in notAdvanced
       const record = orders.data?.data?.find(o => o.status.toUpperCase() !== "NOTADVANCED" && o.id === id) ?? {};
 

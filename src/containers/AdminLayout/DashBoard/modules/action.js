@@ -28,8 +28,17 @@ const getOrder = (status) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+
       //  Sort order to remove NOTADVANCED
-      const ordersort = orders.data?.data.filter(order => order.status.toUpperCase() !== "NOTADVANCED");
+      orders.data?.data.map(order => order.status.toUpperCase() !== "NOTADVANCED");
+
+      if (orders.data.redirectUrl) {
+        if (orders.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = orders.data.redirectUrl
+      }
+
       return dispatch(
         getSuccess({
           orders: ordersort.map((order) => {

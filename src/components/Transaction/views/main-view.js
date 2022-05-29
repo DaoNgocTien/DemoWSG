@@ -249,6 +249,66 @@ class TransactionUI extends Component {
     },
   ];
 
+  pricingColumns = [
+    {
+      title: "Platform Fee Pecent",
+      dataIndex: "platformFeePercent",
+      width: 150,
+      key: "platformFeePercent",
+      render: (data) => {
+        return (
+          <NumberFormat
+            value={data || 0}
+            thousandSeparator={true}
+            suffix={"%"}
+            decimalScale={0}
+            displayType="text"
+          />
+        )
+      }
+    },
+    {
+      title: "Payment Fee Pecent",
+      dataIndex: "paymentFeePercent",
+      width: 150,
+      key: "paymentFeePercent",
+      render: (data) => {
+        return (
+          <NumberFormat
+            value={data || 0}
+            thousandSeparator={true}
+            suffix={"%"}
+            decimalScale={0}
+            displayType="text"
+          />
+        )
+      },
+    },
+    {
+      title: "Penalty Fee Pecent",
+      dataIndex: "penaltyFeePercent",
+      width: 150,
+      key: "penaltyFeePercent",
+      render: (data) => {
+        return (
+          <NumberFormat
+            value={data || 0}
+            thousandSeparator={true}
+            suffix={"%"}
+            decimalScale={0}
+            displayType="text"
+          />
+        )
+      }
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      width: 100,
+      key: "status",
+    },
+  ];
+
   orderTransactionColumns = [
     {
       title: "Order Code",
@@ -514,6 +574,59 @@ class TransactionUI extends Component {
               columns={this.orderTransactionColumns}
               dataSource={data?.transactionHistory}
               scroll={{ y: 200 }}
+            />
+          </Tabs.TabPane>
+
+          <Tabs.TabPane tab="Pricing" key="4">
+            <Descriptions
+              bordered
+              column={1}
+              size="small"
+              labelStyle={{ width: "20%", fontWeight: "bold" }}
+            >
+
+              <Descriptions.Item label="Platform Fee Pecent">
+                <NumberFormat
+                  value={(data.pricingActive?.platformFeePercent || 0)}
+                  suffix={"%"}
+                  decimalScale={0}
+                  displayType="text"
+                />
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Payment Fee Pecent">
+                <NumberFormat
+                  value={(data.pricingActive?.paymentFeePercent || 0)}
+                  suffix={"%"}
+                  decimalScale={0}
+                  displayType="text"
+                />
+              </Descriptions.Item>
+
+              <Descriptions.Item label="Penalty Fee Pecent">
+                <NumberFormat
+                  value={(data.pricingActive?.penaltyFeePercent || 0)}
+                  suffix={"%"}
+                  decimalScale={0}
+                  displayType="text"
+                />
+              </Descriptions.Item>
+
+            </Descriptions>
+
+            <Table
+              loading={this.props.loading}
+              columns={this.pricingColumns}
+              dataSource={data?.pricingHistory}
+              scroll={{ y: 200 }}
+              style={{ marginTop: "50px" }}
+              title={() => {
+                return (
+                  <h6>
+                    <strong>History</strong>
+                  </h6>
+                );
+              }}
             />
           </Tabs.TabPane>
         </Tabs>

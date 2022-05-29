@@ -23,6 +23,12 @@ class DeleteModel extends Component {
             method: "DELETE",
             withCredentials: true,
         }).then((response) => {
+            if (response.data.redirectUrl) { 
+                if (response.data.redirectUrl === '/login') {
+                  localStorage.clear()
+                }
+                return window.location = response.data.redirectUrl 
+              }
             if (response.status === 200) {
                 return this.props.deleteCategory();
             }

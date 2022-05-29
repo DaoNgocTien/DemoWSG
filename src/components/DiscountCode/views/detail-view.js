@@ -1,7 +1,5 @@
 import { Button, DatePicker, Descriptions, Form, Image, Input, InputNumber, PageHeader, Popover, Space, Tag } from "antd";
-import Axios from "axios";
 import moment from "moment";
-import PropTypes from "prop-types";
 import React, { Component, memo } from "react";
 import NumberFormat from "react-number-format";
 import { connect } from "react-redux";

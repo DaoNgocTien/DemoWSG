@@ -27,6 +27,13 @@ const getData = (orderCode) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+
+      if (order.data.redirectUrl) { 
+        if (order.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = order.data.redirectUrl 
+      }
       return dispatch(
         getSuccess({
           orderHistories: orderHistories.data.data.map((orderHistory) => {
@@ -63,6 +70,13 @@ const rejectRequest = (data) => {
           withCredentials: true,
         }),
       ]);
+
+      if (rejectResponse.data.redirectUrl) { 
+        if (rejectResponse.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = rejectResponse.data.redirectUrl 
+      }
 
       return dispatch(getSuccess(rejectResponse));
     } catch (error) {

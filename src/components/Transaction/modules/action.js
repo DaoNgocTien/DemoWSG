@@ -18,7 +18,7 @@ const getTransaction = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      if (transactions.data.redirectUrl) {
+      if (transactions.data.data.redirectUrl) {
         console.log(transactions.data)
         localStorage.clear()
         window.location = transactions.data.redirectUrl

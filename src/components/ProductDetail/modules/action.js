@@ -22,6 +22,12 @@ const getOneProduct = (id) => {
         withCredentials: true,
       })])
 
+      if (product.data.redirectUrl) { 
+        if (product.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = product.data.redirectUrl 
+      }
 
       return dispatch(getSuccess({
         product: product.data.data, campaigns: campaigns.data.data, categories: categories.data.data

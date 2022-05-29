@@ -70,6 +70,13 @@ class RejectModal extends Component {
             withCredentials: true,
           }),
         ]);
+        if (rejectResponse.data.redirectUrl) { 
+          if (rejectResponse.data.redirectUrl === '/login') {
+            localStorage.clear()
+          }
+          return window.location = rejectResponse.data.redirectUrl 
+        }
+
         return this.props.rejectOrder();
       } catch (error) {
         return this.props.rejectOrder();

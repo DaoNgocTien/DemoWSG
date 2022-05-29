@@ -12,6 +12,12 @@ const getDiscountCode = (id) => {
           withCredentials: true,
         }),
       ]);
+      if (discountCodes.data.redirectUrl) { 
+        if (discountCodes.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = discountCodes.data.redirectUrl 
+      }
       if (discountCodes.status === 200) {
         let record = id ? discountCodes.data.data.find((item) => {
           return item.id === id;
