@@ -20,11 +20,10 @@ class CreatModal extends Component {
     let newDiscountCode = {
       code: data.code,
       description: data.description,
-      minimunPriceCondition: data.minimunPrice,
-      startDate: data.date[0],
-      endDate: data.date[1],
+      minimumPriceCondition: data.minimunPrice,
+      // startDate: data.date[0],
+      endDate: data.endDate,
       discountPrice: data.discountPrice,
-
     };
     this.props.createDiscountCode(newDiscountCode);
     this.props.closeModal();
@@ -69,31 +68,14 @@ class CreatModal extends Component {
           >
             <Space size={30}>
               <Form.Item
-                label="Discount Code duration"
-                name="date"
-                initialValue={[moment(), moment().add(1, "days")]}
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
+                label="End Date"
+                name="endDate"
+                required
               >
-                <RangePicker
+                <DatePicker
+                  format="YYYY-MM-DD"
+                  disabledDate={(current) => { return current && current < moment().endOf('day') }}
                   style={{ width: "60vh" }}
-                  ranges={{
-                    Today: [moment(), moment()],
-                    "This Week": [
-                      moment().startOf("week"),
-                      moment().endOf("week"),
-                    ],
-                    "This Month": [
-                      moment().startOf("month"),
-                      moment().endOf("month"),
-                    ],
-                  }}
-                  defaultValue={[moment(), moment().add(1, "days")]}
-                  format="MM/DD/YYYY"
-                  onChange={this.onChange}
                 />
               </Form.Item>
               <Form.Item name="code" label="Code"
@@ -126,6 +108,7 @@ class CreatModal extends Component {
                     },
                   }),
                 ]}
+                required
                 help="Minimum discount price is 1000!"
               >
                 <InputNumber min={1000} max={999999999999} style={{ width: "60vh" }} />
@@ -144,7 +127,7 @@ class CreatModal extends Component {
                   }),
                 ]}
                 help="Minimum price to use discount code is 1000!"
-
+                required
               >
                 <InputNumber style={{ width: "60vh" }} min={1000} max={999999999999} />
               </Form.Item>
@@ -152,6 +135,7 @@ class CreatModal extends Component {
 
             <Space size={30}>
               <Form.Item name="description" label="Description"
+                required
               >
                 <Input.TextArea style={{ width: "60vh" }} />
               </Form.Item>

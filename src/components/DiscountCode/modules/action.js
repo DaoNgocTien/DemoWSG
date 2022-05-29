@@ -7,7 +7,7 @@ const getDiscountCode = (id) => {
     try {
       const [discountCodes] = await Promise.all([
         Axios({
-          url: `/discountcode/supplier`,
+          url: `/discountcode?supplierId=${JSON.parse(localStorage.getItem('user'))?.id ?? null}`,
           method: "GET",
           withCredentials: true,
         }),
@@ -95,28 +95,25 @@ const deleteDiscountCode = (id) => {
   return async (dispatch) => {
     dispatch(getRequest());
     try {
-      const [deleteResponse, discountCodes] = await Promise.all([
+      const [deleteResponse] = await Promise.all([
         Axios({
           url: `/discountcode/${id}`,
           method: "DELETE",
           withCredentials: true,
         }),
-        Axios({
-          url: `/discountcode/supplier`,
-          method: "GET",
-          withCredentials: true,
-        }),
+        // Axios({
+        //   url: `/discountcode/supplier`,
+        //   method: "GET",
+        //   withCredentials: true,
+        // }),
       ]);
 
+      if (deleteResponse.status === 200) {
+        return window.location = "/discount/discount-codes"
+      }
+
       return dispatch(
-        getSuccess({
-          discountCodes: discountCodes.data.data.map((item) => {
-            return {
-              key: item.id,
-              ...item,
-            };
-          }),
-        })
+        getSuccess({})
       );
     } catch (error) {
       return dispatch(getFailed(error));

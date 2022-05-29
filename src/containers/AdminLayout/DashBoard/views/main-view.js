@@ -199,13 +199,13 @@ class DashboardUI extends Component {
                 <Card>
                   <Statistic
                     title="Sales"
-                    value={parseFloat(statistical.totalIncomeInThisMonth?.sum)}
+                    value={parseFloat(statistical.totalIncomeInThisMonth?.sum || 0)}
                     valueStyle={{ color: '#3f8600' }}
                     prefix="đ"
                   />
                   <Space>
-                    <Text >Last 30 days</Text>
-                    <Text type="success"><ArrowUpOutlined style={{ marginTop: "5px" }} />30%</Text>
+                    {/* <Text >Last 30 days</Text> */}
+                    {/* <Text type="success"><ArrowUpOutlined style={{ marginTop: "5px" }} />30%</Text> */}
                   </Space>
                 </Card>
               </Col>
@@ -214,13 +214,13 @@ class DashboardUI extends Component {
                 <Card>
                   <Statistic
                     title="Orders"
-                    value={parseFloat(statistical.totalOrderInThisMonth?.count)}
+                    value={parseFloat(statistical.totalOrderInThisMonth?.count || 0)}
                     valueStyle={{ color: '#3f8600' }}
                     suffix="Orders"
                   />
                   <Space>
-                    <Text style={{ marginTop: "35px" }}>Last 30 days</Text>
-                    <Text type="success"><ArrowUpOutlined />30%</Text>
+                    {/* <Text style={{ marginTop: "35px" }}>Last 30 days</Text> */}
+                    {/* <Text type="success"><ArrowUpOutlined />30%</Text> */}
                   </Space>
                 </Card>
               </Col>
