@@ -268,7 +268,7 @@ class CreatModal extends Component {
       switchState,
       businessRuleErrMessage,
     } = this.state;
-
+console.log(this.props.productList)
     return (
       <>
         <Modal

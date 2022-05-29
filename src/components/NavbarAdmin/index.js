@@ -2,7 +2,7 @@ import {
   BellTwoTone,
   LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MessageTwoTone, SettingTwoTone, UserOutlined
 } from "@ant-design/icons";
-import { Button, Col, Divider, Menu, Row } from "antd";
+import { Button, Col, Divider, Menu, Row, Image } from "antd";
 import Axios from "axios";
 import React, { Component, memo } from "react";
 import { Link } from "react-router-dom";
@@ -50,6 +50,16 @@ class NavbarAdmin extends Component {
         </Col>
         <Col flex="500px">
           <Link className="LinkDecorations" style={{ color: "black" }} to="/">
+            <Image.PreviewGroup>
+              <Image
+                src="/logo.png"
+                width={42}
+                height={42}
+                preview={{
+                  src: "/logo.png",
+                }}
+              />
+            </Image.PreviewGroup>
             WHOLESALE GROUP
           </Link>
         </Col>
