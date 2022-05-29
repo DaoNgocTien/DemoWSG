@@ -11,6 +11,8 @@ import LoyalCustomerCondition from "../components/LoyalCustomerCondition";
 import LoyalCustomerConditionDetail from "../components/LoyalCustomerCondition/views/detail-view";
 import Orders from "../components/Orders";
 import OrderDetail from "../components/Orders/views/order-detail";
+import AccessWaiting from "../components/AccessWaiting";
+import Deactivated from "../components/Deactivated";
 import Product from "../components/Product";
 import ProductDetail from "../components/ProductDetail";
 import Profile from "../components/Profile";
@@ -130,6 +132,17 @@ const adminRoutes = [
     exact: true,
     path: "/order/handle/returning/:orderCode",
     component: HandleReturningOrder,
+  },
+
+  {
+    exact: true,
+    path: "/waiting-access",
+    component: AccessWaiting,
+  },
+  {
+    exact: true,
+    path: "/deactivated",
+    component: Deactivated,
   },
 ];
 

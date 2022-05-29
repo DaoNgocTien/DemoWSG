@@ -18,11 +18,14 @@ const getTransaction = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
-      if (transactions.data.data.redirectUrl) {
-        console.log(transactions.data)
-        localStorage.clear()
-        window.location = transactions.data.redirectUrl
+      
+      if (transactions.data.redirectUrl) { 
+        if (transactions.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = transactions.data.redirectUrl 
       }
+
       return dispatch(
         getSuccess({
           transactions: transactions.data.data,
