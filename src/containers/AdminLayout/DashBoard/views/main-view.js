@@ -120,21 +120,22 @@ class DashboardUI extends Component {
     const {
       statistical,
     } = this.state;
+    const { data } = this.props;
     if (Object.keys(statistical).length === 0) {
       return <></>
     }
     this.orderData?.map(item => {
       const income = statistical.income?.find(element => element.month === item.month)
       const orders = statistical.orders?.find(element => element.month === item.month)
-      if(income) {
+      if (income) {
         item.totalincome = parseFloat(income.totalincome)
       }
-      if(orders) {
+      if (orders) {
         item.totalorders = parseFloat(orders.totalorders)
       }
     })
-
-    console.log(this.orderData)
+    const completedOrder = data.length !== 0 ? data.filter(o => o.status.toUpperCase() === "COMPLETED") : [];
+    const returnedOrder = data.length !== 0 ? data.filter(o => o.status.toUpperCase() === "RETURNED") : [];
     return (
       <Layout>
         <Content>
@@ -201,7 +202,7 @@ class DashboardUI extends Component {
           >
             {/* Statistic  */}
             <Row gutter={12}>
-              <Col span={12}>
+              <Col span={6}>
                 <Card>
                   <Statistic
                     title="Sales"
@@ -216,7 +217,7 @@ class DashboardUI extends Component {
                 </Card>
               </Col>
 
-              <Col span={12}>
+              <Col span={6}>
                 <Card>
                   <Statistic
                     title="Orders"
@@ -227,6 +228,40 @@ class DashboardUI extends Component {
                   <Space>
                     {/* <Text style={{ marginTop: "35px" }}>Last 30 days</Text> */}
                     {/* <Text type="success"><ArrowUpOutlined />30%</Text> */}
+                  </Space>
+                </Card>
+              </Col>
+
+              <Col span={6}>
+                <Card>
+                  <Statistic
+                    title="Conversion Rate"
+                    value={
+                      completedOrder.length === 0 ? 0 :
+                        (parseFloat(completedOrder.length) / parseFloat(data.length === 0 ? data.length : 1))}
+                    valueStyle={{ color: '#3f8600' }}
+                    prefix="%"
+                  />
+                  <Space>
+                    {/* <Text >Last 30 days</Text> */}
+                    {/* <Text type="success"><ArrowUpOutlined style={{ marginTop: "5px" }} />30%</Text> */}
+                  </Space>
+                </Card>
+              </Col>
+
+              <Col span={6}>
+                <Card>
+                  <Statistic
+                    title="Return Rate"
+                    value={
+                      returnedOrder.length === 0 ? 0 :
+                        (parseFloat(returnedOrder.length) / parseFloat(data.length === 0 ? data.length : 1))}
+                    valueStyle={{ color: '#3f8600' }}
+                    prefix="%"
+                  />
+                  <Space>
+                    {/* <Text >Last 30 days</Text> */}
+                    {/* <Text type="success"><ArrowUpOutlined style={{ marginTop: "5px" }} />30%</Text> */}
                   </Space>
                 </Card>
               </Col>

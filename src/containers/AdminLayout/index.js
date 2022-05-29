@@ -320,6 +320,7 @@ class AdminRender extends Component {
                       {this.state.userMessages.map((element, index) => {
                         return (
                           <Conversation
+                            key={index}
                             name={
                               messages[element].userinfo?.firstname +
                               " " +

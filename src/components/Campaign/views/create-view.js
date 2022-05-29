@@ -268,7 +268,7 @@ class CreatModal extends Component {
       switchState,
       businessRuleErrMessage,
     } = this.state;
-
+console.log(this.props.productList)
     return (
       <>
         <Modal
@@ -282,7 +282,7 @@ class CreatModal extends Component {
           visible={openModal}
           onCancel={this.handleCancel}
           footer={[
-            <Button onClick={this.handleCancel}>Cancel</Button>,
+            <Button key="cancel" onClick={this.handleCancel}>Cancel</Button>,
             <Button
               type="primary"
               form="createCampaignForm"

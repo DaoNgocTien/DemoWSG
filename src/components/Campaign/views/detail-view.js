@@ -346,6 +346,7 @@ class OrdersInCampaign extends React.Component {
           subTitle={`This is a campaign detail page`}
           extra={[
             <Button
+              key={"primary"}
               type="primary"
               onClick={() => this.props.startCampaignBeforeHand(record?.id)}
               hidden={record?.status !== "ready"}
@@ -363,6 +364,7 @@ class OrdersInCampaign extends React.Component {
               )}
             </Button>,
             <Button
+              key={"done"}
               onClick={() => this.props.doneCampaignBeforeHand(record?.id)}
               type="primary"
               hidden={record?.status !== "active"}
@@ -370,6 +372,7 @@ class OrdersInCampaign extends React.Component {
               Done Campaign
             </Button>,
             <Button
+              key={"edit"}
               onClick={() => this.start("openEditModal")}
               type="primary"
               hidden={record?.status !== "ready"}
@@ -377,6 +380,7 @@ class OrdersInCampaign extends React.Component {
               Edit Campaign
             </Button>,
             <Button
+              key="delete"
               onClick={() => this.start("openDeleteModal")}
               type="danger"
               hidden={record?.status !== "ready"}
@@ -533,6 +537,7 @@ class OrdersInCampaign extends React.Component {
                   JSON.parse(record?.productimage)?.map((image) => {
                     return (
                       <Image
+                        key={image}
                         width={100}
                         height={100}
                         src={image.url}

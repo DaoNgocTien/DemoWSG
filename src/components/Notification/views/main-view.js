@@ -74,8 +74,9 @@ class NotificationUI extends Component {
               <List.Item
                 key={item.key}
                 actions={[
-                  <Space>
+                  <Space key="space">
                     <Button
+                      key="detail"
                       type="primary"
                       onClick={() => this.onShowDetail(item.key)}
                     >
@@ -83,7 +84,7 @@ class NotificationUI extends Component {
                     </Button>,
                     <Button
                       type="primary"
-
+                      key="read"
                       onClick={() => this.onShowDetail()}
                     >
                       Read
@@ -128,16 +129,17 @@ class NotificationUI extends Component {
               <List.Item
                 key={item.key}
                 actions={[
-                  <Space>
+                  <Space key="space">
                     <Button
                       type="primary"
+                      key="detail"
                       onClick={() => this.onShowDetail(item.key)}
                     >
                       Detail
                     </Button>,
                     <Button
                       type="primary"
-
+                      key="read"
                       onClick={() => this.onShowDetail()}
                     >
                       Read

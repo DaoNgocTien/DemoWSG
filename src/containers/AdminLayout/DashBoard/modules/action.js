@@ -1,18 +1,26 @@
 import Axios from "axios";
 import {
-  GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS} from "./constant";
+  GET_DATA_FAIL, GET_DATA_REQUEST, GET_DATA_SUCCESS
+} from "./constant";
 
-const getOrder = () => {
+const getOrder = (status) => {
   return async (dispatch) => {
     try {
       dispatch(getRequest());
       const [orders, campaigns] = await Promise.all([
-        Axios({
-          url: `/order/supplier`,
-          method: "GET",
-          withCredentials: true,
-          exposedHeaders: ["set-cookie"],
-        }),
+        !status
+          ? Axios({
+            url: `/order/supplier`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          })
+          : Axios({
+            url: `/order/supplier/status?status=${status}`,
+            method: "GET",
+            withCredentials: true,
+            exposedHeaders: ["set-cookie"],
+          }),
         Axios({
           url: `/campaigns/All`,
           method: "GET",
@@ -21,18 +29,21 @@ const getOrder = () => {
         }),
       ]);
 
-      if (orders.data.redirectUrl) { 
+      //  Sort order to remove NOTADVANCED
+      orders.data?.data.map(order => order.status.toUpperCase() !== "NOTADVANCED");
+
+      if (orders.data.redirectUrl) {
         if (orders.data.redirectUrl === '/login') {
           localStorage.clear()
         }
-        return window.location = orders.data.redirectUrl 
+        return window.location = orders.data.redirectUrl
       }
 
       return dispatch(
         getSuccess({
-          orders: orders.map((order) => {
+          orders: ordersort.map((order) => {
             return {
-              campaign: (campaigns.data.data).filter(camp => {
+              campaign: campaigns.data.data.filter((camp) => {
                 return camp.id == order.campaignid;
               }),
               key: order.id,
@@ -42,7 +53,7 @@ const getOrder = () => {
         })
       );
     } catch (error) {
-      return dispatch(getFailed());
+      return dispatch(getFailed(error));
     }
   };
 };
