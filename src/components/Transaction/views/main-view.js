@@ -596,7 +596,6 @@ class TransactionUI extends Component {
               size="small"
               labelStyle={{ width: "20%", fontWeight: "bold" }}
             >
-
               <Descriptions.Item label="Platform Fee Pecent">
                 <NumberFormat
                   value={(data.pricingActive?.platformFeePercent || 0)}
