@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 class TransactionUI extends Component {
   state = {
     loading: false,
+    tab: "Account",
   };
 
   onOKWithdraw = (data) => {
@@ -467,6 +468,12 @@ class TransactionUI extends Component {
     },
   ];
 
+  onClickTab = value => {
+    this.setState({
+      tab: value
+    })
+  }
+
   render() {
     const { data } = this.props;
     return (
@@ -481,11 +488,16 @@ class TransactionUI extends Component {
           cancelText="No"
           key="withdraw"
         >
-          <Button type="primary">Withdraw</Button>
+          <Button
+            hidden={this.state.tab === "Order Transaction" || this.state.tab === "Pricing"}
+            type={this.state.tab === "Account" ? "primary" : "danger"}
+          >
+            {this.state.tab === "Account" ? "Withdraw" : "Pay Penalty"}
+          </Button>
         </Popconfirm>]}
       >
-        <Tabs defaultActiveKey="1" >
-          <Tabs.TabPane tab="Account" key="1">
+        <Tabs defaultActiveKey="1" onChange={this.onClickTab}>
+          <Tabs.TabPane tab="Account" key="Account">
             <Descriptions
               bordered
               column={2}
@@ -560,7 +572,7 @@ class TransactionUI extends Component {
               }}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Penalty" key="3">
+          <Tabs.TabPane tab="Penalty" key="Penalty">
             <Table
               loading={this.props.loading}
               columns={this.penaltyColumns}
@@ -568,7 +580,7 @@ class TransactionUI extends Component {
               scroll={{ y: 200 }}
             />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="Order Transaction" key="2">
+          <Tabs.TabPane tab="Order Transaction" key="Order Transaction">
             <Table
               loading={this.props.loading}
               columns={this.orderTransactionColumns}
@@ -577,7 +589,7 @@ class TransactionUI extends Component {
             />
           </Tabs.TabPane>
 
-          <Tabs.TabPane tab="Pricing" key="4">
+          <Tabs.TabPane tab="Pricing" key="Pricing">
             <Descriptions
               bordered
               column={1}
