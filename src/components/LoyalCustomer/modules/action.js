@@ -13,6 +13,12 @@ const getLoyalCustomer = () => {
         }),
       ]);
 
+      if (LoyalCustomers.data.redirectUrl) { 
+        if (LoyalCustomers.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = LoyalCustomers.data.redirectUrl 
+      }
       return dispatch(
         getSuccess({
           LoyalCustomers: LoyalCustomers.data.data.map((item) => {
@@ -47,6 +53,13 @@ const updateLoyalCustomer = (record, id) => {
           withCredentials: true,
         }),
       ]);
+
+      if (LoyalCustomers.data.redirectUrl) { 
+        if (LoyalCustomers.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = LoyalCustomers.data.redirectUrl 
+      }
 
       return dispatch(
         getSuccess({

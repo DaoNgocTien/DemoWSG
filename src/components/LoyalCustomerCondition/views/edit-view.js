@@ -2,7 +2,6 @@ import {
   Button, DatePicker, Descriptions, Form,
   Input, InputNumber, Modal, Select, Upload,
 } from "antd";
-import Axios from "axios";
 import moment from "moment";
 import React, { Component, memo } from "react";
 

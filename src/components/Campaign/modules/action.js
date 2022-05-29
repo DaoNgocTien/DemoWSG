@@ -52,6 +52,13 @@ const getCampaign = (campaignId) => {
         ]);
       }
 
+      if (products.data.redirectUrl) { 
+        if (products.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = products.data.redirectUrl 
+      }
+
       let availableProducts = products.data.data.filter((p) => {
         let max = 0;
         campaigns.data.data.map((c) => {
@@ -118,6 +125,13 @@ const createCampaign = (record) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      if (products.data.redirectUrl) { 
+        if (products.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = products.data.redirectUrl 
+      }
+
       if (createResponse.data.message) {
         alert(createResponse.data.message);
       }
@@ -162,6 +176,13 @@ const updateCampaign = (record) => {
       withCredentials: true,
     })
       .then((result) => {
+        if (result.data.redirectUrl) { 
+          if (result.data.redirectUrl === '/login') {
+            localStorage.clear()
+          }
+          return window.location = result.data.redirectUrl 
+        }
+
         if (result.status === 200) {
           if (result.data.message) {
             alert(result.data.message);
@@ -192,6 +213,14 @@ const deleteCampaign = (id) => {
           withCredentials: true,
         }),
       ]);
+
+      if (deleteResponse.data.redirectUrl) { 
+        if (deleteResponse.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = deleteResponse.data.redirectUrl 
+      }
+
       dispatch(
         getSuccess({
           campaigns: [],
@@ -219,6 +248,13 @@ const startCampaignBeforeHand = (id) => {
           withCredentials: true,
         }),
       ]);
+      if (response.data.redirectUrl) { 
+        if (response.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = response.data.redirectUrl 
+      }
+
       if (response.status === 200) {
         if (!response.data.data) {
           alert(response.data.message);
@@ -249,6 +285,13 @@ const doneCampaignBeforeHand = (id) => {
           withCredentials: true,
         }),
       ]);
+
+      if (response.data.redirectUrl) { 
+        if (response.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = response.data.redirectUrl 
+      }
 
       dispatch(
         getSuccess({
@@ -290,6 +333,12 @@ const getCampaignById = (id) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      if (products.data.redirectUrl) { 
+        if (products.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = products.data.redirectUrl 
+      }
       //  Get all product with available quantity >= 10
       let availableProducts = products.data.data.filter((p) => {
         let max = 0;
