@@ -26,6 +26,14 @@ const getOrder = (status) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+
+      if (orders.data.redirectUrl) { 
+        if (orders.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = orders.data.redirectUrl 
+      }
+      
       //  Sort order to remove NOTADVANCED
       const ordersort = orders.data?.data.filter(order => order.status.toUpperCase() !== "NOTADVANCED");
       return dispatch(
@@ -113,6 +121,14 @@ const getOrderByCampaignId = (campaignId) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+
+      if (orders.data.redirectUrl) { 
+        if (orders.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = orders.data.redirectUrl 
+      }
+
       //  Remove order in notAdvanced
       const ordersort = orders.data?.data.filter(order => order.status.toUpperCase() !== "NOTADVANCED");
       //  Remove order not belong to campaign
@@ -147,6 +163,14 @@ const getOrderById = id => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+
+      if (orders.data.redirectUrl) { 
+        if (orders.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = orders.data.redirectUrl 
+      }
+
       //  Remove order in notAdvanced
       const record = orders.data?.data?.find(o => o.status.toUpperCase() !== "NOTADVANCED" && o.id === id) ?? {};
 

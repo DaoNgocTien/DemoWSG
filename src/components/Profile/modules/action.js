@@ -21,6 +21,14 @@ const getProfile = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+
+      if (profile.data.redirectUrl) { 
+        if (profile.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = profile.data.redirectUrl 
+      }
+
       if (profile.status === 200) {
         let user = profile.data.data.user.rolename === "Supplier" ? {
           rolename: profile.data.data.user.rolename,
@@ -81,6 +89,13 @@ const checkPhoneNumber = (phone) => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+      if (phoneValidation.data.redirectUrl) { 
+        if (phoneValidation.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = phoneValidation.data.redirectUrl 
+      }
+
       const exist = phoneValidation.data.data[0] ? true : false;
 
       if (exist) {

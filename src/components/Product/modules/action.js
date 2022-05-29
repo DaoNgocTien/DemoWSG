@@ -12,6 +12,12 @@ const getAllProduct = (category) => {
       exposedHeaders: ["set-cookie"],
     })
       .then((result) => {
+        if (result.data.redirectUrl) { 
+          if (result.data.redirectUrl === '/login') {
+            localStorage.clear()
+          }
+          return window.location = result.data.redirectUrl 
+        }
         if (result.status === 200) {
           const data = (result.data.data).map(product => {
             return {

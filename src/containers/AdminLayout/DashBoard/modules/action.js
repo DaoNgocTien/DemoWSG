@@ -20,6 +20,14 @@ const getOrder = () => {
           exposedHeaders: ["set-cookie"],
         }),
       ]);
+
+      if (orders.data.redirectUrl) { 
+        if (orders.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = orders.data.redirectUrl 
+      }
+
       return dispatch(
         getSuccess({
           orders: orders.map((order) => {

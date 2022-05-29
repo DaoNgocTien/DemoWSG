@@ -17,6 +17,12 @@ class CreatModal extends Component {
       data: record,
       withCredentials: true,
     }).then((response) => {
+      if (response.data.redirectUrl) { 
+        if (response.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = response.data.redirectUrl 
+      }
       if (response.status === 200) {
         return this.props.createCategory()
       }

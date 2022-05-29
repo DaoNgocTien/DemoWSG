@@ -13,6 +13,13 @@ const getLoyalCustomerCondition = () => {
         })
       ]);
 
+      if (LoyalCustomers.data.redirectUrl) { 
+        if (LoyalCustomers.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = LoyalCustomers.data.redirectUrl 
+      }
+
       return dispatch(
         getSuccess({
           LoyalCustomers: LoyalCustomers.data.data.map((item) => {
@@ -42,7 +49,12 @@ const getLoyalCustomerConditionById = id => {
           withCredentials: true,
         })
       ]);
-
+      if (LoyalCustomers.data.redirectUrl) { 
+        if (LoyalCustomers.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = LoyalCustomers.data.redirectUrl 
+      }
       return dispatch(
         storeRecord({
           record: LoyalCustomers.data.data?.find(l => l.id === id)
@@ -77,6 +89,13 @@ const createLoyalCustomerCondition = (record) => {
           withCredentials: true,
         }),
       ]);
+
+      if (LoyalCustomers.data.redirectUrl) { 
+        if (LoyalCustomers.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = LoyalCustomers.data.redirectUrl 
+      }
 
       return dispatch(
         getSuccess({
@@ -125,6 +144,13 @@ const updateLoyalCustomerCondition = (record, id) => {
         }),
       ]);
 
+      if (LoyalCustomers.data.redirectUrl) { 
+        if (LoyalCustomers.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = LoyalCustomers.data.redirectUrl 
+      }
+
       return dispatch(
         getSuccess({
           LoyalCustomers: LoyalCustomers.data.data.map((item) => {
@@ -168,6 +194,13 @@ const deleteLoyalCustomerCondition = (id) => {
           withCredentials: true,
         }),
       ]);
+
+      if (LoyalCustomers.data.redirectUrl) { 
+        if (LoyalCustomers.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = LoyalCustomers.data.redirectUrl 
+      }
 
       return dispatch(
         getSuccess({

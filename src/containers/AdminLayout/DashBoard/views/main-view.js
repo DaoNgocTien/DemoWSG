@@ -100,6 +100,12 @@ class DashboardUI extends Component {
       withCredentials: true,
       exposedHeaders: ["set-cookie"],
     }).then(result => {
+      if (result.data.redirectUrl) { 
+        if (result.data.redirectUrl === '/login') {
+          localStorage.clear()
+        }
+        return window.location = result.data.redirectUrl 
+      }
       if (result.status === 200) {
         this.setState({
           statistical: result.data
