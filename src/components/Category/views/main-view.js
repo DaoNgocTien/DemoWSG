@@ -103,40 +103,6 @@ class CategoryUI extends Component {
       render: (data) => moment(data).format("DD-MM-YYYY"),
       width: 200,
     },
-    {
-      title: "",
-      key: "",
-      render: (object) => {
-        if (object.status === "ready") {
-          return (<>
-
-            <Link to={`/products/categories/${object.id}`}>
-              <Button icon={<OpenInNew />}
-                type="default"
-                shape="circle"
-                style={{
-                  border: "none",
-                  boxShadow: "none",
-                  background: "none",
-                }} />
-            </Link>
-          </>
-          );
-        } else {
-          return <Button icon={<OpenInNew />}
-            type="default"
-            shape="circle"
-            onClick={() => this.start("openEditModal")}
-            style={{
-              border: "none",
-              boxShadow: "none",
-              background: "none",
-            }} />
-        }
-      },
-      fixed: "right",
-      width: 150,
-    },
   ];
 
   onChangeHandler = (e) => {

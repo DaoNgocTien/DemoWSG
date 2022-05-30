@@ -46,8 +46,11 @@ const updateTransaction = (transaction) => {
         data: transaction,
         withCredentials: true,
       })
-      .then((response) => {})
+      .then((response) => {
+        console.log(response.data)
+      })
       .catch((err) => {
+        alert(err.response.data.message)
         return dispatch(getFailed());
       })
       .finally(() => {});
