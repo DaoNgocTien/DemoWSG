@@ -259,11 +259,11 @@ class UpdateModal extends Component {
                 ]}
               >
                 <InputNumber
-                  min={Number(record?.maxquantity) + 1}
+                  min={Number(record?.maxquantityincampaign)}
                   max={999999999999}
                   default={0}
                   placeholder={
-                    "Minimum quantity is " + (Number(record?.maxquantity) + 1)
+                    "Minimum quantity is " + (Number(record?.maxquantityincampaign))
                   }
                   style={{ width: "60vh" }}
                 />
