@@ -55,7 +55,7 @@ class RejectModal extends Component {
     description,
     image,
     orderId,
-    requester
+    requester,
   ) => {
     const user = JSON.parse(localStorage.getItem("user"));
     let reject = {

@@ -97,6 +97,7 @@ class HandleReturningOrderUI extends Component {
       description:
         "has been rejected by " + user.rolename + " for: " + data.reason,
       image: this.state.fileList || [],
+      supplierId: user.id
     });
     this.handleCancel();
   };
