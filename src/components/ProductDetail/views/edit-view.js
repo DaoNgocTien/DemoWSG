@@ -247,6 +247,9 @@ class UpdateModal extends Component {
                 rules={[
                   ({ getFieldValue }) => ({
                     validator(_, value) {
+                      if (Number(value) < Number(record?.maxquantityincampaign)) {
+                        new Error("current quantity must be higher than total campaign's quantity")
+                      }
                       if (Number(value) > 0) {
                         return Promise.resolve();
                       }
