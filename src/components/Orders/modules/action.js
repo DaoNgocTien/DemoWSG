@@ -66,7 +66,7 @@ const updateStatusOrder = (data, image) => {
           data: {
             orderCode: data.ordercode,
             orderId: data.id,
-            type: data.campaignid !== null ? "campaign" : "retail",
+            type: data.campaignid ? "campaign" : "retail",
           },
           withCredentials: true,
         })
@@ -84,7 +84,7 @@ const updateStatusOrder = (data, image) => {
           data: {
             orderCode: data.ordercode,
             orderId: data.id,
-            type: data.campaignid !== null ? "campaign" : "retail",
+            type: data.campaignid ? "campaign" : "retail",
             image: image
           },
           withCredentials: true,
