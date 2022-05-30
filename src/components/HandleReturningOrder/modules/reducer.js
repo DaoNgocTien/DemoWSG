@@ -34,7 +34,7 @@ const handleReturningOrderReducer = (state = initialState, action) => {
       return { ...state };
 
     case GET_DATA_FAIL:
-      state.loading = false;
+      state.loading = true;
       state.data = [];
       return { ...state };
 
