@@ -73,11 +73,11 @@ const adminRoutes = [
     component: HandleReturningOrder,
   },
 
-  {
-    exact: true,
-    path: "/returning",
-    component: ReturningOrder,
-  },
+  // {
+  //   exact: true,
+  //   path: "/returning",
+  //   component: ReturningOrder,
+  // },
 
   {
     exact: true,
