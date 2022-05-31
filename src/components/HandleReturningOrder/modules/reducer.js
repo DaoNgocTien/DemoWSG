@@ -15,7 +15,6 @@ let initialState = {
 const handleReturningOrderReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_DATA_REQUEST:
-
       state.loading = true;
       state.data = [];
       state.err = null;

@@ -207,12 +207,16 @@ class HandleReturningOrderUI extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+
+    console.log(data?.orderHistories.find(item => item.orderstatus === "requestAccepted"))
+
     let handledBySupplier = 0;
-    data.orderHistories?.statushistory?.map((item) => {
-      if (item.statushistory === "returning") {
-        handledBySupplier++;
+    if (data?.orderHistories) {
+      handledBySupplier = data?.orderHistories.filter((item) => item.orderstatus === "returning").length
+      if (data?.orderHistories.find(item => item.orderstatus === "requestAccepted")) {
+        handledBySupplier = 0
       }
-    });
+    }
     return (
       <>
         <Form id="rejectReturnOrderForm" onFinish={this.handleRejectAndClose}>
@@ -308,7 +312,7 @@ class HandleReturningOrderUI extends Component {
               onClick={this.showModal}
               style={{ marginLeft: 3 }}
               hidden={
-                data.order?.status !== "returning" || handledBySupplier > 1
+                data?.status?.toUpperCase() === "RETURNING" && handledBySupplier === 1 ? false : true
               }
             >
               Reject Returning Request
@@ -320,7 +324,7 @@ class HandleReturningOrderUI extends Component {
               onClick={this.handleAcceptAndClose}
               style={{ marginLeft: 3 }}
               hidden={
-                data.order?.status !== "returning" || handledBySupplier > 1
+                data?.status?.toUpperCase() === "RETURNING" && handledBySupplier === 1 ? false : true
               }
             >
               Accept Returning Request
@@ -366,7 +370,34 @@ class HandleReturningOrderUI extends Component {
                           "MM/DD/YYYY HH:mm:ss"
                         )}
                       >
-                        <h4>{orderHistory.statushistory}</h4>
+                        <h4>{(() => {
+                          switch (orderHistory.orderstatus) {
+                            case "advanced":
+                              return "ADVANCED"
+                            case "unpaid":
+                              return "UNPAID"
+                            case "created":
+                              return "CREATED"
+                            case "processing":
+                              return "PROCESSING"
+                            case "delivering":
+                              return "DELIVERING"
+                            case "delivered":
+                              return "DELIVERED"
+                            case "returning":
+                              return "RETURNING"
+                            case "return":
+                              return "RETURN"
+                            case "requestRefun":
+                              return "REQUEST REFUN"
+                            case "successRefun":
+                              return "SUCCESS REFUN"
+                            case "requestRejected":
+                              return "REQUEST REJECTED"
+                            case "requestAccepted":
+                              return "REQUEST ACCEPTED"
+                          }
+                        })()}</h4>
                         <p>{orderHistory.description}</p>
                         <Image.PreviewGroup>
                           {orderHistory.image ? (

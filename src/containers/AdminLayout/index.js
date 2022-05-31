@@ -260,11 +260,11 @@ class AdminRender extends Component {
                 </Menu.Item>
               </SubMenu>
 
-              <Menu.Item key="returning" icon={<InteractionTwoTone />}>
+              {/* <Menu.Item key="returning" icon={<InteractionTwoTone />}>
                 <Link className="LinkDecorations" to="/returning">
                   Returning
                 </Link>
-              </Menu.Item>
+              </Menu.Item> */}
 
               <Menu.Item key="transaction" icon={<DollarCircleTwoTone />}>
                 <Link className="LinkDecorations" to="/transaction">

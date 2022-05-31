@@ -19,7 +19,7 @@ const getOrder = (status) => {
             exposedHeaders: ["set-cookie"],
           })
           : Axios({
-            url: `/order/supplier/status?status=${status}`,
+            url: `/order/supplier/status?status=returning}`,
             method: "GET",
             withCredentials: true,
             exposedHeaders: ["set-cookie"],
@@ -114,7 +114,7 @@ const rejectOrder = (orderCode, reasonForCancel, imageProof) => {
           withCredentials: true,
         }),
         Axios({
-          url: `/order/supplier`,
+          url: `order/supplier/status?status=returning`,
           method: "GET",
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
@@ -182,7 +182,7 @@ const getOrderById = id => {
       dispatch(getRequest());
       const [orders] = await Promise.all([
         Axios({
-          url: `/order/supplier`,
+          url: `order/supplier/status?status=returning`,
           method: "GET",
           withCredentials: true,
           exposedHeaders: ["set-cookie"],
