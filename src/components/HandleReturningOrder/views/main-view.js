@@ -388,14 +388,16 @@ class HandleReturningOrderUI extends Component {
                               return "RETURNING"
                             case "return":
                               return "RETURN"
-                            case "requestRefun":
+                            case "requestRefund":
                               return "REQUEST REFUN"
-                            case "successRefun":
+                            case "successRefund":
                               return "SUCCESS REFUN"
                             case "requestRejected":
                               return "REQUEST REJECTED"
                             case "requestAccepted":
                               return "REQUEST ACCEPTED"
+                            case "cancelled":
+                              return "CANCELLED"
                           }
                         })()}</h4>
                         <p>{orderHistory.description}</p>
@@ -405,8 +407,8 @@ class HandleReturningOrderUI extends Component {
                               return (
                                 <Image
                                   key={image.url}
-                                  width={200}
-                                  height={200}
+                                  width={100}
+                                  height={100}
                                   src={image.url}
                                   preview={{
                                     src: image.url,
