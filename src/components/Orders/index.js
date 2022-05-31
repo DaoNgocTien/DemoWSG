@@ -45,6 +45,10 @@ const mapDispatchToProps = (dispatch) => {
     rejectOrder: async (status) => {
       await dispatch(action.getOrder(status));
     },
+    confirmReceived: async (orderCode, type, orderId) => {
+      await dispatch(action.confirmReceived(orderCode, type, orderId));
+      await dispatch(action.getOrder());
+    }
   };
 };
 

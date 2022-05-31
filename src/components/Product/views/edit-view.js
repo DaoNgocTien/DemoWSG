@@ -283,7 +283,7 @@ class UpdateModal extends Component {
               <Form.Item
                 name="quantity"
                 label="Quantity"
-                tooltip="Minimum quantity = total quantity in stock - total quantity in active campaigns"
+                tooltip="Minimum quantity = total quantity in active campaigns"
                 initialValue={record?.quantity}
                 rules={[
                   ({ getFieldValue }) => ({

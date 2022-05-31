@@ -1,11 +1,13 @@
 import {
   LoadingOutlined,
   PlusOutlined,
-  SearchOutlined
+  SearchOutlined,
+  TrademarkCircleTwoTone,
 } from "@ant-design/icons";
 import {
-  LocalShipping, OpenInNew,
-  PlayCircleOutline
+  LocalShipping,
+  OpenInNew,
+  PlayCircleOutline,
 } from "@material-ui/icons";
 import {
   Button,
@@ -13,10 +15,13 @@ import {
   Form,
   Input,
   Modal,
-  PageHeader, Row,
+  PageHeader,
+  Row,
   Select,
-  Table, Tabs, Tag,
-  Upload
+  Table,
+  Tabs,
+  Tag,
+  Upload,
 } from "antd";
 import moment from "moment";
 import React, { Component, memo } from "react";
@@ -147,6 +152,14 @@ class OrderManagement extends Component {
       title: "",
       width: 130,
       render: (object) => {
+        let showButton = false;
+        if (object.status === "returning") {
+          object.orderstatushistory.filter((history) => {
+            if (history.statushistory === "finishReturning") {
+              showButton = true;
+            }
+          });
+        }
         return (
           <>
             <Link to={`/orders/${object.ordercode}`}>
@@ -185,6 +198,20 @@ class OrderManagement extends Component {
               }}
               hidden={object.status !== "processing"}
             />
+            <Button
+              type="primary"
+              icon={<TrademarkCircleTwoTone />}
+              shape="circle"
+              style={{
+                border: "none",
+                boxShadow: "none",
+                background: "none",
+              }}
+              hidden={!showButton}
+              onClick={() => this.confirmReceivedRequest(object)}
+            >
+              Confirm Received
+            </Button>
           </>
         );
       },
@@ -192,17 +219,29 @@ class OrderManagement extends Component {
     },
   ];
 
+  confirmReceivedRequest = (object) => {
+    this.props.confirmReceived(
+      object.ordercode,
+      object.campaignid ? "campaign" : "retail",
+      object.id
+    );
+  };
+
   onChangeHandler = (e) => {
     let { data } = this.props;
     let searchData = data.filter((item) => {
       return (
-        String(item.customerfirstname)?.toUpperCase()
+        String(item.customerfirstname)
+          ?.toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
-        String(item.customerlastname)?.toUpperCase()
+        String(item.customerlastname)
+          ?.toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
-        String(item.ordercode)?.toUpperCase()
+        String(item.ordercode)
+          ?.toUpperCase()
           .includes(e.target.value.toUpperCase()) ||
-        String(item.createdat)?.toUpperCase()
+        String(item.createdat)
+          ?.toUpperCase()
           .includes(e.target.value.toUpperCase())
       );
     });
@@ -297,13 +336,8 @@ class OrderManagement extends Component {
   };
 
   render() {
-    const {
-      displayData,
-      searchKey,
-      openUploadModal,
-      load,
-      fileList
-    } = this.state;
+    const { displayData, searchKey, openUploadModal, load, fileList } =
+      this.state;
 
     const arrayLocation = window.location.pathname.split("/");
 
@@ -332,7 +366,9 @@ class OrderManagement extends Component {
                 visible={openUploadModal}
                 onCancel={this.cancelUploadImage}
                 footer={[
-                  <Button key="cancel" onClick={this.cancelUploadImage}>Cancel</Button>,
+                  <Button key="cancel" onClick={this.cancelUploadImage}>
+                    Cancel
+                  </Button>,
                   <Button
                     type="primary"
                     form="uploadImageForDeliveringForm"
@@ -386,7 +422,7 @@ class OrderManagement extends Component {
               </Modal>
             </Form>
             <div>
-              <Tabs defaultActiveKey="all" >
+              <Tabs defaultActiveKey="all">
                 <TabPane
                   tab={
                     <span onClick={() => this.onClickOrderTab("all")}>
@@ -442,7 +478,7 @@ class OrderManagement extends Component {
                     <Select.Option value="delivered">Delivered</Select.Option>
                     <Select.Option value="cancelled">Cancelled</Select.Option>
                     <Select.Option value="returning">Returning</Select.Option>
-                    <Select.Option value="returned">Returned</Select.Option>                    
+                    <Select.Option value="returned">Returned</Select.Option>
                     <Select.Option value="completed">Completed</Select.Option>
                   </Select>
                 </Col>
