@@ -202,7 +202,7 @@ class DashboardUI extends Component {
           >
             {/* Statistic  */}
             <Row gutter={12}>
-              <Col span={6}>
+              <Col span={12}>
                 <Card>
                   <Statistic
                     title="Sales"
@@ -217,7 +217,7 @@ class DashboardUI extends Component {
                 </Card>
               </Col>
 
-              <Col span={6}>
+              <Col span={12}>
                 <Card>
                   <Statistic
                     title="Orders"
@@ -232,7 +232,7 @@ class DashboardUI extends Component {
                 </Card>
               </Col>
 
-              <Col span={6}>
+ {/*<Col span={6}>
                 <Card>
                   <Statistic
                     title="Conversion Rate"
@@ -266,7 +266,7 @@ class DashboardUI extends Component {
                 </Card>
               </Col>
 
-              {/* <Col span={6}>
+              <Col span={6}>
                 <Card>
                   <Statistic
                     title="Conversion Rate"
