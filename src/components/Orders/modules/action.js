@@ -185,6 +185,38 @@ const getOrderById = id => {
   };
 };
 
+const confirmReceived = (orderCode, type, orderId) => {
+
+  let body = {
+    orderCode: orderCode,
+    type: type,
+    orderId: orderId,
+    description: "has been returned, the refund payment is processing...",
+  }
+  return async (dispatch) => {
+    dispatch(getRequest());
+    try {
+      const [confirmReceivedResponse] = await Promise.all([
+        Axios({
+          url: `/order/status/supplier/returned`,
+          method: "PUT",
+          data: body,
+          withCredentials: true,
+        }),
+        
+      ]);
+      return dispatch(
+        getSuccess({
+          orders: [],
+        })
+      );
+    } catch (error) {
+      return dispatch(getFailed());
+    }
+  };
+};
+
+
 const getRequest = () => {
   return {
     type: GET_DATA_REQUEST,
@@ -217,6 +249,7 @@ const action = {
   updateStatusOrder,
   getOrderByCampaignId,
   getOrderById,
+  confirmReceived
 };
 
 export default action;
