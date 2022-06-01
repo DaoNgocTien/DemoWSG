@@ -21,6 +21,7 @@ class Orders extends Component {
         loading={this.props.loading}
         updateStatusOrder={this.props.updateStatusOrder}
         createCampaign={this.props.createCampaign}
+        confirmReceived={this.props.confirmReceived}
         rejectOrder={this.props.rejectOrder}
       />
     );
