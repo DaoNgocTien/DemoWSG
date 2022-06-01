@@ -6,7 +6,7 @@ import { Button, Col, Divider, Menu, Row, Image } from "antd";
 import Axios from "axios";
 import React, { Component, memo } from "react";
 import { Link } from "react-router-dom";
-
+import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 class NavbarAdmin extends Component {
   handleLogOut = () => {
     Axios({
