@@ -8,6 +8,7 @@ import {
   LocalShipping,
   OpenInNew,
   PlayCircleOutline,
+  CheckBoxOutlined
 } from "@material-ui/icons";
 import {
   Button,
@@ -199,19 +200,17 @@ class OrderManagement extends Component {
               hidden={object.status !== "processing"}
             />
             <Button
-              type="primary"
-              icon={<TrademarkCircleTwoTone />}
+              type="default"
+              icon={<CheckBoxOutlined />}
               shape="circle"
               style={{
                 border: "none",
                 boxShadow: "none",
                 background: "none",
               }}
-              hidden={!showButton}
+              // hidden={!showButton}
               onClick={() => this.confirmReceivedRequest(object)}
-            >
-              Confirm Received
-            </Button>
+            />
           </>
         );
       },
