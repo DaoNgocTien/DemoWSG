@@ -153,6 +153,7 @@ class OrderManagement extends Component {
       title: "",
       width: 130,
       render: (object) => {
+        console.log(object)
         // let showButton = false;
         // if (object.status === "returning") {
         //   object.orderstatushistory.filter((history) => {
@@ -208,7 +209,7 @@ class OrderManagement extends Component {
                 boxShadow: "none",
                 background: "none",
               }}
-              // hidden={!showButton}
+              hidden={object.status === "returning" && object.histories.find(item => item.orderstatus === "finishReturning") ? false : true}
               onClick={() => this.confirmReceivedRequest(object)}
             />
           </>

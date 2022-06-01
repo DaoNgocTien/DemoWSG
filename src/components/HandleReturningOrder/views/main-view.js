@@ -384,8 +384,14 @@ class HandleReturningOrderUI extends Component {
                               return "DELIVERING"
                             case "delivered":
                               return "DELIVERED"
+                            case "returningInProgress":
+                              return "RETURNING IN PROGRESS"
+                            case "finishReturning":
+                              return "FINISH RETURNING"
                             case "returning":
                               return "RETURNING"
+                            case "returned":
+                              return "RETURNED"
                             case "return":
                               return "RETURN"
                             case "requestRefund":
