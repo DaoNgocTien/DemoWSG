@@ -152,14 +152,14 @@ class OrderManagement extends Component {
       title: "",
       width: 130,
       render: (object) => {
-        let showButton = false;
-        if (object.status === "returning") {
-          object.orderstatushistory.filter((history) => {
-            if (history.statushistory === "finishReturning") {
-              showButton = true;
-            }
-          });
-        }
+        // let showButton = false;
+        // if (object.status === "returning") {
+        //   object.orderstatushistory.filter((history) => {
+        //     if (history.statushistory === "finishReturning") {
+        //       showButton = true;
+        //     }
+        //   });
+        // }
         return (
           <>
             <Link to={`/orders/${object.ordercode}`}>

@@ -62,6 +62,7 @@ class ProfileTab extends Component {
   componentDidMount() {
     this.props.getProfile();
     let storedUser = JSON.parse(localStorage.getItem("user"));
+    console.log(this.props.data)
     this.setState({
       user: storedUser,
     });
@@ -263,6 +264,7 @@ class ProfileTab extends Component {
         <div style={{ marginTop: 8 }}>Upload</div>
       </div>
     );
+    this.state.address = JSON.parse(this.props.data.address || JSON.stringify({}))
     return (
       <>
         <Title style={{ textAlign: "center", padding: "30px" }} level={3}>
@@ -315,16 +317,22 @@ class ProfileTab extends Component {
           <Form.Item
             name="phone"
             label="Phone Number"
-          // tooltip="User's logging method in WSG System"
           >
-            {/* <Tooltip
-              placement="topLeft"
-              title="Logging by username / Logging by Google Mail"
-            > */}
             <Tag color="green">
               {this.state.user.phone}
             </Tag>
-            {/* </Tooltip> */}
+          </Form.Item>
+
+          <Form.Item
+            // name="ewallet"
+            label="Ewallet"
+          >
+            {data.ewalletcode && data.ewalletsecret && <Tag color="green">
+              Had Ewallet
+            </Tag>}
+            {(!data.ewalletcode || !data.ewalletsecret )&& <Tag color="red">
+              Had not Ewallet
+            </Tag>}
           </Form.Item>
 
           <Form.Item
@@ -399,7 +407,7 @@ class ProfileTab extends Component {
                 placement="topLeft"
                 title="User logins by Gmail can not change email"
               >
-                <Input onChange={this.props.onChangeUpdateProfile} disabled="false" />
+                <Input onChange={this.props.onChangeUpdateProfile} />
               </Tooltip>
             }
           </Form.Item>

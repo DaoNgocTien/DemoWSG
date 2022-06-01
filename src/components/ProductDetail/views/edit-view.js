@@ -248,7 +248,9 @@ class UpdateModal extends Component {
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (Number(value) < Number(record?.maxquantityincampaign)) {
-                        new Error("current quantity must be higher than total campaign's quantity")
+                        return Promise.reject(
+                          new Error("current quantity must be higher than total campaign's quantity")
+                        )
                       }
                       if (Number(value) > 0) {
                         return Promise.resolve();
@@ -262,7 +264,7 @@ class UpdateModal extends Component {
                 ]}
               >
                 <InputNumber
-                  min={Number(record?.maxquantityincampaign)}
+                  // min={Number(record?.maxquantityincampaign)}
                   max={999999999999}
                   default={0}
                   placeholder={
