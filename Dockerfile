@@ -8,8 +8,8 @@ RUN yarn
 
 # RUN yarn run start-linux
 
-# COPY . .
+COPY . .
 
-# EXPOSE 3001
+EXPOSE 3001
 
 CMD ["yarn", "run", "start-linux"]
