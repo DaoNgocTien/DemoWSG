@@ -12,4 +12,4 @@ ENTRYPOINT yarn run start-linux
 
 EXPOSE 3001
 
-CMD ["npm", "run", "start-linux", "yarn"]
+CMD yarn run start-linux
