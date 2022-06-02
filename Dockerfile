@@ -6,7 +6,7 @@ COPY ["package.json", "package-lock.json*", "./"]
 
 RUN yarn
 
-# RUN yarn run start-linux
+ENTRYPOINT yarn run start-linux
 
 # COPY . .
 
