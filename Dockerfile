@@ -1,6 +1,6 @@
 FROM node:14
 
-WORKDIR /
+# WORKDIR /usr/src/app
 
 RUN npm i
 
