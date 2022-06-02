@@ -49,12 +49,17 @@ class CreatModal extends Component {
   switchmRef = React.createRef();
   quantityRef = React.createRef();
 
-  componentDidMount() {
-    this.setState({
-      productSelected: this.props.productList[0],
-    });
-  }
 
+
+  //work around
+  componentDidUpdate(prevProps) {
+    if (prevProps.productList.length !== this.props.productList.length) {
+      this.setState({
+        productSelected: this.props.productList[0],
+      });
+
+    }
+  }
   uniqByKeepFirst(a, key) {
     let seen = new Set();
     return a.filter((item) => {
@@ -64,6 +69,7 @@ class CreatModal extends Component {
   }
 
   handleCreateAndClose = (data) => {
+    
     let newCampaign = {};
     if (this.state.switchState) {
       let minPrice = 0;
@@ -71,41 +77,52 @@ class CreatModal extends Component {
       let listInvalidQuantity = [];
       let listQuantity = data.quantities ?? [];
       //  Sort array
-      data.quantities.sort(function (a, b) {
+      data.quantities?.sort(function (a, b) {
         minPrice = a.price > b.price ? b.price : a.price;
         return b.quantity - a.quantity;
       });
 
-      listQuantity.sort(function (a, b) {
+      listQuantity?.sort(function (a, b) {
         minPrice = a.price > b.price ? b.price : a.price;
         return a.quantity - b.quantity;
       });
 
       for (let i = listQuantity.length - 1; i >= 1; i--) {
-        if (listQuantity[i].quantity === listQuantity[i - 1].quantity) {
+        
+        if (listQuantity.find((x, index) => x.quantity === listQuantity[i].quantity && index !== i) ) {
+
           listDupQuantity.push(listQuantity[i].quantity)
+
         }
-        if (listQuantity[i].price >= listQuantity[i - 1].price) {
+
+        if (listQuantity.find((x, index) => x.quantity <= listQuantity[i].quantity && x.price <= listQuantity[i].price && index !== i) ) {
           listInvalidQuantity.push(listQuantity[i].quantity)
         }
 
       }
+     
+      if (listDupQuantity.length > 0) {
+        let mes = `Duplicate quantities: ${listDupQuantity[0]}`;
 
-
-      console.log(listQuantity)
-      console.log(listDupQuantity)
-      console.log(listInvalidQuantity)
-
-      if (listDupQuantity.length > 0 || listInvalidQuantity.length > 0) {
-        let mes = `Duplicate quantities: ${listDupQuantity}
-        Invalid quantities: ${listInvalidQuantity}`;
         return this.setState({
           listDupQuantity: listDupQuantity,
           listInvalidQuantity: listInvalidQuantity,
           businessRuleErrMessage: mes
         })
       }
-      else if (listQuantity[[listQuantity.length - 1].price] * 1 * data.advancePercent < 1000000) {
+
+      if (listInvalidQuantity.length > 0) {
+        let mes = `Invalid quantities: `;
+        listInvalidQuantity.forEach((x, index) =>{ if (index === 0) {mes += `${x}`} else {mes += `,${x}`} })
+        return this.setState({
+          listDupQuantity: listDupQuantity,
+          listInvalidQuantity: listInvalidQuantity,
+          businessRuleErrMessage: mes
+        })
+      }
+
+
+      if (listQuantity[[listQuantity.length - 1].price] * 1 * data.advancePercent < 1000000) {
         let mes = "Advance fee must have a value greater than 10,000!!!";
         return this.setState({
           businessRuleErrMessage: mes
@@ -205,6 +222,7 @@ class CreatModal extends Component {
       maxQuantity: "10",
       advancePercent: "1",
       isShare: true,
+      quantities: []
     });
   };
 
@@ -243,7 +261,7 @@ class CreatModal extends Component {
   };
 
   disabledDate = (current) => {
-    return current && current < moment().endOf("day");
+    return current && new Date(moment(current).format('YyYY-MM-DD')) < new Date(moment().format('YyYY-MM-DD'));
   };
 
   toggleSwitch = () => {
@@ -268,7 +286,6 @@ class CreatModal extends Component {
       switchState,
       businessRuleErrMessage,
     } = this.state;
-console.log(this.props.productList)
     return (
       <>
         <Modal
@@ -311,7 +328,7 @@ console.log(this.props.productList)
                   },
                   () => ({
                     validator(_, value) {
-                      if (value.length > 0 && value.length <= 50) {
+                      if (value?.length > 0 && value?.length <= 50) {
                         return Promise.resolve();
                       }
 
@@ -363,6 +380,7 @@ console.log(this.props.productList)
               <Form.Item
                 name="productId"
                 label="Product"
+                initialValue={productSelected?.key}
                 rules={[
                   {
                     required: true,
@@ -386,6 +404,7 @@ console.log(this.props.productList)
                 <Select
                   onChange={this.onSelectProduct}
                   style={{ width: "60vh" }}
+
                 >
                   {productList.map((item) => {
 
@@ -585,19 +604,14 @@ console.log(this.props.productList)
                 label="Campaign type"
                 name="isShare"
                 tooltip="In single campaign, a customer buy all products at once and campaign is done. In shared campaign, customers can buy products at any amount and the final price will depend on the campaign steps!!"
-                rules={[
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      return businessRuleErrMessage.length === 0 ? Promise.resolve() : Promise.reject(businessRuleErrMessage);
-                    },
-                  }),
-                ]}
+              
               >
                 <Space style={{ width: "60vh" }} size={20}>
                   <Switch
                     onClick={this.toggleSwitch}
                     ref={this.switchmRef}
                     style={{ marginRight: "20" }}
+                    defaultChecked={switchState}
                   />
                   {this.state.switchState
                     ? "Shared: more buyer more discount"
@@ -605,6 +619,7 @@ console.log(this.props.productList)
                 </Space>
               </Form.Item>
             </Space>
+            <p style={{color: "#ff4d4f"}} >{ businessRuleErrMessage}</p>
             {!switchState ? (
               ""
             ) : (
