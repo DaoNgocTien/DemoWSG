@@ -56,6 +56,7 @@ class AdminRender extends Component {
           this.setState({
             userMessages: Object.keys(snapshot.val()),
             messages: snapshot.val(),
+            to: Object.keys(snapshot.val())[0]
           });
           if (this.state.to) {
             this.setState({
