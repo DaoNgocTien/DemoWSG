@@ -1,12 +1,8 @@
 FROM node:14
 
-WORKDIR /usr/src/app
+RUN /bin/sh -c npm i
 
-RUN ls /usr/src
-
-RUN npm i
-
-RUN npm start
+RUN /bin/sh -c npm start
 
 EXPOSE 3001
 
