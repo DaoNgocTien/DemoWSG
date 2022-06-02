@@ -6,10 +6,10 @@ COPY ["package.json", "package-lock.json*", "./"]
 
 RUN yarn
 
-ENTRYPOINT yarn run start-linux
+# RUN yarn run start-linux
 
 # COPY . .
 
 EXPOSE 3001
 
-CMD yarn run start-linux
+CMD ["yarn", "run", "start-linux"]
