@@ -20,10 +20,46 @@
   background: #fff;
 }
 
+
 /* General */
 input {
   outline: none;
   border: none;
+}
+
+.search-title-text  {
+  margin-top: -0.2rem;
+  margin-left: 0.5rem;
+  color: #000;
+}
+
+.forgot-password {
+  margin-top: -1.5rem;
+}
+
+.form-item-input {
+  border-radius: 8px;
+  border: 1px solid red;
+}
+.red_asterik {
+  margin-left: 0.25rem;
+  color: red;
+}
+
+.form-item-title {
+  color: black;
+  display: flex;
+  margin-bottom: -0.5rem;
+}
+
+.create_account_title {
+  font-weight: 400;
+  color: rgb(134, 142, 150);
+}
+.create_account_navigation {
+  margin-left: 0.25rem;
+  color: rgb(28, 126, 214);
+  text-decoration: none;
 }
 
 /* login form  */
@@ -35,6 +71,7 @@ input {
   display: -moz-box;
   display: -ms-flexbox;
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -43,11 +80,36 @@ input {
 }
 
 .form__container {
-  border: 1px solid black;
+  border-radius: 8px;
+  border: 1px solid rgb(233, 236, 239);
   padding: 70px 70px 100px 70px;
   width: 450px;
+  box-shadow: rgb(0 0 0 / 5%) 0px 1px 3px, rgb(0 0 0 / 5%) 0px 20px 25px -5px, rgb(0 0 0 / 4%) 0px 10px 10px -5px;
   /* border-radius: 5%; */
   /* background: rgba(22, 13, 148, 0.322); */
+}
+
+.register__form__container {
+  border-radius: 8px;
+  border: 1px solid rgb(233, 236, 239);
+  padding: 70px 70px 100px 70px;
+  width: 700px;
+  box-shadow: rgb(0 0 0 / 5%) 0px 1px 3px, rgb(0 0 0 / 5%) 0px 20px 25px -5px, rgb(0 0 0 / 4%) 0px 10px 10px -5px;
+  /* border-radius: 5%; */
+  /* background: rgba(22, 13, 148, 0.322); */
+}
+.steps-action {
+  margin-top: 24px;
+}
+
+.steps-content {
+  min-height: 200px;
+  margin-top: 16px;
+  /* padding-top: 10px; */
+  text-align: center;
+  /* background-color: #fafafa; */
+  /* border: 1px dashed #e9e9e9; */
+  border-radius: 2px;
 }
 
 .login-form-button {
@@ -68,4 +130,5 @@ input {
 /* All Links */
 .LinkDecorations {
   text-decoration: none;
+  /* color: white !important; */
 }

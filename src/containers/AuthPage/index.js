@@ -1,13 +1,16 @@
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Form, Input, message, Typography } from "antd";
 import React, { Component } from "react";
-import { actLoginApi, googleOAuth2 } from "./modules/action";
+import { GoogleLogin } from "react-google-login";
 import { connect } from "react-redux";
 import Loader from "./../../components/Loader";
-import { Input, message, Form, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Redirect } from "react-router-dom";
-import { GoogleLogin } from "react-google-login";
-
+import action from "./modules/action";
+import ForgotPassword from "./views/forgot-password";
+const { Text } = Typography;
 class AuthPage extends Component {
+  state = {
+    openForgotPasswordModal: false,
+  };
   openMessage = () => {
     const key = "updatable";
     message.error({ content: "Can't Access !", key, duration: 2 });
@@ -17,7 +20,6 @@ class AuthPage extends Component {
   };
 
   onFinish = (e) => {
-    console.log(e);
     this.props.login(e, this.props.history);
   };
 
@@ -27,35 +29,56 @@ class AuthPage extends Component {
       return <div className="alert alert-danger">{error.response.data}</div>;
     }
   };
-
+  closeModal = () => {
+    this.setState({
+      openForgotPasswordModal: false,
+    });
+  };
+  openModal = () => {
+    this.setState({
+      openForgotPasswordModal: true,
+    });
+  };
   render() {
-    const { loading } = this.props;
+    const { openForgotPasswordModal } = this.state;
+
+    const { loading, error } = this.props;
     if (loading) return <Loader />;
-    if (localStorage.getItem("user")) {
-      return <Redirect to="/" />;
-    } else {
+    if (!localStorage.getItem("user")) {
       return (
+
         <div className="main_form_body">
+          <h2>Welcome back!</h2>
+          <p className="create_account_title">Do not have an account yet?
+            <a href="/registration" className="create_account_navigation">Create account</a>
+          </p>
           <div className="form__wrapper">
             <div className="form__container">
-              <h2 style={{ textAlign: "center" }}>LOGIN</h2>
               <Form
                 name="normal_login"
                 className="login-form"
                 initialValues={{ remember: true }}
                 onFinish={this.onFinish}
               >
+                <p className="form-item-title">
+                  Username <p className="red_asterik">*</p>
+                </p>
                 <Form.Item
+
                   name="username"
                   rules={[
                     { required: true, message: "Please input your Username!" },
                   ]}
                 >
                   <Input
+                    className="form-item-input"
                     prefix={<UserOutlined className="site-form-item-icon" />}
                     placeholder="Username"
                   />
                 </Form.Item>
+                <p className="form-item-title">
+                  Password <p className="red_asterik">*</p>
+                </p>
                 <Form.Item
                   name="password"
                   rules={[
@@ -69,13 +92,15 @@ class AuthPage extends Component {
                   />
                 </Form.Item>
                 <Form.Item>
-
                   <a
+                    style={{
+                      textDecoration: "none",
+                      float: "right" 
+                    }}
                     className="login-form-forgot"
-                    href=""
-                    style={{ float: "right" }}
+                    href="/#"
                   >
-                    Forgot password
+                    <p className="forgot-password">Forgot Password ?</p>
                   </a>
                 </Form.Item>
                 <Form.Item>
@@ -87,18 +112,14 @@ class AuthPage extends Component {
                     Log in
                   </Button>
                 </Form.Item>
-                <GoogleLogin
+                {/* <GoogleLogin
                   clientId="641513059325-n3suicaa1j3fsph5fqaft0okgh57gv2l.apps.googleusercontent.com"
                   buttonText="Sign in with Google"
                   onSuccess={this.props.googleOAuth2}
                   onFailure={this.props.googleOAuth2}
                   cookiePolicy={"single_host_origin"}
                   className="google-button"
-                />
-                <br />
-                <a href="" style={{ float: "right" }}>
-                  register now!
-                </a>
+                /> */}
               </Form>
             </div>
           </div>
@@ -118,10 +139,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login: (user, history) => {
-      dispatch(actLoginApi(user, history));
+      dispatch(action.actLoginApi(user, history));
     },
-    googleOAuth2: (googleResponse) => {
-      dispatch(googleOAuth2(googleResponse));
+    // googleOAuth2: (googleResponse) => {
+    //   dispatch(action.googleOAuth2(googleResponse));
+    // },
+    onLogin: () => {
+      dispatch(action.onLogin());
     },
   };
 };

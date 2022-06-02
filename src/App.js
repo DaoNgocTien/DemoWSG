@@ -1,10 +1,13 @@
 import "./App.css";
+import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import { routesAdmin, routesAuth } from "./routes";
+// import { routesAdmin, routesAuth } from "./routes";
 import "antd/dist/antd.css";
 import AdminLayout from "./containers/AdminLayout";
 import PageNotFound from "./containers/PageNotFound";
+import { adminRoutes } from "./routes/admin";
+import { authRoutes } from "./routes/auth";
 
 function App() {
   const showLayoutAdmin = (routes) => {
@@ -37,15 +40,17 @@ function App() {
     }
   };
   return (
-    <BrowserRouter>
-      <div>
-        <Switch>
-          {showLayoutAdmin(routesAdmin)}
-          {showLayoutAuth(routesAuth)}
-          <Route path="/" component={PageNotFound} />
-        </Switch>
-      </div>
-    </BrowserRouter>
+    <>
+      <BrowserRouter forceRefresh>
+        <div>
+          <Switch>
+            {showLayoutAdmin(adminRoutes)}
+            {showLayoutAuth(authRoutes)}
+            <Route path="/" component={PageNotFound} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    </>
   );
 }
 

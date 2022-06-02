@@ -1,0 +1,28 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": false
+        }
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "no-unused-vars": "off",
+        "react/prop-types": "off",
+        "react/no-direct-mutation-state": "off",
+        "react/jsx-key": 1,
+        "react/jsx-no-duplicate-props": "off",
+        "react/react-in-jsx-scope": "off"
+    }
+}
