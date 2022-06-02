@@ -202,7 +202,7 @@ class OrderManagement extends Component {
             />
             <Button
               type="default"
-              icon={<CheckBoxOutlined />}
+              icon={<CheckBoxOutlined />} 
               shape="circle"
               style={{
                 border: "none",
