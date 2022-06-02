@@ -35,7 +35,7 @@ class EdilModal extends Component {
     availableQuantity: 10,
     minQuantity: 10,
     maxQuantity: null,
-    switchState: this.props.isShare,
+    switchState: this.props.isshare,
     minWholesalePrice: 100,
     advancePercent: 1,
     minSharedAdvancedPercent: 1,
