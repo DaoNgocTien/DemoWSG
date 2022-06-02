@@ -522,6 +522,15 @@ class OrdersInCampaign extends React.Component {
               <Descriptions.Item label="Number of Order">
                 {record?.numorder}
               </Descriptions.Item>
+              <Descriptions.Item label="Advance Fee" span={2}>
+                <NumberFormat
+                  value={record?.advancefee}
+                  thousandSeparator={true}
+                  suffix={"%"}
+                  decimalScale={0}
+                  displayType="text"
+                />
+              </Descriptions.Item>
               {record?.isshare && (<Descriptions.Item label="Range" span={2}>
                 <Table
                   columns={this.stepCloumns}
