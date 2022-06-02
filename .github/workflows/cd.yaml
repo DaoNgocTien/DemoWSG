@@ -26,7 +26,7 @@ jobs:
           host: 13.215.133.39
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: cd /home/ubuntu/webapp && git fetch origin main && git reset --hard origin/main && git pull
+          script: cd /home/ubuntu/web-app && git fetch origin main && git reset --hard origin/main && git pull
       - name: CD - Stop existing server-master's container and remove container
         uses: appleboy/ssh-action@master
         continue-on-error: true
@@ -41,11 +41,11 @@ jobs:
           host: 13.215.133.39
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: cd /home/ubuntu/webapp && sudo docker build . -t swg/web-app-master
+          script: cd /home/ubuntu/web-app && sudo docker build . -t swg/web-app-master
       - name: CD - Start Express container
         uses: appleboy/ssh-action@master
         with:
           host: 13.215.133.39
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: sudo docker run --name="web-app-master" -p 3000:3000 -d swg/web-app-master
+          script: sudo docker run --name="web-app-master" -p 3001:3001 -d swg/web-app-master
