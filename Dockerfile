@@ -1,13 +1,13 @@
 FROM node:14
 
 # WORKDIR /usr/src/app
-RUN ls
+# RUN ls
 
-RUN ls /usr
+# RUN ls /usr
 
 RUN ls /usr/src
 
-RUN ls /usr/src/app
+# RUN ls /usr/src/app
 
 RUN npm i
 
