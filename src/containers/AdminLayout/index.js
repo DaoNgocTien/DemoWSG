@@ -16,6 +16,7 @@ import NavbarAdmin from "../../components/NavbarAdmin";
 import Notification from "../../components/Notification";
 import { adminRoutePaths } from "../../routes/admin";
 import { realtime } from "../../services/firebase";
+import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css"
 
 
 
@@ -321,11 +322,7 @@ class AdminRender extends Component {
                         return (
                           <Conversation
                             key={index}
-                            name={
-                              messages[element].userinfo?.firstname +
-                              " " +
-                              messages[element].userinfo?.lastname
-                            }
+                            name={ `${this.state.messageDetails.userinfo?.firstname ?? this.state.messageDetails.userinfo?.name} ${this.state.messageDetails.userinfo?.lastname ?? ""}`}
                             onClick={() =>
                               this.setMessagesDetail(messages[element])
                             }
@@ -341,12 +338,8 @@ class AdminRender extends Component {
                     <ConversationHeader>
                       <ConversationHeader.Back />
                       <ConversationHeader.Content
-                        userName={
-                          (this.state.messageDetails.userinfo?.firstname ||
-                            "") +
-                          " " +
-                          (this.state.messageDetails.userinfo?.lastname || "")
-                        }
+                        userName=
+                        { `${this.state.messageDetails.userinfo?.firstname ?? this.state.messageDetails.userinfo?.name} ${this.state.messageDetails.userinfo?.lastname ?? ""}`}
                       />
                       <ConversationHeader.Actions>
                         <EllipsisButton orientation="vertical" />
