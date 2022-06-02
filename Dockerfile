@@ -4,10 +4,12 @@ WORKDIR /usr/src/app
 
 COPY ["package.json", "package-lock.json*", "./"]
 
-RUN npm i
+RUN yarn
 
-RUN npm start
+RUN yarn start-linux
+
+COPY . .
 
 EXPOSE 3001
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start-linux", "yarn"]
