@@ -1,8 +1,12 @@
 FROM node:14
 
-RUN /bin/sh -c npm i
+WORKDIR /usr/src/app
 
-RUN /bin/sh -c npm start
+COPY ["package.json", "package-lock.json*", "./"]
+
+RUN npm i
+
+RUN npm start
 
 EXPOSE 3001
 
