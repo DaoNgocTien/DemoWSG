@@ -2,6 +2,8 @@ FROM node:14
 
 WORKDIR /usr/src/app
 
+RUN ls /usr/src
+
 RUN npm i
 
 RUN npm start
