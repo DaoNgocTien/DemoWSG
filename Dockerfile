@@ -10,6 +10,6 @@ RUN yarn
 
 # COPY . .
 
-EXPOSE 3001
+# EXPOSE 3001
 
 CMD ["yarn", "run", "start-linux"]
