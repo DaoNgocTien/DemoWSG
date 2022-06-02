@@ -8,7 +8,7 @@ RUN yarn
 
 RUN yarn run start-linux
 
-COPY . .
+# COPY . .
 
 EXPOSE 3001
 
