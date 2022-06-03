@@ -56,6 +56,10 @@ class CreatModal extends Component {
     if (prevProps.productList.length !== this.props.productList.length) {
       this.setState({
         productSelected: this.props.productList[0],
+        availableQuantity: this.props.productList[0].quantity - this.props.productList[0].maxquantity,
+        switchState: true,
+        price: this.props.productList[0].retailprice,
+        maxQuantity: "10",
       });
 
     }
