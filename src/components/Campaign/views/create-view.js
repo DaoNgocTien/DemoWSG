@@ -27,7 +27,7 @@ class CreatModal extends Component {
     previewTitle: "",
     fileList: [],
     price: 0,
-    productSelected: {},
+    productSelected: this.props.productList[0] || {},
     availableQuantity: 10,
     minQuantity: 10,
     maxQuantity: 10,
@@ -268,7 +268,6 @@ class CreatModal extends Component {
       switchState,
       businessRuleErrMessage,
     } = this.state;
-console.log(this.props.productList)
     return (
       <>
         <Modal
