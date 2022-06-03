@@ -1,7 +1,7 @@
 import {
   MinusCircleOutlined,
   PlusOutlined,
-  UndoOutlined
+  UndoOutlined,
 } from "@ant-design/icons";
 import {
   Button,
@@ -11,7 +11,11 @@ import {
   Input,
   InputNumber,
   Modal,
-  Select, Space, Switch, Typography, Upload
+  Select,
+  Space,
+  Switch,
+  Typography,
+  Upload,
 } from "antd";
 import moment from "moment";
 import React, { Component, memo } from "react";
@@ -31,7 +35,7 @@ class EdilModal extends Component {
     availableQuantity: 10,
     minQuantity: 10,
     maxQuantity: null,
-    switchState: true,
+    switchState: this.props.isshare,
     minWholesalePrice: 100,
     advancePercent: 1,
     minSharedAdvancedPercent: 1,
@@ -48,6 +52,15 @@ class EdilModal extends Component {
   formRef = React.createRef();
   switchmRef = React.createRef();
   quantityRef = React.createRef();
+
+  //work around
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.productList.length !== this.props.productList.length) {
+  //     this.setState({
+  //       productSelected: this.props.productList[0],
+  //     });
+  //   }
+  // }
 
   uniqByKeepFirst(a, key) {
     let seen = new Set();
@@ -75,34 +88,53 @@ class EdilModal extends Component {
 
       for (let i = listQuantity.length - 1; i >= 1; i--) {
         if (listQuantity[i].quantity === listQuantity[i - 1].quantity) {
-          listDupQuantity.push(listQuantity[i].quantity)
+          listDupQuantity.push(listQuantity[i].quantity);
         }
         if (listQuantity[i].price >= listQuantity[i - 1].price) {
-          listInvalidQuantity.push(listQuantity[i].quantity)
+          listInvalidQuantity.push(listQuantity[i].quantity);
         }
-
       }
 
-      if (listDupQuantity.length > 0 || listInvalidQuantity.length > 0) {
-        let mes = `Duplicate quantities: ${listDupQuantity}
-        Invalid quantities: ${listInvalidQuantity}`;
+      if (listDupQuantity.length > 0) {
+        let mes = `Duplicate quantities: ${listDupQuantity[0]}`;
+
         return this.setState({
           listDupQuantity: listDupQuantity,
           listInvalidQuantity: listInvalidQuantity,
-          businessRuleErrMessage: mes
-        })
+          businessRuleErrMessage: mes,
+        });
       }
-      else if (listQuantity[[listQuantity.length - 1].price] * 1 * data.advancePercent < 1000000) {
+       else if (listInvalidQuantity.length > 0) {
+        let mes = `Invalid quantities: `;
+        listInvalidQuantity.forEach((x, index) => {
+          if (index === 0) {
+            mes += `${x}`;
+          } else {
+            mes += `,${x}`;
+          }
+        });
+        return this.setState({
+          listDupQuantity: listDupQuantity,
+          listInvalidQuantity: listInvalidQuantity,
+          businessRuleErrMessage: mes,
+        });
+      } 
+      else if (
+        listQuantity[[listQuantity.length - 1].price] *
+          1 *
+          data.advancePercent <
+        1000000
+      ) {
         let mes = "Advance fee must have a value greater than 10,000!!!";
         return this.setState({
-          businessRuleErrMessage: mes
-        })
-      }
-      else {
-
+          businessRuleErrMessage: mes,
+        });
+      } else {
         let productSelected = this.state.productSelected
           ? this.state.productSelected
-          : this.props.productList.find((p) => p.id === this.props.record.productid);
+          : this.props.productList.find(
+              (p) => p.id === this.props.record.productid
+            );
 
         newCampaign = {
           id: this.props.record?.id,
@@ -125,7 +157,9 @@ class EdilModal extends Component {
     } else {
       let productSelected = this.state.productSelected
         ? this.state.productSelected
-        : this.props.productList.find((p) => p.id === this.props.record.productid);
+        : this.props.productList.find(
+            (p) => p.id === this.props.record.productid
+          );
       newCampaign = {
         id: this.props.record?.id,
         productId: productSelected?.id,
@@ -165,6 +199,8 @@ class EdilModal extends Component {
       maxQuantity: "10",
       advancePercent: "1",
       isShare: true,
+      quantities: []
+
     });
   };
 
@@ -223,7 +259,7 @@ class EdilModal extends Component {
   };
 
   disabledDate = (current) => {
-    return current && current < moment().endOf("day");
+    return current && new Date(moment(current).format('YyYY-MM-DD')) < new Date(moment().format('YyYY-MM-DD'));
   };
 
   toggleSwitch = () => {
@@ -244,16 +280,16 @@ class EdilModal extends Component {
       maxQuantity,
       advancePercent,
       switchState,
-      businessRuleErrMessage
+      businessRuleErrMessage,
     } = this.state;
     productSelected = productSelected
       ? productSelected
       : productList.find((p) => p.id === record.productid);
     if (!productSelected) {
-      return <></>
+      return <></>;
     }
-    availableQuantity = productSelected.quantity - productSelected.maxquantity
-    console.log(productSelected)
+    availableQuantity = productSelected.quantity - productSelected.maxquantity;
+    console.log(productSelected);
     return (
       <>
         <Modal
@@ -267,7 +303,9 @@ class EdilModal extends Component {
           visible={openModal}
           onCancel={this.handleCancel}
           footer={[
-            <Button key="cancel" onClick={this.handleCancel}>Cancel</Button>,
+            <Button key="cancel" onClick={this.handleCancel}>
+              Cancel
+            </Button>,
             <Button
               type="primary"
               form="updateCampaignForm"
@@ -294,7 +332,7 @@ class EdilModal extends Component {
                 rules={[
                   () => ({
                     validator(_, value) {
-                      if (value.length > 0 && value.length <= 50) {
+                       if (value?.length > 0 && value?.length <= 50) {
                         return Promise.resolve();
                       }
 
@@ -375,7 +413,6 @@ class EdilModal extends Component {
                   style={{ width: "60vh" }}
                 >
                   {productList.map((item) => {
-
                     return (
                       <Select.Option key={item.key} value={item.id}>
                         {item.name}
@@ -387,7 +424,6 @@ class EdilModal extends Component {
 
               <Form.Item
                 name="wholesalePrice"
-
                 label="Wholsale Price"
                 dependencies={[maxQuantity]}
                 rules={[
@@ -565,19 +601,22 @@ class EdilModal extends Component {
                 name="isShare"
                 initialValue={record?.isshare ? true : false}
                 tooltip="In single campaign, a customer buy all products at once and campaign is done. In shared campaign, customers can buy products at any amount and the final price will depend on the campaign steps!!"
-                rules={[
-                  () => ({
-                    validator(_) {
-                      return businessRuleErrMessage.length === 0 ? Promise.resolve() : Promise.reject(businessRuleErrMessage);
-                    },
-                  }),
-                ]}
+                // rules={[
+                //   () => ({
+                //     validator(_) {
+                //       return businessRuleErrMessage.length === 0
+                //         ? Promise.resolve()
+                //         : Promise.reject(businessRuleErrMessage);
+                //     },
+                //   }),
+                // ]}
               >
                 <Space style={{ width: "60vh" }} size={20}>
                   <Switch
                     onClick={this.toggleSwitch}
                     ref={this.switchmRef}
                     style={{ marginRight: "20" }}
+                    defaultChecked={switchState}
                   />
                   {this.state.switchState
                     ? "Shared: more buyer more discount"
@@ -585,13 +624,15 @@ class EdilModal extends Component {
                 </Space>
               </Form.Item>
             </Space>
+            <p style={{color: "#ff4d4f"}} >{ businessRuleErrMessage}</p>
+
             {!switchState ? (
               ""
             ) : (
               <>
                 <Form.List
                   name="quantities"
-                  onChange={() => { }}
+                  onChange={() => {}}
                   initialValue={record?.range ? JSON.parse(record?.range) : []}
                 >
                   {(fields, { add, remove }) => {
@@ -637,7 +678,7 @@ class EdilModal extends Component {
                                     style={{ width: "60vh" }}
                                     onChange={() =>
                                       this.setState({
-                                        businessRuleErrMessage: ""
+                                        businessRuleErrMessage: "",
                                       })
                                     }
                                   />
@@ -670,7 +711,7 @@ class EdilModal extends Component {
                                 style={{ width: "60vh" }}
                                 onChange={() =>
                                   this.setState({
-                                    businessRuleErrMessage: ""
+                                    businessRuleErrMessage: "",
                                   })
                                 }
                               />
@@ -713,21 +754,29 @@ class EdilModal extends Component {
                                 businessRuleErrMessage :
                                 ""}
                           </Text> */}
-                          <Paragraph >
+                          <Paragraph>
                             <pre>
-                              Share campaign tutorial step by step:<br />
-                              - The higher products customers buy, the better discount price they will get.<br />
-                              - Quantity step - price conflict: the higher quantity will be counted<br />
-                              For eq:<br />
-                              + Quantity 15, price 80<br />
-                              + Quantity 25, price 70<br />
-                              + Quantity 45, price 95<br />
-                              + Quantity 55, price 90<br />
-                              -{">"} Quantity valid: 15-25<br />
-                              -{">"} Quantity invalid: 45-55
+                              Share campaign tutorial step by step:
+                              <br />
+                              - The higher products customers buy, the better
+                              discount price they will get.
+                              <br />
+                              - Quantity step - price conflict: the higher
+                              quantity will be counted
+                              <br />
+                              For eq:
+                              <br />
+                              + Quantity 15, price 80
+                              <br />
+                              + Quantity 25, price 70
+                              <br />
+                              + Quantity 45, price 95
+                              <br />
+                              + Quantity 55, price 90
+                              <br />-{">"} Quantity valid: 15-25
+                              <br />-{">"} Quantity invalid: 45-55
                             </pre>
                           </Paragraph>
-
                         </Form.Item>
                       </>
                     );
@@ -793,8 +842,8 @@ class EdilModal extends Component {
                     productSelected?.image
                       ? JSON.parse(productSelected?.image)
                       : defaultProduct?.image
-                        ? JSON.parse(defaultProduct?.image)
-                        : []
+                      ? JSON.parse(defaultProduct?.image)
+                      : []
                   }
                 ></Upload>
               </Descriptions.Item>
