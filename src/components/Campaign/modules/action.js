@@ -62,10 +62,15 @@ const getCampaign = (campaignId) => {
       let availableProducts = products.data.data.filter((p) => {
         let max = 0;
         campaigns.data.data.map((c) => {
-          max += c.productid === p.id ? Number(c.maxquantity) : 0;
+          if (c.status === "active" || c.status === "ready" ) {
+            max += c.productid === p.id ? Number(c.maxquantity) : 0;
+          }
         });
         return p.quantity - max >= 10;
       });
+
+      console.log(availableProducts)
+
       const campaignsList = campaigns.data.data.length == 0 ? [] : campaigns.data.data?.map((campaign) => {
         return {
           key: campaign.id,
@@ -78,7 +83,9 @@ const getCampaign = (campaignId) => {
         let max = 0;
         if (campaigns.data.data.length !== 0)
           campaigns.data.data.map((c) => {
-            max += c.productid === p.id ? Number(c.maxquantity) : 0;
+             if (c.status === "active" || c.status === "ready" ) {
+               max += c.productid === p.id ? Number(c.maxquantity) : 0;
+             }
           });
         if (Number((p.quantity - max)) * Number(p.retailprice) >= 10000 && p.status !== "deactivated") {
           return {
