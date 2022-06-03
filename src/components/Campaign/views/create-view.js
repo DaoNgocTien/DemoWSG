@@ -28,7 +28,7 @@ class CreatModal extends Component {
     fileList: [],
     price: 0,
     productSelected: {},
-    availableQuantity: 10,
+    availableQuantity: this.props.productList ?(this.props.productList[0]?.quantity - this.props.productList[0]?.maxquantity) : 10,
     minQuantity: 10,
     maxQuantity: 10,
     switchState: true,
